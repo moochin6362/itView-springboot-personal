@@ -1,0 +1,79 @@
+:root{
+  --bg:#f7f8f9; --card:#fff; --line:#e9ecf0; --text:#111; --muted:#6b7280;
+  --primary:#12c7bd; --radius:16px; --space:16px; --maxw:720px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Pretendard,"Malgun Gothic",Arial,sans-serif;color:var(--text);background:var(--bg)}
+
+.page{max-width:var(--maxw);margin:0 auto 96px;padding:8px 16px 24px}
+
+/* topbar */
+.page-topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;margin:10px 0 14px}
+.icon-btn{border:none;background:transparent;cursor:pointer;font-size:20px}
+.page-title{margin:0;text-align:center;font-size:22px;font-weight:800}
+.spacer{width:20px}
+
+/* banner */
+.banner{display:flex;gap:14px;align-items:center;background:#eef2f5;border:1px solid #e2e8f0;border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.banner-illust{font-size:28px}
+.banner-text b{font-size:15px}
+.banner-text p{margin:6px 0 0;color:#7c8591;font-size:13px}
+
+/* FAQ 링크 카드 */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.faq-link{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:inherit;margin-bottom:16px}
+.faq-link .chev{font-size:18px;color:#94a3b8}
+
+/* section title */
+.sec-title{margin:18px 2px 8px;font-size:15px;font-weight:900}
+
+/* inputs */
+.field{margin-bottom:10px}
+.input, .textarea, .select-wrap select{
+  width:100%; border:1px solid var(--line); border-radius:12px; background:#fff; outline:0;
+  font-size:15px;
+}
+.input{height:48px;padding:0 14px}
+.textarea{padding:12px 14px;min-height:140px;resize:vertical}
+
+/* select */
+.select-wrap{position:relative}
+.select-wrap select{appearance:none;-webkit-appearance:none;-moz-appearance:none;height:48px;padding:0 40px 0 14px;cursor:pointer}
+.select-wrap .arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#64748b}
+
+/* email row */
+.email-row{
+  display:grid; grid-template-columns: 1fr 20px 1fr auto; gap:10px; align-items:center;
+}
+.email-row .at{color:#94a3b8; text-align:center}
+.email-row .domain{min-width:180px}
+
+/* consent */
+.consent{margin-top:8px}
+.chk{display:flex;align-items:center;gap:10px;color:#374151}
+.chk input{appearance:none;width:18px;height:18px;border:1.5px solid #cbd5e1;border-radius:4px;display:inline-block;position:relative;cursor:pointer}
+.chk input:checked{background:#10d5ca;border-color:#10d5ca}
+.chk input:checked::after{content:"";position:absolute;left:4px;top:0;width:6px;height:10px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg)}
+.chk em{font-style:normal;color:#ef4444;font-weight:800}
+
+/* submit bar */
+.submit-bar{
+  position:sticky; bottom:0; margin-top:20px;
+  background:linear-gradient(180deg, rgba(247,248,249,0), rgba(247,248,249,1));
+  padding-top:8px;
+}
+.submit{
+  width:100%; height:56px; border:none; border-radius:999px; background:var(--primary);
+  color:#fff; font-size:16px; font-weight:900; cursor:pointer;
+}
+
+/* responsive */
+@media (max-width:640px){
+  .email-row{grid-template-columns:1fr 16px 1fr; }
+  .email-row .select-wrap{grid-column:3 / 4}
+  .email-row .domain{grid-column:1 / -1}
+}
+@media (min-width:1024px){
+  .page-title{font-size:24px}
+}

@@ -1,0 +1,69 @@
+:root{
+  --bg:#f7f8f9; --card:#fff; --text:#111; --muted:#7a7f87; --line:#e9ecf0;
+  --primary:#12c7bd; --radius:14px; --space:16px; --maxw:720px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Pretendard,"Malgun Gothic",Arial,sans-serif;color:var(--text);background:var(--bg)}
+
+.page{max-width:var(--maxw);margin:0 auto 80px;padding:8px 16px 24px}
+
+/* topbar */
+.page-topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;margin:10px 0 14px}
+.icon-btn.back{border:none;background:transparent;font-size:20px;cursor:pointer}
+.page-title{margin:0;text-align:center;font-size:22px;font-weight:700}
+.text-btn.save{border:none;background:transparent;color:#3b3b3b;font-weight:700;cursor:pointer}
+
+/* form/card */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space)}
+.form{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:4px 0}
+.section-bar{
+  margin:0; padding:12px 14px; font-size:15px; font-weight:800;
+  background:#f1f5f9; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:8px;
+}
+.section-bar .muted{font-weight:600;color:#8a919a}
+
+/* rows */
+.form-row{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:14px 14px;border-bottom:1px solid var(--line);background:#fff}
+.form-row.top{padding-top:18px}
+.form-label{font-weight:700;align-self:center;line-height:1.3}
+.form-label.required::after{content:" *"; color:#ff4d4d}
+.form-field{display:block}
+.helper{margin:6px 0 0;color:#8b93a0;font-size:12px}
+
+.input{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:#fff;outline:none}
+.input.center{text-align:center}
+
+/* nickname */
+.nickname-wrap{display:grid;grid-template-columns:1fr auto;gap:8px}
+.ghost-btn{height:44px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;cursor:pointer}
+.nickname-wrap .helper{grid-column:1 / -1}
+
+/* chips */
+.chip-group{display:flex;flex-wrap:wrap;gap:10px}
+.chip-group.single input,
+.chip-group.multi  input{position:absolute;opacity:0;pointer-events:none}
+
+.chip{
+  display:inline-flex;align-items:center;justify-content:center;min-width:84px;height:40px;
+  padding:0 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#333;cursor:pointer;
+}
+/* 선택된 상태(라디오/체크 모두) */
+.chip-group input:checked + .chip{
+  background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700;
+}
+.chip[aria-disabled="true"]{opacity:.5;cursor:default}
+
+/* notice */
+.notice ul{margin:0; padding-left:20px; color:#6b7280; line-height:1.6}
+.notice li+li{margin-top:6px}
+
+/* responsive */
+@media (max-width:640px){
+  .form-row{grid-template-columns:1fr;gap:8px}
+  .form-label{font-size:14px}
+}
+@media (min-width:1024px){
+  .page-title{font-size:24px}
+}

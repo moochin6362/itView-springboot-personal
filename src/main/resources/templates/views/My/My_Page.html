@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>마이페이지</title>
+  <link rel="stylesheet" href="my_page.css"/>
+</head>
+<body>
+
+
+
+  <main class="page">
+        <!-- 마이페이지 상단 타이틀바 -->
+  <div class="page-topbar">
+    <h1 class="page-title">마이페이지</h1>
+    <div class="page-actions">
+      <button class="icon-btn" aria-label="알림">🔔</button>
+      <button class="icon-btn" aria-label="장바구니">🛍️</button>
+    </div>
+  </div>
+
+    <!-- 프로필 카드 -->
+    <section class="card profile-card">
+      <div class="avatar">
+        <span>👤</span>
+      </div>
+      <div class="profile-meta">
+        <div class="nickname">무쳐따니무쳤다</div>
+        <div class="chips">
+          <span class="chip">30대</span>
+          <span class="chip">중성</span>
+        </div>
+      </div>
+      <button class="chevron" aria-label="프로필 설정 이동">›</button>
+    </section>
+
+    <!-- 매칭률 배너 -->
+    <section class="card hero-card">
+      <div class="hero-illustration" aria-hidden="true"></div>
+      <p class="hero-desc">
+        지금 사용하고 있는 제품을 선택하면<br/>
+        <b>내 피부와의 매칭률을 알려드려요</b>
+      </p>
+      <button class="primary">매칭률 확인하기</button>
+    </section>
+
+    
+
+    <!-- 리뷰 인입 카드 -->
+    <section class="card review-cta">
+      <div class="review-cta-left">
+        <h2 class="section-title">내가 사용해 본 제품 리뷰 쓰기</h2>
+        <p class="muted">쇼핑 구매 여부와 상관 없이</p>
+      </div>
+      <div class="review-cta-right">
+        <div class="illustr">✍️</div>
+      </div>
+      <div class="review-cta-full">
+        <a class="pill-btn" href="#">리뷰 1건당 쿠폰or포인트 받기</a>
+      </div>
+    </section>
+
+    <!-- 구매한 제품 리뷰 쓰기 -->
+    <section class="list-row">
+      <h3>구매한 제품 리뷰 쓰기</h3>
+      
+    </section>
+
+    <!-- 마이 메뉴(2번 캡쳐 상단) -->
+    <section class="menu-list card">
+      <a class="menu-item" href="#">체험단 리뷰 쓰기<span>당첨된 제품 검색 후 작성</span></a>
+      <a class="menu-item" href="#">내 리뷰<span>상위 몇%인지 확인하기</span></a>
+    </section>
+
+    <!-- 나의 관심 -->
+    <section>
+      <h2 class="block-title">나의 관심</h2>
+
+      <!-- 최근 본 제품 캐러셀 -->
+      <div class="sub-block">
+        <div class="sub-title">
+          <span>최근 본 제품 3</span>
+          <button class="ghost">›</button>
+        </div>
+        <div class="card product-row">
+          <article class="product">
+            <div class="thumb"></div>
+            <div class="pname">Arencia</div>
+            <a class="mini-btn" href="#">리뷰 쓰기</a>
+          </article>
+          <article class="product">
+            <div class="thumb"></div>
+            <div class="pname">Ruten</div>
+            <a class="mini-btn" href="#">리뷰 쓰기</a>
+          </article>
+          <article class="product">
+            <div class="thumb"></div>
+            <div class="pname">Averie</div>
+            <a class="mini-btn" href="#">리뷰 쓰기</a>
+          </article>
+        </div>
+      </div>
+
+      <div class="menu-list card">
+        <a class="menu-item" href="#">찜한 상품</a>
+        <a class="menu-item" href="#">즐겨찾는 제품</a>
+        <a class="menu-item" href="#">즐겨찾는 브랜드</a>
+      </div>
+    </section>
+
+    
+
+    <!-- 이벤트 안내 박스 -->
+    <section class="card info-card">
+      <p>
+        이벤트 신청 · 당첨 내역과 배송지 수정은 혜택 탭 상단
+        <a href="#" class="underline">내 이벤트</a>에서 한 번에 확인할 수 있어요
+      </p>
+    </section>
+
+    <!-- 고객센터 -->
+    <section class="menu-list card">
+      <a class="menu-item" href="#">제품 등록 요청</a>
+      <a class="menu-item" href="#">등록 요청 제품</a>
+      <a class="menu-item" href="#">FAQ</a>
+      <a class="menu-item" href="#">1:1 문의</a>
+      <a class="menu-item" href="#">설정</a>
+    </section>
+  </main>
+
+  <!-- 하단 탭바 -->
+  <nav class="tabbar">
+    <a class="tab" href="#"><span>📂</span><em>카테고리</em></a>
+    <a class="tab" href="#"><span>💎</span><em>혜택</em></a>
+    <a class="tab" href="#"><span>🏠</span><em>홈</em></a>
+    <a class="tab" href="#"><span>🛍️</span><em>쇼핑</em></a>
+    <a class="tab active" href="#"><span>👤</span><em>마이</em></a>
+  </nav>
+</body>
+</html>

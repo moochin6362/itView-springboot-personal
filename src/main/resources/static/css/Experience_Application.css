@@ -1,0 +1,180 @@
+body {
+  margin: 0;
+  font-family: Arial, "Malgun Gothic", sans-serif;
+  background: #f7f7f7;
+}
+
+.page {
+  max-width: 480px;
+  margin: auto;
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  border-bottom: 1px solid #ddd;
+  padding: 0 12px;
+}
+.header .title {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+}
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 경고 */
+.alert {
+  background: #ffe9e9;
+  color: #d04c4c;
+  font-size: 14px;
+  padding: 10px;
+  text-align: center;
+}
+
+/* 본문 */
+.content {
+  padding: 16px;
+}
+.section {
+  margin-bottom: 20px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* 폼 */
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.form-row label {
+  width: 70px;
+  font-size: 14px;
+}
+.form-row input,
+.form-row select {
+  flex: 1;
+  height: 40px;
+  padding: 0 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.phone-wrap {
+  display: flex;
+  gap: 6px;
+}
+.addr-search {
+  display: flex;
+  gap: 6px;
+}
+.btn-outline {
+  padding: 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+/* 도움말 */
+.helper {
+  font-size: 12px;
+  color: teal;
+  margin-left: 70px;
+}
+
+/* 동의 */
+.agree {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* 하단 버튼 */
+.submit-bar {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+}
+.btn-primary {
+  width: 100%;
+  height: 44px;
+  background: #27c7c7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-primary:active {
+  background: #18b6b6;
+}
+
+/* ===== Desktop layout (넓은 화면) ===== */
+@media (min-width: 768px) {
+  .page{
+    max-width: 960px;         /* 480px → 960px로 넓게 */
+    margin: 24px auto;        /* 화면 가운데 정렬 + 바깥 여백 */
+    border-radius: 12px;      /* 카드 느낌(선택) */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06); /* 선택 */
+    background: #fff;
+  }
+
+  /* 헤더를 웹페이지 느낌으로 */
+  .header{
+    position: relative;       /* 모바일 sticky 해제 */
+    height: 64px;
+    justify-content: flex-start;
+    padding: 0 20px;
+    border-bottom: 1px solid #eaecef;
+  }
+  .header .title{
+    text-align: left;         /* 가운데 → 왼쪽 정렬 */
+    font-size: 20px;
+  }
+  .back-btn{ display: none; } /* ← 버튼 숨김 */
+
+  /* 본문 패딩/여백 넉넉하게 */
+  .content{
+    padding: 24px 24px 40px;  /* 하단 버튼 고정이 아니므로 아래 여백만 */
+  }
+
+  /* 라벨/인풋 비율 넓게 */
+  .form-row{
+    grid-template-columns: 120px 1fr;  /* 84px → 120px */
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .form-row.no-label{ margin-left: 120px; }
+  .helper{ margin-left: 120px; }
+
+  /* 하단 버튼을 고정 해제 → 일반 영역에 배치 */
+  .submit-bar{
+    position: static;         /* fixed 해제 */
+    transform: none;
+    padding: 24px 0 0;
+    background: transparent;
+    box-shadow: none;
+    max-width: none;
+  }
+  .btn-primary{
+    height: 48px;
+    width: 240px;             /* 페이지 오른쪽 하단에 두고 싶다면 다음 줄 추가 */
+    float: right;             /* 선택: 오른쪽 정렬 */
+  }
+}

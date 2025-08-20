@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXPERIENCE_APPLICATION</title>
+  <link rel="stylesheet" href="Experience_Application.CSS">
+</head>
+<body>
+  <div class="page">
+
+    <!-- 상단 헤더 -->
+    <header class="header">
+      <button type="button" class="back-btn" aria-label="뒤로가기">←</button>
+      <h1 class="title">체험단 신청하기</h1>
+    </header>
+
+    <!-- 경고 배너 -->
+    <div class="alert">
+      당첨 이후 배송지 변경은 불가합니다.
+    </div>
+
+    <main class="content">
+      <!-- 배송지 정보 -->
+      <section class="section">
+        <h2 class="section-title">배송지 정보</h2>
+
+        <div class="form-row">
+          <label for="receiver">받는분</label>
+          <input id="receiver" type="text" placeholder="실명을 정확히 입력해주세요">
+        </div>
+
+        <div class="form-row">
+          <label>휴대폰</label>
+          <div class="phone-wrap">
+            <input type="tel" maxlength="3" placeholder="010">
+            <input type="tel" maxlength="4" placeholder="1234">
+            <input type="tel" maxlength="4" placeholder="5678">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="addr1">배송지</label>
+          <div class="addr-search">
+            <input id="addr1" type="text" placeholder="주소를 입력해주세요">
+            <button type="button" class="btn-outline">주소검색</button>
+          </div>
+        </div>
+
+        <div class="form-row no-label">
+          <input type="text" placeholder="상세주소">
+        </div>
+        <div class="form-row no-label">
+          <input type="text" placeholder="요청사항 (선택)">
+        </div>
+
+        <p class="helper">* 입력된 주소는 이벤트 참여용 기본 배송지로 설정됩니다.</p>
+      </section>
+
+      <!-- 상품 선택 -->
+      <section class="section">
+        <h2 class="section-title">상품선택</h2>
+        <select>
+          <option selected disabled>옵션을 선택해주세요.</option>
+          <option>옵션 A</option>
+          <option>옵션 B</option>
+        </select>
+      </section>
+
+      <!-- 이용자 동의 -->
+      <section class="section">
+        <h2 class="section-title">이용자 동의</h2>
+        <label class="agree">
+          <input type="checkbox">
+          <span>(필수) 개인정보 제3자 제공 동의</span>
+        </label>
+        <label class="agree">
+          <input type="checkbox">
+          <span>(필수) 이벤트 신청 완료 시 브랜드 즐겨찾기 추가 동의</span>
+        </label>
+      </section>
+
+      <!-- 하단 버튼 -->
+      <div class="submit-bar">
+        <button type="button" class="btn-primary">이벤트 신청하기</button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
