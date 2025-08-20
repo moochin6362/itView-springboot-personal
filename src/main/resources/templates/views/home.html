@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쇼핑몰 예제</title>
+
+    <style>
+      /* 캐러셀 */
+      #heroCarousel .carousel-item img {
+        border: 3px solid #6ec1e4;
+        border-radius: 10px;
+        height: 500px;
+        object-fit: cover;
+      }
+      .carousel-control-prev-icon,
+      .carousel-control-next-icon {
+        background-color: #56acd1;
+        width: 30px;
+        height: 30px;
+        background-size: 100%, 100%;
+      }
+
+      /* 상품 카드 */
+      .product-card {
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        border-color: #6ec1e4;
+      }
+      .product-image {
+        background-color: #f8f9fa;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+    </style>
+  </head>
+  <body>
+
+  <div th:replace="~{views/common/header :: header}"></div>
+
+    <!-- 히어로 캐러셀 -->
+    <div id="heroCarousel" class="carousel slide my-4" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+          <img
+            src="https://vrthumb.imagetoday.co.kr/2022/06/16/ti178t002072.jpg"
+            class="d-block w-100"
+            alt="배너1"
+          />
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+          <img
+            src="https://vrthumb.imagetoday.co.kr/2022/06/16/ti178t002068.jpg"
+            class="d-block w-100"
+            alt="배너2"
+          />
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+          <img
+            src="https://img.freepik.com/premium-vector/cosmetics-skin-care-product-ads-with-bottle-banner-ad-beauty-products-green-leaf_258787-40.jpg"
+            class="d-block w-100"
+            alt="배너3"
+          />
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+
+    <!-- 베스트셀러 -->
+    <section class="container py-5">
+      <h2 class="mb-4">가장 많이 팔린 상품</h2>
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="product-card p-3">
+            <div class="product-image">이미지1</div>
+            <h5 class="mt-3">상품명 1</h5>
+            <p>상품 설명 1</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="product-card p-3">
+            <div class="product-image">이미지2</div>
+            <h5 class="mt-3">상품명 2</h5>
+            <p>상품 설명 2</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="product-card p-3">
+            <div class="product-image">이미지3</div>
+            <h5 class="mt-3">상품명 3</h5>
+            <p>상품 설명 3</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="product-card p-3">
+            <div class="product-image">이미지4</div>
+            <h5 class="mt-3">상품명 4</h5>
+            <p>상품 설명 4</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div th:replace="~{views/common/footer :: footer}"></div>
+
+  </body>
+</html>
+
+
