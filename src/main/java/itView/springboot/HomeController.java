@@ -11,7 +11,6 @@ public class HomeController {
         return "views/home";
         // Controller가 return하는 home이라고 하는 애를 View Resolver가 반환되는 경로 앞에 prefix(classpath:templates/)를 기본적으로 가지고 있고, 반환되는 경로 뒤에 suffix(.html)을 기본적으로 가지고 있음
         // classpath:templates/views/home.html
-
-
     }
+
 }
