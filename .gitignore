@@ -37,3 +37,4 @@ Thumbs.db
 .apt_generated/
 .classpath
 .project
+.metadata/
