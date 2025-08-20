@@ -1,0 +1,39 @@
+# ==========================
+# Spring Boot / Java
+# ==========================
+
+# 빌드 결과물
+/target/
+*.class
+
+# 로그 파일
+*.log
+
+# 환경 변수 파일
+*.env
+*.properties
+
+# IDE 설정
+/.idea/
+/*.iml
+/.vscode/
+
+# Maven / Gradle
+/.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+.gradle/
+build/
+
+# OS 관련
+.DS_Store
+Thumbs.db
+
+# Eclipse
+.settings/
+*.launch
+
+# STS
+*.tmp
+.apt_generated/
+.classpath
+.project
