@@ -5,149 +5,201 @@
 <title>Insert title here</title>
 
 <style>
-body{
-    margin-right:5%;
-    margin-left:5%;
+* {
+	box-sizing: border-box
+}
 
-  }
-.title{
-    text-align:center;
-    font-weight:bold;
-    font-size:22px;
-  }
-  .cancel-notice {
-  border: 1px solid #ccc;  
-  border-left: none;
-  border-right:none;
-  color:gray;
-  font-size:24px;
-  font-weight:bold;
-  text-align:center;
+.form {
+	background: #f0f4f9;
+	border: 1px solid #cccccc;
+	border-radius: 8px;
+	padding: 4px 0;
+	padding-bottom: 0;
+}
+
+body {
+	margin-right: 5%;
+	margin-left: 5%;
+	background: #f7f8f9;
+}
+
+.title {
+	text-align: center;
+	font-weight: bold;
+	font-size: 22px;
+}
+
+.cancel-notice {
+	background: #f1f5f9;
+	border: 1px solid #ccc;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	color: gray;
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
 }
 
 .order-box {
-  border: 1px solid #27c7c7;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius:5px;
+	padding-top: 1.5%;
+	padding-left: 2%;
+	padding-right: 2%;
+	padding-bottom: 1.5%;
+	background: #ffffff;
 }
 
-
 .order-body {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .order-image {
-  width: 130px;
-  height: 130px;
-  background-color: #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  margin-top:1%;
-  border-radius:5px;
+	width: 130px;
+	height: 130px;
+	background-color: #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 15px;
+	margin-top: 1%;
+	border-radius: 5px;
 }
 
 .order-info {
-  flex: 1; 
+	flex: 1;
 }
 
 .order-info p {
-  margin: 3px 0;
+	margin: 3px 0;
 }
 
 .order-info .status {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .order-info .price {
-  color: #3943cf;
-  font-weight: bold;
-  margin-bottom:1%;
-  font-size:20px;
+	color: #8ad8f0;
+	font-weight: bold;
+	margin-bottom: 1%;
+	font-size: 20px;
 }
 
 .order-info .name {
-  color: gray;
-  font-size:18px;
-}
-.cs-link{
-	align-items:center;
-	text-decoration:none;
-	color:gray;
-	display:block;
-	margin: 10px auto 5px;
-	width:fit-content;
-}
-.cancel-detail{
-color:gray;
-font-size:20px;
-border: 1px solid #ccc;  
-  border-left: none;
-  border-right:none;
-  font-weight: bold;
+	color: gray;
+	font-size: 18px;
 }
 
-.refund-notice{
-font-size:20px;
-font-weight: bold;
+.cs-link {
+	align-items: center;
+	text-decoration: none;
+	color: gray;
+	display: block;
+	margin: 7px auto 2px;
+	width: fit-content;
 }
 
-.total-price,
-.total-refund,
-.refund-method,
-.refund-date{
-font-weight: bold;
-font-size:18px;
-color:gray;
-margin-left:1%;
-margin-right:1%;
+.cancel-detail {
+	color: gray;
+	font-size: 20px;
+	border: 1px solid #ccc;
+	border-left: none;
+	border-right: none;
+	font-weight: bold;
+	background: #f1f5f9;
 }
-.total-price{
- display: flex;   
-justify-content: space-between;
+
+.refund-inform {
+	border-radius: 8px;
 }
-.total-refund{
- display: flex;   
-justify-content: space-between;
+
+.refund-notice {
+	font-size: 20px;
+	font-weight: bold;
+	padding-left: 2%;
+	margin-top: 0;
+	padding-top: 2%;
+	background: #ffffff;
 }
-.refund-method{
- display: flex;   
-justify-content: space-between;
+
+.total-price, .total-refund, .refund-method, .refund-date {
+	font-weight: bold;
+	font-size: 18px;
+	color: gray;
+	margin-left: 1%;
+	margin-right: 1%;
 }
-.refund-date{
- display: flex;   
-justify-content: space-between;
+
+.total-price {
+	display: flex;
+	justify-content: space-between;
+}
+
+.total-refund {
+	display: flex;
+	justify-content: space-between;
+}
+
+.refund-method {
+	display: flex;
+	justify-content: space-between;
+}
+
+.refund-date {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0;
+	padding-bottom: 1%;
+	border-radius: 8px;
+	padding-left: 2%;
+	padding-right: 2%;
 }
 </style>
 </head>
 <body>
-<p class="title">취소상세</p>
-<div class="cancel-notice">
-  <p class="date">접수하신 상품의 취소가 완료되었어요.</p>
-</div>
-<div class="order-box">
-	  <div class="order-body">
-	    <div class="order-image">(이미지)</div>
-	    <div class="order-info">
-	      <p class="price">가격</p>
-	      <p class="name">상품이름</p>
-	    </div>
-	  </div>
-  	<a href="#" class="cs-link">상품문의하기 ></a>
-</div>
-<div class="cancel-detail"><p>취소사유</p></div>
+	<p class="title">취소상세</p>
+	<form class="form">
+		<div class="cancel-notice">
+			<p class="complete" style="background: #f1f5f9;">접수하신 상품의 취소가
+				완료되었어요.</p>
+		</div>
 
-<div class="refund-inform">
-	<p class="refund-notice">환불 정보를 확인해주세요.</p>
-	<div class="total-price"><p>총 결제금액</p><p style="color:black;">(얼마얼마)</p></div>
-	<div class="total-refund"><p>총 환불금액</p><p style="color:black;">(얼마얼마)</p></div>
-	<div class="refund-method"><p>환불 수단</p><p style="color:black;">(결제어떤걸로햇으)</p></div><!-- 이거는 좀 뺄수도... -->
-	<div class="refund-date"><p>환불 예정일</p><p style="color:black;">반품 완료 후 영업일 기준 1~2일</p></div>
+		<div class="order-box">
+			<div class="order-body">
+				<div class="order-image">(이미지)</div>
+				<div class="order-info">
+					<p class="price">가격</p>
+					<p class="name">상품이름</p>
+				</div>
+			</div>
+			<a href="#" class="cs-link">상품문의하기 ></a>
+		</div>
+		<div class="cancel-detail">
+			<p style="margin-left: 2%;">취소사유</p>
+		</div>
 
-</div>
+		<div class="refund-inform" style="background: #ffffff;">
+			<p class="refund-notice">환불 정보를 확인해주세요.</p>
+			<div class="total-price">
+				<p style="margin-left: 2%;">총 결제금액</p>
+				<p style="color: black; margin-right: 2%;">(얼마얼마)</p>
+			</div>
+			<div class="total-refund">
+				<p style="margin-left: 2%;">총 환불금액</p>
+				<p style="color: black; margin-right: 2%;">(얼마얼마)</p>
+			</div>
+			<div class="refund-method">
+				<p style="margin-left: 2%;">환불 수단</p>
+				<p style="color: black; margin-right: 2%;">(결제어떤걸로햇으)</p>
+			</div>
+			<!-- 이거는 좀 뺄수도... -->
+			<div class="refund-date">
+				<p>환불 예정일</p>
+				<p style="color: black;">반품 완료 후 영업일 기준 1~2일</p>
+			</div>
+
+		</div>
+	</form>
 </body>
 </html>
