@@ -1,134 +1,35 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>주문/결제 페이지</title>
-    <style>
-        :root {
-            --main-color: #27c7c7;
-            --text-color: #333;
-            --bg-color: #f9f9f9;
-            --border-radius: 8px;
-            --font-family: 'Arial', sans-serif;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
-        }
-
-        .container {
-            width: 60%;
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 30px 40px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--main-color);
-            margin-bottom: 30px;
-        }
-
-        hr {
-            border: none;
-            height: 2px;
-            background-color: var(--main-color);
-            margin: 20px 0;
-        }
-
-        label {
-            display: block;
-            margin-top: 20px;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .address {
-            background-color: #f1f1f1;
-            padding: 12px;
-            border-radius: var(--border-radius);
-        }
-
-        select, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--main-color);
-            border-radius: var(--border-radius);
-            font-size: 14px;
-        }
-
-        .payment-options {
-            margin-top: 15px;
-        }
-
-        .payment-options label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        .payment-options input[type="radio"] {
-            accent-color: var(--main-color);
-            margin-right: 10px;
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            margin-top: 30px;
-            padding: 12px;
-            background-color: var(--main-color);
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            background-color: #1ea8a8;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주문/결제 페이지</title>
+<link href="../../../static/css/seller/paymentPage.css" rel="stylesheet"
+	type="text/css" />
 </head>
 <body>
-    <div class="container">
-        <h1>주문 결제</h1>
-        <hr />
+	<div class="container">
+		<h1>주문 결제</h1>
+		<hr />
 
-        <label for="name">이름</label>
-        <input type="text" id="name" placeholder="이름을 입력하세요" />
+		<label for="name">이름</label> <input type="text" id="name"
+			placeholder="이름을 입력하세요" /> <label>주소</label>
+		<div class="address">서울특별시 중구 남대문로 120</div>
 
-        <label>주소</label>
-        <div class="address">서울특별시 중구 남대문로 120</div>
+		<label for="delivery">배송 요청사항</label> <select id="delivery">
+			<option>문 앞</option>
+			<option>직접 받고 부재 시 문 앞</option>
+			<option>경비실</option>
+			<option>택배함</option>
+		</select> <label>결제수단</label>
+		<div class="payment-options">
+			<label><input type="radio" name="paymentOption" /> 카카오페이</label> <label><input
+				type="radio" name="paymentOption" /> TOSS</label> <label><input
+				type="radio" name="paymentOption" /> 네이버 Pay</label> <label><input
+				type="radio" name="paymentOption" /> 카드 결제</label>
+		</div>
 
-        <label for="delivery">배송 요청사항</label>
-        <select id="delivery">
-            <option>문 앞</option>
-            <option>직접 받고 부재 시 문 앞</option>
-            <option>경비실</option>
-            <option>택배함</option>
-        </select>
-
-        <label>결제수단</label>
-        <div class="payment-options">
-            <label><input type="radio" name="paymentOption" /> 카카오페이</label>
-            <label><input type="radio" name="paymentOption" /> TOSS</label>
-            <label><input type="radio" name="paymentOption" /> 네이버 Pay</label>
-            <label><input type="radio" name="paymentOption" /> 카드 결제</label>
-        </div>
-
-        <button class="submit-btn">결제하기</button>
-    </div>
+		<button class="submit-btn">결제하기</button>
+	</div>
 </body>
 </html>

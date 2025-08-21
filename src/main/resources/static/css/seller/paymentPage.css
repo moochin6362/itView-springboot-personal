@@ -1,0 +1,94 @@
+:root {
+    --main-color: #27c7c7;
+    --text-color: #333;
+    --bg-color: #f9f9f9;
+    --border-radius: 8px;
+    --font-family: 'Arial', sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+.container {
+    width: 60%;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    
+}
+
+h1 {
+    text-align: center;
+    color: var(--main-color);
+    margin-bottom: 30px;
+}
+
+hr {
+    border: none;
+    height: 2px;
+    background-color: var(--main-color);
+    margin: 20px 0;
+}
+
+label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.address {
+    background-color: #f1f1f1;
+    padding: 12px;
+    border-radius: var(--border-radius);
+}
+
+select, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--main-color);
+    border-radius: var(--border-radius);
+    font-size: 14px;
+}
+
+.payment-options {
+    margin-top: 15px;
+}
+
+.payment-options label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.payment-options input[type="radio"] {
+    accent-color: var(--main-color);
+    margin-right: 10px;
+}
+
+.submit-btn {
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    padding: 12px;
+    background-color: var(--main-color);
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #1ea8a8;
+}

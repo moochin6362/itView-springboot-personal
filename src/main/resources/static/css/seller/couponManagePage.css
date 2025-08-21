@@ -1,0 +1,140 @@
+:root {
+  --main-color: #27c7c7;
+  --bg-color: #eefbfb;
+  --text-color: #333;
+  --border-radius: 8px;
+  --font-family: 'Arial', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: #fff;
+  color: var(--text-color);
+}
+
+.header {
+  height: 60px;
+  background-color: white;
+  border-bottom: 2px solid var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+.sidebar {
+  width: 220px;
+  background-color: var(--bg-color);
+  border-right: 1px solid var(--main-color);
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-item {
+  margin: 15px 0;
+  padding: 10px 20px;
+  width: 80%;
+  text-align: center;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebar-item.active,
+.sidebar-item:hover {
+  background-color: var(--main-color);
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+.content h2 {
+  margin-bottom: 30px;
+  color: var(--main-color);
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.form-group label {
+  width: 120px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  padding: 8px;
+  width: 250px;
+  border: 2px solid var(--main-color);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.form-buttons button {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-buttons button:hover {
+  background-color: #1ea8a8;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    border-right: none;
+    border-bottom: 1px solid var(--main-color);
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .form-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-group label {
+    width: auto;
+  }
+
+  .form-buttons {
+    justify-content: center;
+  }
+}
