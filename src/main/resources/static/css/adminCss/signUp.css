@@ -1,0 +1,275 @@
+@font-face {
+    font-family: 'EBSHMJESaeronRA';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHMJESaeronRA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    background-color: #ffffff;
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.signup-container {
+    background-color: #fff;
+    padding: 40px 50px;
+    border-radius: 8px;
+    box-shadow: none;
+    width: 500px;
+    box-sizing: border-box;
+}
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.logo h1 {
+    color: #34e5eb;
+    margin: 0;
+    font-family: 'EBSHMJESaeronRA';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHMJESaeronRA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+label {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #333;
+}
+input[type='text'],
+input[type='password'],
+select {
+    padding: 9px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+input[type='text']:focus,
+input[type='password']:focus,
+select:focus {
+    border-color: #03c75a;
+}
+.birth-selects {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.birth-selects select {
+    flex: 1;
+}
+.phone-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.phone-group select {
+    width: 90px;
+}
+.phone-group input[type='text'] {
+    flex: 1;
+}
+.btn-verify {
+    background-color: #eefbfb;
+    border: 1px solid #c2e4e4;
+    color: #000;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 9px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+.btn-verify:hover {
+    background-color: #34e5eb; /* hover 시 조금 진한 민트 */
+    border-color: #a8dada;
+}
+.check-btn {
+    background-color: #eefbfb;
+    border: 1px solid #c2e4e4;
+    color: #000;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 9px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+.check-btn:hover {
+    background-color: #34e5eb; /* hover 시 조금 진한 민트 */
+    border-color: #a8dada;
+}
+.btn-submit {
+    background-color: #eefbfb; /* 민트색 */
+    border: 1px solid #c2e4e4;
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+.btn-submit:hover {
+    background-color: #34e5eb; /* hover 시 조금 진한 민트 */
+    border-color: #a8dada;
+}
+.small-text {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 12px;
+}
+
+/* 회원전용 / 판매자전용 버튼 그룹 */
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.toggle-buttons button {
+    flex: 1;
+    background-color: #eefbfb; /* 민트색 */
+    border: 1px solid #c2e4e4; /* 민트와 어울리는 연한 테두리 */
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-buttons button:hover {
+    background-color: #34e5eb; /* hover 시 조금 진한 민트 */
+    border-color: #a8dada;
+}
+
+/* 선택된 버튼 스타일 */
+.toggle-buttons button.active {
+    background-color: #34e5eb; /* 더 진한 민트톤 */
+    border-color: #7fcfcf;
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+/* 추가정보 기본 숨김 */
+.additional-info {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.toggle-additional {
+    background-color: #eefbfb; /* 버튼 배경색 */
+    color: black; /* 글자색 */
+    font-size: 13px; /* 글자 크기 */
+    font-weight: bold;
+    padding: 6px 12px; /* 상하좌우 여백 */
+    border: 1px solid #c2e4e4; /* 민트와 어울리는 연한 테두리 */
+    border-radius: 25px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 포인터 변경 */
+    transition: background-color 0.3s, transform 0.2s; /* 부드러운 호버 효과 */
+    margin-bottom: 20px;
+}
+
+.toggle-additional:hover {
+    background-color: #34e5eb; /* 호버 시 색상 변경 */
+    transform: translateY(-2px); /* 살짝 위로 이동 */
+}
+
+.tip-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #e9fffb; /* 배경색 */
+    border: 1px solid #c7f5f1; /* 테두리 */
+    border-radius: 12px; /* 둥근 모서리 */
+    padding: 16px 20px; /* 내부 여백 */
+    margin: 10px 0; /* 위아래 여백 */
+}
+
+.tip-text {
+    font-weight: 700;
+    line-height: 1.5;
+    color: #333; /* 글자색 */
+}
+
+.tip-illust {
+    margin-left: auto; /* 오른쪽 끝으로 붙이기 */
+    font-size: 24px; /* 아이콘 크기 */
+}
+
+.signup-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    padding: 5px 0;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip-group input {
+    display: none; /* 라디오 버튼 숨김 */
+}
+
+.chip {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #f9f9f9;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.chip:hover {
+    border-color: #666;
+    background: #f1f1f1;
+}
+
+.chip-group input:checked + .chip {
+    background: #34e5eb; /* 선택된 색상 */
+    border-color: #34e5eb;
+    color: #fff;
+    font-weight: 600;
+}
