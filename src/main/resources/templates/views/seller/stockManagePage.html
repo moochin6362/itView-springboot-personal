@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>재고 관리 페이지</title>
+  <style>
+    :root {
+      --main-color: #27c7c7;
+      --bg-color: #eefbfb;
+      --text-color: #333;
+      --border-radius: 8px;
+      --font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background-color: #fff;
+      color: var(--text-color);
+    }
+
+    .header {
+      height: 60px;
+      background-color: white;
+      border-bottom: 2px solid var(--main-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: var(--bg-color);
+      border-right: 1px solid var(--main-color);
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar-item {
+      margin: 15px 0;
+      padding: 10px 20px;
+      width: 80%;
+      text-align: center;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar-item.active,
+    .sidebar-item:hover {
+      background-color: var(--main-color);
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .content h2 {
+      margin-bottom: 30px;
+      color: var(--main-color);
+    }
+
+    .stock-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      padding: 15px 20px;
+    }
+
+    .stock-name {
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .stock-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stock-controls input[type="number"] {
+      width: 80px;
+      padding: 5px;
+      border: 2px solid var(--main-color);
+      border-radius: var(--border-radius);
+    }
+
+    .stock-controls button {
+      background-color: var(--main-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .stock-controls button:hover {
+      background-color: #1ea8a8;
+    }
+
+    .delete-btn {
+      background-color: #ff4d4d;
+    }
+
+    .delete-btn:hover {
+      background-color: #e64444;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        border-right: none;
+        border-bottom: 1px solid var(--main-color);
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .stock-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stock-controls {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    판매자님, 환영합니다.
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-item">상품 등록</div>
+      <div class="sidebar-item">상품 수정</div>
+      <div class="sidebar-item active">재고 관리</div>
+      <div class="sidebar-item">쿠폰 관리</div>
+      <div class="sidebar-item">상품 Q&A</div>
+    </div>
+
+    <div class="content">
+      <h2>재고 관리 페이지</h2>
+
+      <!-- 재고 목록 예시 -->
+      <div class="stock-item">
+        <div class="stock-name">[상품명1] 촉촉한 수분크림</div>
+        <div class="stock-controls">
+          <input type="number" min="0" value="100" />
+          <button>수정</button>
+          <button class="delete-btn">삭제</button>
+        </div>
+      </div>
+
+      <div class="stock-item">
+        <div class="stock-name">[상품명2] 고보습 핸드크림</div>
+        <div class="stock-controls">
+          <input type="number" min="0" value="55" />
+          <button>수정</button>
+          <button class="delete-btn">삭제</button>
+        </div>
+      </div>
+
+      <div class="stock-item">
+        <div class="stock-name">[상품명3] 데일리 선크림</div>
+        <div class="stock-controls">
+          <input type="number" min="0" value="200" />
+          <button>수정</button>
+          <button class="delete-btn">삭제</button>
+        </div>
+      </div>
+
+      <!-- 필요한 만큼 추가 가능 -->
+    </div>
+  </div>
+
+</body>
+</html>

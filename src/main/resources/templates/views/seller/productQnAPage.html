@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>상품 Q&A 페이지</title>
+  <style>
+    :root {
+      --main-color: #27c7c7;
+      --bg-color: #eefbfb;
+      --text-color: #333;
+      --border-radius: 8px;
+      --font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background-color: #fff;
+      color: var(--text-color);
+    }
+
+    .header {
+      height: 60px;
+      background-color: white;
+      border-bottom: 2px solid var(--main-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: var(--bg-color);
+      border-right: 1px solid var(--main-color);
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar-item {
+      margin: 15px 0;
+      padding: 10px 20px;
+      width: 80%;
+      text-align: center;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar-item.active,
+    .sidebar-item:hover {
+      background-color: var(--main-color);
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .content h2 {
+      margin-bottom: 30px;
+      color: var(--main-color);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid var(--main-color);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: var(--bg-color);
+    }
+
+    .qna-box {
+      background-color: var(--bg-color);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin-bottom: 20px;
+      border: 1px solid var(--main-color);
+      min-height: 100px;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        border-right: none;
+        border-bottom: 1px solid var(--main-color);
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      table, th, td {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    판매자님, 환영합니다.
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-item">상품 등록</div>
+      <div class="sidebar-item">상품 수정</div>
+      <div class="sidebar-item">재고 관리</div>
+      <div class="sidebar-item">쿠폰 관리</div>
+      <div class="sidebar-item active">상품 Q&A</div>
+    </div>
+
+    <div class="content">
+      <h2>상품 Q&A 페이지</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>상품 명</th>
+            <th>문의 제목</th>
+            <th>작성자</th>
+            <th>작성 날짜</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>세럼 A</td>
+            <td>이거 지성도 써도 되나요?</td>
+            <td>user01</td>
+            <td>2025-08-19</td>
+          </tr>
+          <tr>
+            <td>크림 B</td>
+            <td>유통기한이 어떻게 되나요?</td>
+            <td>beauty22</td>
+            <td>2025-08-17</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="qna-box">
+        <strong>문의 내용</strong><br/>
+        피부가 예민한 편인데 사용해도 될까요?
+      </div>
+
+      <div class="qna-box">
+        <strong>답변 내용</strong><br/>
+        네, 본 제품은 무향/무알콜 성분으로 민감성 피부에도 사용 가능합니다. 다만 피부 테스트 후 사용 권장드립니다.
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

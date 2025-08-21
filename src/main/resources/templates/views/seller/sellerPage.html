@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>판매자 페이지</title>
+  <style>
+    :root {
+      --main-color: #27c7c7;
+      --bg-color: #eefbfb;
+      --text-color: #333;
+      --border-radius: 8px;
+      --font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background-color: #fff;
+      color: var(--text-color);
+    }
+
+    .header {
+      height: 60px;
+      background-color: white;
+      border-bottom: 2px solid var(--main-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .wrapper {
+      display: flex;
+      height: calc(100vh - 60px); /* 화면 전체 높이에서 header 제외 */
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: var(--bg-color);
+      border-right: 1px solid var(--main-color);
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar-item {
+      margin: 20px 0;
+      padding: 10px 20px;
+      width: 80%;
+      text-align: center;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar-item:hover {
+      background-color: var(--main-color);
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    /* Responsive: 모바일 간단 대응 */
+    @media (max-width: 768px) {
+      .wrapper {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--main-color);
+      }
+
+      .sidebar-item {
+        margin: 10px;
+        flex-shrink: 0;
+      }
+
+      .content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    판매자님, 환영합니다.
+  </div>
+
+  <div class="wrapper">
+    <div class="sidebar">
+      <div class="sidebar-item">상품 등록</div>
+      <div class="sidebar-item">상품 수정</div>
+      <div class="sidebar-item">재고 관리</div>
+      <div class="sidebar-item">쿠폰 관리</div>
+      <div class="sidebar-item">상품 Q&A</div>
+    </div>
+
+    <div class="content">
+      <!-- 여기에 콘텐츠가 들어갈 예정 -->
+      <h2>대시보드</h2>
+      <p>좌측 메뉴에서 기능을 선택해주세요.</p>
+    </div>
+  </div>
+</body>
+</html>

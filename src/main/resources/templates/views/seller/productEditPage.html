@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>상품 수정 페이지</title>
+  <style>
+    :root {
+      --main-color: #27c7c7;
+      --bg-color: #eefbfb;
+      --text-color: #333;
+      --border-radius: 8px;
+      --font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background-color: #fff;
+      color: var(--text-color);
+    }
+
+    .header {
+      height: 60px;
+      background-color: white;
+      border-bottom: 2px solid var(--main-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: var(--bg-color);
+      border-right: 1px solid var(--main-color);
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar-item {
+      margin: 15px 0;
+      padding: 10px 20px;
+      width: 80%;
+      text-align: center;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar-item.active,
+    .sidebar-item:hover {
+      background-color: var(--main-color);
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .content h2 {
+      margin-bottom: 30px;
+      color: var(--main-color);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="file"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid var(--main-color);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 150px;
+    }
+
+    .form-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .form-buttons button {
+      background-color: var(--main-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .form-buttons button:hover {
+      background-color: #1ea8a8;
+    }
+
+    .delete-btn {
+      background-color: #ff4d4d;
+    }
+
+    .delete-btn:hover {
+      background-color: #e64444;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        border-right: none;
+        border-bottom: 1px solid var(--main-color);
+      }
+
+      .content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    판매자님, 환영합니다.
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-item">상품 등록</div>
+      <div class="sidebar-item active">상품 수정</div>
+      <div class="sidebar-item">재고 관리</div>
+      <div class="sidebar-item">쿠폰 관리</div>
+      <div class="sidebar-item">상품 Q&A</div>
+    </div>
+
+    <div class="content">
+      <h2>상품 수정 페이지</h2>
+      <form>
+        <div class="form-group">
+          <label>상품명</label>
+          <input type="text" value="기존 상품명 예시" />
+        </div>
+
+        <div class="form-group">
+          <label>상품 설명</label>
+          <textarea>기존 설명 내용 예시</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>상품 이미지</label>
+          <input type="file" />
+        </div>
+
+        <div class="form-group">
+          <label>재고 수량</label>
+          <input type="number" min="0" value="100" />
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit">완료</button>
+          <button type="button">취소</button>
+          <button type="button" class="delete-btn">삭제</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
