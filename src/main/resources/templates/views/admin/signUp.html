@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>회원가입</title>
+        <link href="../finalCss/signUp.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="signup-container">
+            <div class="logo">
+                <h1>it:view</h1>
+            </div>
+            <div class="toggle-buttons">
+                <button type="button" id="memberBtn" class="active">회원전용</button>
+                <button type="button" id="sellerBtn">판매자전용</button>
+            </div>
+            <form id="signupForm">
+                <!-- 회원용 아이디 -->
+                <div id="member-field">
+                    <label for="email">아이디</label>
+                    <br />
+                    <input type="text" id="email" placeholder="아이디 입력 (6 ~ 20자)" />
+                </div>
+
+                <!-- 판매자용 사업자등록번호 -->
+                <div id="seller-field" style="display: none">
+                    <label for="biz-number">사업자등록번호</label>
+                    <input type="text" id="biz-number" placeholder="사업자등록번호 입력" />
+                </div>
+
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" placeholder="비밀번호 입력 (문자, 숫자, 특수기호 포함 6 ~ 20자)" />
+
+                <label for="password-confirm">비밀번호 확인</label>
+                <input type="password" id="password-confirm" placeholder="비밀번호 확인" />
+
+                <label for="name">이름</label>
+                <input type="text" id="name" placeholder="이름을 입력하세요" />
+
+                <label>휴대전화</label>
+                <div class="phone-group">
+                    <input type="text" id="phone-number" placeholder="전화번호 입력" />
+                    <button type="button" class="btn-verify">인증</button>
+                </div>
+
+                <label>생년월일</label>
+                <div class="birth-selects">
+                    <select id="birth-year" aria-label="출생년도">
+                        <option value="">년도</option>
+                        <!-- 연도 옵션 추가 가능 -->
+                        <option value="1990">1990</option>
+                        <option value="1991">1991</option>
+                        <option value="1992">1992</option>
+                    </select>
+                    <select id="birth-month" aria-label="출생월">
+                        <option value="">월</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <select id="birth-day" aria-label="출생일">
+                        <option value="">일</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
+                <label for="email-confirm">이메일 <span class="small-text"></span></label>
+                <input type="text" id="email-confirm" placeholder="이메일 입력" />
+
+                <label for="gender">성별</label>
+                <select id="gender">
+                    <option value="">성별</option>
+                    <option value="male">남성</option>
+                    <option value="female">여성</option>
+                    <option value="other">선택 안 함</option>
+                </select>
+
+                <!-- 추가정보 토글 버튼 -->
+                <button type="button" class="toggle-additional">추가정보 입력</button>
+
+                <!-- 추가정보 영역 -->
+                <div class="additional-info">
+                    <div>
+                        <label for="personal-color">퍼스널 컬러</label>
+
+                        <select id="personal-color">
+                            <option value="">선택</option>
+                            <option value="spring">봄 웜톤</option>
+                            <option value="summer">여름 쿨톤</option>
+                            <option value="autumn">가을 웜톤</option>
+                            <option value="winter">겨울 쿨톤</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="skin-type">피부타입</label>
+                        <select id="skin-type">
+                            <option value="">선택</option>
+                            <option value="dry">건성</option>
+                            <option value="oily">지성</option>
+                            <option value="combination">복합성</option>
+                            <option value="sensitive">민감성</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="skin-concern">피부 고민</label>
+                        <input type="text" id="skin-concern" placeholder="예: 여드름, 잡티, 탄력" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">가입하기</button>
+            </form>
+        </div>
+
+        <script>
+            // 회원/판매자 전환
+            const memberBtn = document.getElementById('memberBtn');
+            const sellerBtn = document.getElementById('sellerBtn');
+            const memberField = document.getElementById('member-field');
+            const sellerField = document.getElementById('seller-field');
+
+            memberBtn.addEventListener('click', () => {
+                memberBtn.classList.add('active');
+                sellerBtn.classList.remove('active');
+                memberField.style.display = 'block';
+                sellerField.style.display = 'none';
+            });
+
+            sellerBtn.addEventListener('click', () => {
+                sellerBtn.classList.add('active');
+                memberBtn.classList.remove('active');
+                memberField.style.display = 'none';
+                sellerField.style.display = 'block';
+            });
+            //추가정보 토글
+            const toggleBtn = document.querySelector('.toggle-additional');
+            const additionalInfo = document.querySelector('.additional-info');
+
+            toggleBtn.addEventListener('click', () => {
+                if (additionalInfo.style.display === 'none' || additionalInfo.style.display === '') {
+                    additionalInfo.style.display = 'block';
+                    toggleBtn.textContent = '추가정보 숨기기';
+                } else {
+                    additionalInfo.style.display = 'none';
+                    toggleBtn.textContent = '추가정보 입력';
+                }
+            });
+        </script>
+    </body>
+</html>
