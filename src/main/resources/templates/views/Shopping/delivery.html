@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+body{
+    margin-right:5%;
+    margin-left:5%;
+
+  }
+.title{
+    text-align:center;
+    font-weight:bold;
+    font-size:22px;
+  }
+  .delivery-num{
+color:black;
+font-size:20px;
+border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  font-weight: bold;
+}
+.order-box {
+  border: 1px solid #27c7c7;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius:5px;
+}
+
+
+.order-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-image {
+  width: 130px;
+  height: 130px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  margin-top:1%;
+  border-radius:5px;
+}
+
+.order-info {
+  flex: 1; 
+}
+
+.order-info p {
+  margin: 3px 0;
+}
+
+
+.order-info .price {
+  color: #3943cf;
+  font-weight: bold;
+}
+
+.order-info .name {
+  color: gray;
+}
+.delivery-cancel-btn {
+  background-color: black;
+  color: white;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight:bold;
+  font-size:15px;
+}
+.consumer-inform{
+font-weight: bold;
+font-size:18px;
+color:gray;
+border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  font-weight: bold;
+  border-bottom:none;
+}
+</style>
+</head>
+<body>
+<p class="title">배송조회</p>
+<div class="delivery-num"><p>송장번호</p></div><!-- 송장번호 나오면 배송중/ 아직 배송이 시작되지 않았습니다 나오면 배송전/ 배송이 완료되었습니다 나오면 배송완료 -->
+
+<div class="order-box">
+	  <div class="order-body">
+	    <div class="order-image">(이미지)</div>
+	    <div class="order-info">
+	      <p class="price">가격</p>
+	      <p class="name">상품이름</p>
+	    </div>
+	    <button class="delivery-cancel-btn">배송취소</button>
+	  </div>
+	  
+</div>
+
+<div class="consumer-inform">
+	<div class="name"><p>(이름)</p></div>
+	<div class="address"><p>(주소)</p></div>
+	<div class="phone"><p>(전화번호)</p></div>
+	<div class="delivery-request"><p>배송 요청사항</p></div>
+
+</div>
+</body>
+</html>

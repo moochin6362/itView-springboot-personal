@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+body{
+    margin-right:5%;
+    margin-left:5%;
+
+  }
+.title{
+    text-align:center;
+    font-weight:bold;
+    font-size:22px;
+  }
+.cancel-choose {
+  border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  
+}
+.cancel-option{
+font-weight:bold;
+color:black;
+font-size:19px;
+}
+#sort {
+  border: 1px solid #27c7c7;     
+  border-radius: 8px;         
+  padding: 8px 8px;          
+  font-size: 17px;            
+  outline: none;              
+  cursor: pointer;  
+  margin-bottom:1%;
+  width:100%;          
+}
+#content{
+	width: 98.5%;
+	height:150px;
+	padding: 8px 8px;
+	margin-bottom: 15px;
+	font-size: 17px;
+	border: 1px solid #27c7c7;     
+	border-radius: 8px; 
+
+}
+.refund-inform{
+border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  
+}
+.refund-notice{
+font-size:20px;
+font-weight: bold;
+}
+
+.total-price{
+ display: flex;   
+justify-content: space-between;
+font-weight: bold;
+font-size:18px;
+color:gray;
+margin-left:1%;
+margin-right:1%;
+}
+.refund-method{
+ display: flex;   
+justify-content: space-between;
+font-weight: bold;
+font-size:18px;
+color:gray;
+margin-left:1%;
+margin-right:1%;
+}
+ summary{
+margin-bottom:1%;
+margin-top:1%;
+font-weight: bold;
+}
+
+.refund-notes p{
+	color:gray;
+	margin-left:1.5%;
+
+}
+#cancel-request{
+ margin-top:1%;
+ margin-left:0;
+ margin-right:0;
+ width:100%;
+   display: block;                     
+  padding: 13px 0;         
+  background-color: black; 
+  color: white;            
+  font-size: 18px;         
+  font-weight: bold;       
+  border: none;            
+  border-radius: 5px;      
+  cursor: pointer; 
+  
+  }
+</style>
+</head>
+<body>
+<p class="title">주문취소</p>
+<div class="cancel-choose">
+  <p class="cancel-option">취소사유</p>
+	<select id="sort"name="cancelSortType">
+		<option value="notice" selected>사유를 선택해주세요</option>
+		<option value="like">상품이 마음에 들지 않아요</option>
+		<option value="change-address">배송지를 변경하고 싶어요</option>
+		<option value="order-false">주문을 잘못했어요</option>
+		<option value="delivery-delay">배송이 지연되었어요</option>
+		<option value="service">서비스가 불만족스러워요</option>
+	</select>
+</div>
+
+<div class="cancel-detail">
+  <p class="cancel-option">상세 사유를 입력해주세요</p>
+	<textarea name="cancelContent" id="content" placeholder="내용을 입력해주세요"></textarea>
+</div>
+
+<div class="refund-inform">
+	<p class="refund-notice">취소/환불 정보</p>
+	<div class="total-price"><p>총 환불금액</p><p style="color:black;">(얼마얼마)</p></div>
+	<div class="refund-method"><p>환불 수단</p><p style="color:black;">(결제어떤걸로햇으)</p></div>
+
+</div>
+
+<div class="refund-notes">
+<details>
+	  <summary>결제수단 환불 유의사항</summary>
+	  <p>
+	    - 간편결제(토스페이,네이버페이, 페이코, 카카오페이), 카드 결제(신용카드, 체크카드)건은 결제한 수단으로 취소됩니다.<br><br>
+	    - 현금 결제(무통장 입금)건은 취소/반품 시 등록한 환불 계좌로 입금됩니다.<br><br>
+	    - 휴대폰 결제 건은 당월 결제, 당월 취소에 한해 '휴대폰 결제 취소'로 진행되며, 그 외의 경우(익월 취소 등)에는 취소/반품 시 등록한 환불 계좌로 입금됩니다.<br><br>
+	    - 취소/반품 완료 후 결제 수단에 따라 영업일 기준 약 3~5일 정도 소요될 수 있습니다.
+	  </p>
+</details>
+<details>
+	  <summary>포인트 환불 유의사항</summary>
+	  <p>
+	    - 취소/반품이 완료되면 유효기간이 길게 남은 포인트부터 복원됩니다.<br><br>
+	    - 취소/반품 완료 시, 해당 주문에 사용된 포인트의 유효기간이 지난 경우 복원되지 않습니다.<br>
+	  </p>
+</details>
+</div>
+<button type="submit" id="cancel-request">취소 접수</button>
+</body>
+</html>

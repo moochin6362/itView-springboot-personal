@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+body{
+    margin-right:5%;
+    margin-left:5%;
+
+  }
+.title{
+    text-align:center;
+    font-weight:bold;
+    font-size:22px;
+  }
+  .order-status {
+  display: flex;
+  border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+}
+
+.status-item {
+  flex: 1;                 
+  text-align: center;
+  padding: 13px 0;
+  border-left: 1px solid #ccc;  
+}
+
+.status-item:first-child {
+  border-left: none;      
+}
+
+.status-item p {
+  margin: 9px 0;
+  font-size: 18px;
+  color:gray;
+  
+}
+
+.status-item .count {
+  color: #3943cf;          
+  font-weight: bold;
+}
+.order-box {
+  border: 1px solid #27c7c7;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.order-date {
+  font-weight: bold;
+  font-size:18px;
+}
+
+.order-link {
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+}
+
+
+.order-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-image {
+  width: 130px;
+  height: 130px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.order-info {
+  flex: 1; 
+}
+
+.order-info p {
+  margin: 3px 0;
+}
+
+.order-info .status {
+  font-weight: bold;
+}
+
+.order-info .price {
+  color: #3943cf;
+  font-weight: bold;
+}
+
+.order-info .name {
+  color: gray;
+}
+
+
+.cart-btn {
+  background-color: black;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+</style>
+</head>
+<body>
+ <p class="title">주문내역</p>
+  <div class="order-status">
+  <div class="status-item">
+    <p class="delivery">배송중</p>
+    <p class="count">0</p>
+  </div>
+  <div class="status-item">
+    <p class="delivery">배송완료</p>
+    <p class="count">0</p>
+  </div>
+  <div class="status-item">
+    <p class="delivery">취소/반품</p>
+    <p class="count">0</p>
+  </div>
+</div>
+
+  <div class="order-box">
+  <div class="order-header">
+    <span class="order-date">(주문날짜)</span>
+    <a href="#" class="order-link">></a>
+  </div>
+
+  <div class="order-body">
+    <div class="order-image">(이미지)</div>
+    <div class="order-info">
+      <p class="status">구매확정</p>
+      <p class="price">가격</p>
+      <p class="name">상품이름</p>
+    </div>
+    <button class="cart-btn">장바구니 다시 담기</button>
+  </div>
+  
+</div>
+  <div class="order-box">
+  <div class="order-header">
+    <span class="order-date">(주문날짜)</span>
+    <a href="#" class="order-link">></a>
+  </div>
+
+  <div class="order-body">
+    <div class="order-image">(이미지)</div>
+    <div class="order-info">
+      <p class="status">결제완료</p>
+      <p class="price">가격</p>
+      <p class="name">상품이름</p>
+    </div>
+     <button class="cart-btn">구매확정 하기</button>
+  </div>
+ 
+</div>
+<div class="order-box">
+  <div class="order-header">
+    <span class="order-date">(주문날짜)</span>
+    <a href="#" class="order-link">></a>
+  </div>
+
+  <div class="order-body">
+    <div class="order-image">(이미지)</div>
+    <div class="order-info">
+      <p class="status">취소완료</p>
+      <p class="price">가격</p>
+      <p class="name">상품이름</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+body{
+    margin-right:5%;
+    margin-left:5%;
+
+  }
+.title{
+    text-align:center;
+    font-weight:bold;
+    font-size:22px;
+  }
+  .cancel-notice {
+  border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  color:gray;
+  font-size:24px;
+  font-weight:bold;
+  text-align:center;
+}
+
+.order-box {
+  border: 1px solid #27c7c7;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius:5px;
+}
+
+
+.order-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-image {
+  width: 130px;
+  height: 130px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  margin-top:1%;
+  border-radius:5px;
+}
+
+.order-info {
+  flex: 1; 
+}
+
+.order-info p {
+  margin: 3px 0;
+}
+
+.order-info .status {
+  font-weight: bold;
+}
+
+.order-info .price {
+  color: #3943cf;
+  font-weight: bold;
+  margin-bottom:1%;
+  font-size:20px;
+}
+
+.order-info .name {
+  color: gray;
+  font-size:18px;
+}
+.cs-link{
+	align-items:center;
+	text-decoration:none;
+	color:gray;
+	display:block;
+	margin: 10px auto 5px;
+	width:fit-content;
+}
+.cancel-detail{
+color:gray;
+font-size:20px;
+border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  font-weight: bold;
+}
+
+.refund-notice{
+font-size:20px;
+font-weight: bold;
+}
+
+.total-price,
+.total-refund,
+.refund-method,
+.refund-date{
+font-weight: bold;
+font-size:18px;
+color:gray;
+margin-left:1%;
+margin-right:1%;
+}
+.total-price{
+ display: flex;   
+justify-content: space-between;
+}
+.total-refund{
+ display: flex;   
+justify-content: space-between;
+}
+.refund-method{
+ display: flex;   
+justify-content: space-between;
+}
+.refund-date{
+ display: flex;   
+justify-content: space-between;
+}
+</style>
+</head>
+<body>
+<p class="title">취소상세</p>
+<div class="cancel-notice">
+  <p class="date">접수하신 상품의 취소가 완료되었어요.</p>
+</div>
+<div class="order-box">
+	  <div class="order-body">
+	    <div class="order-image">(이미지)</div>
+	    <div class="order-info">
+	      <p class="price">가격</p>
+	      <p class="name">상품이름</p>
+	    </div>
+	  </div>
+  	<a href="#" class="cs-link">상품문의하기 ></a>
+</div>
+<div class="cancel-detail"><p>취소사유</p></div>
+
+<div class="refund-inform">
+	<p class="refund-notice">환불 정보를 확인해주세요.</p>
+	<div class="total-price"><p>총 결제금액</p><p style="color:black;">(얼마얼마)</p></div>
+	<div class="total-refund"><p>총 환불금액</p><p style="color:black;">(얼마얼마)</p></div>
+	<div class="refund-method"><p>환불 수단</p><p style="color:black;">(결제어떤걸로햇으)</p></div><!-- 이거는 좀 뺄수도... -->
+	<div class="refund-date"><p>환불 예정일</p><p style="color:black;">반품 완료 후 영업일 기준 1~2일</p></div>
+
+</div>
+</body>
+</html>
