@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+body{
+    margin-right:5%;
+    margin-left:5%;
+
+  }
+.wish-Top {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;             
+}
+#sort {
+  border: 1px solid #ccc;     
+  border-radius: 8px;         
+  padding: 8px 8px;          
+  font-size: 16px;            
+  outline: none;              
+  cursor: pointer;            
+}
+
+.quantity{
+	color:gray;
+	margin-left:4%;
+	margin-right:4%;
+	font-size: 18px;
+}
+hr{
+	margin-bottom:1.5%;
+}
+
+.product-list {
+  display: flex;
+  gap: 5%;
+  margin-left:4%;
+  align-items:center;
+   flex-wrap: wrap;
+}
+
+
+.product-item {
+  display: flex;          
+  align-items: flex-start; 
+  width:20%;
+  margin-top:1.5%;
+  flex-direction: column;
+}
+
+
+.check {
+	
+ margin-bottom:6%;
+ transform: scale(1.5);
+ cursor: pointer; 
+}
+
+.product-image {
+ position:relative;
+  background-color: #aaa; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  width: 240px;   /* 고정 크기 */
+  height: 230px;
+}
+.delete-btn{
+position:absolute;
+background:none;
+border:none;
+color:gray;
+font-size:18px;
+top:2.5%;
+right:2%;
+}
+
+.product-info p {
+  margin: 2px 0;
+  text-align:left;
+
+  
+}
+.price{
+color:#3943cf;
+font-size: 20px;
+font-weight:bold;
+}
+.brand{
+font-size: 18px;
+}
+.name{
+	color:gray;
+  font-size: 18px;
+}
+ #cart-insert{
+ margin-top:2%;
+ margin-left:4%;
+ margin-right:4%;
+   display: block;          
+   width: calc(100% - 8%);              
+  padding: 13px 0;         
+  background-color: black; 
+  color: white;            
+  font-size: 18px;         
+  font-weight: bold;       
+  border: none;            
+  border-radius: 5px;      
+  cursor: pointer; 
+  
+  }
+
+
+</style>
+</head>
+<body>
+<div class="wish-Top">
+	<select id="sort"name="wishSortType">
+				<option value="oldest" selected>담은순</option>
+				<option value="popular">인기순</option>
+				<option value="newest">최신순</option>
+				<option value="review">리뷰많은순</option>
+			</select>
+	
+	
+</div>
+<hr>
+
+<span class="quantity">상품(몇개)</span>
+<div class="product-list">
+  <div class="product-item">
+    <input type="checkbox" class="check"/>
+    <div class="product-image">이미지1<button class="delete-btn" type="button">X</button></div>
+    <div class="product-info">
+      <p class="price">가격</p>
+      <p class="brand">브랜드</p>
+      <p class="name">상품이름</p>
+    </div>
+  </div>
+  <div class="product-item">
+    <input type="checkbox" class="check">
+    <div class="product-image">이미지1<button class="delete-btn" type="button">X</button></div>
+    <div class="product-info">
+      <p class="price">가격</p>
+      <p class="brand">브랜드</p>
+      <p class="name">상품이름</p>
+    </div>
+  </div>
+  <div class="product-item">
+    <input type="checkbox" class="check">
+    <div class="product-image">이미지1<button class="delete-btn" type="button">X</button></div>
+    <div class="product-info">
+      <p class="price">가격</p>
+      <p class="brand">브랜드</p>
+      <p class="name">상품이름</p>
+    </div>
+  </div>
+  <div class="product-item">
+    <input type="checkbox" class="check">
+    <div class="product-image">이미지1<button class="delete-btn" type="button">X</button></div>
+    <div class="product-info">
+      <p class="price">가격</p>
+      <p class="brand">브랜드</p>
+      <p class="name">상품이름</p>
+    </div>
+  </div>
+  <div class="product-item">
+    <input type="checkbox" class="check">
+    <div class="product-image">이미지1<button class="delete-btn" type="button">X</button></div>
+    <div class="product-info">
+      <p class="price">가격</p>
+      <p class="brand">브랜드</p>
+      <p class="name">상품이름</p>
+    </div>
+  </div>
+</div>
+<button type="submit" id="cart-insert">선택 상품 장바구니 담기</button>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+body{
+    margin-right:5%;
+    margin-left:5%;
+
+  }
+.title{
+    text-align:center;
+    font-weight:bold;
+    font-size:22px;
+  }
+  .order-notice {
+  border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  color:gray;
+}
+ .order-notice summary{
+  color:black;
+  margin-bottom:1%;
+}
+
+
+.order-box {
+  border: 1px solid #27c7c7;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius:5px;
+}
+
+
+
+.order-count {
+  font-weight: bold;
+  font-size:18px;
+}
+.order-count,
+.delivery-link{
+display:block;
+margin-bottom:5px;
+}
+
+.order-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-image {
+  width: 130px;
+  height: 130px;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  margin-top:1%;
+  border-radius:5px;
+}
+
+.order-info {
+  flex: 1; 
+}
+
+.order-info p {
+  margin: 3px 0;
+}
+
+.order-info .status {
+  font-weight: bold;
+}
+
+.order-info .price {
+  color: #3943cf;
+  font-weight: bold;
+}
+
+.order-info .name {
+  color: gray;
+}
+
+
+.review-btn {
+  background-color: black;
+  color: white;
+  padding: 11px 17px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight:bold;
+  font-size:15px;
+}
+.cs-link{
+	align-items:center;
+	text-decoration:none;
+	color:gray;
+	display:block;
+	margin: 20px auto 10px;
+	width:fit-content;
+}
+.order-detail summary{
+margin-bottom:1%;
+margin-top:1%;
+}
+.order-detail details{
+	border: 1px solid #ccc;  
+  border-left: none;
+  border-right:none;
+  border-top:none;
+}
+.order-detail p{
+	color:gray;
+	margin-left:1.5%;
+}
+
+</style>
+</head>
+<body>
+<p class="title">주문상세</p>
+<div class="order-notice">
+  <p class="date">(결제날짜/시간)</p>
+  <details>
+	  <summary>배송/교환/반품 안내 </summary>
+	  <p>
+	    - 배송은 2~3일 소요됩니다.<br>
+	    - 교환/반품은 수령 후 7일 이내 가능합니다.<br>
+	    - 단, 사용 흔적이 있으면 교환/반품이 불가합니다.
+	  </p>
+</details>
+</div>
+<div class="order-box">
+    <span class="order-count">(주문상품갯수)</span>
+    <a href="#" class="deivery-link">배송조회</a>
+	  <div class="order-body">
+	    <div class="order-image">(이미지)</div>
+	    <div class="order-info">
+	      <p class="status">구매확정</p>
+	      <p class="price">가격</p>
+	      <p class="name">상품이름</p>
+	    </div>
+	    <button class="review-btn">리뷰쓰러가기</button> <!-- //구매확정일때만 나타나기 -->
+	  </div>
+  	<a href="#" class="cs-link">상품문의하기 ></a>
+</div>
+<div class= "order-detail">
+<details>
+	  <summary>주문자 정보 </summary>
+	  <p>(주문자)</p>
+	  <p>(연락처)</p>
+</details>
+
+<details>
+	  <summary>결제 정보 </summary>
+	  <p>(결제 방법)</p>
+	  <p>(총 상품금액)</p>
+</details>
+
+<details>
+	  <summary>배송지 정보 </summary>
+	  <p>(주소)</p>
+</details>
+</div>
+
+
+
+</body>
+</html>

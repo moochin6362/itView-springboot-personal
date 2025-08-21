@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>쿠폰 선택</title>
+<style>
+  body{
+    margin-right:5%;
+    margin-left:5%;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans KR", sans-serif;
+  }
+
+  .title{
+    text-align:center;
+    font-weight:bold;
+    font-size:22px;
+  }
+
+  .coupon{
+    border:1px solid #27c7c7;
+    border-radius:8px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    padding:15px;
+    margin:15px 0;
+
+    /* ↓↓↓ 중앙 정렬 핵심 */
+    display:flex;
+    flex-direction:column;
+    justify-content:center;   /* 상하 가운데 */
+    gap:8px;                  /* header와 body 간격 */
+    min-height:100px;         /* 높이 있는 카드일 때도 중앙 유지 */
+  }
+
+  .coupon-header{
+    /* 헤더 내부(체크박스 + 가격) 수평정렬 */
+    display:flex;
+    align-items:center;       /* 세로 중앙 */
+    gap:8px;                  /* 체크박스와 금액 간격 */
+    margin:0;                 /* 위로 밀던 여백 제거 */
+  }
+
+  .price{
+    font-size:25px;
+    font-weight:bold;
+    color:#3943cf;
+  }
+
+  .coupon-body{
+    display:flex;
+    flex-direction:column;
+    gap:4px;                  /* 이름/설명 간격 */
+  }
+
+  .coupon-name{
+    font-weight:bold;
+    font-size:18px;
+    margin:0; 
+    margin-left:2%;                
+  }
+
+  .coupon-price{
+    color:gray;
+    margin:0;  
+    margin-left:2%;               
+  }
+  #coupon-apply{
+   display: block;          
+  width: 100%;             
+  padding: 13px 0;         
+  background-color: black; 
+  color: white;            
+  font-size: 18px;         
+  font-weight: bold;       
+  border: none;            
+  border-radius: 5px;      
+  cursor: pointer; 
+  }
+</style>
+</head>
+<body>
+  <p class="title">쿠폰선택</p>
+  <hr>
+
+  <div class="coupon">
+    <div class="coupon-header">
+      <label>
+        <input type="checkbox">
+        <span class="price">2000원</span>
+      </label>
+    </div>
+    <div class="coupon-body">
+      <div class="coupon-name">쿠폰이름</div>
+      <div class="coupon-price">쿠폰 설명</div>
+    </div>
+  </div>
+<div class="coupon">
+    <div class="coupon-header">
+      <label>
+        <input type="checkbox">
+        <span class="price">2000원</span>
+      </label>
+    </div>
+    <div class="coupon-body">
+      <div class="coupon-name">쿠폰이름</div>
+      <div class="coupon-price">쿠폰 설명</div>
+    </div>
+  </div>
+  <div class="coupon">
+    <div class="coupon-header">
+      <label>
+        <input type="checkbox">
+        <span class="price">2000원</span>
+      </label>
+    </div>
+    <div class="coupon-body">
+      <div class="coupon-name">쿠폰이름</div>
+      <div class="coupon-price">쿠폰 설명</div>
+    </div>
+  </div>
+<button type="submit" id="coupon-apply">쿠폰 적용하기</button>
+</body>
+</html>
