@@ -1,4 +1,4 @@
-package itView.springboot.product.model.service;
+package itView.springboot.service;
 
 import org.springframework.stereotype.Service;
 

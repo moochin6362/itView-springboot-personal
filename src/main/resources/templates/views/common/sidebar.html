@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sidebar Menu</title>
+<!--     <link href="../finalCss/sidebar.css" rel="stylesheet" type="text/css" /> -->
+
+    <!-- 아이콘 (Font Awesome + Google Fonts) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="sidebar">
+        <!-- 아이콘바 -->
+        <div class="icon-bar">
+            <i class="fas fa-home" data-menu="dashboard"></i>
+            <i class="fas fa-user" data-menu="pos-sale"></i>
+            <i class="fas fa-box" data-menu="manage-permission"></i>
+            <i class="fas fa-users-cog" data-menu="manage-customers"></i>
+            <i class="fas fa-dollar-sign" data-menu="payment"></i>
+            <i class="fas fa-cash-register" data-menu="manage-products"></i>
+            <i class="fas fa-chart-bar" data-menu="sales"></i>
+        </div>
+
+        <!-- 메뉴 패널 -->
+        <div class="menu-panel">
+            <div class="menu-title">it-view</div>
+
+            <div class="menu-item" data-menu="dashboard">
+                <span><i class="fas fa-home"></i> 공지사항 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> IBT</div>
+                <div class="submenu-item"><span>●</span> Manage Web Orders</div>
+                <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+            </div>
+
+            <div class="menu-item" data-menu="pos-sale">
+                <span><i class="fas fa-user"></i> 회원계정 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> IBT</div>
+                <div class="submenu-item"><span>●</span> Manage Web Orders</div>
+                <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+            </div>
+
+            <div class="menu-item" data-menu="manage-permission">
+                <span><i class="fas fa-box"></i> 제품 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> IBT</div>
+                <div class="submenu-item"><span>●</span> Manage Web Orders</div>
+                <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+            </div>
+
+            <div class="menu-item" data-menu="manage-customers">
+                <span><i class="fas fa-users-cog"></i> 문의 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> IBT</div>
+                <div class="submenu-item"><span>●</span> Manage Web Orders</div>
+                <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+            </div>
+
+            <div class="menu-item" data-menu="payment">
+                <span><i class="fas fa-dollar-sign"></i> 신고 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> IBT</div>
+                <div class="submenu-item"><span>●</span> Manage Web Orders</div>
+                <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+            </div>
+
+            <div class="menu-item" data-menu="manage-products">
+                <span><i class="fas fa-cash-register"></i> 쿠폰 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> Product List</div>
+                <div class="submenu-item"><span>●</span> Purchase Orders</div>
+                <div class="submenu-item"><span>●</span> Authorise GRV</div>
+            </div>
+
+            <div class="menu-item" data-menu="sales">
+                <span><i class="fas fa-chart-bar"></i> 포인트 관리</span> ▾
+            </div>
+            <div class="submenu">
+                <div class="submenu-item"><span>●</span> IBT</div>
+                <div class="submenu-item"><span>●</span> Manage Web Orders</div>
+                <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 아이콘 클릭 시 해당 메뉴 펼치기
+        const icons = document.querySelectorAll('.icon-bar i');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        icons.forEach((icon) => {
+            icon.addEventListener('click', () => {
+                const targetMenu = icon.getAttribute('data-menu');
+
+                // 모든 메뉴 초기화
+                menuItems.forEach((item) => {
+                    if (item.dataset.menu === targetMenu) {
+                        item.classList.toggle('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+
+                // 아이콘 active 상태 갱신
+                icons.forEach((i) => i.classList.remove('active'));
+                icon.classList.add('active');
+            });
+        });
+
+        // 오른쪽 메뉴 직접 클릭 시 펼치기
+        menuItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                } else {
+                    menuItems.forEach((i) => i.classList.remove('active'));
+                    item.classList.add('active');
+                }
+
+                // 아이콘도 같이 active로
+                icons.forEach((icon) => {
+                    if (icon.dataset.menu === item.dataset.menu) {
+                        icons.forEach((i) => i.classList.remove('active'));
+                        icon.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

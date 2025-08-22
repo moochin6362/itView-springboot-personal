@@ -1,0 +1,152 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    background-color: #f7f9fa;
+}
+
+/* 전체 사이드바 영역 */
+.sidebar {
+    display: flex;
+    height: 100vh;
+    background: #eefbfb;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    border-radius: 0 15px 15px 0;
+    overflow: hidden;
+}
+
+/* 왼쪽 아이콘바 */
+.icon-bar {
+    width: 60px;
+    background: linear-gradient(180deg, #33c5d2, #2bb8c0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 25px;
+}
+
+.icon-bar i {
+    font-size: 22px;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.icon-bar i:hover,
+.icon-bar i.active {
+    background: #1aa1a8;
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 오른쪽 메뉴패널 */
+.menu-panel {
+    width: 260px;
+    background: #fff;
+    padding: 25px 15px;
+    overflow-y: auto;
+    border-left: 1px solid #ddd;
+}
+
+/* 메뉴 타이틀 */
+.menu-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #34e5eb;
+    font-family: 'EBSHMJESaeronRA';
+    letter-spacing: 1px;
+}
+
+/* 메뉴 아이템 */
+.menu-item {
+    padding: 14px 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    font-size: 16px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.menu-item span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-item:hover {
+    background: #eefbfb;
+    color: #1aa1a8;
+    transform: translateX(4px);
+}
+
+/* 서브메뉴 */
+.submenu {
+    display: none;
+    padding-left: 25px;
+    margin-top: 6px;
+    transition: all 0.3s ease;
+}
+
+.submenu .submenu-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 8px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.submenu .submenu-item:hover {
+    background: #eefbfb;
+    color: #1aa1a8;
+}
+
+/* 서브메뉴 원형 아이콘 */
+.submenu-item span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #33c5d2;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+    text-indent: -9999px;
+}
+
+/* 메뉴 클릭(active) */
+.menu-item.active {
+    background: #1aa1a8;
+    color: #fff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 펼쳐진 상태 */
+.menu-item.active + .submenu {
+    display: block;
+}
+
+/* 화살표 회전 */
+.menu-item span:last-child {
+    display: inline-block;
+    transition: none;
+}
+
+/* 폰트 임포트 */
+@font-face {
+    font-family: 'EBSHMJESaeronRA';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHMJESaeronRA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

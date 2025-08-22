@@ -1,4 +1,4 @@
-package itView.springboot.product.model.vo;
+package itView.springboot.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +21,11 @@ public class Product {
 	private String productCompany;
 	private String productState;
 	private int userNo;
-	private String brandName;
 	private String skinType;
 	private String personalColor;
 	private String skinTrouble;
 	private String headSkin;
+	
+	// join시 가져올 이름
+	private String brandName;
 }

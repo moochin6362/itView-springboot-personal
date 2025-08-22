@@ -1,4 +1,4 @@
-package itView.springboot.product.model.exception;
+package itView.springboot.exception;
 
 public class ProductException extends RuntimeException {
 	public ProductException() {}

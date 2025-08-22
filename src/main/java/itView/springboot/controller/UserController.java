@@ -1,4 +1,4 @@
-package itView.springboot.user.controller;
+package itView.springboot.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

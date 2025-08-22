@@ -80,9 +80,9 @@ body {
 .form-group input[type="number"],
 .form-group input[type="file"],
 .form-group textarea {
-  width: 100%;
+  width: 98.5%;
   padding: 10px;
-  border: 2px solid #34e5eb;
+  border: 1px solid #8ad8f0;
   border-radius: var(--border-radius);
   font-size: 14px;
 }
@@ -102,7 +102,7 @@ body {
 .form-buttons button {
   background-color: #eefbfb;
   color: black;
-  border: none;
+  border: 1px solid #c2e4e4;
   border-radius: var(--border-radius);
   padding: 10px 20px;
   cursor: pointer;
@@ -132,7 +132,7 @@ body {
 .option-button {
   padding: 8px 16px;
   background-color: var(--bg-color);
-  border: none;
+  border: 1px solid #c2e4e4;
   border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 14px;
