@@ -91,7 +91,7 @@ html,body{
   max-width: var(--maxw);
   margin: 0 auto 80px;
   /* 헤더 높이만큼 아래로 + 사이드바 여백 확보 */
-  padding: calc(var(--site-header-h) + 20px) 16px 80px;
+  padding: 20px 16px 80px; /* 상단 여백만 20px */
   padding-left: calc(16px + var(--sidenav-collapsed));
   transition: padding-left .18s ease;
 }
