@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 신고게시판</title>
+    <link rel="stylesheet" href="./admin_report_board.css">
+    <script src="./admin_report_board.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body>
+    <div class="admin-report-board-wrapper">
+        <div class="admin-report-board-header">
+            <div class="admin-report-board-title">신고 게시판</div>
+            <div class="admin-report-board-searchBox">
+                <form th:action="@{/report-board/search}" method="get">
+                    <select name="condition" class="form-select">
+                        <option value="title">제목</option>
+                        <option value="writer">신고글 번호</option>
+                        <option value="content">신고글 상태</option>
+                        <option value="content">작성자</option>
+                    </select>
+                    <input type="search" name="value" class="form-control" style="width:250px; display:inline;">
+                    <button class="report-board-btn" type="submit">
+                        <i class="ti ti-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <hr class="admin-report-board-divider"/>
+        
+            <!--게시글 선택옵션 넣고 삭제(상태 N)하기 버튼 : 토글로 넣어야겠다 / 검색창기능 추가 / -->
+        <div class="admin-report-board-table">
+            <table id="admin-report-board-table-header" class="admin-report-board-table-header">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>신고글 상태</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-report-board-table-body" class="admin-report-board-table-body">
+                    <tr>
+                        <td>5</td>
+                        <td>사기당했어요</td>
+                        <td>luv1004</td>
+                        <td>2025-08-23</td>
+                        <td>Y</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>샀는데 제품이 사라졌어요</td>
+                        <td>dlwl34</td>
+                        <td>2025-08-22</td>
+                        <td>Y</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>신고하고싶습니다.</td>
+                        <td>리뷰천재</td>
+                        <td>2025-08-21</td>
+                        <td>Y</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>cosrx 제품 신고합니다.</td>
+                        <td>rom&nd</td>
+                        <td>2025-07-23</td>
+                        <td>Y</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>뾰루지 나서 신고합니다.</td>
+                        <td>곰돌이 두마리</td>
+                        <td>2024-12-02</td>
+                        <td>Y</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul class="admin-board-pagination">
+                <li class="admin-board-page-item">&laquo;</li>
+                <li class="admin-board-page-item active">1</li>
+                <li class="admin-board-page-item">2</li>
+                <li class="admin-board-page-item">3</li>
+                <li class="admin-board-page-item">4</li>
+                <li class="admin-board-page-item">5</li>
+                <li class="admin-board-page-item">&raquo;</li>
+            </ul>
+
+
+
+
+        </div>
+
+
+
+
+        
+    </div>
+
+
+
+</body>
+</html>

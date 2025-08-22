@@ -1,0 +1,178 @@
+.admin-genBoard-detail-wrapper{
+    width: 55%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-genBoard-detail-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin:10px 0;
+}
+
+/*테이블 부분 verticle table*/
+.admin-genBoard-detail-table {
+    border-collapse: separate;
+    border-spacing: 0cap;
+    border: transparent;
+    width:100%;
+    flex-direction: row;
+}
+.admin-genBoard-detail-table th{
+  background-color: #f9f9f9;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-right-style: none;
+  width: 120px; /* 왼쪽 영역 너비 */
+  font-weight: 400;
+  text-align: center;
+  border-bottom: none;
+  
+}
+.admin-genBoard-detail-table td {
+  padding: 10px 10px;
+  border: 1px solid #ddd;
+  color: #333;
+  width: calc(100% - 120px); /* 남는 영역 전부 */
+  word-break: break-word; 
+  border-left: none;
+  border-bottom: none;
+}
+
+.admin-genBoard-detail-table tr:nth-child(3) th {
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-genBoard-detail-table tr:nth-child(3) th {
+  border-bottom: 1px solid #ddd; 
+  border-bottom-left-radius: 12px;
+}
+.admin-genBoard-detail-table tr:nth-child(1) th{
+    border-top-left-radius: 12px;
+}
+.admin-genBoard-detail-table tr:nth-child(1) td{
+    border-top-right-radius: 12px;
+}
+.admin-genBoard-detail-table tr:nth-child(3) td{
+    border-bottom-right-radius: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+/*게시판 내용 부분*/
+.admin-genBoard-detail-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin:5px 10px;
+    padding:25px 25px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    border:1px solid #ddd;
+}
+.admin-genBoard-detail-content .detail-content{
+    word-break: break-word;
+    white-space: normal; /* 줄바꿈 허용 */
+    vertical-align: top; /* 글이 위쪽부터 시작 */
+}
+
+/*관리자 답변 부분 (게시판에 구조에 포함 X)*/
+.admin-genBoard-detail-reply{
+    display: flex;
+    flex-direction:column;
+    width: 100%;
+    font-size: 14px;
+}
+/*달린 댓글 포맷*/
+.admin-genBoard-detail-reply
+.genBoard-reply-list{
+    width: 100%;
+    display: flex;
+    margin-left: 10px;
+    flex-direction: column;
+    margin-top: 10px;
+}
+.genBoard-reply-list
+.genBoard-reply-date{
+    font-size: 11px;
+    color:#b4b3b3;
+    margin-bottom: 7px;
+}
+.genBoard-reply-list
+.genBoard-reply-text{
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.admin-genBoard-detail-reply
+.genBoard-reply-content textarea{
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-top: 10px;
+    resize:none;
+    overflow-y: auto; 
+
+}
+.admin-genBoard-detail-reply textarea:focus{
+    outline: none;
+    border: 2px solid #b1e8ec9f; /* 포커스 시 테두리 색상 변경 */
+}
+.genBoard-reply-content{
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  width: 100%;
+  gap: 8px; /* textarea와 버튼 사이 간격 */
+}
+.genBoard-reply-btn-wrapper{
+  display: flex;
+  justify-content: flex-end;
+}
+.genBoard-reply-content 
+.genBoard-reply-btn{
+    right:10px;
+    bottom:10px;
+    display: inline-block;
+    padding: 10px 0;
+    text-align: center;
+    width:70px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    cursor: pointer;
+    user-select: none;
+
+}
+
+.genBoard-reply-content 
+.genBoard-reply-btn:hover{
+    background-color: rgba(183, 244, 247, 0.938);
+    color: white;
+    font-weight: 530;
+    border-color: rgba(183, 244, 247, 0.712);
+    box-shadow: 0 0 2px rgba(183, 244, 247, 0.712);
+    
+}
+
