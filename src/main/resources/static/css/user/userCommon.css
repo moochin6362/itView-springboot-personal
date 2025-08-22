@@ -30,6 +30,8 @@ html,body{
   color:var(--text); background:var(--bg);
 }
 
+
+
 /* -------------------- 전역 최상단 헤더(민트) -------------------- */
 .site-header{
   position:relative; top:0; left:0; width:100%;
