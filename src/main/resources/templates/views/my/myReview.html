@@ -4,9 +4,34 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>리뷰 쓰기</title>
+   <!-- 페이지 전용 -->
   <link rel="stylesheet" href="../../../static/css/user/myReview.css"/>
+  
+   <!-- 공통 레이아웃 -->
+  <link rel="stylesheet" href="../../../static/css/user/userCommon.css"/>
+  
+  <!-- 아이콘 CDN (v6) -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
 </head>
 <body>
+
+
+<!-- 전역 헤더 (공통) -->
+  <header class="site-header"><a href="index">It:View</a></header>
+
+  <!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
+  <nav class="sidenav" aria-label="Primary">
+    <div class="sidenav-top">
+      <a class="nav-item active" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
+      <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
+      <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
+      <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
+      <a class="nav-item" href="/Shopping/WishList"><i class="fa-solid fa-heart"></i><span>찜</span></a>
+      <a class="nav-item"><i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
+    </div>
+    </nav>
+
 
 <main class="page">
   <!-- 상단 타이틀바 -->

@@ -1,21 +1,48 @@
-:root{
-  --bg:#f7f8f9; --card:#fff; --line:#e9ecf0; --text:#111; --muted:#6b7280;
-  --primary:#12c7bd; --radius:16px; --space:16px; --maxw:720px;
-}
+/* 공통(userCommon.css)의 색 변수를 그대로 사용합니다. 별도 :root 정의 없음 */
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Pretendard,"Malgun Gothic",Arial,sans-serif;color:var(--text);background:var(--bg)}
+html,body{
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Pretendard,"Malgun Gothic",Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
 
 /* container */
-.page{max-width:var(--maxw);margin:0 auto 96px;padding:8px 16px 24px}
+.page{
+  /* 폭/패딩은 userCommon.css(.page) 기준 사용 */
+  margin-bottom:96px;
+}
 
 /* topbar */
-.page-topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;margin:8px 0 12px}
-.icon-btn{border:none;background:transparent;cursor:pointer;font-size:20px}
-.page-title{margin:0;text-align:center;font-size:22px;font-weight:800}
+.page-topbar{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  margin:8px 0 12px;
+}
+.icon-btn{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  font-size:20px;
+}
+.page-title{
+  margin:0;
+  text-align:center;
+  font-size:22px;
+  font-weight:800
+}
 
 /* cards & blocks */
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--space);margin:10px 0}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:var(--space);
+  margin:10px 0
+}
 .block{margin:18px 0}
 .block-title{margin:0 0 10px;font-size:16px;font-weight:800}
 .block-title.req::after{content:" *"; color:#ff5252}
@@ -23,30 +50,53 @@ html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe
 .divider{border:none;border-top:1px solid var(--line);margin:20px 0}
 
 /* tip banner */
-.tip-banner{display:flex;align-items:center;gap:16px;background:#e9fffb;border-color:#c7f5f1}
+.tip-banner{
+  display:flex;align-items:center;gap:16px;
+  background: var(--primary-soft);
+  border-color: var(--primary-pressed);
+}
 .tip-text{font-weight:700;line-height:1.5}
 .tip-illust{margin-left:auto;font-size:28px}
 
 /* search */
-.search-box{position:relative;background:#f7f8fa;border:1px solid var(--line);border-radius:999px;padding:12px 16px}
+.search-box{
+  position:relative;
+  background:#f7f8fa;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 16px
+}
 .search-ic{position:absolute;left:14px;top:50%;transform:translateY(-50%)}
 .search-input{width:100%;border:none;background:transparent;outline:0;padding-left:28px;font-size:15px}
 
-/* stars */
-.stars{display:inline-flex;gap:8px;justify-content:center;width:100%}
+/* -------------------- Stars: L→R + Yellow -------------------- */
+/* DOM은 5,4,3,2,1 순서를 유지하고, 시각적으로만 좌→우가 되도록 row-reverse 사용 */
+.stars{
+  display:flex;
+  flex-direction: row-reverse;  /* ← 이 줄로 왼쪽에서부터 채워짐 */
+  gap:8px;
+  justify-content:center;
+  width:100%;
+}
 .stars input{position:absolute;opacity:0;pointer-events:none}
 .stars label{
   width:40px;height:40px;display:inline-block;cursor:pointer;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23e5e7eb"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.17L12 18.896l-7.336 3.872 1.402-8.17L.132 9.21l8.2-1.192z"/></svg>') center/28px no-repeat;
-  filter: grayscale(0.2);
+  background: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
+<path fill="%23e5e7eb" d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.17L12 18.896l-7.336 3.872 1.402-8.17L.132 9.21l8.2-1.192z"/>\
+</svg>') center/28px no-repeat;
+  filter: grayscale(0.1);
 }
-/* fill stars */
+/* 선택 시 노란색(#FFC107)으로 채움 (DOM 순서 5→1 기준, 기존 선택자 유지) */
 #star1:checked ~ label[for="star1"],
 #star2:checked ~ label[for="star1"], #star2:checked ~ label[for="star2"],
 #star3:checked ~ label[for="star1"], #star3:checked ~ label[for="star2"], #star3:checked ~ label[for="star3"],
 #star4:checked ~ label[for="star1"], #star4:checked ~ label[for="star2"], #star4:checked ~ label[for="star3"], #star4:checked ~ label[for="star4"],
 #star5:checked ~ label[for="star1"], #star5:checked ~ label[for="star2"], #star5:checked ~ label[for="star3"], #star5:checked ~ label[for="star4"], #star5:checked ~ label[for="star5"]{
-  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2312c7bd"><path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.17L12 18.896l-7.336 3.872 1.402-8.17L.132 9.21l8.2-1.192z"/></svg>');
+  background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
+<path fill="%23FFC107" d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.788 1.402 8.17L12 18.896l-7.336 3.872 1.402-8.17L.132 9.21l8.2-1.192z"/>\
+</svg>');
   filter:none;
 }
 
@@ -59,12 +109,11 @@ html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe
   padding:0 18px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;color:#6b7280;
   cursor:pointer;font-weight:800;
 }
-/* 선택 시: 민트 테두리 + 연한 민트 배경 + 민트 글자 */
 .chip-group input:checked + .chip{
   border-color: var(--primary);
-  background: #e8fbf9;
+  background: var(--primary-soft);
   color: var(--primary);
-  box-shadow: inset 0 0 0 2px rgba(18,199,189,.08);
+  box-shadow: inset 0 0 0 2px rgba(52,229,235,.10);
 }
 
 /* 사진 첨부 버튼 (외곽선) */
@@ -73,8 +122,13 @@ html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe
   border:2px solid var(--primary); background:#fff; color:var(--primary);
   font-weight:900; font-size:16px; cursor:pointer;
 }
+.upload-btn:active{
+  background: var(--primary-pressed);
+  color:#fff;
+  border-color: var(--primary-pressed);
+}
 
-/* questions */
+/* 질문/힌트/텍스트 */
 .q-title{margin:22px 0 10px;font-size:18px;font-weight:900;display:flex;align-items:center;gap:8px}
 .q-title .req-dot{color:#ff5252}
 .q-title.pos::before{content:"🙂";margin-right:6px}
@@ -92,10 +146,17 @@ html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe
 .notice ul{margin:0;padding-left:18px;color:#6b7280;line-height:1.6}
 .notice li+li{margin-top:6px}
 
-/* submit */
-.submit-wrap{position:sticky;bottom:0;padding:12px 0;background:linear-gradient(180deg, rgba(247,248,249,0), rgba(247,248,249,1))}
+/* submit (공통 .primary 스타일을 그대로 사용) */
+.submit-wrap{
+  position:sticky;bottom:0;padding:12px 0;
+  background:linear-gradient(180deg, rgba(247,248,249,0), rgba(247,248,249,1))
+}
 .primary.big{
-  width:100%;height:54px;border:none;border-radius:999px;background:var(--primary);color:#fff;font-weight:900;cursor:pointer;font-size:16px;
+  width:100%;
+  height:54px;
+  border:none;
+  border-radius:999px;
+  /* 배경/호버/액티브 등은 공통 .primary 규칙을 그대로 상속 */
 }
 
 /* responsive */
