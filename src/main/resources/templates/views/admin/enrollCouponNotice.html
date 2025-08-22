@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>쿠폰 공지사항 등록</title>
+        <link href="/finalCss/enrollCoupon.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="notice-container">
+            <h2>쿠폰 공지사항 등록</h2>
+            <form action="/admin/coupon/notice/create" method="post">
+                <label for="coupon">쿠폰 선택</label>
+                <select id="coupon" name="couponId" required>
+                    <option value="">쿠폰 선택</option>
+                    <option value="1">여름 할인 쿠폰</option>
+                    <option value="2">VIP 회원 전용 쿠폰</option>
+                    <option value="3">신규 가입 쿠폰</option>
+                </select>
+
+                <label for="noticeTitle">공지 제목</label>
+                <input type="text" id="noticeTitle" name="noticeTitle" placeholder="공지 제목 입력" required />
+
+                <label for="noticeContent">공지 내용</label>
+                <textarea id="noticeContent" name="noticeContent" placeholder="공지 내용을 입력하세요" rows="5" required></textarea>
+
+                <label>공지 노출기간</label>
+                <input type="date" id="startDate" name="startDate" required /> ~
+                <input type="date" id="endDate" name="endDate" required />
+
+                <label for="target">공지 대상</label>
+                <select id="target" name="target" required>
+                    <option value="">대상 선택</option>
+                    <option value="all">전체 회원</option>
+                    <option value="vip">VIP 회원</option>
+                    <option value="new">신규 회원</option>
+                </select>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-submit">등록</button>
+                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

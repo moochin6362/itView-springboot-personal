@@ -1,0 +1,76 @@
+body {
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    background-color: #eefbfb; /* 전체 배경 민트색 */
+    margin: 0;
+    padding: 20px;
+}
+
+.notice-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 6px;
+    color: #333;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: #333;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 버튼 공통 스타일 */
+.btn-submit,
+.btn-cancel {
+    flex: 1;
+    background-color: #eefbfb; /* 기본 배경 민트 */
+    border: 1px solid #eefbfb; /* border도 민트 */
+    color: black;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* hover 시 조금 진한 민트 */
+.btn-submit:hover,
+.btn-cancel:hover {
+    background-color: #d4f1f1; /* hover 민트 */
+    border-color: #d4f1f1;
+    color: black;
+}
