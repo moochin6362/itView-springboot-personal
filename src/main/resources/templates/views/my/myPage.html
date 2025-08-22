@@ -1,34 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>마이페이지</title>
-<link rel="stylesheet" href="../../../static/css/user/myPage.css" />
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-
+  <!-- 공통 레이아웃 -->
+  <link rel="stylesheet" href="../../../static/css/user/userCommon.css"/>
+  <!-- 페이지 전용 -->
+  <link rel="stylesheet" href="../../../static/css/user/myPage.css"/>
+  <!-- 아이콘 CDN (v6) -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
 </head>
 <body>
 
+  <!-- 전역 헤더 (공통) -->
+  <header class="site-header">It:View</header>
+
+  <!-- 공통 사이드바 (myInfo 기준) -->
+<nav class="sidenav" aria-label="Primary">
+  <div class="sidenav-top">
+    <a class="nav-item active" href="#"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
+    <a class="nav-item" href="#"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
+    <a class="nav-item" href="#"><i class="fa-regular fa-clipboard"></i><span>공지사항</span></a>
+    <a class="nav-item" href="#"><i class="fa-solid fa-star"></i><span>리뷰 관리</span></a>
+  </div>
+</nav>
 
 
   <main class="page">
-        <!-- 마이페이지 상단 타이틀바 -->
-  <div class="page-topbar">
-    <h1 class="page-title">마이페이지</h1>
-    <div class="page-actions">
-      <button class="icon-btn" aria-label="알림">🔔</button>
-      <button class="icon-btn" aria-label="장바구니">🛍️</button>
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <h1 class="page-title">마이페이지</h1>
+      <div class="page-actions">
+        <!-- 이모지 대신 아이콘 쓰려면 아래 주석 해제 -->
+        <!-- <button class="icon-btn" aria-label="알림"><i class="fa-regular fa-bell"></i></button>
+        <button class="icon-btn" aria-label="장바구니"><i class="fa-solid fa-cart-shopping"></i></button> -->
+        <button class="icon-btn" aria-label="알림">🔔</button>
+        <button class="icon-btn" aria-label="장바구니">🛍️</button>
+      </div>
     </div>
-  </div>
 
     <!-- 프로필 카드 -->
     <section class="card profile-card">
-      <div class="avatar">
-        <span>👤</span>
-      </div>
+      <div class="avatar"><span>👤</span></div>
       <div class="profile-meta">
         <div class="nickname">무쳐따니무쳤다</div>
         <div class="chips">
@@ -49,8 +64,6 @@
       <button class="primary">매칭률 확인하기</button>
     </section>
 
-    
-
     <!-- 리뷰 인입 카드 -->
     <section class="card review-cta">
       <div class="review-cta-left">
@@ -68,10 +81,9 @@
     <!-- 구매한 제품 리뷰 쓰기 -->
     <section class="list-row">
       <h3>구매한 제품 리뷰 쓰기</h3>
-      
     </section>
 
-    <!-- 마이 메뉴(2번 캡쳐 상단) -->
+    <!-- 마이 메뉴 -->
     <section class="menu-list card">
       <a class="menu-item" href="#">체험단 리뷰 쓰기<span>당첨된 제품 검색 후 작성</span></a>
       <a class="menu-item" href="#">내 리뷰<span>상위 몇%인지 확인하기</span></a>
@@ -80,8 +92,6 @@
     <!-- 나의 관심 -->
     <section>
       <h2 class="block-title">나의 관심</h2>
-
-      <!-- 최근 본 제품 캐러셀 -->
       <div class="sub-block">
         <div class="sub-title">
           <span>최근 본 제품 3</span>
@@ -113,8 +123,6 @@
       </div>
     </section>
 
-    
-
     <!-- 이벤트 안내 박스 -->
     <section class="card info-card">
       <p>
@@ -133,21 +141,5 @@
     </section>
   </main>
 
- 
 </body>
-
-<aside class="sidenav" aria-label="Primary">
-  <div class="sidenav-top">
-    <a class="nav-item active" href="#"><i class="fa-solid fa-house"></i><span>홈</span></a>
-    <a class="nav-item" href="#"><i class="fa-solid fa-list"></i><span>카테고리</span></a>
-    <a class="nav-item" href="#"><i class="fa-solid fa-gift"></i><span>혜택</span></a>
-    <a class="nav-item" href="#"><i class="fa-solid fa-bag-shopping"></i><span>쇼핑</span></a>
-    <a class="nav-item" href="#"><i class="fa-solid fa-user"></i><span>마이</span></a>
-  </div>
-
-  
-</aside>
-
-
-
 </html>

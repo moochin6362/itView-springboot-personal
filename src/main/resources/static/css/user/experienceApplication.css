@@ -4,6 +4,38 @@ body {
   background: #f7f7f7;
 }
 
+@font-face {
+  font-family: 'EBSHMJESaeronRA';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHMJESaeronRA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 사이트 최상단 헤더 */
+.site-header {
+  font-family: 'EBSHMJESaeronRA', sans-serif;
+  font-size: 72px;
+  text-align: center;
+  padding: 16px 0;
+  background: #34e5eb;     /* 대표색 */
+  color: #fff;
+  border-bottom: 2px solid #8ad8f0;
+/*   position: sticky;        스크롤해도 상단에 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;             /* body 전체폭 차지 */
+  z-index: 2000;
+  height: var(--site-header-h);    /* 최상단 It:View 헤더 높이 변수 적용 */
+}
+:root {
+  --site-header-h: 68px; /* It:View 헤더 높이 (마이페이지와 동일하게 컨트롤) */
+}
+
+
+
+
+
+
 .page {
   max-width: 480px;
   margin: auto;
@@ -11,7 +43,7 @@ body {
   min-height: 100vh;
 }
 
-/* 헤더 */
+/* 헤더 상단 체험단신청하기부분 */
 .header {
   display: flex;
   align-items: center;
@@ -31,13 +63,16 @@ body {
   cursor: pointer;
 }
 
-/* 경고 */
+/* 경고 입력된주소는~~~부분 */
 .alert {
-  background: #ffe9e9;
-  color: #d04c4c;
+  background: #eefbfb;   /* 주소검색 버튼 배경색과 동일 */
+  color: #34e5eb;        /* 대표색 글씨 */
   font-size: 14px;
   padding: 10px;
   text-align: center;
+  font-weight: 600;      /* 강조 느낌 */
+  border: 1px solid #34e5eb;
+  border-radius: 6px;
 }
 
 /* 본문 */
@@ -80,17 +115,28 @@ body {
   gap: 6px;
 }
 .btn-outline {
-  padding: 0 12px;
-  border: 1px solid #ccc;
+ padding: 0 12px;
+  border: 1px solid #34e5eb;
   border-radius: 6px;
-  background: #f5f5f5;
+  background: #eefbfb;         /* 연한 배경 */
+  color: #34e5eb;
   cursor: pointer;
+  font-weight: 600;
+  transition: background .15s ease, color .15s ease;
+}
+.btn-outline:hover {
+  background: #d9f6f6;         /* hover 시 살짝 진해짐 */
+}
+.btn-outline:active {
+  background: #8ad8f0;         /* 클릭 시 */
+  color: #fff;
+  border-color: #8ad8f0;
 }
 
 /* 도움말 */
 .helper {
   font-size: 12px;
-  color: teal;
+  color: #34e5eb;
   margin-left: 70px;
 }
 
@@ -125,7 +171,7 @@ body {
   background: #18b6b6;
 }
 
-/* ===== Desktop layout (넓은 화면) ===== */
+
 @media (min-width: 768px) {
   .page{
     max-width: 960px;         /* 480px → 960px로 넓게 */
@@ -135,7 +181,7 @@ body {
     background: #fff;
   }
 
-  /* 헤더를 웹페이지 느낌으로 */
+
   .header{
     position: relative;       /* 모바일 sticky 해제 */
     height: 64px;
@@ -172,9 +218,30 @@ body {
     box-shadow: none;
     max-width: none;
   }
-  .btn-primary{
-    height: 48px;
-    width: 240px;             /* 페이지 오른쪽 하단에 두고 싶다면 다음 줄 추가 */
-    float: right;             /* 선택: 오른쪽 정렬 */
-  }
+ 
+ 
+ /* 메인 버튼 (이벤트 신청하기) */
+.btn-primary {
+  width: 100%;
+  height: 44px;
+  background: #34e5eb;       /* 대표색 */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background .15s ease, transform .08s ease;
+  box-shadow: 0 4px 10px rgba(52,229,235,0.18);
 }
+.btn-primary:hover {
+  background: #34e5eb;       /* hover 시 같은 대표색 유지 */
+  filter: brightness(1.05);  /* 살짝 밝아짐 */
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  background: #8ad8f0;       /* 클릭 시 진해지는 색 */
+  transform: translateY(0);
+}
+ 
+  
+

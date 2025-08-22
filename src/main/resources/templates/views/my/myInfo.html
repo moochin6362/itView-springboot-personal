@@ -1,197 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>내 정보 수정</title>
-  <link rel="stylesheet" href="myInfo.css"/>
+  <!-- 공통 레이아웃 -->
+  <link rel="stylesheet" href="../../../static/css/user/userCommon.css"/>
+  <!-- 페이지 전용 -->
+  <link rel="stylesheet" href="../../../static/css/user/myInfo.css"/>
+  <!-- 아이콘(CDN) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
 </head>
 <body>
 
-<main class="page">
-  <!-- 상단 타이틀바 -->
-  <div class="page-topbar">
-    <button class="icon-btn back" aria-label="뒤로">←</button>
-    <h1 class="page-title">내 정보 수정</h1>
-    <button class="text-btn save">저장</button>
-  </div>
+  <!-- 전역 헤더 (공통) -->
+  <header class="site-header">It:View</header>
 
-  <form class="form">
+  <!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
+  <nav class="sidenav" aria-label="Primary">
+    <div class="sidenav-top">
+      <a class="nav-item active" href="#"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
+      <a class="nav-item" href="#"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
+      <a class="nav-item" href="#"><i class="fa-regular fa-clipboard"></i><span>공지사항</span></a>
+      <a class="nav-item" href="#"><i class="fa-solid fa-star"></i><span>리뷰 관리</span></a>
+    </div>
+  </nav>
 
-    <!-- 섹션: 기본 정보 -->
-    <h2 class="section-bar">기본 정보</h2>
-
-    <div class="form-row">
-      <label class="form-label">이메일</label>
-      <div class="form-field">
-        <input type="email" class="input" placeholder="email@example.com" />
-      </div>
+  <!-- 본문 -->
+  <main class="page">
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <button class="icon-btn back" aria-label="뒤로">←</button>
+      <h1 class="page-title">내 정보 수정</h1>
+      <button class="text-btn save" type="button">저장</button>
     </div>
 
-    <div class="form-row">
-      <label class="form-label">닉네임</label>
-      <div class="form-field nickname-wrap">
-        <input type="text" class="input"  maxlength="12" />
-        <button class="ghost-btn" type="button">중복확인</button>
-        <p class="helper">2~12글자까지 입력할 수 있어요</p>
-      </div>
-    </div>
+    <form class="form">
 
-    <div class="form-row">
-      <label class="form-label required">성별</label>
-      <div class="form-field">
-        <!-- 단일 선택: name="gender" 동일 -->
-        <div class="chip-group single">
-          <input id="g-f" name="gender" type="radio" />
-          <label for="g-f" class="chip">여성</label>
+      <!-- 섹션: 기본 정보 -->
+      <h2 class="section-bar">기본 정보</h2>
 
-          <input id="g-m" name="gender" type="radio" checked />
-          <label for="g-m" class="chip">남성</label>
+      <div class="form-row">
+        <label class="form-label">이메일</label>
+        <div class="form-field">
+          <input type="email" class="input" placeholder="email@example.com" />
         </div>
       </div>
-    </div>
 
-    <!-- 섹션: 피부 정보 -->
-    <h2 class="section-bar">
-      피부 정보 <span class="muted">맞춤 서비스를 이용하려면 반드시 선택해 주세요</span>
-    </h2>
-
-    <div class="form-row top">
-      <label class="form-label">피부 타입<br><small>(1개)</small></label>
-      <div class="form-field">
-        <!-- 단일 선택: name="skintype" 동일 -->
-        <div class="chip-group single">
-          <input id="sk-d" name="skintype" type="radio" />
-          <label for="sk-d" class="chip">건성</label>
-
-          <input id="sk-n" name="skintype" type="radio" checked />
-          <label for="sk-n" class="chip">중성</label>
-
-          <input id="sk-o" name="skintype" type="radio" />
-          <label for="sk-o" class="chip">지성</label>
-
-          <input id="sk-c" name="skintype" type="radio" />
-          <label for="sk-c" class="chip">복합성</label>
-
-          <input id="sk-s" name="skintype" type="radio" />
-          <label for="sk-s" class="chip">수부지</label>
-
+      <div class="form-row">
+        <label class="form-label">닉네임</label>
+        <div class="form-field nickname-wrap">
+          <input type="text" class="input" maxlength="12" />
+          <button class="ghost-btn" type="button">중복확인</button>
+          <p class="helper">2~12글자까지 입력할 수 있어요</p>
         </div>
       </div>
-    </div>
 
-    <div class="form-row">
-      <label class="form-label">퍼스널컬러<br><small>(1개)</small></label>
-      <div class="form-field">
-        <!-- 단일 선택: name="pcolor" 동일 -->
-        <div class="chip-group single">
-          <input id="pc-spr" name="pcolor" type="radio" />
-          <label for="pc-spr" class="chip">봄웜톤</label>
+      <div class="form-row">
+        <label class="form-label required">성별</label>
+        <div class="form-field">
+          <div class="chip-group single">
+            <input id="g-f" name="gender" type="radio" />
+            <label for="g-f" class="chip">여성</label>
 
-          <input id="pc-sum" name="pcolor" type="radio" />
-          <label for="pc-sum" class="chip">여름쿨톤</label>
+            <input id="g-m" name="gender" type="radio" checked />
+            <label for="g-m" class="chip">남성</label>
 
-          <input id="pc-fall" name="pcolor" type="radio" />
-          <label for="pc-fall" class="chip">가을웜톤</label>
-
-          <input id="pc-win" name="pcolor" type="radio" />
-          <label for="pc-win" class="chip">겨울쿨톤</label>
-
-          <input id="pc-unk" name="pcolor" type="radio" checked />
-          <label for="pc-unk" class="chip">잘 모르겠어요</label>
+            <input id="g-n" name="gender" type="radio" />
+            <label for="g-n" class="chip">선택안함</label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-row">
-      <label class="form-label">피부 고민</label>
-      <div class="form-field">
-        <!-- 복수 선택: checkbox -->
-        <div class="chip-group multi">
-          <input id="c1" type="checkbox" checked/>
-          <label for="c1" class="chip">미백/잡티</label>
-
-          <input id="c2" type="checkbox" checked/>
-          <label for="c2" class="chip">피지/블랙헤드</label>
-
-          <input id="c3" type="checkbox"/>
-          <label for="c3" class="chip">다크서클</label>
-
-          <input id="c4" type="checkbox"/>
-          <label for="c4" class="chip">속건조</label>
-
-
-          <input id="c5" type="checkbox"/>
-          <label for="c5" class="chip">주름/탄력</label>
-
-          <input id="c6" type="checkbox"/>
-          <label for="c6" class="chip">모공</label>
-
-          <input id="c7" type="checkbox"/>
-          <label for="c7" class="chip">홍조</label>
-
-          <input id="c8" type="checkbox"/>
-          <label for="c8" class="chip">각질</label>
-
-          <input id="c9" type="checkbox"/>
-          <label for="c9" class="chip">해당없음</label>
+      <!-- 연령 -->
+      <div class="form-row">
+        <label class="form-label required">연령</label>
+        <div class="form-field">
+          <div class="chip-group single">
+            <input id="age-10" name="age" type="radio"/><label for="age-10" class="chip">10대</label>
+            <input id="age-20" name="age" type="radio"/><label for="age-20" class="chip">20대</label>
+            <input id="age-30" name="age" type="radio" checked/><label for="age-30" class="chip">30대</label>
+            <input id="age-40" name="age" type="radio"/><label for="age-40" class="chip">40대</label>
+            <input id="age-50" name="age" type="radio"/><label for="age-50" class="chip">50대</label>
+            <input id="age-60" name="age" type="radio"/><label for="age-60" class="chip">60대 이상</label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 섹션: 기타 정보 -->
-    <h2 class="section-bar">기타 정보 <span class="muted">고민에 맞는 제품을 추천해드려요</span></h2>
+      <!-- 섹션: 피부 정보 -->
+      <h2 class="section-bar">
+        피부 정보 <span class="muted">맞춤 서비스를 이용하려면 반드시 선택해 주세요</span>
+      </h2>
 
-    <div class="form-row">
-      <label class="form-label">두피·모발 고민</label>
-      <div class="form-field">
-        <!-- 복수 선택 -->
-        <div class="chip-group multi">
-          <input id="h1" type="checkbox"/><label for="h1" class="chip">탈모</label>
-          <input id="h2" type="checkbox"/><label for="h2" class="chip">손상모</label>
-          <input id="h3" type="checkbox"/><label for="h3" class="chip">두피트러블</label>
-          <input id="h4" type="checkbox"/><label for="h4" class="chip">열감두피</label>
-          <input id="h5" type="checkbox"/><label for="h5" class="chip">지성두피</label>
-          <input id="h6" type="checkbox"/><label for="h6" class="chip">가려움</label>
-          <input id="h7" type="checkbox"/><label for="h7" class="chip">비듬/각질</label>
-          <input id="h8" type="checkbox"/><label for="h8" class="chip">해당없음</label>
+      <div class="form-row top">
+        <label class="form-label">피부 타입<br><small>(1개)</small></label>
+        <div class="form-field">
+          <div class="chip-group single">
+            <input id="sk-d" name="skintype" type="radio" /><label for="sk-d" class="chip">지성</label>
+            <input id="sk-n" name="skintype" type="radio" checked /><label for="sk-n" class="chip">건성</label>
+            <input id="sk-o" name="skintype" type="radio" /><label for="sk-o" class="chip">복합성</label>
+            <input id="sk-c" name="skintype" type="radio" /><label for="sk-c" class="chip">민감성</label>
+            <input id="sk-s" name="skintype" type="radio" /><label for="sk-s" class="chip">수부지</label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-row">
-      <label class="form-label">건강 고민</label>
-      <div class="form-field">
-        <!-- 복수 선택 -->
-        <div class="chip-group multi">
-          <input id="b1" type="checkbox"/><label for="b1" class="chip">눈건강</label>
-          <input id="b2" type="checkbox"/><label for="b2" class="chip">만성피로</label>
-          <input id="b3" type="checkbox"/><label for="b3" class="chip">수면/스트레스</label>
-          <input id="b4" type="checkbox"/><label for="b4" class="chip">체지방감소</label>
-          <input id="b5" type="checkbox"/><label for="b5" class="chip">면역력증가</label>
-          <input id="b6" type="checkbox"/><label for="b6" class="chip">근력강화</label>
-          <input id="b7" type="checkbox"/><label for="b7" class="chip">콜레스테롤개선</label>
-          <input id="b8" type="checkbox"/><label for="b8" class="chip">장건강</label>
-          <input id="b9" type="checkbox"/><label for="b9" class="chip">간건강</label>
-          <input id="b10" type="checkbox"/><label for="b10" class="chip">뼈/관절/치아건강</label>
-          <input id="b11" type="checkbox"/><label for="b11" class="chip">여성건강</label>
-          <input id="b12" type="checkbox"/><label for="b12" class="chip">혈액순환</label>
-          <input id="b13" type="checkbox"/><label for="b13" class="chip">소화/위장건강</label>
-          <input id="b14" type="checkbox"/><label for="b14" class="chip">해당없음</label>
+      <div class="form-row">
+        <label class="form-label">퍼스널컬러<br><small>(1개)</small></label>
+        <div class="form-field">
+          <div class="chip-group single">
+            <input id="pc-spr" name="pcolor" type="radio" /><label for="pc-spr" class="chip">봄웜톤</label>
+            <input id="pc-sum" name="pcolor" type="radio" /><label for="pc-sum" class="chip">여름쿨톤</label>
+            <input id="pc-fall" name="pcolor" type="radio" /><label for="pc-fall" class="chip">가을웜톤</label>
+            <input id="pc-win" name="pcolor" type="radio" /><label for="pc-win" class="chip">겨울쿨톤</label>
+            <input id="pc-unk" name="pcolor" type="radio" checked /><label for="pc-unk" class="chip">잘 모르겠어요</label>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 안내사항 -->
-    <section class="notice card">
-      <ul>
-        <li>입력한 정보를 저장하면 추천 서비스 등 맞춤 서비스를 위한 정보 이용에 동의하게 됩니다.</li>
-        <li>자세한 내용은 개인정보 처리방침에서 확인할 수 있습니다.</li>
-      </ul>
-    </section>
+      <div class="form-row">
+        <label class="form-label">피부 고민</label>
+        <div class="form-field">
+          <div class="chip-group multi">
+            <input id="c1" type="checkbox" checked/><label for="c1" class="chip">미백/잡티</label>
+            <input id="c2" type="checkbox" checked/><label for="c2" class="chip">피지/블랙헤드</label>
+            <input id="c3" type="checkbox"/><label for="c3" class="chip">속건조</label>
+            <input id="c4" type="checkbox"/><label for="c4" class="chip">주름/탄력</label>
+            <input id="c5" type="checkbox"/><label for="c5" class="chip">각질</label>
+            <input id="c9" type="checkbox"/><label for="c9" class="chip">해당없음</label>
+          </div>
+        </div>
+      </div>
 
-  </form>
-</main>
+      <!-- 건강 고민 섹션은 삭제 -->
+
+      <!-- 안내사항 -->
+      <section class="notice card">
+        <ul>
+          <li>입력한 정보를 저장하면 추천 서비스 등 맞춤 서비스를 위한 정보 이용에 동의하게 됩니다.</li>
+          <li>자세한 내용은 개인정보 처리방침에서 확인할 수 있습니다.</li>
+        </ul>
+      </section>
+
+    </form>
+  </main>
 
 </body>
 </html>
