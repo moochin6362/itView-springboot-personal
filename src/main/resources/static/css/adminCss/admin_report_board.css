@@ -74,7 +74,7 @@ input, .report-board-btn:focus{
     align-items: center;
     justify-content: center;
     /* border: 1px solid #cccccca9; */
-    border: 1px solid #c4f2f58f;
+    border: 1px solid #34e5eb;
     margin-bottom: 20px;
     width: 100%;
     border-radius: 2px;
@@ -150,7 +150,7 @@ input, .report-board-btn:focus{
 }
 
 .admin-board-page-item.active {
-  background-color: #a1eef3de;
+  background-color: #34e5eb;
   color: white;
-  border-color: #a1eef3de;
+  border-color: #34e5eb;
 }

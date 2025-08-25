@@ -139,7 +139,7 @@
 }
 .admin-partBoard-detail-reply textarea:focus{
     outline: none;
-    border: 2px solid #b1e8ec9f; /* 포커스 시 테두리 색상 변경 */
+    border: 2px solid #34e5eb; /* 포커스 시 테두리 색상 변경 */
 }
 .partBoard-reply-content{
   display: flex;
@@ -168,10 +168,10 @@
 
 .partBoard-reply-content 
 .partBoard-reply-btn:hover{
-    background-color: rgba(183, 244, 247, 0.938);
+    background-color: #34e5eb;
     color: white;
     font-weight: 530;
-    border-color: rgba(183, 244, 247, 0.712);
+    border-color: #34e5eb;
     box-shadow: 0 0 2px rgba(183, 244, 247, 0.712);
     
 }

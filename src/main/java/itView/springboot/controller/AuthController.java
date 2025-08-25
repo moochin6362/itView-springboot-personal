@@ -26,14 +26,14 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     // 로그인 페이지
-    @GetMapping
+    @GetMapping("login")
     public String loginPage() {
         return "login/login";
     }
 
     // 로그인 처리
-    @PostMapping
-    public String login(
+    @PostMapping("login")
+    public String loginPage(
             @RequestParam("userId") String userId,
             @RequestParam("userPwd") String userPwd,
             HttpServletResponse response,
