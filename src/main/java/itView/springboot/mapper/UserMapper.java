@@ -1,7 +1,13 @@
 package itView.springboot.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
-public class UserMapper {
+import itView.springboot.vo.User;
 
+@Mapper
+public interface UserMapper {
+
+	//회원조회
+	 User findByUsername(String username);
+
+	
 }
