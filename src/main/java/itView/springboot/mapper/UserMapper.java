@@ -5,9 +5,8 @@ import itView.springboot.vo.User;
 
 @Mapper
 public interface UserMapper {
-
 	//회원조회
-	 User findByUsername(String username);
+	 User findByUsername(String userId);
 
 	
 }

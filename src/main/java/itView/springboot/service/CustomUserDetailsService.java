@@ -18,11 +18,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         // DB에서 username(userId)로 사용자 조회
-        User user = userMapper.findByUsername(username); 
+        User user = userMapper.findByUsername(userId); 
         if (user == null) {
-            throw new UsernameNotFoundException(username + " 사용자를 찾을 수 없습니다.");
+            throw new UsernameNotFoundException(userId + " 사용자를 찾을 수 없습니다.");
         }
 
         // User를 UserPrincipal로 변환
