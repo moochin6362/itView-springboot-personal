@@ -2,17 +2,19 @@ package itView.springboot.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/login")
 public class UserController {
 
-	@GetMapping("/login/login")
+	@GetMapping("/login")
 	public String loginPage() {
-	    return "views/login/login"; 
+	    return "login/login"; 
 	}
 
-	@GetMapping("/login/signUp")
+	@GetMapping("/signUp")
 	public String signUpPage() {
-	    return "views/login/signUp"; 
+	    return "login/signUp"; 
 	}
 }
