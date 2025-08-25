@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth 			//접근 권한설정
                         .requestMatchers("/admin/**", "/notice/write", "/notice/insert", "/notice/updForm", "/notice/update", "/notice/delete").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN","SELLER")
-                        .requestMatchers("/", "/login/**", "/signUp/**", "/review/**", "/error/**", "/category/**", "/experience/**", "/notice/**", "/joinMoim", "/moimAdminPage", "/personalInfo", "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
+                        .requestMatchers("/", "/login/**", "/signUp/**", "/review/**", "/error/**", "/category/**", "/experience/**", "/notice/**","/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

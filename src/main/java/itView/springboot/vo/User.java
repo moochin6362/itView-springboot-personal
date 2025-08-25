@@ -8,13 +8,13 @@ import lombok.Setter;
 @Setter
 @Getter
 public class User {
-	private int userNo;
-	private String username;
+	private int userNo; //pk
+	private String userName; //실명
 	private String userGender;
 	private int userAge;
 	private String userPhone;
 	private String userType; //p:판매자 a:관리자 u:일반소비자
-	private String userId;
+	private String userId;	
 	private String userPassword;
 	private String userStatus;
 	private int userPoint;
@@ -26,4 +26,5 @@ public class User {
 	private String personalColor;
 	private String skinTrouble;
 	private String headSkin;
+	private String kakaoId;
 }
