@@ -45,9 +45,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth 			//접근 권한설정
-                        .requestMatchers("/admin/**", "/notice/write", "/notice/insert", "/notice/updForm", "/notice/update", "/notice/delete").hasRole("ADMIN")
-                        .requestMatchers("/my/**").hasAnyRole("ADMIN","SELLER")
-                        .requestMatchers("/", "/login/**", "/signUp/**", "/review/**", "/error/**", "/category/**", "/experience/**", "/notice/**","/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
+                        .requestMatchers("/admin/**","/", "/login/**", "/signUp/**", "/review/**","/category/**", "/experience/**","/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
