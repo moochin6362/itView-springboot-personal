@@ -11,3 +11,8 @@ toggleBtn.addEventListener("click", () => {
     toggleBtn.innerHTML = '<i class="ti ti-eye"></i>';
   }
 });
+
+const msg = /*[[${msg}]]*/ '';
+    if (msg) {
+        alert(msg);
+    }

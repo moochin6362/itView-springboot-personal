@@ -45,13 +45,13 @@ public class AuthController {
     @PostMapping("/login")
     public String login(
             @RequestParam("userId") String userId,
-            @RequestParam("userPwd") String userPwd,
+            @RequestParam("userPassword") String userPassword,
             HttpServletResponse response,
             Model model
     ) {
         try {
             Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userId, userPwd)
+                    new UsernamePasswordAuthenticationToken(userId, userPassword)
             );
             SecurityContextHolder.getContext().setAuthentication(auth);
 
@@ -68,7 +68,7 @@ public class AuthController {
             return "redirect:/"; // 로그인 성공
         } catch (Exception e) {
             model.addAttribute("msg", "아이디 또는 비밀번호가 올바르지 않습니다.");
-            return "login/login"; // 로그인 실패
+            return "/index"; // 로그인 실패
         }
     }
 
