@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Kakao.init("36c4525b1f76f6d071d405f80d50e8fa");
     }
 
+	//fetch 비동기 카카오로그인
     Kakao.Auth.createLoginButton({
         container: '#kakao-login-btn',
         success: function(authObj) {
