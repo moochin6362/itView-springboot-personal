@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,14 +36,14 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;  // JWT 발급
 
     // 로그인 페이지
-    @GetMapping("login")
+    @GetMapping("/login")
     public String loginPage() {
         return "login/login";
     }
 
     // 로그인 처리
-    @PostMapping("login")
-    public String loginPage(
+    @PostMapping("/login")
+    public String login(
             @RequestParam("userId") String userId,
             @RequestParam("userPwd") String userPwd,
             HttpServletResponse response,
@@ -55,8 +56,9 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+            
+            //Jwt발급
             String jwt = jwtUtil.generateToken(principal);
-
             Cookie cookie = new Cookie("JWT_TOKEN", jwt);
             cookie.setHttpOnly(true);
             cookie.setPath("/");
@@ -65,7 +67,7 @@ public class AuthController {
 
             return "redirect:/"; // 로그인 성공
         } catch (Exception e) {
-            model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
+            model.addAttribute("msg", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return "login/login"; // 로그인 실패
         }
     }
