@@ -65,14 +65,23 @@ public class AuthController {
             cookie.setMaxAge(60 * 60); // 1시간
             response.addCookie(cookie);
 
-            return "redirect:/"; // 로그인 성공
+            // UserType에 따라 경로 분기
+            String userType = principal.getUser().getUserType();
+            System.out.println("userType = '" + userType + "'");
+            if ("A".equalsIgnoreCase(userType)) {
+                return "redirect:/";  // 관리자
+            } else if ("P".equalsIgnoreCase(userType)) {
+                return "redirect:/seller/sellerPage";  // 파트너
+            } else { 
+                return "redirect:/";  // 일반 사용자
+            }
+
         } catch (Exception e) {
             model.addAttribute("msg", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return "/index"; // 로그인 실패
         }
     }
 
-    
     //kakao로그인
     @PostMapping("/kakaoLogin")
     @ResponseBody
@@ -86,9 +95,7 @@ public class AuthController {
         }
     }
 
-    	
- 
-    
+   
     // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
