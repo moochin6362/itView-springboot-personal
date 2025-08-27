@@ -17,15 +17,15 @@
                 </div>
                 <div class="login-select-loginType">
                     <div class="loginType-box">
-                        <input type="radio" id="login-admin" name="loginType" value="admin" required>
+                        <input type="radio" id="login-admin" name="userType" value="A" required>
                         <label for="login-admin">관리자</label>
                     </div>
                     <div class="loginType-box">
-                        <input type="radio" id="login-partner" name="loginType" value="partner">
+                        <input type="radio" id="login-partner" name="userType" value="P">
                         <label for="login-partner">판매자</label>
                     </div>
                     <div class="loginType-box">
-                        <input type="radio" id="login-general" name="loginType" value="general">
+                        <input type="radio" id="login-general" name="userType" value="U">
                         <label for="login-general">일반</label>
                     </div>
                 </div>
@@ -50,6 +50,9 @@
                     <button type="button" onclick="location.href='/signUp'">회원가입</button> <!--회원정보 없을 경우 회원가입 페이지 이동-->
                 </div>
                 <div id="kakao-login-btn"></div>
+                
+                <input type="hidden" name="beforeURL"/>
+                
             </form>
         </div>    
     </main>

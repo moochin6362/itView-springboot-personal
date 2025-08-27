@@ -23,7 +23,6 @@ public class UserController {
         return "login/signUp";
     }
 
-    
     //비밀번호 찾기
     @GetMapping("/findPwd")
     public String findPwdPage() {
