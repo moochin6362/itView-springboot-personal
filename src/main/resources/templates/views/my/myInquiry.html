@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>1:1문의</title>
   
-   <!-- 공통 레이아웃 -->
-  <link rel="stylesheet" href="../../../static/css/user/userCommon.css"/>
-  <!-- 페이지 전용 -->
-  <link rel="stylesheet" href="../../../static/css/user/myInquiry.css"/>
+  <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
+
+  <!-- 페이지 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/myInquiry.css}" />
   <!-- 아이콘(CDN) -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"

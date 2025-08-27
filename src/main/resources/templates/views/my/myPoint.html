@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>내 포인트</title>
+
+   <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
+
+  <!-- 페이지 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/myPoint.css}" />
+
+  <!-- 아이콘 -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" />
+</head>
+<body>
+
+  <!-- 전역 헤더 (공통) -->
+  <header class="site-header">
+    <a href="index">It:View</a>
+  </header>
+
+  <!-- 전역 사이드바 (공통) -->
+  <nav class="sidenav" aria-label="Primary">
+    <div class="sidenav-top">
+      <a class="nav-item" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
+      <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
+      <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
+      <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
+      <a class="nav-item" href="/Shopping/WishList"><i class="fa-solid fa-heart"></i><span>찜</span></a>
+      <a class="nav-item"><i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <!-- 상단 타이틀바 (myPage와 동일 레이아웃) -->
+    <div class="page-topbar">
+      <h1 class="page-title">포인트</h1>
+      <div class="page-actions">
+        <button class="icon-btn" aria-label="알림">🔔</button>
+        <button class="icon-btn" aria-label="장바구니">🛍️</button>
+      </div>
+    </div>
+
+    <!-- 포인트 카드 -->
+    <section class="point-card card" aria-labelledby="pointHeading">
+      <div class="card-left">
+        <h2 id="pointHeading" class="card-title">내 포인트</h2>
+        <div class="point-big" th:text="${pointBalance} + 'P'">15P</div>
+        <p class="muted" th:text="${expireSoonText}">
+          포인트 사용 만료기간은 3년입니당
+        </p>
+      </div>
+      <button class="info" type="button" aria-label="포인트 안내">
+        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+      </button>
+    </section>
+
+    <!-- 필터 탭 -->
+    <nav class="tabs" aria-label="포인트 내역 필터">
+      <button class="tab active" type="button" data-filter="all">전체</button>
+      <button class="tab" type="button" data-filter="save">적립</button>
+      <button class="tab" type="button" data-filter="use">사용</button>
+      <button class="tab" type="button" data-filter="expire">소멸</button>
+    </nav>
+
+    <!-- 포인트 내역 -->
+    <section class="history" aria-live="polite">
+      <!-- 예시 데이터 (Thymeleaf로 서버에서 렌더링 가능) -->
+      <div class="month">2025년 08월</div>
+
+      <div class="row" data-type="save">
+        <div>
+          <p class="row-title">리뷰 작성 보상</p>
+          <div class="date">2025-08-20 14:21</div>
+        </div>
+        <div class="right">
+          <div class="amount plus">+200P</div>
+          <div class="expire">소멸 예정일: 2026-08-20</div>
+        </div>
+      </div>
+
+      <div class="row" data-type="use">
+        <div>
+          <p class="row-title">주문 결제 사용</p>
+          <div class="date">2025-08-18 09:12</div>
+        </div>
+        <div class="right">
+          <div class="amount">-150P</div>
+        </div>
+      </div>
+
+      <div class="row" data-type="expire">
+        <div>
+          <p class="row-title">포인트 소멸</p>
+          <div class="date">2022-08-01 00:00</div>
+        </div>
+        <div class="right">
+          <div class="amount">-30P</div>
+        </div>
+      </div>
+
+      <div class="month">2025년 07월</div>
+
+      <div class="row" data-type="save">
+        <div>
+          <p class="row-title">신규 가입 축하</p>
+          <div class="date">2025-07-28 11:00</div>
+        </div>
+        <div class="right">
+          <div class="amount plus">+1000P</div>
+          <div class="expire">소멸 예정일: 2026-07-28</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- (필요 시) 탭 필터용 간단 스크립트 -->
+  <script>
+    (function(){
+      const tabs = document.querySelectorAll('.tabs .tab');
+      const rows = document.querySelectorAll('.history .row');
+      tabs.forEach(tab=>{
+        tab.addEventListener('click', ()=>{
+          tabs.forEach(t=>t.classList.remove('active'));
+          tab.classList.add('active');
+          const type = tab.dataset.filter;
+          rows.forEach(r=>{
+            r.style.display =
+              (type === 'all' || r.dataset.type === type) ? '' : 'none';
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

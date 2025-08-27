@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>쿠폰함</title>
+
+ <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
+
+  <!-- 페이지 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/myCoupon.css}" />
+<!-- 아이콘 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" />
+</head>
+<body>
+
+	<!-- 전역 헤더 (공통) -->
+	<header class="site-header">
+		<a href="index">It:View</a>
+	</header>
+
+	<!-- 전역 사이드바 (공통) -->
+	<nav class="sidenav" aria-label="Primary">
+		<div class="sidenav-top">
+			<a class="nav-item" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
+			<a class="nav-item" href="/experience/experienceApplication"><i
+				class="fa-solid fa-gift"></i><span>체험단 신청</span></a> <a class="nav-item"
+				href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
+			<a class="nav-item" href="/Shopping/cart"><i
+				class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a> <a
+				class="nav-item" href="/Shopping/WishList"><i
+				class="fa-solid fa-heart"></i><span>찜</span></a> <a class="nav-item"><i
+				class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
+		</div>
+	</nav>
+
+	<main class="page">
+		<!-- 상단 바 -->
+		<header class="topbar">
+			<a class="back" href="javascript:history.back()" aria-label="뒤로가기">
+				<i class="fa-solid fa-arrow-left"></i>
+			</a>
+			<h1 class="title">쿠폰함</h1>
+			<span aria-hidden="true"></span>
+		</header>
+
+		<!-- 상단 탭 -->
+		<nav class="top-tabs" aria-label="쿠폰 탭">
+			<button class="tab active" type="button">보유 쿠폰</button>
+			<a class="tab link" href="#">쿠폰 등록</a>
+		</nav>
+
+		<!-- 카테고리 칩 -->
+		<div class="chips" role="tablist" aria-label="쿠폰 분류">
+			<button class="chip active" type="button">전체</button>
+			<button class="chip" type="button">상품</button>
+			<button class="chip" type="button">카테고리</button>
+			<button class="chip" type="button">브랜드</button>
+			<button class="chip" type="button">장바구니</button>
+			<button class="chip" type="button">배송</button>
+			<button class="chip" type="button">기타</button>
+		</div>
+
+		<!-- 쿠폰 코드 등록 -->
+		<form class="coupon-form" method="post"
+			th:action="@{/coupon/register}">
+			<label class="sr-only" for="couponCode">쿠폰 코드</label> <input
+				id="couponCode" name="code" placeholder="쿠폰 코드" />
+			<button type="submit" class="btn primary">등록하기</button>
+		</form>
+
+		<!-- 비어있는 상태 -->
+		<section class="empty">
+			<p class="empty-text">보유 쿠폰이 없어요</p>
+			<a class="btn link" href="#">쿠폰등록 하러가기</a>
+		</section>
+
+		<!-- 유의사항 -->
+		<section class="notice">
+			<h2 class="sr-only">유의사항</h2>
+			<ul>
+				<li>사용기간이 만료된 쿠폰은 보유 목록에서 자동으로 삭제됩니다.</li>
+				<li>일부 쿠폰은 특정 카테고리/브랜드에만 적용됩니다.</li>
+			</ul>
+		</section>
+	</main>
+</body>
+</html>

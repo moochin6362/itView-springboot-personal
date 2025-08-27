@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>리뷰 쓰기</title>
-   <!-- 페이지 전용 -->
-  <link rel="stylesheet" href="../../../static/css/user/myReview.css"/>
-  
-   <!-- 공통 레이아웃 -->
-  <link rel="stylesheet" href="../../../static/css/user/userCommon.css"/>
+   <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
+
+  <!-- 페이지 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/myReview.css}" />
   
   <!-- 아이콘 CDN (v6) -->
   <link rel="stylesheet"
