@@ -28,7 +28,7 @@ public class ProductRestContoller {
 	
 	@PostMapping("imageUpload")
 	public String imageUpload(@RequestParam("file") ArrayList<MultipartFile> file) {
-		JSONObject json = new JSONObject();
+		JSONObject json = new JSONObject();  
 		
 		for(int i = 0; i < file.size(); i++) {
 			MultipartFile upload = file.get(i);
