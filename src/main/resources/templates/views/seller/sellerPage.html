@@ -4,8 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>판매자 페이지</title>
-<link href="../../../static/css/seller/sellerPage.css" rel="stylesheet"
-	type="text/css" />
+<link href="/css/seller/sellerPage.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<div class="header">판매자님, 환영합니다.</div>
@@ -25,5 +24,19 @@
 			<p>좌측 메뉴에서 기능을 선택해주세요.</p>
 		</div>
 	</div>
+	
+	<script>
+		window.onload = () => {
+			const buttons = document.querySelectorAll('.sidebar-item');
+			for(const button of buttons){
+				button.addEventListener('click', e => {
+					const value = e.target.innerText;
+					if(value == '상품 등록') {
+						location.href = 'insertProductPage';
+					}
+				});
+			}
+		}
+	</script>
 </body>
 </html>

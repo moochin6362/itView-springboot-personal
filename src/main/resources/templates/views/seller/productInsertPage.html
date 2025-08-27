@@ -4,17 +4,17 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>상품 등록 페이지</title>
-	<link href="../../../static/css/seller/productInsertPage.css"rel="stylesheet" type="text/css" />
-	<link href="../../../static/summernote/summernote-lite.css" rel="stylesheet"/>
+	<link href="/css/seller/productInsertPage.css"rel="stylesheet" type="text/css" />
+	<link href="/summernote/summernote-lite.css" rel="stylesheet"/>
 <!-- 	<link href="../../../static/css/seller/sidebar.css" rel="stylesheet"/> -->
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<script src="../../../static/summernote/summernote-lite.js"></script>
-	<script src="../../../static/summernote/summernote-ko-KR.js"></script>
+	<script src="/summernote/summernote-lite.js"></script>
+	<script src="/summernote/summernote-ko-KR.js"></script>
 </head>
 <body>
 
 	<div class="header">판매자님, 환영합니다.</div>
-	<div th:replace="~{views/common/sidebar :: sidebar}"></div>
+<!-- 	<div th:replace="~{views/common/sidebar :: sidebar}"></div> -->
 
 	<div class="layout">
 
@@ -68,8 +68,8 @@
 						<p class="option-title">추천 피부 타입</p>
 						<div class="option-row">
 							<button type="button" class="option-button">건성</button>
-							<button type="button" class="option-button">중성</button>
 							<button type="button" class="option-button">지성</button>
+							<button type="button" class="option-button">민감성</button>
 							<button type="button" class="option-button">복합성</button>
 							<button type="button" class="option-button">수부지</button>
 						</div>
@@ -157,7 +157,7 @@
 		fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
 		height: 450,
 		lang: "ko-KR",
-		placeholder: "상품 정보를 입력하세요",
+		
 		
 		// 이미지 업로드 처리
 		callbacks : {
@@ -179,10 +179,10 @@
 			type : 'post',
 			data : formData,
 			enctype : 'multipart/form-data',
+			processData : false,
+			contentType : false,
 			success : function(data){
-				$(el).summernote('insertImage', '${pageContext.request.contextPath}/static/images/upload'+data, function($image){
-					$image.css('width', '100%');
-				});
+				$(el).summernote('editor.insertImage', data.url);
 			},
 			error : data => console.log(data)
 		});
