@@ -22,7 +22,7 @@ public class SecurityConfig {
    @Bean // 반환 값을 bean으로 등록
     public BCryptPasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    } 
 
 
 }
