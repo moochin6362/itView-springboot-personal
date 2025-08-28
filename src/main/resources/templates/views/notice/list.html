@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,7 +44,7 @@
   </head>
   <body>
 
-  <div th:replace="~{views/common/header :: header}"></div>
+  <div th:replace="~{common/header :: header}"></div>
 
     <main class="container my-5">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -62,55 +62,28 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>3</td>
-                <td class="text-start">[안내] 2025년 추석 배송 일정 안내</td>
+            <tr th:each="notice : ${notices}"
+                th:onclick="|location.href='/notice/${notice.boardId}'|"
+                style="cursor:pointer;">
+                <input type="hidden"  name="boardId" value="${notice.boardId}">
+                <td>[[${notice.boardId}]]</td>
+                <td class="text-start">[[${notice.boardTitle}]]</td>
                 <td>관리자</td>
-                <td>2025-08-10</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td class="text-start">[안내] 2025년 추석 배송 일정 안내</td>
-                <td>관리자</td>
-                <td>2025-08-10</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td class="text-start">[안내] 2025년 추석 배송 일정 안내</td>
-                <td>관리자</td>
-                <td>2025-08-10</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td class="text-start">[안내] 2025년 추석 배송 일정 안내</td>
-                <td>관리자</td>
-                <td>2025-08-10</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td class="text-start">[공지] 시스템 점검으로 인한 서비스 일시 중단</td>
-                <td>관리자</td>
-                <td>2025-08-05</td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td class="text-start">[신규 기능] 포인트 적립 서비스 안내</td>
-                <td>관리자</td>
-                <td>2025-07-28</td>
+                <td>[[${notice.boardDate}]]</td>
               </tr>
             </tbody>
           </table>
         </div>
       
         <!-- 하단 오른쪽 버튼 -->
-        <div class="d-flex justify-content-end mt-3">
-          <a href="board_write.html" class="btn btn-primary px-4">
+        <div th:if="${session.loginUser != null and session.loginUser.userType == 'A'}" class="d-flex justify-content-end mt-3">
+          <a href="/notice/write" class="btn btn-primary px-4">
             등록
           </a>
         </div>
       </main>
 
-  <div th:replace="~{views/common/footer :: footer}"></div>
+  <div th:replace="~{common/footer :: footer}"></div>
 
   </body>
 </html>
