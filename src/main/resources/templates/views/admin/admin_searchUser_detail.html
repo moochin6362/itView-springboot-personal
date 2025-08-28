@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>관리자 회원조회 상세페이지</title>
+	<link rel="stylesheet" href="/css/adminCss/admin_searchUser_detail.css">
+   	<link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+	<script src="/js/admin/admin_searchUser_detail.js"></script>
+	<script src="/js/inhoAdmin/sidebar.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body>
+	<!-- 사이드바 -->
+	<div th:replace="~{common/sidebar :: sidebar}"></div>
+	<!-- 헤더 -->
+	<div th:replace="~{common/header2 :: header2}"></div>
+
+    <div class="admin-searchUser-detail-wrapper">
+        <div class="admin-searchUser-detail-container"> <!--게시판-->
+            <table class="admin-searchUser-detail-table">  <!--게시판 헤더-->
+                <tr>
+                    <th>회원 아이디</th>
+                    <td>luv1004</td>
+                </tr>
+                <tr>
+                    <th>이메일</th>
+                    <td>luv1004@gmail.com</td>
+                </tr>
+                <tr>
+                    <th>회원 유형</th>
+                    <td>일반</td>
+                </tr>
+                <tr>
+                    <th>활동 여부</th>
+                    <td>Y</td>
+                </tr>
+                <tr>
+                    <th>누적 신고횟수</th>
+                    <td>3 회</td>
+                </tr>
+            </table>
+         </div>
+         <button class="admin-reportList-btn" type="button" 
+                th:onclick="'location.href=\'/report/list?userId=' + ${member.userId} + '\'"'>
+            신고글 보기
+        </button>
+
+       
+
+
+       
+
+
+
+
+    </div>
+</body>
+</html>

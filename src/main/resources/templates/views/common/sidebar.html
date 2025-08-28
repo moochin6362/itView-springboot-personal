@@ -13,7 +13,9 @@
 	
 	    <!-- 메뉴 패널 -->
 	    <div class="menu-panel">
-	        <div class="menu-title">it-view</div>
+	        <div class="menu-title">
+	        	<a th:href="@{/home}">it-view</a>
+	        </div>
 	
 	        <div class="menu-item" data-menu="dashboard">
 	            <span><i class="fas fa-home"></i> 공지사항 관리</span> ▾
@@ -28,36 +30,39 @@
 	            <span><i class="fas fa-user"></i> 회원계정 관리</span> ▾
 	        </div>
 	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> IBT</div>
-	            <div class="submenu-item"><span>●</span> Manage Web Orders</div>
-	            <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+	            <div class="submenu-item"><span>●</span>
+	            <a th:href="@{/admin/searchUser}"> 회원 조회</a>
+	            </div>
 	        </div>
 	
 	        <div class="menu-item" data-menu="manage-permission">
 	            <span><i class="fas fa-box"></i> 제품 관리</span> ▾
 	        </div>
 	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> IBT</div>
-	            <div class="submenu-item"><span>●</span> Manage Web Orders</div>
-	            <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+	            <div class="submenu-item"><span>●</span> 
+	            	<a href="#">판매 금지 제품 공지사항</a>
+	            </div>
 	        </div>
 	
 	        <div class="menu-item" data-menu="manage-customers">
 	            <span><i class="fas fa-users-cog"></i> 문의 관리</span> ▾
 	        </div>
 	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> IBT</div>
-	            <div class="submenu-item"><span>●</span> Manage Web Orders</div>
-	            <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+	            <div class="submenu-item"><span>●</span> 
+	            	<a th:href="@{/admin/gBoard}"> 일반회원 문의</a>
+	            </div>
+	            <div class="submenu-item"><span>●</span>
+	            	<a th:href="@{/admin/pBoard}"> 판매자 문의</a>
+	            </div>
 	        </div>
 	
 	        <div class="menu-item" data-menu="payment">
 	            <span><i class="fas fa-dollar-sign"></i> 신고 관리</span> ▾
 	        </div>
 	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> IBT</div>
-	            <div class="submenu-item"><span>●</span> Manage Web Orders</div>
-	            <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
+	            <div class="submenu-item"><span>●</span> 
+	            	<a th:href="@{/admin/report}"> 신고 게시판</a>
+	            </div>
 	        </div>
 	
 	        <div class="menu-item" data-menu="manage-products">

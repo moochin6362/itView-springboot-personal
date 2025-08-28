@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자용 회원조회</title>
+    <link rel="stylesheet" href="/css/adminCss/admin_searchUser.css">
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+    <script src="/js/admin/admin_searchUser.js" defer></script>
+     <script src="/js/inhoAdmin/sidebar.js" defer></script>
+     <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body>
+	<div class="container">
+		<!-- 사이드바 -->
+		<div th:replace="~{common/sidebar :: sidebar}"></div>
+		<!-- 컨텐츠 영역 -->
+	    <div class="content-area">
+			<!-- 헤더 -->
+			<div th:replace="~{common/header2 :: header2}"></div>
+	
+		   <div class="admin-searchUser-wrapper">
+		       <div class="admin-searchUser-header">
+		           <div class="admin-searchUser-title">회원 조회</div>
+		           <div class="admin-searchUser-searchBox">
+		               <form th:action="@{/searchUser/search}" method="get">
+		                   <select name="condition" class="form-select">
+		                       <option value="title">회원 아이디</option>
+		                       <option value="writer">가입 유형</option>
+		                       <option value="content">활동 상태</option>
+		                       <option value="content">누적 신고횟수</option>
+		                   </select>
+		                   <input type="search" name="value" class="form-control" style="width:250px; display:inline;">
+		                   <button class="searchUser-btn" type="submit">
+		                       <i class="ti ti-search"></i>
+		                   </button>
+		               </form>
+		           </div>
+		       </div>
+		       <hr class="admin-searchUser-divider"/>
+		
+		       <div class="admin-searchUser-table">
+		           <table id="admin-searchUser-table-header" class="admin-genBoard-table-header">
+		               <thead>
+		                   <tr>
+		                       <th>가입유형</th>
+		                       <th>회원 아이디</th>
+		                       <th>가입일</th>
+		                       <th>활동 상태</th>
+		                       <th>누적 신고횟수</th>
+		                   </tr>
+		               </thead>
+		               <tbody id="admin-searchUser-table-body" class="admin-genBoard-table-body">
+		                   <tr>
+		                       <td>판매자</td>
+		                       <td>cosrx</td>
+		                       <td>2014-03-23</td>
+		                       <td>Y</td>
+		                       <td>1회</td>
+		                   </tr>
+		                   <tr>
+		                       <td>판매자</td>
+		                       <td>rainbowmansion</td>
+		                       <td>2014-03-23</td>
+		                       <td>Y</td>
+		                       <td>2회</td>
+		                   </tr>
+		                   <tr>
+		                       <td>일반</td>
+		                       <td>kim44</td>
+		                       <td>2014-03-23</td>
+		                       <td>N</td>
+		                       <td>7회</td>
+		                   </tr>
+		                   <tr>
+		                       <td>일반</td>
+		                       <td>luv1004</td>
+		                       <td>2025-07-23</td>
+		                       <td>Y</td>
+		                       <td>1회</td>
+		                   </tr>
+		                   <tr>
+		                       <td>판매자</td>
+		                       <td>rom&nd</td>
+		                       <td>2023-12-01</td>
+		                       <td>Y</td>
+		                       <td>0회</td>
+		                   </tr>
+		               </tbody>
+		           </table>
+		           <ul class="admin-searchUser-pagination">
+		               <li class="admin-searchUser-page-item">&laquo;</li>
+		               <li class="admin-searchUser-page-item active">1</li>
+		               <li class="admin-searchUser-page-item">2</li>
+		               <li class="admin-searchUser-page-item">3</li>
+		               <li class="admin-searchUser-page-item">4</li>
+		               <li class="admin-searchUser-page-item">5</li>
+		               <li class="admin-searchUser-page-item">&raquo;</li>
+		           </ul>
+		
+		
+		
+		
+		       </div>
+
+
+
+			</div>
+       </div>
+   </div>
+
+
+
+</body>
+</html>

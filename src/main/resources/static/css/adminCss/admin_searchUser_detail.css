@@ -1,0 +1,82 @@
+.admin-searchUser-detail-wrapper{
+    width: 30%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-searchUser-detail-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin:10px 0;
+}
+
+/*테이블 부분 verticle table*/
+.admin-searchUser-detail-table {
+    border-collapse: separate;
+    border-spacing: 0cap;
+    border: transparent;
+    width:100%;
+    flex-direction: row;
+}
+.admin-searchUser-detail-table th{
+  background-color: #f9f9f9;
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-right-style: none;
+  width: 120px; /* 왼쪽 영역 너비 */
+  font-weight: 400;
+  text-align: center;
+  border-bottom: none;
+  
+}
+.admin-searchUser-detail-table td {
+  padding: 10px 10px;
+  border: 1px solid #ddd;
+  color: #333;
+  width: calc(100% - 120px); /* 남는 영역 전부 */
+  word-break: break-word; 
+  border-left: none;
+  border-bottom: none;
+}
+
+.admin-searchUser-detail-table tr:nth-child(5) th {
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-searchUser-detail-table tr:nth-child(5) th {
+  border-bottom: 1px solid #ddd; 
+  border-bottom-left-radius: 12px;
+}
+.admin-searchUser-detail-table tr:nth-child(1) th{
+    border-top-left-radius: 12px;
+}
+.admin-searchUser-detail-table tr:nth-child(1) td{
+    border-top-right-radius: 12px;
+}
+.admin-searchUser-detail-table tr:nth-child(5) td{
+    border-bottom-right-radius: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-reportList-btn{
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    background-color: #97f1f7e3;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 50px;
+}
+.admin-reportList-btn:hover {
+    background-color: #83dbe0;
+}

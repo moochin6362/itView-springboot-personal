@@ -1,11 +1,37 @@
+/* 전체 레이아웃 */
+body {
+	font-family: 'Malgun Gothic', Arial, sans-serif;
+	background-color: #eefbfb; /* 민트 배경 */
+	margin: 0;
+	padding: 0;
+	display: flex;
+	height: 100vh;
+}
+
+/* 최상위 컨테이너 */
+.container {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+/* 콘텐츠 영역 */
+.content-area {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background: #f9f9f9;
+	overflow-y: auto;
+}
+
 .admin-genBoard-wrapper{
-    width: 50%;
-    height: 100%;
-    margin: auto;
+    width: auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color:white;
+    padding: 40px;
 }
 .admin-genBoard-header {
     width: 100%;

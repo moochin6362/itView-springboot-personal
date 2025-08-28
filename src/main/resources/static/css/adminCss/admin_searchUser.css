@@ -23,17 +23,17 @@ body {
 	overflow-y: auto;
 }
 
-.admin-report-board-wrapper{
+.admin-searchUser-wrapper{
     width: auto;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color:white;
+    background-color : white;
     padding: 40px;
 }
-.admin-report-board-header {
+.admin-searchUser-header {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -42,17 +42,27 @@ body {
     justify-content: space-between; /* 양쪽 끝으로 배치하고 싶으면 */
     
 }
-.admin-report-board-title{
+.admin-searchUser-title{
     font-size: 20px;
     color:black;
     font-weight: 500;
     margin-bottom: 10px;
-}
 
+}
+.admin-searchUser-divider{
+    align-items: center;
+    justify-content: center;
+    /* border: 1px solid #cccccca9; */
+    border: 1px solid #c4f2f58f;
+    margin-bottom: 20px;
+    width: 100%;
+    border-radius: 2px;
+
+}
 
 /* 회원 검색창*/
 
-.admin-report-board-title {
+.admin-searchUser-title {
   display: flex;
   font-size: 20px;
   font-weight: 500;
@@ -60,7 +70,7 @@ body {
 }
 
 
-.admin-report-board-searchBox {
+.admin-searchUser-searchBox {
   display: flex;
   align-items: center;
   gap: 17px; /* select, input, 버튼 간격 */
@@ -68,7 +78,7 @@ body {
 }
 
 
-.admin-report-board-searchBox input{
+.admin-searchUser-searchBox input{
     width: 100%;
     height: 10px;
     border-radius: 4px;
@@ -78,11 +88,11 @@ body {
     margin-bottom: 30px;
     
 }
-input, .report-board-btn:focus{
+input, .searchUser-btn:focus{
     outline:none;
 }
-.admin-report-board-searchBox
-.report-board-btn{
+.admin-searchUser-searchBox
+.searchUser-btn{
     border:none;
     background:transparent;
     padding:0;
@@ -92,62 +102,53 @@ input, .report-board-btn:focus{
 }
 
 
-.admin-report-board-divider{
-    align-items: center;
-    justify-content: center;
-    /* border: 1px solid #cccccca9; */
-    border: 1px solid #34e5eb;
-    margin-bottom: 20px;
-    width: 100%;
-    border-radius: 2px;
-}
-
-.admin-report-board-table table{
+/*조회 결과 테이블*/
+.admin-searchUser-table table{
     width: 100%;
     height: 100%;
     border-collapse: collapse;
     table-layout: fixed;
     font-size: 14px;
 }
-.admin-report-board-table th,
-.admin-report-board-table td {
+.admin-searchUser-table th,
+.admin-searchUser-table td {
     text-align: center;
     padding: 10px;
     word-wrap: break-word; /* 길어도 줄 바꿈 */
 }
-.admin-report-board-table th{
+.admin-searchUser-table th{
     font-weight: 500;
     color: black;
    
 }
-.admin-report-board-table th:nth-child(1),
-.admin-report-board-table td:nth-child(1){ width: 5%; }
-.admin-report-board-table th:nth-child(2),
-.admin-report-board-table td:nth-child(2){ /* 제목 부분*/
-    width: 45%;
+.admin-searchUser-table th:nth-child(1),
+.admin-searchUser-table td:nth-child(1){ width: 20%; }
+.admin-searchUser-table th:nth-child(2),
+.admin-searchUser-table td:nth-child(2){ /* 제목 부분*/
+    width: 25%;
     white-space: nowrap;     
     overflow: hidden;         
     text-overflow: ellipsis;
     }
-.admin-report-board-table th:nth-child(3),
-.admin-report-board-table td:nth-child(3){ 
+.admin-searchUser-table th:nth-child(3),
+.admin-searchUser-table td:nth-child(3){ 
     width: 25%; 
     white-space: nowrap;      
     overflow: hidden;         
     text-overflow: ellipsis;
 }
-.admin-report-board-table th:nth-child(4),
-.admin-report-board-table td:nth-child(4){ width: 15%; }
-.admin-report-board-table th:nth-child(5),
-.admin-report-board-table td:nth-child(5){ width: 10%; }
+.admin-searchUser-table th:nth-child(4),
+.admin-searchUser-table td:nth-child(4){ width: 15%; }
+.admin-searchUser-table th:nth-child(5),
+.admin-searchUser-table td:nth-child(5){ width: 10%; }
 
-.admin-report-board-table td:nth-child(2) { /*제목 부분만 클릭 가능 -> 게시글 상세보기 이동*/
+.admin-searchUser-table td:nth-child(2) { /*제목 부분만 클릭 가능 -> 게시글 상세보기 이동*/
     cursor: pointer;
 }
 
 
 /*페이지네이션 : 일반/판매자게시판 UI 통일*/
-.admin-board-pagination {
+.admin-searchUser-pagination {
   display: flex;
   gap: 8px;
   justify-content: center;
@@ -156,7 +157,7 @@ input, .report-board-btn:focus{
   margin-top: 50px;
 }
 
-.admin-board-page-item {
+.admin-searchUser-page-item {
   padding: 6px 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -167,12 +168,12 @@ input, .report-board-btn:focus{
   transition: all 0.2s ease;
 }
 
-.admin-board-page-item:hover:not(.active) {
+.admin-searchUser-page-item:hover:not(.active) {
   background-color: #f0f0f0;
 }
 
-.admin-board-page-item.active {
-  background-color: #34e5eb;
+.admin-searchUser-page-item.active {
+  background-color: #a1eef3de;
   color: white;
-  border-color: #34e5eb;
+  border-color: #a1eef3de;
 }

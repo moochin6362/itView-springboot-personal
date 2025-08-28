@@ -4,11 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자용 일반유저 게시판</title>
-    <link rel="stylesheet" href="./admin_general_board.css">
-    <script src="./admin_general_board.js" defer></script>
+    <link rel="stylesheet" href="/css/adminCss/admin_general_board.css">
+    <script src="/js/admin/admin_general_board.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+
+	<link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+    <script th:src="@{/js/inhoAdmin/sidebar.js}" defer></script>
+
+    <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+
 </head>
 <body>
+	<div class="container">
+		<!-- 사이드바 -->
+		<div th:replace="~{common/sidebar :: sidebar}"></div>
+		<!-- 컨텐츠 영역 -->
+	    <div class="content-area">
+			<!-- 헤더 -->
+			<div th:replace="~{common/header2 :: header2}"></div>
+	
     <div class="admin-genBoard-wrapper">
         <div class="admin-genBoard-header">
             <div class="admin-genBoard-title">일반 문의게시판</div>
@@ -81,7 +99,8 @@
         </div>
 
 
-
+</div>
+</div>
 
         
     </div>
