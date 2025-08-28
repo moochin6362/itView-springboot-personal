@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itView.springboot.mapper.NoticeMapper">
+
+    <!--  게시글 목록 조회  -->
+    <select id="selectBoardList" resultType="Board">
+        SELECT *
+        FROM BOARD
+        WHERE BOARD_STATUS = 'Y'
+        ORDER BY BOARD_ID DESC
+    </select>
+    <!--  게시글 상세 조회  -->
+    <select id="selectBoard" parameterType="int" resultType="itView.springboot.vo.Board">
+        SELECT *
+        FROM BOARD
+        WHERE BOARD_ID = #{boardId} and BOARD_STATUS = 'Y'
+        ORDER BY BOARD_ID DESC
+    </select>
+
+
+    <!-- 게시글 등록 -->
+    <insert id="insertBoard" parameterType="itView.springboot.vo.Board" keyProperty="boardId">
+        <selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+            SELECT SEQ_BOARD.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO BOARD (
+        BOARD_ID,
+        BOARD_TITLE,
+        BOARD_CONTENT,
+        BOARD_DATE,
+        BOARD_TYPE,
+        BOARD_STATUS,
+        USER_NO
+        ) VALUES (
+        #{boardId},
+        #{boardTitle},
+        #{boardContent},
+        SYSDATE,
+        1,
+        'Y',
+        #{userNo}
+        )
+    </insert>
+    <!-- 첨부파일 등록 -->
+    <insert id="insertAttachment" parameterType="itView.springboot.vo.Attachment">
+        INSERT INTO ATTACHMENT (
+        ATTM_NO,
+        ATTM_NAME,
+        ATTM_RENAME,
+        ATTM_PATH,
+        ATTM_STATUS,
+        ATTM_DATE,
+        ATTM_LEVEL,
+        ATTM_POSITION,
+        POSITION_NO
+        ) VALUES (
+        SEQ_ATTM.NEXTVAL,
+        #{attmName},
+        #{attmRename},
+        #{attmPath},
+        'Y',
+        SYSDATE,
+        1,
+        1,
+        #{positionNo}
+        )
+    </insert>
+
+    <!--  게시글 수정  -->
+    <update id="updateBoard" parameterType="itView.springboot.vo.Board">
+        UPDATE BOARD SET
+        BOARD_TITLE = #{boardTitle},
+        BOARD_CONTENT = #{boardContent},
+        BOARD_MODIFIED_DATE = SYSDATE
+        WHERE BOARD_ID = #{boardId}
+    </update>
+
+
+    <!--  첨부파일 조회  -->
+    <select id="selectAttachments" parameterType="int" resultType="itView.springboot.vo.Attachment">SELECT ATTM_NO,
+        ATTM_NAME, ATTM_RENAME, ATTM_PATH, ATTM_STATUS, ATTM_DATE, ATTM_LEVEL, ATTM_POSITION, POSITION_NO FROM
+        ATTACHMENT WHERE POSITION_NO = #{boardId} AND ATTM_STATUS = 'Y'
+    </select>
+
+    <!--  게시글 삭제 (상태값 변경)  -->
+    <update id="deleteBoard" parameterType="int">UPDATE BOARD SET BOARD_STATUS = 'N' WHERE BOARD_ID = #{boardId}
+    </update>
+    <!--  첨부파일 삭제 (상태값 변경)  -->
+    <update id="deleteAttachment" parameterType="int">UPDATE ATTACHMENT SET ATTM_STATUS = 'N' WHERE POSITION_NO =
+        #{boardId}
+    </update>
+</mapper>
