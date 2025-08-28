@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>쿠폰 등록</title>
+        <link href="../finalCss/enrollCoupon.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="coupon-container">
+            <h2>쿠폰 등록</h2>
+            <form action="/admin/coupon/create" method="post">
+                <label for="couponName">쿠폰명</label>
+                <input type="text" id="couponName" name="couponName" placeholder="쿠폰명을 입력하세요" required />
+
+                <label for="target">쿠폰 발급대상</label>
+                <select id="target" name="target" required>
+                    <option value="">대상 선택</option>
+                    <option value="all">전체 회원</option>
+                    <option value="vip">VIP 회원</option>
+                    <option value="new">신규 회원</option>
+                </select>
+
+                <label for="discountRate">쿠폰 할인율(%)</label>
+                <input type="number" id="discountRate" name="discountRate" min="1" max="100" placeholder="예: 10" required />
+
+                <label for="minAmount">사용 최소금액(원)</label>
+                <input type="number" id="minAmount" name="minAmount" min="0" placeholder="예: 50000" required />
+
+                <label for="period">쿠폰 사용기간</label>
+                <input type="date" id="startDate" name="startDate" required /> ~
+                <input type="date" id="endDate" name="endDate" required />
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-submit">쿠폰 등록</button>
+                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

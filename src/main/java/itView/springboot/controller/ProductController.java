@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import itView.springboot.exception.LoginException;
-import itView.springboot.exception.ProductException;
+import itView.springboot.exception.UserException;
+import itView.springboot.exception.UserException;
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.User;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping({"/product", "/login", "/seller"})
+@RequestMapping({"/product", "/login", "/seller", "/inhoAdmin"})
 @RequiredArgsConstructor
 public class ProductController {
 	
@@ -52,15 +52,19 @@ public class ProductController {
                 case "P":
                     return "redirect:/seller/home";
                 case "A":
-                    return "redirect:/";
+                    return "redirect:/inhoAdmin/enrollCouponNotice";
                 default:
-                    throw new ProductException("알 수 없는 사용자 유형입니다.");
+                    throw new UserException("알 수 없는 사용자 유형입니다.");
             }
         } else {
             throw new LoginException("아이디 또는 비밀번호가 잘못되었습니다.");
         }
     }
-
+    //로그인했을 떄 관리자면 관리자 페이지 넘어가는 경로
+    @GetMapping("/enrollCouponNotice")
+    public String enrollCouponNotice() {
+       return "inhoAdmin/enrollCouponNotice";
+    }
 	
 	//로그아웃
 	@GetMapping("logout")
@@ -79,4 +83,6 @@ public class ProductController {
 	public String insertProductPage() {
 		return "seller/productInsertPage";
 	}
+	
+
 }

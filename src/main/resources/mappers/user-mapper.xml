@@ -4,5 +4,9 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="itView.springboot.mapper.UserMapper">
 
+<!-- 비번 수정 -->
+<update id="resetPwd">
+update "USER" set user_password = #{userPassword} where user_id = #{userId}
+</update>
 
 </mapper>

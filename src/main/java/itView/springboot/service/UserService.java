@@ -17,6 +17,11 @@ import itView.springboot.vo.User;
 public class UserService {
 	private UserMapper userMapper;
 
+	//비밀번호 수정
+	public int resetPwd(User u) {
+		return userMapper.resetPwd(u);
+	}
+
 	
 
 }
