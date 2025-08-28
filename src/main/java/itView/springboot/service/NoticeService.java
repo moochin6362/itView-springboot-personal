@@ -35,7 +35,7 @@ public class NoticeService {
                 Attachment attm = new Attachment();
                 attm.setAttmName(fileName.substring(fileName.indexOf("_") + 1)); // 원본명
                 attm.setAttmRename(fileName); // UUID+원본명
-                attm.setAttmPath("/uploadFilesFinal/");
+                attm.setAttmPath("c:/uploadFilesFinal/notice");
                 attm.setPositionNo(boardId);
 
                 noticeMapper.insertAttachment(attm);
@@ -66,7 +66,7 @@ public class NoticeService {
                 Attachment attm = new Attachment();
                 attm.setAttmName(fileName.substring(fileName.indexOf("_") + 1)); // 원본명
                 attm.setAttmRename(fileName); // UUID+원본명
-                attm.setAttmPath("/uploadFilesFinal/"); // 업로드 경로
+                attm.setAttmPath("c:/uploadFilesFinal/notice"); // 업로드 경로
                 attm.setPositionNo(boardId);
 
                 noticeMapper.insertAttachment(attm);

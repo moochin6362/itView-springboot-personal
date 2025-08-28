@@ -63,7 +63,7 @@ public class NoticeController {
     @PostMapping("/uploadImage")
     @ResponseBody
     public String uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
-        String uploadDir = "C:/uploadFilesFinal/notice";
+        String uploadDir = "c:/uploadFilesFinal/notice";
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
         File saveFile = new File(uploadDir, fileName);
