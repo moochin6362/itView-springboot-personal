@@ -1,7 +1,9 @@
 package itView.springboot.controller;
 
+import itView.springboot.common.Pagination;
 import itView.springboot.service.NoticeService;
 import itView.springboot.vo.Board;
+import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,9 +27,16 @@ public class NoticeController {
 
     //리스트 페이지
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Board> notices = noticeService.selectBoardList();
+    public String list(@RequestParam(value= "page", defaultValue= "1") int currentPage,Model model, HttpServletRequest request) {
+        int listCount = noticeService.getListCount(1);
+
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 3); // 현재페이지, 몇개가있는지, 몇개씩 보여질지
+
+        List<Board> notices = noticeService.selectBoardList(pi);
+
         model.addAttribute("notices", notices);
+        model.addAttribute("pi", pi);
+        model.addAttribute("loc",request.getRequestURL());
         return "notice/list";
     }
     //작성폼 페이지
@@ -37,8 +46,8 @@ public class NoticeController {
     }
 
     //디테일 페이지
-    @GetMapping("/{boardId}")
-    public String writeForm(@PathVariable("boardId") int boardId, Model model) {
+    @GetMapping("/{boardId}/{page}")
+    public String writeForm(@PathVariable("boardId") int boardId, Model model, @PathVariable("page") int page) {
         Board notice = noticeService.selectBoard(boardId);
 
         model.addAttribute("notice", notice);
@@ -76,6 +85,13 @@ public class NoticeController {
         return "/uploadFilesFinal/" + fileName;
     }
 
+    // 삭제
+    @GetMapping("/{boardId}/delete")
+    public String deleteNotice(@PathVariable int boardId) {
+        int notice = noticeService.deleteBoard(boardId);
+        return "redirect:/notice/list";
+    }
+
     // 업데이트 페이지
     @GetMapping("/{boardId}/updateForm")
     public String updateForm(@PathVariable int boardId, Model model) {
@@ -101,6 +117,7 @@ public class NoticeController {
 
         return "redirect:/notice/" + board.getBoardId();
     }
+
 
 
 }

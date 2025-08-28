@@ -59,11 +59,41 @@
           <a href="/notice/list" class="btn btn-outline-secondary">목록</a>
           <div>
             <a th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"  th:href="@{/notice/{boardId}/updateForm(boardId=${notice.boardId})}" class="btn btn-primary">수정</a>
-            <a th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"  href="#" class="btn btn-danger">삭제</a>
+            <!-- 삭제 버튼 (모달 띄우기) -->
+            <button th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal">
+              삭제
+            </button>
+          </div>
+        </div>
+
+
+
+      </div>
+    </main>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">삭제 확인</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+          </div>
+          <div class="modal-body">
+            정말 이 공지사항을 삭제하시겠습니까?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+            <!-- 실제 삭제 요청 -->
+            <a th:href="@{/notice/{boardId}/delete(boardId=${notice.boardId})}" class="btn btn-danger">삭제</a>
           </div>
         </div>
       </div>
-    </main>
+    </div>
 
     <div th:replace="~{common/footer :: footer}"></div>
 

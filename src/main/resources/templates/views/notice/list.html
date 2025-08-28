@@ -1,91 +1,125 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>쇼핑몰 예제</title>
-    <style>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>쇼핑몰 예제</title>
+  <style>
+    .board-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #333;
+      border-left: 6px solid #6ec1e4;
+      padding-left: 10px;
+      margin-bottom: 20px;
+    }
 
-      .board-title {
-        font-weight: 700;
-        font-size: 1.5rem;
-        color: #333;
-        border-left: 6px solid #6ec1e4;
-        padding-left: 10px;
-        margin-bottom: 20px;
-      }
+    .notice-table {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+    }
 
-      .notice-table {
-        background: #fff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
-      }
+    .notice-table thead {
+      background-color: #6ec1e4;
+      color: #fff;
+    }
 
-      .notice-table thead {
-        background-color: #6ec1e4;
-        color: #fff;
-      }
+    .notice-table th,
+    .notice-table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 15px;
+    }
 
-      .notice-table th,
-      .notice-table td {
-        text-align: center;
-        vertical-align: middle;
-        padding: 15px;
-      }
+    .notice-table tbody tr:hover {
+      background-color: #f2faff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-      .notice-table tbody tr:hover {
-        background-color: #f2faff;
-        cursor: pointer;
-      }      
+<div th:replace="~{common/header :: header}"></div>
 
+<main class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="board-title">📢 공지사항</h2>
+  </div>
 
-    </style>
-  </head>
-  <body>
+  <!-- 공지사항 리스트 -->
+  <div class="notice-table">
+    <table class="table table-hover mb-0">
+      <thead>
+      <tr>
+        <th style="width: 10%">번호</th>
+        <th style="width: 50%">제목</th>
+        <th style="width: 20%">작성자</th>
+        <th style="width: 20%">날짜</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="notice : ${notices}"
+          th:onclick="|location.href='/notice/${notice.boardId}/${pi.currentPage}'|"
+          style="cursor:pointer;">
+        <td>[[${notice.boardId}]]</td>
+        <td class="text-start">[[${notice.boardTitle}]]</td>
+        <td>관리자</td>
+        <td>[[${notice.boardDate}]]</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <div th:replace="~{common/header :: header}"></div>
+  <br/>
 
-    <main class="container my-5">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="board-title">📢 공지사항</h2>
-      </div>
+  <!-- 페이지네이션 -->
+  <nav aria-label="Standard pagination example" class="d-flex justify-content-end">
+    <ul class="pagination">
 
-        <div class="notice-table">
-          <table class="table table-hover mb-0">
-            <thead>
-              <tr>
-                <th style="width: 10%">번호</th>
-                <th style="width: 50%">제목</th>
-                <th style="width: 20%">작성자</th>
-                <th style="width: 20%">날짜</th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr th:each="notice : ${notices}"
-                th:onclick="|location.href='/notice/${notice.boardId}'|"
-                style="cursor:pointer;">
-                <input type="hidden"  name="boardId" value="${notice.boardId}">
-                <td>[[${notice.boardId}]]</td>
-                <td class="text-start">[[${notice.boardTitle}]]</td>
-                <td>관리자</td>
-                <td>[[${notice.boardDate}]]</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      
-        <!-- 하단 오른쪽 버튼 -->
-        <div th:if="${session.loginUser != null and session.loginUser.userType == 'A'}" class="d-flex justify-content-end mt-3">
-          <a href="/notice/write" class="btn btn-primary px-4">
-            등록
-          </a>
-        </div>
-      </main>
+      <!-- 이전 버튼 -->
+      <li class="page-item" th:classappend="${pi.currentPage == 1} ? 'disabled'">
+        <a class="page-link"
+           th:if="${pi.currentPage > 1}"
+           th:href="@{${loc}(page=${pi.currentPage-1})}"
+           aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+        <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>
+      </li>
 
-  <div th:replace="~{common/footer :: footer}"></div>
+      <!-- 페이지 번호 -->
+      <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+          th:classappend="${p == pi.currentPage} ? 'active'">
+        <a class="page-link" th:href="@{${loc}(page=${p})}">[[${p}]]</a>
+      </li>
 
-  </body>
+      <!-- 다음 버튼 -->
+      <li class="page-item" th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+        <a class="page-link"
+           th:if="${pi.currentPage < pi.maxPage}"
+           th:href="@{${loc}(page=${pi.currentPage+1})}"
+           aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+        <span class="page-link" th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
+      </li>
+
+    </ul>
+  </nav>
+
+  <!-- 등록 버튼 (페이지네이션 아래쪽에 위치) -->
+  <div th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"
+       class="d-flex justify-content-end mt-3"
+       style="clear: both;">
+    <a href="/notice/write" class="btn btn-primary px-4">
+      등록
+    </a>
+  </div>
+</main>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+</body>
 </html>
-
-

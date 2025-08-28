@@ -3,9 +3,11 @@ package itView.springboot.service;
 import itView.springboot.mapper.NoticeMapper;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
+import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +45,10 @@ public class NoticeService {
         }
     }
     //리스트
-    public List<Board> selectBoardList() {
-        return noticeMapper.selectBoardList();
+    public List<Board> selectBoardList(PageInfo pi) {
+        int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+        return noticeMapper.selectBoardList(rowBounds);
     }
 
     //디테일화면
@@ -72,5 +76,13 @@ public class NoticeService {
                 noticeMapper.insertAttachment(attm);
             }
         }
+    }
+
+    public int getListCount(int i) {
+        return noticeMapper.getListCount(i);
+    }
+
+    public int deleteBoard(int boardId) {
+        return noticeMapper.deleteBoard(boardId);
     }
 }
