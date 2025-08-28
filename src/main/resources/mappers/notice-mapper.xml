@@ -68,6 +68,14 @@
         )
     </insert>
 
+    <!--  게시글 수정  -->
+    <update id="updateBoard" parameterType="itView.springboot.vo.Board">
+        UPDATE BOARD SET
+        BOARD_TITLE = #{boardTitle},
+        BOARD_CONTENT = #{boardContent},
+        BOARD_MODIFIED_DATE = SYSDATE
+        WHERE BOARD_ID = #{boardId}
+    </update>
 
 
     <!--  첨부파일 조회  -->
@@ -75,11 +83,7 @@
         ATTM_NAME, ATTM_RENAME, ATTM_PATH, ATTM_STATUS, ATTM_DATE, ATTM_LEVEL, ATTM_POSITION, POSITION_NO FROM
         ATTACHMENT WHERE POSITION_NO = #{boardId} AND ATTM_STATUS = 'Y'
     </select>
-    <!--  게시글 수정  -->
-    <update id="updateBoard" parameterType="itView.springboot.vo.Board">UPDATE BOARD SET BOARD_TITLE = #{boardTitle},
-        BOARD_CONTENT = #{boardContent}, BOARD_MODIFIED_DATE = SYSDATE, BOARD_TYPE = #{boardType}, BOARD_STATUS =
-        #{boardStatus} WHERE BOARD_ID = #{boardId}
-    </update>
+
     <!--  게시글 삭제 (상태값 변경)  -->
     <update id="deleteBoard" parameterType="int">UPDATE BOARD SET BOARD_STATUS = 'N' WHERE BOARD_ID = #{boardId}
     </update>
