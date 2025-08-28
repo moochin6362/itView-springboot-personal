@@ -15,7 +15,7 @@ import itView.springboot.vo.User;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping({"/product", "/login", "/seller"})
+@RequestMapping({"/product", "/login", "/seller", "/inhoAdmin"})
 @RequiredArgsConstructor 
 @SessionAttributes("loginUser")
 public class ProductController {
