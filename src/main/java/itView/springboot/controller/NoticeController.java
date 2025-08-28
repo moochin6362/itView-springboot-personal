@@ -30,7 +30,7 @@ public class NoticeController {
     public String list(@RequestParam(value= "page", defaultValue= "1") int currentPage,Model model, HttpServletRequest request) {
         int listCount = noticeService.getListCount(1);
 
-        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 3); // 현재페이지, 몇개가있는지, 몇개씩 보여질지
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10); // 현재페이지, 몇개가있는지, 몇개씩 보여질지
 
         List<Board> notices = noticeService.selectBoardList(pi);
 
@@ -46,27 +46,31 @@ public class NoticeController {
     }
 
     //디테일 페이지
-    @GetMapping("/{boardId}/{page}")
-    public String writeForm(@PathVariable("boardId") int boardId, Model model, @PathVariable("page") int page) {
-        Board notice = noticeService.selectBoard(boardId);
+    @GetMapping("/detail")
+    public String writeForm(@RequestParam("boardId") int boardId,
+                            @RequestParam(value = "page", defaultValue = "1") int page,
+                            Model model) {
 
+        Board notice = noticeService.selectBoard(boardId);
         model.addAttribute("notice", notice);
+        model.addAttribute("page", page);
 
         return "notice/detail";
     }
 
-    //작성
+    // 작성
     @PostMapping("/insert")
     public String insertNotice(Board board,
                                @RequestParam(value="uploadedFiles", required=false) String uploadedFiles,
                                HttpSession session) {
+
         String[] files = uploadedFiles != null ? uploadedFiles.split(",") : new String[0];
         noticeService.insertNotice(board, files, session);
 
-        System.out.println(board.getBoardId());
-
-        return "redirect:/notice/" + board.getBoardId();
+        // Query Parameter 방식으로 리다이렉트
+        return "redirect:/notice/detail?boardId=" + board.getBoardId() + "&page=1";
     }
+
 
     // 보여지는 이미지
     @PostMapping("/uploadImage")

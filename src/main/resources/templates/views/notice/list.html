@@ -61,7 +61,7 @@
       </thead>
       <tbody>
       <tr th:each="notice : ${notices}"
-          th:onclick="|location.href='/notice/${notice.boardId}/${pi.currentPage}'|"
+          th:onclick="|location.href='/notice/detail?boardId=${notice.boardId}&page=${pi.currentPage}'|"
           style="cursor:pointer;">
         <td>[[${notice.boardId}]]</td>
         <td class="text-start">[[${notice.boardTitle}]]</td>
