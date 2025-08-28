@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping({"/product", "/login", "/seller"})
-@RequiredArgsConstructor
+@RequiredArgsConstructor 
 @SessionAttributes("loginUser")
 public class ProductController {
 	
