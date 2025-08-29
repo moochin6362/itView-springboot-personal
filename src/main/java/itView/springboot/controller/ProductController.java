@@ -22,12 +22,15 @@ public class ProductController {
 	
 	@PostMapping("login")
 	public String login(User u, Model model) {
-		//System.out.println(bcrypt.encode("1234"));
+		System.out.println(bcrypt.encode("1111"));
 		User loginUser = pService.login(u);
 		
 		if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
 			model.addAttribute("loginUser", loginUser);
-			if(loginUser.getUserType().equals("U") && loginUser.getUserType().equals("A")) {
+			if(loginUser.getUserType().equals("U") || loginUser.getUserType().equals("A")) {
+				if(loginUser.getUserId().equals("b")) {
+					return "my/myPage";
+				}
 				return "redirect:/";
 			} else {
 				return "redirect:/seller/home";

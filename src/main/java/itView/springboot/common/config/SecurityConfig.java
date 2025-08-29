@@ -2,32 +2,18 @@ package itView.springboot.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import itView.springboot.common.config.handler.CustomAccessDeniedHandler;
-import itView.springboot.common.config.handler.CustomAuthenticationEntryPoint;
-//import itView.springboot.service.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
 
 @Configuration // 설정 파일 역할의 클래스를 bean으로 등록
 //@RequiredArgsConstructor
 //@EnableWebSecurity
 public class SecurityConfig {
-//	private final JwtFilter jwtFilter;
+//   private final JwtFilter jwtFilter;
 //    private final CustomAccessDeniedHandler accessDeniedHandler;
 //    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
    // private final CustomUserDetailsService customUserDetailsService;
     
-	 
+    
     @Bean // 반환 값을 bean으로 등록
     public BCryptPasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -35,8 +21,8 @@ public class SecurityConfig {
 
 //    //@Bean
 //    public AuthenticationManager authenticationManager(
-//    		AuthenticationConfiguration configuration
-//    		) throws Exception {
+//          AuthenticationConfiguration configuration
+//          ) throws Exception {
 //        return configuration.getAuthenticationManager();
 //    }
 //    //@Bean
@@ -45,7 +31,7 @@ public class SecurityConfig {
 //        return http
 //                .csrf(AbstractHttpConfigurer::disable)
 //                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> auth 			//접근 권한설정
+//                .authorizeHttpRequests(auth -> auth          //접근 권한설정
 //                        .requestMatchers("/admin/**","/", "/login/**", "/signUp/**", "/review/**","/category/**", "/experience/**","/css/**", "/js/**", "/images/**").permitAll()
 //                        .anyRequest().authenticated()
 //                )
