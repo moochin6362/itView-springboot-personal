@@ -10,17 +10,16 @@ select * from "USER" where user_id = #{userId}
 
 <!-- 회원조회 type -->
 <select id="searchUserByType">
-
+select * from "USER" where user_type = #{userType}
 </select>
-
 
 <!-- 회원조회 status -->
 <select id="searchUserByStatus">
-select * from 
+select * from "USER" where user_status = #{userStatus}
 </select>
 
 <!-- 회원조회 report -->
-<select id="searchUserByReport" resultType="itView.springboot.dto.ReportDto">
+<select id="searchUserByReport"  resultType="itView.springboot.dto.ReportDto">
 select
     r.REPORT_NO,
     r.REPORT_TITLE,

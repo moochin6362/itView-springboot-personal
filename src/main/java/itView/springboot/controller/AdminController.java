@@ -25,6 +25,8 @@ public class AdminController {
 			@RequestParam(required = false) String value,
 			Model model) {
 		//이 요청을 한 사람이 관리자가 맞는지 확인하는 것
+		
+		
 		//회원 목록 가져오기
 		//회원 목록을 Model에 담아서 view에 뿌려주기 -> ModelAndView
 		ArrayList<User> user;
@@ -45,7 +47,7 @@ public class AdminController {
 				user = adService.searchUserByReport(count);
 				break;
 				default : 
-					user = adService.getAllUser(); //못찾으면 걍 전체ㅇ회원목록 반환하기
+					user = adService.getAllUser(); //기본:전체회원목록 반환하기
 				}
 				
 			} else {
@@ -55,9 +57,8 @@ public class AdminController {
 		
 		//찾은 결과를 (user타입의 객체배열을 뷰에 전달)
 		model.addAttribute("user", user);
-		return "admin/admin_SearchUser";
+		return "admin/admin_searchUser";
 	}
-	
 	
 	//관리자 신고게시판 이동
 	@GetMapping("/report")

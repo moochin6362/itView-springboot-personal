@@ -49,46 +49,19 @@
 		                   <tr>
 		                       <th>가입유형</th>
 		                       <th>회원 아이디</th>
-		                       <th>가입일</th>
+		                       <th>이메일</th>  <!-- 수정 가능(원래는 가입일자였음 -->
 		                       <th>활동 상태</th>
 		                       <th>누적 신고횟수</th>
 		                   </tr>
 		               </thead>
-		               <tbody id="admin-searchUser-table-body" class="admin-genBoard-table-body">
+		               <tbody id="admin-searchUser-table-body" 
+		               	th:each="user : ${user}"class="admin-genBoard-table-body">
 		                   <tr>
-		                       <td>판매자</td>
-		                       <td>cosrx</td>
-		                       <td>2014-03-23</td>
-		                       <td>Y</td>
-		                       <td>1회</td>
-		                   </tr>
-		                   <tr>
-		                       <td>판매자</td>
-		                       <td>rainbowmansion</td>
-		                       <td>2014-03-23</td>
-		                       <td>Y</td>
-		                       <td>2회</td>
-		                   </tr>
-		                   <tr>
-		                       <td>일반</td>
-		                       <td>kim44</td>
-		                       <td>2014-03-23</td>
-		                       <td>N</td>
-		                       <td>7회</td>
-		                   </tr>
-		                   <tr>
-		                       <td>일반</td>
-		                       <td>luv1004</td>
-		                       <td>2025-07-23</td>
-		                       <td>Y</td>
-		                       <td>1회</td>
-		                   </tr>
-		                   <tr>
-		                       <td>판매자</td>
-		                       <td>rom&nd</td>
-		                       <td>2023-12-01</td>
-		                       <td>Y</td>
-		                       <td>0회</td>
+		                       <td th:text="${user.userType =='P' ? '판매자' : '일반'}"></td>
+		                       <td th:text="${user.userType == 'P' ? user.brandName : user.userName}"></td>
+		                       <td th:text="${user.email}"></td>
+		                       <td th:text="${user.userStatus}"></td>
+		                       <td th:text="${user.reportCount}">회</td>
 		                   </tr>
 		               </tbody>
 		           </table>
