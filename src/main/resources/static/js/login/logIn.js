@@ -16,3 +16,6 @@ const msg = /*[[${msg}]]*/ '';
     if (msg) {
         alert(msg);
     }
+	
+const beforeURL = document.referrer;
+document.getElementsByName('beforeURL')[0].value = beforeURL;

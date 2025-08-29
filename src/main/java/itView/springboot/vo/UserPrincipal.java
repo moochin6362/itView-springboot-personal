@@ -25,15 +25,23 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        String type = user.getUserType();
         String role;
-        switch (user.getUserType()) {
-            case "A": role = "ROLE_ADMIN"; break;
-            case "P": role = "ROLE_PARTNER"; break;
-            case "U": 
-            default: role = "ROLE_USER"; break;
+
+        if (type == null) {
+            role = "ROLE_USER"; // null이면(그럴리가 없겟지만) "U"디폴트 제공
+        } else {
+            switch (type) {
+                case "A": role = "ROLE_ADMIN"; break;
+                case "P": role = "ROLE_PARTNER"; break;
+                case "U":
+                default: role = "ROLE_USER"; break;
+            }
         }
+
         return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
+
 
     @Override
     public String getPassword() {
@@ -60,8 +68,10 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 
+    
+    //현재 활동중인 User상태값
     @Override
     public boolean isEnabled() {
-        return "ACTIVE".equalsIgnoreCase(user.getUserStatus());
+        return "Y".equalsIgnoreCase(user.getUserStatus());
     }
 }
