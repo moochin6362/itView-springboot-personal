@@ -12,7 +12,6 @@ public class adminLoginInterceptor implements HandlerInterceptor{
 			throws Exception {
 		//로그인 유저 불러오기
 		//만약 로그인 유저가 null이고 관리자가 아니라면 접근권한 막기 ->home으로 보내기
-		
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
 }

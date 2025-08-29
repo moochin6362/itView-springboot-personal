@@ -3,15 +3,18 @@ package itView.springboot.controller;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import itView.springboot.exception.LoginException;
-import itView.springboot.exception.UserException;
 import itView.springboot.exception.UserException;
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.User;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -68,8 +71,8 @@ public class ProductController {
 	//로그아웃
 	@GetMapping("logout")
 	public String logout(SessionStatus status) {
-		status.setComplete();
-		return "redirect:/";
+	    status.setComplete();
+	    return "redirect:/";
 	}	
 	
 	

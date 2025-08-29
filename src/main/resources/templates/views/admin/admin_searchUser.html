@@ -27,12 +27,12 @@
 		       <div class="admin-searchUser-header">
 		           <div class="admin-searchUser-title">회원 조회</div>
 		           <div class="admin-searchUser-searchBox">
-		               <form th:action="@{/searchUser/search}" method="get">
+		               <form th:action="@{/admin/searchUser}" method="get">
 		                   <select name="condition" class="form-select">
-		                       <option value="title">회원 아이디</option>
-		                       <option value="writer">가입 유형</option>
-		                       <option value="content">활동 상태</option>
-		                       <option value="content">누적 신고횟수</option>
+		                       <option value="userId">회원 아이디</option>
+		                       <option value="userType">가입 유형</option>
+		                       <option value="userStatus">활동 상태</option>
+		                       <option value="reportCount">누적 신고횟수</option>
 		                   </select>
 		                   <input type="search" name="value" class="form-control" style="width:250px; display:inline;">
 		                   <button class="searchUser-btn" type="submit">

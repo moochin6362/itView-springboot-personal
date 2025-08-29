@@ -1,4 +1,5 @@
-package itView.springboot.vo;
+package itView.springboot.dto;
+
 
 import java.sql.Date;
 
@@ -11,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Report {
+public class ReportDto {
 	private int reportNo;
 	private String reportTitle;
 	private String reportContent;
@@ -22,4 +23,7 @@ public class Report {
 	private String reportType;
 	private int reporterUserId;
 	private int reportTargetNo;
+	
+	private String targetUserId;   // 신고받은 사용자 ID
+    private int reportCount;       // 해당 사용자가 받은 신고 총 수
 }
