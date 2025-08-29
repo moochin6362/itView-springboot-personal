@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자 신고게시판 상세</title>
-    <link rel="stylesheet" href="./admin_report_detail.css">
-    <script src="./admin_report_detail.js"></script>
+    <link rel="stylesheet" href="/css/adminCss/admin_report_detail.css">
+    <script src="/js/admin/admin_report_detail.js"></script>
 </head>
 <body>
+	<!-- 사이드바 -->
+	<div th:replace="~{common/sidebar :: sidebar}"></div>
+	<!-- 헤더 -->
+	<div th:replace="~{common/header2 :: header2}"></div>
+
     <div class="admin-report-detail-wrapper">
         <div class="admin-report-detail-container"> <!--게시판-->
             <table class="admin-report-detail-table">  <!--게시판 헤더-->

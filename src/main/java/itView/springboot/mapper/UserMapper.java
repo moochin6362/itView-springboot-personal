@@ -5,11 +5,11 @@ import itView.springboot.vo.User;
 
 @Mapper
 public interface UserMapper {
-	//회원조회
-	 User findByUsername(String userId);
-
 	 //kakao로그인
 	 User selectUserByKakaoId(String kakaoId);
+
+	 //비밀번호 수정
+	 int resetPwd(User u);
 	 
 
 

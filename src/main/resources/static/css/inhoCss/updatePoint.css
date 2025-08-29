@@ -1,0 +1,72 @@
+body {
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    background-color: #eefbfb; /* 민트 배경 */
+    margin: 0;
+    padding: 20px;
+}
+
+.point-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 6px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc; /* enrollCoupon.css 기준 */
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: #333; /* enrollCoupon.css 기준 */
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-submit,
+.btn-cancel {
+    flex: 1;
+    background-color: #eefbfb;
+    border: 1px solid #eefbfb;
+    color: black;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover,
+.btn-cancel:hover {
+    background-color: #d4f1f1;
+    border-color: #d4f1f1;
+    color: black;
+}

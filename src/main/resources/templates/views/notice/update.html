@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 수정</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{common/header :: header}"></div>
+
+<h2>공지사항 수정</h2>
+
+<form th:action="@{/notice/update}" method="post" id="noticeForm">
+    <!-- boardId -->
+    <input type="hidden" name="boardId" th:value="${notice.boardId}">
+
+    <!-- 제목 -->
+    <div>
+        <label>제목</label>
+        <input type="text" name="boardTitle" th:value="${notice.boardTitle}" required>
+    </div>
+
+    <!-- 내용 -->
+    <div>
+        <label>내용</label>
+        <div id="editor"></div>
+        <!-- textarea에 기존 내용을 담아두고, JS에서 initialValue로 불러옴 -->
+        <textarea id="boardContent" name="boardContent" style="display:none;"
+                  th:text="${notice.boardContent}"></textarea>
+    </div>
+
+    <!-- 업로드된 이미지 파일명 저장용 -->
+    <input type="hidden" name="uploadedFiles" id="uploadedFiles">
+
+    <button type="submit">수정 완료</button>
+</form>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+<script>
+    const uploadedFilesArr = [];
+
+    // textarea에 미리 들어간 기존 내용 불러오기
+    const initialContent = document.getElementById("boardContent").value;
+
+    // Toast UI Editor 초기화
+    const editor = new toastui.Editor({
+        el: document.querySelector('#editor'),
+        height: '400px',
+        initialEditType: 'wysiwyg',
+        previewStyle: 'vertical',
+        initialValue: initialContent, // ✅ 기존 내용 세팅
+        hooks: {
+            addImageBlobHook: async (blob, callback) => {
+                const formData = new FormData();
+                formData.append('image', blob);
+
+                const response = await fetch('/notice/uploadImage', {
+                    method: 'POST',
+                    body: formData
+                });
+                const url = await response.text();
+                callback(url, 'image');
+
+                // 업로드된 파일명 저장
+                uploadedFilesArr.push(url.split('/').pop());
+                document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
+            }
+        }
+    });
+
+    // form submit 전 에디터 내용 textarea에 담기
+    const form = document.getElementById("noticeForm");
+    form.addEventListener("submit", function(e) {
+        const html = editor.getHTML();
+        console.log("Editor HTML:", html); // 디버깅용
+        document.getElementById("boardContent").value = html;
+    });
+</script>
+
+</body>
+</html>
