@@ -25,27 +25,39 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
-    //리스트 페이지
+    // 리스트 페이지
     @GetMapping("/list")
-    public String list(@RequestParam(value= "page", defaultValue= "1") int currentPage,Model model, HttpServletRequest request) {
-        int listCount = noticeService.getListCount(1);
+    public String list(
+            @RequestParam(value = "page", defaultValue = "1") int currentPage,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "type", defaultValue = "all") String type,
+            Model model,
+            HttpServletRequest request) {
 
-        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10); // 현재페이지, 몇개가있는지, 몇개씩 보여질지
+        // 검색 포함 게시글 수 가져오기
+        int listCount = noticeService.getListCountWithSearch(1, keyword, type);
 
-        List<Board> notices = noticeService.selectBoardList(pi);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+
+        List<Board> notices = noticeService.selectBoardListWithSearch(pi, keyword, type);
 
         model.addAttribute("notices", notices);
         model.addAttribute("pi", pi);
-        model.addAttribute("loc",request.getRequestURL());
+        model.addAttribute("loc", request.getRequestURL());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("type", type);
+
         return "notice/list";
     }
-    //작성폼 페이지
+
+
+    // 작성폼 페이지
     @GetMapping("/write")
     public String writeForm() {
         return "notice/write";
     }
 
-    //디테일 페이지
+    // 디테일 페이지
     @GetMapping("/detail")
     public String writeForm(@RequestParam("boardId") int boardId,
                             @RequestParam(value = "page", defaultValue = "1") int page,
@@ -64,29 +76,36 @@ public class NoticeController {
                                @RequestParam(value="uploadedFiles", required=false) String uploadedFiles,
                                HttpSession session) {
 
-        String[] files = uploadedFiles != null ? uploadedFiles.split(",") : new String[0];
-        noticeService.insertNotice(board, files, session);
+        if(uploadedFiles != null && !uploadedFiles.isEmpty()){
+            String[] files = uploadedFiles.split(",");
+            String content = board.getBoardContent();
+            for(String fileName : files){
+                // HTML 내 temp 경로를 notice 경로로 변경
+                content = content.replace("/uploadFilesFinal/temp/" + fileName,
+                        "/uploadFilesFinal/notice/" + fileName);
+            }
+            board.setBoardContent(content);
+        }
 
-        // Query Parameter 방식으로 리다이렉트
+        noticeService.insertNotice(board, uploadedFiles, session);
         return "redirect:/notice/detail?boardId=" + board.getBoardId() + "&page=1";
     }
 
 
-    // 보여지는 이미지
+    // 업로드 (임시 폴더)
     @PostMapping("/uploadImage")
     @ResponseBody
     public String uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
-        String uploadDir = "c:/uploadFilesFinal/notice";
+        String tempDir = "c:/uploadFilesFinal/temp";
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        File saveFile = new File(uploadDir, fileName);
+        File saveFile = new File(tempDir, fileName);
         if (!saveFile.exists()) {
             saveFile.getParentFile().mkdirs();
         }
         file.transferTo(saveFile);
 
-        // 반환값은 브라우저에서 사용할 URL
-        return "/uploadFilesFinal/" + fileName;
+        return "/uploadFilesFinal/temp/" + fileName;
     }
 
     // 삭제
@@ -103,25 +122,31 @@ public class NoticeController {
         model.addAttribute("notice", notice);
         return "notice/update";
     }
+
     // 업데이트
     @PostMapping("/update")
     public String update(Board board,
                          @RequestParam(value="uploadedFiles", required=false) String uploadedFiles,
                          HttpSession session) {
 
-        // 1. 게시글 업데이트
-        int result = noticeService.updateBoard(board);
-
-        // 2. 업로드된 이미지가 있는 경우 DB에 저장
-        String[] files = uploadedFiles != null ? uploadedFiles.split(",") : new String[0];
-        if(files.length > 0) {
-            User user = (User) session.getAttribute("loginUser");
-            noticeService.insertAttachmentsForUpdate(board.getBoardId(), files);
+        // 에디터 HTML 내 temp → notice 경로 변경
+        if(uploadedFiles != null && !uploadedFiles.isEmpty()){
+            String[] files = uploadedFiles.split(",");
+            String content = board.getBoardContent();
+            for(String fileName : files){
+                content = content.replace("/uploadFilesFinal/temp/" + fileName,
+                        "/uploadFilesFinal/notice/" + fileName);
+            }
+            board.setBoardContent(content);
         }
 
-        return "redirect:/notice/" + board.getBoardId();
+        // 게시글 업데이트
+        noticeService.updateBoard(board);
+
+        // 이미지 temp → notice 이동 및 DB 저장
+        noticeService.insertAttachmentsForUpdate(board.getBoardId(), uploadedFiles != null ? uploadedFiles.split(",") : new String[0]);
+
+        return "redirect:/notice/detail?boardId=" + board.getBoardId() + "&page=1";
     }
-
-
 
 }

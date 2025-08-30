@@ -37,6 +37,38 @@
       background-color: #f2faff;
       cursor: pointer;
     }
+
+    /* 검색창 & 버튼 */
+    .search-form input.form-control {
+        height: 36px;          /* 높이 조정 */
+        font-size: 0.9rem;     /* 폰트 크기 작게 */
+        padding: 0 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .search-form select.form-select {
+        height: 36px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .search-form .btn-search {
+        height: 36px;
+        padding: 0 15px;
+        font-size: 0.7rem;
+        background-color: #6ec1e4;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+    }
+
+    .search-form .btn-search:hover {
+        background-color: #5ab0d8;
+    }
+
   </style>
 </head>
 <body>
@@ -46,7 +78,18 @@
 <main class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="board-title">📢 공지사항</h2>
+    <form th:action="@{/notice/list}" method="get" class="d-flex align-items-center search-form">
+      <input type="text" name="keyword" class="form-control me-2" placeholder="검색어를 입력하세요" th:value="${keyword}">
+      <select name="type" class="form-select me-2">
+        <option value="title" th:selected="${type=='title'}">제목</option>
+        <option value="content" th:selected="${type=='content'}">내용</option>
+        <option value="all" th:selected="${type=='all'}">제목+내용</option>
+      </select>
+      <button type="submit" class="btn btn-search">검색</button>
+    </form>
   </div>
+
+
 
   <!-- 공지사항 리스트 -->
   <div class="notice-table">

@@ -15,7 +15,7 @@
 <form th:action="@{/notice/insert}" method="post" id="noticeForm">
     <div>
         <label>제목</label>
-        <input type="text" name="boardTitle" required>
+        <input type="text" name="boardTitle" required style="width: 80%;">
     </div>
 
     <div>
@@ -38,9 +38,17 @@
     // Toast UI Editor 초기화
     const editor = new toastui.Editor({
         el: document.querySelector('#editor'),
-        height: '400px',
+        height: '500px',
+        width: '90%',
         initialEditType: 'wysiwyg',
-        previewStyle: 'vertical',
+        hideModeSwitch: true,
+        toolbarItems: [
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol'],
+            ['table', 'link'],
+            ['image']
+        ],
         hooks: {
             addImageBlobHook: async (blob, callback) => {
                 const formData = new FormData();
@@ -50,21 +58,18 @@
                     method: 'POST',
                     body: formData
                 });
-                const url = await response.text();
-                callback(url, 'image');
+                const tempUrl = await response.text(); // temp URL 반환
+                callback(tempUrl, 'image');
 
-                // 업로드된 파일명 저장
-                uploadedFilesArr.push(url.split('/').pop());
+                uploadedFilesArr.push(tempUrl.split('/').pop());
                 document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
             }
         }
     });
 
-    // form submit 전 에디터 내용 textarea에 담기
     const form = document.getElementById("noticeForm");
     form.addEventListener("submit", function(e) {
-        const html = editor.getHTML();
-        console.log("Editor HTML:", html); // 디버깅용
+        let html = editor.getHTML();
         document.getElementById("boardContent").value = html;
     });
 </script>
