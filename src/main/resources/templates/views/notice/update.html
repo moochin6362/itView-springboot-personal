@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>공지사항 수정</title>
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 </head>
 <body>
@@ -18,6 +18,19 @@
     <div>
         <label>제목</label>
         <input type="text" name="boardTitle" th:value="${notice.boardTitle}" required style="width: 80%;">
+    </div>
+
+    <br>
+
+    <div>
+        <label>게시판 종류</label>
+        <select name="boardType" required>
+            <option value="1" th:selected="${notice.boardType == 1}">공지사항</option>
+            <option value="2" th:selected="${notice.boardType == 2}">이벤트</option>
+            <option value="3" th:selected="${notice.boardType == 3}">문의사항</option>
+            <option value="4" th:selected="${notice.boardType == 4}">쿠폰</option>
+            <option value="5" th:selected="${notice.boardType == 5}">커뮤니티</option>
+        </select>
     </div>
 
     <div>
@@ -58,7 +71,7 @@
                 const formData = new FormData();
                 formData.append('image', blob);
 
-                const response = await fetch('/notice/uploadImage', { method: 'POST', body: formData });
+                const response = await fetch('/notice/uploadImage', {method: 'POST', body: formData});
                 const url = await response.text();
                 callback(url, 'image');
 
@@ -69,12 +82,12 @@
     });
 
     const form = document.getElementById("noticeForm");
-    form.addEventListener("submit", function(e) {
+    form.addEventListener("submit", function (e) {
         document.getElementById("boardContent").value = editor.getHTML();
     });
 
     // 취소 버튼 클릭 시 이전 페이지로 이동
-    document.getElementById("cancelBtn").addEventListener("click", function() {
+    document.getElementById("cancelBtn").addEventListener("click", function () {
         history.back();
     });
 </script>

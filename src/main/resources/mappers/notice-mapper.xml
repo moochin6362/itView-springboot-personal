@@ -87,7 +87,7 @@
         #{boardTitle},
         #{boardContent},
         SYSDATE,
-        1,
+        #{boardType},
         'Y',
         #{userNo}
         )
@@ -122,6 +122,7 @@
         UPDATE BOARD SET
         BOARD_TITLE = #{boardTitle},
         BOARD_CONTENT = #{boardContent},
+        BOARD_TYPE = #{boardType},
         BOARD_MODIFIED_DATE = SYSDATE
         WHERE BOARD_ID = #{boardId}
     </update>
