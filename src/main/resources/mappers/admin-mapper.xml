@@ -3,56 +3,64 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="itView.springboot.mapper.AdminMapper">
-<!-- 회원조회 Id -->
-<select id="searchUserById">
-select * from "USER" where user_id = #{userId}
+<!-- 회원 전체 조회-->
+<select id="getUserListCount" resultType="int">
+select count(*) 
+    from (
+        select u.user_no, u.user_id, u.email, u.user_type, u.user_status,
+               count(r.report_no) as reportCount
+        from "USER" u
+        left join REPORT r on u.user_no = r.reporter_user_id
+        group by u.user_no, u.user_id, u.email, u.user_type, u.user_status)t
+	<if test="value != null and value != ''">
+		<choose>
+			<when test="condition == 'userId'">
+				where user_id like '%' || #{value} || '%'
+			</when>
+			<when test="condition == 'userType'">
+				where user_type like '%'|| #{value} ||'%'
+			</when>
+			<when test="condition == 'userStatus'">
+				where user_status like '%' || #{value} || '%'
+			</when>
+			<when test="condition == 'reportCount'">
+				where reportCount = #{value}
+			</when>
+			<otherwise>
+            	where (user_id like '%' || #{value} || '%')
+            </otherwise>
+		</choose>
+	</if>
 </select>
 
-<!-- 회원조회 type -->
-<select id="searchUserByType">
-select * from "USER" where user_type = #{userType}
+<select id="selectUserList" resultType="itView.springboot.dto.UserReport">
+	select * 
+    from (
+        select u.user_no, u.user_id, u.email, u.user_type, u.user_status,
+               count(r.report_no) as reportCount
+        from "USER" u
+        left join REPORT r on u.user_no = r.reporter_user_id
+        group by u.user_no, u.user_id, u.email, u.user_type, u.user_status)t
+	<if test="value != null and value != ''">
+		<choose>
+			<when test="condition == 'userId'">
+				where upper(user_id) like '%' || upper(#{value}) || '%'
+			</when>
+			<when test="condition == 'userType'">
+				where upper(user_type) like '%'|| upper(#{value})||'%'
+			</when>
+			<when test="condition == 'userStatus'">
+				where upper(user_status) like '%' || upper(#{value}) || '%'
+			</when>
+			<when test="condition == 'reportCount'">
+				where reportCount = #{value}
+			</when>
+			<otherwise>
+            	where (upper(user_id) like '%' || upper(#{value}) || '%')
+            </otherwise>
+		</choose>
+	</if>
 </select>
-
-<!-- 회원조회 status -->
-<select id="searchUserByStatus">
-select * from "USER" where user_status = #{userStatus}
-</select>
-
-<!-- 회원조회 report -->
-<select id="searchUserByReport"  resultType="itView.springboot.dto.ReportDto">
-select
-    r.REPORT_NO,
-    r.REPORT_TITLE,
-    r.REPORT_CONTENT,
-    r.REPORT_DATE,
-    r.REPORT_MODIFY_DATE,
-    r.REPORT_STATUS,
-    r.REPORT_TYPE,
-    r.REPORTER_USER_ID,
-    r.REPORT_TARGET_NO,
-    u.USER_ID AS targetUserId,
-    target_report_count.reportCount
-FROM REPORT r
-JOIN "USER" u
-    ON r.REPORT_TARGET_NO = u.USER_NO
-JOIN (
-    SELECT REPORT_TARGET_NO, COUNT(*) AS reportCount
-    FROM REPORT
-    GROUP BY REPORT_TARGET_NO
-) target_report_count
-    ON r.REPORT_TARGET_NO = target_report_count.REPORT_TARGET_NO
-ORDER BY r.REPORT_TARGET_NO, r.REPORT_NO;
-</select>
-
-
-<!-- 회원조회  전체 -->
-<select id="getAllUser">
-select * from "USER"
-</select>
-
-
-
-
 
 
 

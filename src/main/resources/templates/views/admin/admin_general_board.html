@@ -83,15 +83,25 @@
                     </tr>
                 </tbody>
             </table>
-            <ul class="admin-board-pagination">
-                <li class="admin-board-page-item">&laquo;</li>
-                <li class="admin-board-page-item active">1</li>
-                <li class="admin-board-page-item">2</li>
-                <li class="admin-board-page-item">3</li>
-                <li class="admin-board-page-item">4</li>
-                <li class="admin-board-page-item">5</li>
-                <li class="admin-board-page-item">&raquo;</li>
-            </ul>
+		           <ul class="admin-board-pagination">
+		               <li class="admin-board-page-item">
+			               <a th:href="@{${loc}(page=${pi.currentPage-1})}"th:if="${map['value'] == null}" aria-label="Previous">&laquo;</a>
+						   <a th:href="@{${loc}(page=${pi.currentPage-1}, value=${map['value']}, condition=${map['condition']})}"th:if="${map['value'] != null}"aria-label="Previous">&laquo;</a>
+					   
+		              </li>
+		              
+		              
+		               <li class="admin-board-page-item active" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+			               <a th:href="@{${loc}(page=${p})}" th:if="${map['value'] == null}">[[${p}]]</a>
+						   <a th:href="@{${loc}(page=${p}, value=${map['value']}, condition=${map['condition']})}" th:if="${map['value'] != null}">[[${p}]]</a>
+		               </li>
+		               
+		               <li class="admin-board-page-item">
+			               <a th:href="@{${loc}(page=${pi.currentPage+1})}"th:if="${map['value'] == null}" aria-label="Next">&raquo;</a>
+						   
+						   <a th:href="@{${loc}(page=${pi.currentPage+1}, value=${map['value']}, condition=${map['condition']})}" th:if="${map['value'] != null}" aria-label="Next">&raquo;</a>
+		               </li>
+		           </ul>
 
 
 
