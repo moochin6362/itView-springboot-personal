@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
+import itView.springboot.dto.UserReport;
 import itView.springboot.vo.User;
 
 @Mapper
@@ -21,6 +22,9 @@ public interface AdminMapper {
 			@Param("rowBounds") RowBounds rowBounds,
 			@Param("value") String value, 
 			@Param("condition")String condition);
+
+	//회원상세조회
+	UserReport selectUser(int userNo);
 
 	
 	

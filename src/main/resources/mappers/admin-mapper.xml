@@ -7,11 +7,11 @@
 <select id="getUserListCount" resultType="int">
 select count(*) 
     from (
-        select u.user_no, u.user_id, u.email, u.user_type, u.user_status,
+        select u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status,
                count(r.report_no) as reportCount
         from "USER" u
         left join REPORT r on u.user_no = r.reporter_user_id
-        group by u.user_no, u.user_id, u.email, u.user_type, u.user_status)t
+        group by u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status)t
 	<if test="value != null and value != ''">
 		<choose>
 			<when test="condition == 'userId'">
@@ -36,11 +36,11 @@ select count(*)
 <select id="selectUserList" resultType="itView.springboot.dto.UserReport">
 	select * 
     from (
-        select u.user_no, u.user_id, u.email, u.user_type, u.user_status,
+        select u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status,
                count(r.report_no) as reportCount
         from "USER" u
         left join REPORT r on u.user_no = r.reporter_user_id
-        group by u.user_no, u.user_id, u.email, u.user_type, u.user_status)t
+        group by u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status)t
 	<if test="value != null and value != ''">
 		<choose>
 			<when test="condition == 'userId'">
@@ -62,6 +62,9 @@ select count(*)
 	</if>
 </select>
 
+<select id="selectUser" parameterType="int" resultType="itView.springboot.dto.UserReport">
+	select * from "USER" where user_no = #{userNo}
+</select>
 
 
 

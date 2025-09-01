@@ -1,24 +1,19 @@
 package itView.springboot.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import itView.springboot.common.Pagination;
+import itView.springboot.dto.UserReport;
 import itView.springboot.service.AdminService;
-import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -54,16 +49,19 @@ public class AdminController {
     }
 	
 	//게시판 상세조회 : 관리자만 볼 수 있는 게시판
-//	@GetMapping("/{id}/{page}")
-//	public String searchUserDetail(
-//			@PathVariable("boardId")int boardId,
-//			@PathVariable("page")int page,
-//			HttpSession session, Model model
-//			) {
-//		User loginUser = (User)session.getAttribute("loginUser");
-//		Board b = adService.selectBoardList(boardId, loginUser);
-//		
-//	}
+	@GetMapping("/userDetail")
+	public String userDetailPage(
+			@RequestParam("userNo")int userNo,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model
+			) {
+		UserReport user = adService.selectUser(userNo);
+		model.addAttribute("user", user);
+		model.addAttribute("page",page);
+		
+		return "admin/admin_searchUser_detail";
+		
+	}
 	
 	
 	

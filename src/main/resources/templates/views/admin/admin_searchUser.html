@@ -51,7 +51,7 @@
 		                   <tr>
 		                       <th>가입유형</th>
 		                       <th>회원 아이디</th>
-		                       <th>이메일</th>  <!-- 수정 가능(원래는 가입일자였음) -->
+		                       <th>이메일</th> 
 		                       <th>활동 상태</th>
 		                       <th>누적 신고횟수</th>
 		                   </tr>
@@ -61,10 +61,15 @@
 			               	  class="admin-genBoard-table-body">
 		                   <tr>
 		                       <td th:text="${user.userType =='P' ? '판매자' : '일반'}"></td>
-		                       <td th:text="${user.userType == 'P' ? user.brandName : user.userId}"></td>
+		                       <td>
+		                       	<a
+		                       	  th:text="${user.userType == 'P' ? user.brandName : user.userId}"
+		                       	  th:href="@{/admin/userDetail(userNo=${user.userNo})}">
+		                       	</a> 
+		                       	   </td>
 		                       <td th:text="${user.email}"></td>
 		                       <td th:text="${user.userStatus}"></td>
-		                       <td th:text="${user.reportCount}">회</td>
+		                       <td th:text="${user.reportCount}"></td>
 		                   </tr>
 		               </tbody>
 		           </table>

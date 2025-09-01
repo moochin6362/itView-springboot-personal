@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
+import itView.springboot.dto.UserReport;
 import itView.springboot.mapper.AdminMapper;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
@@ -25,6 +26,11 @@ public class AdminService {
 	   int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 	   RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 	   return mapper.selectUserList(rowBounds, value, condition);
+	}
+
+	//회원상세페이지
+	public UserReport selectUser(int userNo) {
+		return mapper.selectUser(userNo);
 	}
 	
 	
