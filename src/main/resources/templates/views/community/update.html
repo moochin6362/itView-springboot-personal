@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 수정</title>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{common/header :: header}"></div>
+
+<h2>공지사항 수정</h2>
+
+<form th:action="@{/community/update}" method="post" id="communityForm">
+    <input type="hidden" name="boardId" th:value="${community.boardId}">
+
+    <div>
+        <label>제목</label>
+        <input type="text" name="boardTitle" th:value="${community.boardTitle}" required style="width: 80%;">
+    </div>
+
+    <br>
+
+    <div>
+        <label>내용</label>
+        <div id="editor"></div>
+        <textarea id="boardContent" name="boardContent" style="display:none;"
+                  th:text="${community.boardContent}"></textarea>
+    </div>
+
+    <input type="hidden" name="uploadedFiles" id="uploadedFiles">
+
+    <button type="submit">수정 완료</button>
+    <button type="button" id="cancelBtn">취소</button>
+</form>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+<script>
+    const uploadedFilesArr = [];
+    const initialContent = document.getElementById("boardContent").value;
+
+    const editor = new toastui.Editor({
+        el: document.querySelector('#editor'),
+        height: '500px',
+        width: '90%',
+        initialEditType: 'wysiwyg',
+        hideModeSwitch: true,
+        initialValue: initialContent,
+        toolbarItems: [
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol'],
+            ['table', 'link'],
+            ['image']
+        ],
+        hooks: {
+            addImageBlobHook: async (blob, callback) => {
+                const formData = new FormData();
+                formData.append('image', blob);
+
+                const response = await fetch('/community/uploadImage', {method: 'POST', body: formData});
+                const url = await response.text();
+                callback(url, 'image');
+
+                uploadedFilesArr.push(url.split('/').pop());
+                document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
+            }
+        }
+    });
+
+    const form = document.getElementById("communityForm");
+    form.addEventListener("submit", function (e) {
+        document.getElementById("boardContent").value = editor.getHTML();
+    });
+
+    // 취소 버튼 클릭 시 이전 페이지로 이동
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+        history.back();
+    });
+</script>
+
+</body>
+</html>
