@@ -41,6 +41,13 @@
             margin-top: 30px;
         }
 
+        .notice-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+
     </style>
 </head>
 <body>
@@ -54,7 +61,7 @@
             [[${community.boardTitle}]]
         </h2>
         <div class="notice-meta">
-            작성자: 관리자 | 작성일: [[${community.boardDate}]]
+            작성자: [[${community.userNo}]] | 작성일: [[${community.boardDate}]]
         </div>
         <div class="notice-content" th:utext="${community.boardContent}">
 
