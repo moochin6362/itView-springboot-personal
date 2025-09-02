@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>쇼핑몰 예제</title>
 
     <style>
         /* 캐러셀 */
         #heroCarousel .carousel-item img {
-            border: 3px solid #34e5eb;
+            /*border: 3px solid #34e5eb;*/
             border-radius: 10px;
             height: 500px;
             object-fit: cover;
         }
+
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
             background-color: #56acd1;
@@ -27,10 +28,12 @@
             border-radius: 10px;
             transition: transform 0.2s ease, border-color 0.2s ease;
         }
+
         .product-card:hover {
             transform: translateY(-5px);
             border-color: #6ec1e4;
         }
+
         .product-image {
             background-color: #f8f9fa;
             height: 200px;
@@ -47,7 +50,7 @@
 
 <div th:replace="~{common/header :: header}"></div>
 
-<!-- 히어로 캐러셀 -->s
+<!-- 히어로 캐러셀 -->
 <div id="heroCarousel" class="carousel slide my-4" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>

@@ -9,7 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import java.util.List;
 
 @Mapper
-public interface NoticeMapper {
+public interface CommunityMapper {
     public void insertBoard(Board board);
 
     public void insertAttachment(Attachment attm);
@@ -32,4 +32,7 @@ public interface NoticeMapper {
 
 
     int deleteBoard(int boardId);
+
+    Attachment selectFirstImage(@Param("boardId") int boardId, @Param("boardType") String boardType);
+
 }

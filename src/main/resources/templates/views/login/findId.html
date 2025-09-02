@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" href="/css/login/findId.css">
+    <script src="/js/login/findId.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body>
+    <main class="findId-main-wrapper">
+        <div class="findId-container">  
+            <form action="/login/findId" method="post" id="findIdForm">
+            <div class="findId-title">
+            	<a th:href="@{/home}">fIND ID</a>
+            </div>
+                <div class="findId-select-loginType-container">
+                    계정 유형을 선택하세요
+                </div>
+                <div class="findId-select-loginType">
+                    <div class="loginType-box">
+                        <input type="radio" id="findId-admin" name="userType" value="A" required>
+                        <label for="findId-admin">관리자</label>
+                    </div>
+                    <div class="loginType-box">
+                        <input type="radio" id="findId-partner" name="userType" value="P">
+                        <label for="findId-partner">판매자</label>
+                    </div>
+                    <div class="loginType-box">
+                        <input type="radio" id="findId-general" name="userType" value="U">
+                        <label for="findId-general">일반</label>
+                    </div>
+                </div>
+                <div class="findId-inputEmail">
+                    <label for="email">이메일 :</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="findId-inputPassword">
+                    <label for="userPassword">비밀번호 :</label>
+                    <input type="password" id="userPassword" name="userPassword" required>
+                    <button type="button" id="togglePassword" class="togglePassword"aria-label="비밀번호 표시/숨기기">
+                        <i class="ti ti-eye"></i>
+                    </button>
+                    <div class="findId-forgetPassword">
+                    	<a href="/login/findPwd">비밀번호를 잊어버렸어요</a>
+                    </div>
+                </div>
+                
+                
+                <div class="findId-button-box">
+                    <button type="submit">아이디 찾기</button>
+                </div>
+            </form>
+            
+            <!-- 모달창 -->
+			<div id="findIdModal" class="modal" style="display:none;">
+			  <div class="modal-content">
+			    <span class="close">&times;</span>
+			    <p id="foundUserId"></p>
+			  </div>
+			</div>
+            
+            
+            
+        </div>    
+    </main>
+</body>
+</html>

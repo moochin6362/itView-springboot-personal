@@ -1,10 +1,10 @@
 package itView.springboot.controller;
 
 import itView.springboot.common.Pagination;
-import itView.springboot.service.NoticeService;
+import itView.springboot.service.CommunityService;
+import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
-import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/notice")
+@RequestMapping("/community")
 @RequiredArgsConstructor
-public class NoticeController {
+public class CommunityController {
 
-    private final NoticeService noticeService;
+    private final CommunityService communityService;
 
     // 리스트 페이지
     @GetMapping("/list")
@@ -34,27 +34,35 @@ public class NoticeController {
             Model model,
             HttpServletRequest request) {
 
-        // 검색 포함 게시글 수 가져오기
-        int listCount = noticeService.getListCountWithSearch(1, keyword, type);
+        int listCount = communityService.getListCountWithSearch(1, keyword, type);
 
-        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
 
-        List<Board> notices = noticeService.selectBoardListWithSearch(pi, keyword, type);
+        List<Board> communitys = communityService.selectBoardListWithSearch(pi, keyword, type);
 
-        model.addAttribute("notices", notices);
+        // 썸네일 이미지 셋팅
+        for (Board board : communitys) {
+            Attachment thumbnail = communityService.selectFirstImage(board.getBoardId(), "1"); // boardType = "1"
+            if (thumbnail != null) {
+                board.setThumbnailPath("/uploadFilesFinal/community/" + thumbnail.getAttmRename());
+            }
+        }
+
+        model.addAttribute("communitys", communitys);
         model.addAttribute("pi", pi);
         model.addAttribute("loc", request.getRequestURL());
         model.addAttribute("keyword", keyword);
         model.addAttribute("type", type);
 
-        return "notice/list";
+        return "community/list";
     }
+
 
 
     // 작성폼 페이지
     @GetMapping("/write")
     public String writeForm() {
-        return "notice/write";
+        return "community/write";
     }
 
     // 디테일 페이지
@@ -63,11 +71,11 @@ public class NoticeController {
                             @RequestParam(value = "page", defaultValue = "1") int page,
                             Model model) {
 
-        Board notice = noticeService.selectBoard(boardId);
-        model.addAttribute("notice", notice);
+        Board community = communityService.selectBoard(boardId);
+        model.addAttribute("community", community);
         model.addAttribute("page", page);
 
-        return "notice/detail";
+        return "community/detail";
     }
 
     // 작성
@@ -82,13 +90,13 @@ public class NoticeController {
             for(String fileName : files){
                 // HTML 내 temp 경로를 notice 경로로 변경
                 content = content.replace("/uploadFilesFinal/temp/" + fileName,
-                        "/uploadFilesFinal/notice/" + fileName);
+                        "/uploadFilesFinal/community/" + fileName);
             }
             board.setBoardContent(content);
         }
 
-        noticeService.insertNotice(board, uploadedFiles, session);
-        return "redirect:/notice/detail?boardId=" + board.getBoardId() + "&page=1";
+        communityService.insertNotice(board, uploadedFiles, session);
+        return "redirect:/community/detail?boardId=" + board.getBoardId() + "&page=1";
     }
 
 
@@ -111,16 +119,16 @@ public class NoticeController {
     // 삭제
     @GetMapping("/{boardId}/delete")
     public String deleteNotice(@PathVariable int boardId) {
-        int notice = noticeService.deleteBoard(boardId);
-        return "redirect:/notice/list";
+        int notice = communityService.deleteBoard(boardId);
+        return "redirect:/community/list";
     }
 
     // 업데이트 페이지
     @GetMapping("/{boardId}/updateForm")
     public String updateForm(@PathVariable int boardId, Model model) {
-        Board notice = noticeService.selectBoard(boardId);
-        model.addAttribute("notice", notice);
-        return "notice/update";
+        Board community = communityService.selectBoard(boardId);
+        model.addAttribute("community", community);
+        return "community/update";
     }
 
     // 업데이트
@@ -135,18 +143,18 @@ public class NoticeController {
             String content = board.getBoardContent();
             for(String fileName : files){
                 content = content.replace("/uploadFilesFinal/temp/" + fileName,
-                        "/uploadFilesFinal/notice/" + fileName);
+                        "/uploadFilesFinal/community/" + fileName);
             }
             board.setBoardContent(content);
         }
 
         // 게시글 업데이트
-        noticeService.updateBoard(board);
+        communityService.updateBoard(board);
 
         // 이미지 temp → notice 이동 및 DB 저장
-        noticeService.insertAttachmentsForUpdate(board.getBoardId(), uploadedFiles != null ? uploadedFiles.split(",") : new String[0]);
+        communityService.insertAttachmentsForUpdate(board.getBoardId(), uploadedFiles != null ? uploadedFiles.split(",") : new String[0]);
 
-        return "redirect:/notice/detail?boardId=" + board.getBoardId() + "&page=1";
+        return "redirect:/community/detail?boardId=" + board.getBoardId() + "&page=1";
     }
 
 }

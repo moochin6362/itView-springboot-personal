@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -54,33 +54,26 @@
 
 <div th:replace="~{common/header :: header}"></div>
 
-<!-- 공지사항 상세 -->
+<!-- 커뮤니티 상세 (CSS수정 안함)--> 
 <main class="container my-5">
     <div class="notice-card">
         <h2 class="notice-title">
-  <span th:switch="${notice.boardType}">
-    <span th:case="1">[공지사항]</span>
-    <span th:case="2">[이벤트]</span>
-    <span th:case="3">[문의사항]</span>
-    <span th:case="4">[쿠폰]</span>
-    <span th:case="5">[커뮤니티]</span>
-  </span>
-            [[${notice.boardTitle}]]
+            [[${community.boardTitle}]]
         </h2>
         <div class="notice-meta">
-            작성자: 관리자 | 작성일: [[${notice.boardDate}]]
+            작성자: [[${community.userNo}]] | 작성일: [[${community.boardDate}]]
         </div>
-        <div class="notice-content" th:utext="${notice.boardContent}">
+        <div class="notice-content" th:utext="${community.boardContent}">
 
         </div>
 
         <div class="btn-wrap d-flex justify-content-between">
-            <a href="/notice/list" class="btn btn-outline-secondary">목록</a>
+            <a href="/community/list" class="btn btn-outline-secondary">목록</a>
             <div>
-                <a th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"
-                   th:href="@{/notice/{boardId}/updateForm(boardId=${notice.boardId})}" class="btn btn-primary">수정</a>
+                <a th:if="${session.loginUser != null and session.loginUser.userNo == community.userNo}"
+                   th:href="@{/community/{boardId}/updateForm(boardId=${community.boardId})}" class="btn btn-primary">수정</a>
                 <!-- 삭제 버튼 (모달 띄우기) -->
-                <button th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"
+                <button th:if="${session.loginUser != null and session.loginUser.userNo == community.userNo}"
                         type="button"
                         class="btn btn-danger"
                         data-bs-toggle="modal"
@@ -108,7 +101,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                 <!-- 실제 삭제 요청 -->
-                <a th:href="@{/notice/{boardId}/delete(boardId=${notice.boardId})}" class="btn btn-danger">삭제</a>
+                <a th:href="@{/community/{boardId}/delete(boardId=${community.boardId})}" class="btn btn-danger">삭제</a>
             </div>
         </div>
     </div>
@@ -118,5 +111,3 @@
 
 </body>
 </html>
-
-

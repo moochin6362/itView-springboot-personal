@@ -6,19 +6,14 @@
 </head>
 <body> 
 
-	<script th:inline="javascript">
-		/*<![CDATA[*/
-			window.onload = () => {
-				alert(/*[[${msg}]]*/);
-				location.href=/*[[${url}]]*/null;
-			}
-			
-		/*]]*/
-	
-	
-	
-	</script>
-
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	window.onload = function() {
+	    alert('[[${msg}]]');        
+	    location.href = /*[[${url}]]*/ '/login/login';
+	}
+	/*]]>*/
+</script>
 
 
 

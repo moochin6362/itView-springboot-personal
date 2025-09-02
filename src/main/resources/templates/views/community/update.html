@@ -12,32 +12,21 @@
 
 <h2>공지사항 수정</h2>
 
-<form th:action="@{/notice/update}" method="post" id="noticeForm">
-    <input type="hidden" name="boardId" th:value="${notice.boardId}">
+<form th:action="@{/community/update}" method="post" id="communityForm">
+    <input type="hidden" name="boardId" th:value="${community.boardId}">
 
     <div>
         <label>제목</label>
-        <input type="text" name="boardTitle" th:value="${notice.boardTitle}" required style="width: 80%;">
+        <input type="text" name="boardTitle" th:value="${community.boardTitle}" required style="width: 80%;">
     </div>
 
     <br>
 
     <div>
-        <label>게시판 종류</label>
-        <select name="boardType" required>
-            <option value="1" th:selected="${notice.boardType == 1}">공지사항</option>
-            <option value="2" th:selected="${notice.boardType == 2}">이벤트</option>
-            <option value="3" th:selected="${notice.boardType == 3}">문의사항</option>
-            <option value="4" th:selected="${notice.boardType == 4}">쿠폰</option>
-            <option value="5" th:selected="${notice.boardType == 5}">커뮤니티</option>
-        </select>
-    </div>
-
-    <div>
         <label>내용</label>
         <div id="editor"></div>
         <textarea id="boardContent" name="boardContent" style="display:none;"
-                  th:text="${notice.boardContent}"></textarea>
+                  th:text="${community.boardContent}"></textarea>
     </div>
 
     <input type="hidden" name="uploadedFiles" id="uploadedFiles">
@@ -71,7 +60,7 @@
                 const formData = new FormData();
                 formData.append('image', blob);
 
-                const response = await fetch('/notice/uploadImage', {method: 'POST', body: formData});
+                const response = await fetch('/community/uploadImage', {method: 'POST', body: formData});
                 const url = await response.text();
                 callback(url, 'image');
 
@@ -81,7 +70,7 @@
         }
     });
 
-    const form = document.getElementById("noticeForm");
+    const form = document.getElementById("communityForm");
     form.addEventListener("submit", function (e) {
         document.getElementById("boardContent").value = editor.getHTML();
     });

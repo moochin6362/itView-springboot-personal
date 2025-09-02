@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="itView.springboot.mapper.NoticeMapper">
+<mapper namespace="itView.springboot.mapper.CommunityMapper">
 
     <!-- 검색 포함 게시글 수 -->
     <select id="getListCountWithSearch" resultType="int">
         SELECT COUNT(*) FROM BOARD
         WHERE BOARD_STATUS='Y'
-        AND BOARD_TYPE IN (1, 2, 4)
+        AND BOARD_TYPE IN (5)
         <if test="keyword != null and keyword != ''">
             <choose>
                 <when test="type == 'title'">
@@ -28,7 +28,7 @@
     <select id="selectBoardListWithSearch" resultType="Board">
         SELECT * FROM BOARD
         WHERE BOARD_STATUS='Y'
-        AND BOARD_TYPE IN (1, 2, 4)
+        AND BOARD_TYPE IN (5)
         <if test="keyword != null and keyword != ''">
             <choose>
                 <when test="type == 'title'">
@@ -52,7 +52,7 @@
         select count(*)
         from board
         where board_status='Y'
-        AND BOARD_TYPE IN (1, 2, 4)
+        AND BOARD_TYPE IN (5)
     </select>
 
 
@@ -61,7 +61,7 @@
         SELECT *
         FROM BOARD
         WHERE board_status='Y'
-        AND BOARD_TYPE IN (1, 2, 4)
+        AND BOARD_TYPE IN (5)
         ORDER BY BOARD_ID DESC
     </select>
     <!--  게시글 상세 조회  -->
@@ -91,7 +91,7 @@
         #{boardTitle},
         #{boardContent},
         SYSDATE,
-        #{boardType},
+        5,
         'Y',
         #{userNo}
         )
@@ -126,7 +126,6 @@
         UPDATE BOARD SET
         BOARD_TITLE = #{boardTitle},
         BOARD_CONTENT = #{boardContent},
-        BOARD_TYPE = #{boardType},
         BOARD_MODIFIED_DATE = SYSDATE
         WHERE BOARD_ID = #{boardId}
     </update>
@@ -136,6 +135,15 @@
         UPDATE BOARD SET BOARD_STATUS = 'N' WHERE BOARD_ID = #{boardId}
     </update>
 
+    <select id="selectFirstImage" resultType="itView.springboot.vo.Attachment">
+        SELECT *
+        FROM attachment
+        WHERE position_no = #{boardId}
+        AND attm_position = #{boardType}
+        AND attm_status = 'Y'
+        ORDER BY attm_no ASC
+        FETCH FIRST 1 ROWS ONLY
+    </select>
 
 
 

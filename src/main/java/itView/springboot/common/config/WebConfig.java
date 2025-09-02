@@ -10,5 +10,17 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploadFilesFinal/**")
                 .addResourceLocations("file:///c:/uploadFilesFinal/notice/");
+
+        // temp 폴더
+        registry.addResourceHandler("/uploadFilesFinal/temp/**")
+                .addResourceLocations("file:///c:/uploadFilesFinal/temp/");
+
+        // notice 폴더
+        registry.addResourceHandler("/uploadFilesFinal/notice/**")
+                .addResourceLocations("file:///c:/uploadFilesFinal/notice/");
+
+        // community 폴더
+        registry.addResourceHandler("/uploadFilesFinal/community/**")
+                .addResourceLocations("file:///c:/uploadFilesFinal/community/");
     }
 }

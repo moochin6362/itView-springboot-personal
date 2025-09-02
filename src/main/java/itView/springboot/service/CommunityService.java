@@ -1,6 +1,6 @@
 package itView.springboot.service;
 
-import itView.springboot.mapper.NoticeMapper;
+import itView.springboot.mapper.CommunityMapper;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 
@@ -17,22 +16,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NoticeService {
+public class CommunityService {
 
-    private final NoticeMapper noticeMapper;
+    private final CommunityMapper communityMapper;
 
     public void insertNotice(Board board, String uploadedFiles, HttpSession session) {
         User user = (User)session.getAttribute("loginUser");
         board.setUserNo(user.getUserNo());
 
         // 게시글 저장 → boardId 생성
-        noticeMapper.insertBoard(board);
+        communityMapper.insertBoard(board);
         int boardId = board.getBoardId();
 
         if (uploadedFiles != null && !uploadedFiles.isEmpty()) {
             String[] files = uploadedFiles.split(",");
             String tempDir = "c:/uploadFilesFinal/temp";
-            String finalDir = "c:/uploadFilesFinal/notice";
+            String finalDir = "c:/uploadFilesFinal/community";
 
             File noticeFolder = new File(finalDir);
             if (!noticeFolder.exists()) {
@@ -61,9 +60,9 @@ public class NoticeService {
                 Attachment attm = new Attachment();
                 attm.setAttmName(fileName.substring(fileName.indexOf("_")+1));
                 attm.setAttmRename(fileName);
-                attm.setAttmPath("/uploadFilesFinal/notice");
+                attm.setAttmPath("/uploadFilesFinal/community");
                 attm.setPositionNo(boardId);
-                noticeMapper.insertAttachment(attm);
+                communityMapper.insertAttachment(attm);
             }
         }
     }
@@ -71,21 +70,21 @@ public class NoticeService {
     public List<Board> selectBoardList(PageInfo pi) {
         int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-        return noticeMapper.selectBoardList(rowBounds);
+        return communityMapper.selectBoardList(rowBounds);
     }
 
     public Board selectBoard(int boardId) {
-        return noticeMapper.selectBoard(boardId);
+        return communityMapper.selectBoard(boardId);
     }
 
     public int updateBoard(Board board) {
-        return noticeMapper.updateBoard(board);
+        return communityMapper.updateBoard(board);
     }
 
     public void insertAttachmentsForUpdate(int boardId, String[] uploadedFiles) {
         if (uploadedFiles != null && uploadedFiles.length > 0) {
             String tempDir = "c:/uploadFilesFinal/temp";
-            String finalDir = "c:/uploadFilesFinal/notice";
+            String finalDir = "c:/uploadFilesFinal/community";
 
             File noticeFolder = new File(finalDir);
             if (!noticeFolder.exists()) {
@@ -112,30 +111,34 @@ public class NoticeService {
                 Attachment attm = new Attachment();
                 attm.setAttmName(fileName.substring(fileName.indexOf("_")+1));
                 attm.setAttmRename(fileName);
-                attm.setAttmPath("/uploadFilesFinal/notice");
+                attm.setAttmPath("/uploadFilesFinal/community");
                 attm.setPositionNo(boardId);
-                noticeMapper.insertAttachment(attm);
+                communityMapper.insertAttachment(attm);
             }
         }
     }
 
 
     public int getListCount(int i) {
-        return noticeMapper.getListCount(i);
+        return communityMapper.getListCount(i);
     }
 
     public int getListCountWithSearch(int boardType, String keyword, String type) {
-        return noticeMapper.getListCountWithSearch(boardType, keyword, type);
+        return communityMapper.getListCountWithSearch(boardType, keyword, type);
     }
 
     public List<Board> selectBoardListWithSearch(PageInfo pi, String keyword, String type) {
         int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-        return noticeMapper.selectBoardListWithSearch(rowBounds, keyword, type);
+        return communityMapper.selectBoardListWithSearch(rowBounds, keyword, type);
     }
 
 
     public int deleteBoard(int boardId) {
-        return noticeMapper.deleteBoard(boardId);
+        return communityMapper.deleteBoard(boardId);
+    }
+
+    public Attachment selectFirstImage(int boardId, String boardType) {
+        return communityMapper.selectFirstImage(boardId, boardType);
     }
 }

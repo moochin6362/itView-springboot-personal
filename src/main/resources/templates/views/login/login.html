@@ -12,7 +12,9 @@
     <main class="login-main-wrapper">
         <div class="login-container">  
             <form action="/login/login" method="post">
-            <div class="login-title">LOG IN</div>
+            <div class="login-title">
+            	<a th:href="@{/home}">LOG IN</a>
+            </div>
                 <div class="login-select-loginType-container">
                     회원 유형을 선택하세요
                 </div>
@@ -35,7 +37,7 @@
                     <input type="text" id="userid" name="userId" required>
                     <div class="login-message">*판매자 아이디: 사업자 등록번호를 입력하세요</div>
                     <div class="login-forgetId">
-                    	<a href="#">아이디를 잊어버렸어요</a>
+                    	<a href="/login/findId">아이디를 잊어버렸어요</a>
                     </div>
                 </div>
                 <div class="login-inputPassword">
