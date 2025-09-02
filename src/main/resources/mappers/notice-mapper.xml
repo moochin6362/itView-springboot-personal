@@ -7,7 +7,7 @@
     <!-- 검색 포함 게시글 수 -->
     <select id="getListCountWithSearch" resultType="int">
         SELECT COUNT(*) FROM BOARD
-        WHERE BOARD_TYPE = #{boardType} AND BOARD_STATUS='Y'
+        WHERE BOARD_STATUS='Y'
         <if test="keyword != null and keyword != ''">
             <choose>
                 <when test="type == 'title'">
@@ -49,7 +49,7 @@
     <select id="getListCount" resultType="_int">
         select count(*)
         from board
-        where board_type = '1' and board_status='Y'
+        where board_status='Y'
     </select>
 
 
@@ -57,7 +57,7 @@
     <select id="selectBoardList" resultType="Board">
         SELECT *
         FROM BOARD
-        WHERE BOARD_STATUS = 'Y' and board_status='Y'
+        WHERE board_status='Y'
         ORDER BY BOARD_ID DESC
     </select>
     <!--  게시글 상세 조회  -->
