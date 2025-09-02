@@ -217,7 +217,7 @@
 		</if>
 	</select>
 	
-	<select id="selectPointList">wneh
+	<select id="selectPointList">
 		select *
 		from point
 			join "USER" using(user_no)

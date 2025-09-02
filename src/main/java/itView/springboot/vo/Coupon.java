@@ -21,7 +21,7 @@ public class Coupon {
 	private int couponDiscount;
 	private Date couponStartdate;
 	private Date couponEndDate;
-	private Date couponCreateDate;
+	private Date couponCreatedate;
 	private int couponMinprice;
 	private int userNo;
 	

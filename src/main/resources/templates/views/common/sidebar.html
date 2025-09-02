@@ -11,77 +11,95 @@
 	        <i class="fas fa-chart-bar" data-menu="sales"></i>
 	    </div>
 	
-	    <!-- 메뉴 패널 -->
-	    <div class="menu-panel">
-	        <div class="menu-title">
-	        	<a th:href="@{/home}">it-view</a>
-	        </div>
-	
-	        <div class="menu-item" data-menu="dashboard">
-	            <span><i class="fas fa-home"></i> 공지사항 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> IBT</div>
-	            <div class="submenu-item"><span>●</span> Manage Web Orders</div>
-	            <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
-	        </div>
-	
-	        <div class="menu-item" data-menu="pos-sale">
-	            <span><i class="fas fa-user"></i> 회원계정 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span>
-	            <a th:href="@{/admin/searchUser}"> 회원 조회</a>
-	            </div>
-	        </div>
-	
-	        <div class="menu-item" data-menu="manage-permission">
-	            <span><i class="fas fa-box"></i> 제품 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> 
-	            	<a href="#">판매 금지 제품 공지사항</a>
-	            </div>
-	        </div>
-	
-	        <div class="menu-item" data-menu="manage-customers">
-	            <span><i class="fas fa-users-cog"></i> 문의 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> 
-	            	<a th:href="@{/admin/gBoard}"> 일반회원 문의</a>
-	            </div>
-	            <div class="submenu-item"><span>●</span>
-	            	<a th:href="@{/admin/pBoard}"> 판매자 문의</a>
-	            </div>
-	        </div>
-	
-	        <div class="menu-item" data-menu="payment">
-	            <span><i class="fas fa-dollar-sign"></i> 신고 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> 
-	            	<a th:href="@{/admin/report}"> 신고 게시판</a>
-	            </div>
-	        </div>
-	
-	        <div class="menu-item" data-menu="manage-products">
-	            <span><i class="fas fa-cash-register"></i> 쿠폰 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> Product List</div>
-	            <div class="submenu-item"><span>●</span> Purchase Orders</div>
-	            <div class="submenu-item"><span>●</span> Authorise GRV</div>
-	        </div>
-	
-	        <div class="menu-item" data-menu="sales">
-	            <span><i class="fas fa-chart-bar"></i> 포인트 관리</span> ▾
-	        </div>
-	        <div class="submenu">
-	            <div class="submenu-item"><span>●</span> IBT</div>
-	            <div class="submenu-item"><span>●</span> Manage Web Orders</div>
-	            <div class="submenu-item"><span>●</span> Manage Offline Orders</div>
-	        </div>
-	    </div>
+		<!-- 메뉴 패널 -->
+		<div class="menu-panel">
+		    <div class="menu-title">it-view</div>
+		
+		    <!-- 공지사항 관리 -->
+		    <div class="menu-item" data-menu="dashboard">
+		        <span><i class="fas fa-home"></i> 공지사항 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/ibt}"><span>●</span> IBT</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageWebOrders}"><span>●</span> Manage Web Orders</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageOfflineOrders}"><span>●</span> Manage Offline Orders</a></li>
+		        </ul>
+		    </div>
+		
+		    <!-- 회원계정 관리 -->
+		    <div class="menu-item" data-menu="pos-sale">
+		        <span><i class="fas fa-user"></i> 회원계정 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/ibt}"><span>●</span> IBT</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageWebOrders}"><span>●</span> Manage Web Orders</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageOfflineOrders}"><span>●</span> Manage Offline Orders</a></li>
+		        </ul>
+		    </div>
+		
+		    <!-- 제품 관리 -->
+		    <div class="menu-item" data-menu="manage-permission">
+		        <span><i class="fas fa-box"></i> 제품 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/ibt}"><span>●</span> IBT</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageWebOrders}"><span>●</span> Manage Web Orders</a></li>
+		            <li><a th:href="@{/inhoAdmin/productDetail}"><span>●</span> 신고 누적 상품 관리</a></li>
+		        </ul>
+		    </div>
+		
+		    <!-- 문의 관리 -->
+		    <div class="menu-item" data-menu="manage-customers">
+		        <span><i class="fas fa-users-cog"></i> 문의 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/ibt}"><span>●</span> IBT</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageWebOrders}"><span>●</span> Manage Web Orders</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageOfflineOrders}"><span>●</span> Manage Offline Orders</a></li>
+		        </ul>
+		    </div>
+		
+		    <!-- 신고 관리 -->
+		    <div class="menu-item" data-menu="payment">
+		        <span><i class="fas fa-dollar-sign"></i> 신고 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/ibt}"><span>●</span> IBT</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageWebOrders}"><span>●</span> Manage Web Orders</a></li>
+		            <li><a th:href="@{/inhoAdmin/manageOfflineOrders}"><span>●</span> Manage Offline Orders</a></li>
+		        </ul>
+		    </div>
+		
+		    <!-- 쿠폰 관리 -->
+		    <div class="menu-item" data-menu="manage-products">
+		        <span><i class="fas fa-cash-register"></i> 쿠폰 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/couponList}"><span>●</span> 쿠폰 목록</a></li>
+		            <li><a th:href="@{/inhoAdmin/couponBoardList}"><span>●</span> 쿠폰 공지 목록</a></li>
+		            <li><a th:href="@{/inhoAdmin/enrollCouponNotice}"><span>●</span> 쿠폰 공지 등록</a></li>
+		            <li><a th:href="@{/inhoAdmin/enrollCoupon}"><span>●</span> 쿠폰 등록</a></li>
+		        </ul>
+		    </div>
+		
+		    <!-- 포인트 관리 -->
+		    <div class="menu-item" data-menu="sales">
+		        <span><i class="fas fa-chart-bar"></i> 포인트 관리</span> ▾
+		    </div>
+		    <div class="submenu" style="display: none;">
+		        <ul>
+		            <li><a th:href="@{/inhoAdmin/pointList}"><span>●</span> 포인트 목록</a></li>
+		            <li><a th:href="@{/inhoAdmin/enrollPoint}"><span>●</span> 포인트 등록</a></li>
+		            <li><a th:href="@{/inhoAdmin/updatePoint}"><span>●</span> 포인트 수정</a></li>
+		        </ul>
+		    </div>
+		</div>
+		
 	</div>
 </div>

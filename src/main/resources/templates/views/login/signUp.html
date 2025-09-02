@@ -1,206 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>회원가입</title>
-        <link href="/css/login/signUp.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
-        <div class="signup-container">
-            <div class="logo">
-                <h1>
-                	<a th:href="@{/home}">it:view</a>
-                </h1>
-            </div>
-            <div class="toggle-buttons">
-                <button type="button" id="memberBtn" class="active">회원전용</button>
-                <button type="button" id="sellerBtn">판매자전용</button>
-            </div>
-            <form id="signupForm">
-                <!-- 회원용 아이디 -->
-                <div class="form-group" id="member-field">
-                    <label for="email">아이디</label>
-                    <input type="text" id="email" placeholder="아이디 입력 (6 ~ 20자)" />
-                    <button type="button" class="check-btn">중복 확인</button>
-                </div>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>회원가입</title>
+	<link href="/css/login/signUp.css" rel="stylesheet" type="text/css" />
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- Flatpickr 한국어 -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+	<!-- 카카오 주소검색 라이브러리 -->
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+</head>
+<body>
+  <div class="signup-container">
+    <div class="logo">
+      <h1>it:view</h1>
+    </div>
 
-                <!-- 판매자용 사업자등록번호 -->
-                <div class="form-group" id="seller-field">
-                    <label for="biz-number">사업자등록번호</label>
-                    <input type="text" id="biz-number" placeholder="사업자등록번호 입력" />
-                </div>
+    <form id="signup" action="/login/signUp" method="post">
+    	<input type="hidden" name="userType" id="userType" value="U">
+    	<div class="toggle-buttons">
+      		<button type="button" id="memberBtn" class="active">회원전용</button>
+      		<button type="button" id="sellerBtn">판매자전용</button>
+    	</div>
+      <!-- 회원용 아이디 -->
+      <div class="form-group" id="member-field">
+        <label id="userIdLabel" for="userId">아이디</label>
+        <input type="text" id="userId" name="userId" placeholder="아이디 입력 (6 ~ 20자)" required/>
+        <label id="idCheckResult"></label>
+      </div>
 
-                <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <input type="password" id="password" placeholder="비밀번호 입력 (문자, 숫자, 특수기호 포함 6 ~ 20자)" />
-                </div>
+      <!-- 비밀번호 -->
+      <div class="form-group">
+        <label for="userPassword">비밀번호</label>
+        <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호 입력 (문자, 숫자, 특수기호 포함 6 ~ 20자)" required/>
+      </div>
 
-                <div class="form-group">
-                    <label for="password-confirm">비밀번호 확인</label>
-                    <input type="password" id="password-confirm" placeholder="비밀번호 확인" />
-                </div>
+      <div class="form-group">
+        <label for="passwordConfirm">비밀번호 확인</label>
+        <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 확인" required/>
+        <label id="passwordCheckResult"></label>
+      </div>
+      
+      <!-- 판매자용 사업자등록번호 -->
+      <div class="form-group" id="seller-field">
+        <label for="brandName">브랜드명</label>
+        <input type="text" id="brandName" name="brandName" placeholder="브랜드명 입력" />
+      </div>
 
-                <div class="form-group">
-                    <label for="name">이름</label>
-                    <input type="text" id="name" placeholder="이름을 입력하세요" />
-                </div>
+      <!-- 이름 -->
+      <div class="form-group">
+        <label for="userName">이름</label>
+        <input type="text" id="userName" name="userName" placeholder="이름을 입력하세요" />
+      </div>
 
-                <div class="form-group">
-                    <label>휴대전화</label>
-                    <input type="text" id="phone-number" placeholder="전화번호 입력" />
-                    <button type="button" class="btn-verify">인증</button>
-                </div>
+	  <!-- 생년월일 -->
+      <div class="form-group">
+        <label>생년월일</label>
+        <input type="text" id="userAge" name="userAge" placeholder="생년월일 입력">
+      </div>
+      
+      <!-- 휴대전화 -->
+      <div class="form-group">
+        <label for="userPhone">전화번호</label>
+        <input type="text" id="userPhone" name="userPhone" placeholder="전화번호 입력" />
+        
+      </div>
 
-                <div class="form-group">
-                    <label>생년월일</label>
-                    <select id="birth-year" aria-label="출생년도">
-                        <option value="">년도</option>
-                        <!-- 연도 옵션 추가 가능 -->
-                        <option value="1990">1990</option>
-                        <option value="1991">1991</option>
-                        <option value="1992">1992</option>
-                    </select>
-                    <select id="birth-month" aria-label="출생월">
-                        <option value="">월</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
-                    <select id="birth-day" aria-label="출생일">
-                        <option value="">일</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
-                </div>
+      <!-- 이메일 -->
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="text" id="email" name="email" placeholder="이메일 입력" />
+        <button type="button" class="btn-verify">인증번호</button>
+      </div>
+      
+      <div class="form-group" style="display: none;">
+        <label for="emailConfirm">인증번호 확인</label>
+        <input type="text" id="emailConfirm" name="emailConfirm" placeholder="인증번호 입력" required/>
+        <label id="emailCheckResult"></label>
+      </div>
+      
+      <!-- 주소 -->
+      <div class="form-group">
+<!--       	<label for="userPost">우편번호</label> -->
+<!--   		<input type="text" id="userPost" name="userPost" readonly> -->
+        <label for="userAddress">주소</label>
+  		<input type="text" id="userAddress" name="userAddress" placeholder="주소 검색" readonly>
+  		<button type="button" class="btn-verify" onclick="searchAddress()">주소 검색</button>
+      </div>
 
-                <div class="form-group">
-                    <label for="email-confirm">이메일 <span class="small-text"></span></label>
-                    <input type="text" id="email-confirm" placeholder="이메일 입력" />
-                </div>
+      <!-- 성별 -->
+      <div class="form-group">
+        <label for="userGender">성별</label>
+        <div class="chip-group single">
+          <input type="radio" id="male" name="userGender" value="M" />
+          <label for="male" class="chip">남자</label>
 
-                <div class="form-group">
-                    <label for="gender">성별</label>
-                    <div class="chip-group single" id="personal-color">
-                        <input type="radio" id="male" name="gender" value="M" />
-                        <label for="male" class="chip">남자</label>
+          <input type="radio" id="female" name="userGender" value="F" />
+          <label for="female" class="chip">여자</label>
 
-                        <input type="radio" id="female" name="gender" value="F" />
-                        <label for="female" class="chip">여자</label>
+        </div>
+      </div>
+      
+      <!-- 피부타입 -->
+        <div class="form-group">
+          <label for="skinType">피부타입</label>
+          <div class="chip-group single" id="skinType">
+            <input type="radio" id="skinDry" name="skinType" value="dry" />
+            <label for="skinDry" class="chip">건성</label>
 
-                        <input type="radio" id="non" name="gender" value="X" />
-                        <label for="non" class="chip">선택안함</label>
-                    </div>
-                </div>
+            <input type="radio" id="skinOily" name="skinType" value="oily" />
+            <label for="skinOily" class="chip">지성</label>
 
-                <section class="tip-banner">
-                    <div class="tip-text">
-                        자세한 정보를 많이 입력할수록<br />
-                        나에게 맞는 제품일 확률이 올라가요
-                    </div>
-                    <div class="tip-illust" aria-hidden="true">💬📈</div>
-                </section>
+            <input type="radio" id="skinCombination" name="skinType" value="combination" />
+            <label for="skinCombination" class="chip">복합성</label>
 
-                <!-- 추가정보 토글 버튼 -->
-                <button type="button" class="toggle-additional">추가정보 입력하기</button>
+            <input type="radio" id="skinSensitive" name="skinType" value="sensitive" />
+            <label for="skinSensitive" class="chip">민감성</label>
 
-                <!-- 추가정보 영역 -->
-                <div class="additional-info">
-                    <div class="form-group">
-                        <label for="personal-color">퍼스널 컬러</label>
-                        <div class="chip-group single" id="personal-color">
-                            <input type="radio" id="pc-spring" name="personal-color" value="spring" />
-                            <label for="pc-spring" class="chip">봄 웜톤</label>
-
-                            <input type="radio" id="pc-summer" name="personal-color" value="summer" />
-                            <label for="pc-summer" class="chip">여름 쿨톤</label>
-
-                            <input type="radio" id="pc-autumn" name="personal-color" value="autumn" />
-                            <label for="pc-autumn" class="chip">가을 웜톤</label>
-
-                            <input type="radio" id="pc-winter" name="personal-color" value="winter" />
-                            <label for="pc-winter" class="chip">겨울 쿨톤</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="skin-type">피부타입</label>
-                        <div class="chip-group single" id="skin-type">
-                            <input type="radio" id="skin-dry" name="skin-type" value="dry" />
-                            <label for="skin-dry" class="chip">건성</label>
-
-                            <input type="radio" id="skin-oily" name="skin-type" value="oily" />
-                            <label for="skin-oily" class="chip">지성</label>
-
-                            <input type="radio" id="skin-combination" name="skin-type" value="combination" />
-                            <label for="skin-combination" class="chip">복합성</label>
-
-                            <input type="radio" id="skin-sensitive" name="skin-type" value="sensitive" />
-                            <label for="skin-sensitive" class="chip">민감성</label>
-
-                            <input type="radio" id="oil-dry" name="skin-type" value="sensitive" />
-                            <label for="oil-dry" class="chip">수부지</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="skin-concerns">피부 고민</label>
-                        <div class="chip-group multiple" id="skin-concerns">
-                            <input type="radio" id="concern-whitening" name="skin-concerns" value="whitening" />
-                            <label for="concern-whitening" class="chip">미백/잡티</label>
-
-                            <input type="radio" id="concern-sebum" name="skin-concerns" value="sebum" />
-                            <label for="concern-sebum" class="chip">피지/블랙헤드</label>
-
-                            <input type="radio" id="concern-dry" name="skin-concerns" value="dry" />
-                            <label for="concern-dry" class="chip">속건조</label>
-
-                            <input type="radio" id="concern-wrinkle" name="skin-concerns" value="wrinkle" />
-                            <label for="concern-wrinkle" class="chip">주름/탄력</label>
-
-                            <input type="radio" id="concern-deadskin" name="skin-concerns" value="deadskin" />
-                            <label for="concern-deadskin" class="chip">각질</label>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit">가입하기</button>
-            </form>
+            <input type="radio" id="oilDry" name="skinType" value="oilDry" />
+            <label for="oilDry" class="chip">수부지</label>
+          </div>
         </div>
 
-        <script>
-            // 회원/판매자 전환
-            const memberBtn = document.getElementById('memberBtn');
-            const sellerBtn = document.getElementById('sellerBtn');
-            const memberField = document.getElementById('member-field');
-            const sellerField = document.getElementById('seller-field');
+		<section class="tip-banner">
+			<div class="tip-text">
+				자세한 정보를 많이 입력할수록<br />
+				나에게 맞는 제품일 확률이 올라가요
+			</div>
+			<div class="tip-illust" aria-hidden="true">💬📈</div>
+		</section>
+      <!-- 추가정보 토글 버튼 -->
+      <button type="button" class="toggle-additional">추가정보 입력하기</button>
 
-            memberBtn.addEventListener('click', () => {
-                memberBtn.classList.add('active');
-                sellerBtn.classList.remove('active');
-                memberField.style.display = 'block';
-                sellerField.style.display = 'none';
-            });
+      <!-- 추가정보 영역 -->
+      <div class="additional-info">
+        <!-- 퍼스널 컬러 -->
+        <div class="form-group">
+          <label for="personalColor">퍼스널 컬러</label>
+          <div class="chip-group single" id="personalColor">
+            <input type="radio" id="pcSpring" name="personalColor" value="spring" />
+            <label for="pcSpring" class="chip">봄 웜톤</label>
 
-            sellerBtn.addEventListener('click', () => {
-                sellerBtn.classList.add('active');
-                memberBtn.classList.remove('active');
-                memberField.style.display = 'none';
-                sellerField.style.display = 'block';
-            });
-            //추가정보 토글
-            const toggleBtn = document.querySelector('.toggle-additional');
-            const additionalInfo = document.querySelector('.additional-info');
+            <input type="radio" id="pcSummer" name="personalColor" value="summer" />
+            <label for="pcSummer" class="chip">여름 쿨톤</label>
 
-            toggleBtn.addEventListener('click', () => {
-                if (additionalInfo.style.display === 'none' || additionalInfo.style.display === '') {
-                    additionalInfo.style.display = 'block';
-                    toggleBtn.textContent = '추가정보 숨기기';
-                } else {
-                    additionalInfo.style.display = 'none';
-                    toggleBtn.textContent = '추가정보 입력';
-                }
-            });
-        </script>
-    </body>
+            <input type="radio" id="pcAutumn" name="personalColor" value="autumn" />
+            <label for="pcAutumn" class="chip">가을 웜톤</label>
+
+            <input type="radio" id="pcWinter" name="personalColor" value="winter" />
+            <label for="pcWinter" class="chip">겨울 쿨톤</label>
+          </div>
+        </div>
+
+        <!-- 피부 고민 -->
+        <div class="form-group">
+          <label for="skinTrouble">피부 고민</label>
+          <div class="chip-group multiple" id="skinTrouble">
+            <input type="checkbox" id="concernWhitening" name="skinTrouble" value="whitening" />
+            <label for="concernWhitening" class="chip">미백/잡티</label>
+
+            <input type="checkbox" id="concernSebum" name="skinTrouble" value="sebum" />
+            <label for="concernSebum" class="chip">피지/블랙헤드</label>
+
+            <input type="checkbox" id="concernDry" name="skinTrouble" value="dry" />
+            <label for="concernDry" class="chip">속건조</label>
+
+            <input type="checkbox" id="concernWrinkle" name="skinTrouble" value="wrinkle" />
+            <label for="concernWrinkle" class="chip">주름/탄력</label>
+
+            <input type="checkbox" id="concernDeadskin" name="skinTrouble" value="deadskin" />
+            <label for="concernDeadskin" class="chip">각질</label>
+          </div>
+        </div>
+        
+      	<!-- 두피/모발 고민 -->
+		<div class="form-group">
+			<label for="headSkin">두피/모발 고민</label>
+			<div class="chip-group multiple" id="headSkin">
+			    <input type="checkbox" id="concernHairLoss" name="headSkin" value="hairLoss" />
+			    <label for="concernHairLoss" class="chip">탈모</label>
+			
+			    <input type="checkbox" id="concernDamagedHair" name="headSkin" value="damagedHair" />
+			    <label for="concernDamagedHair" class="chip">손상모</label>
+			
+			    <input type="checkbox" id="concernHotScalp" name="headSkin" value="hotScalp" />
+			    <label for="concernHotScalp" class="chip">열감두피</label>
+			
+			    <input type="checkbox" id="concernOilyScalp" name="headSkin" value="oilyScalp" />
+			    <label for="concernOilyScalp" class="chip">지성두피</label>
+			
+			    <input type="checkbox" id="concernDandruff" name="headSkin" value="dandruff" />
+			    <label for="concernDandruff" class="chip">비듬/각질</label>
+			</div>
+		</div>
+      </div>
+      <button type="submit" class="btn-submit">가입하기</button>
+    </form>
+  </div>
+
+	<script>
+		window.addEventListener('DOMContentLoaded', () => {
+	
+		    const userIdInput = document.getElementById('userId');
+		    const idCheckLabel = document.getElementById('idCheckResult');
+	
+		    // ID 입력 변경 시 체크
+		    userIdInput.addEventListener('change', () => {
+		        const value = userIdInput.value.trim();
+	
+		        if(value === '') {
+		            idCheckLabel.innerText = '아이디를 입력해주세요.';
+		            idCheckLabel.style.color = 'black';
+		            return;
+		        }
+	
+		        $.ajax({
+		            url: '/login/checkId',  // 서버에서 ID 중복 확인
+		            data: { userId: userIdInput.value.trim() },
+		            success: data => {
+		                if(data == 0){
+		                    idCheckLabel.innerText = '사용 가능한 ID입니다.';
+		                    idCheckLabel.style.color = 'green';
+		                } else {
+		                    idCheckLabel.innerText = "중복된 ID입니다. 다시 입력하세요.";
+		                    idCheckLabel.style.color = 'red';
+		                }
+		            },
+		            error: err => {
+		                console.error(err);
+		                idCheckLabel.innerText = "서버 오류 발생";
+		                idCheckLabel.style.color = 'red';
+		            }
+		        });
+		    });
+	
+		});
+		
+		const passwordInput = document.getElementById('userPassword');
+		const passwordConfirmInput = document.getElementById('passwordConfirm');
+		const pwCheckLabel = document.getElementById('passwordCheckResult');
+
+		// 확인란 입력 시 체크
+		passwordConfirmInput.addEventListener('input', () => {
+		    const pwd = passwordInput.value;
+		    const confirm = passwordConfirmInput.value;
+
+		    if(confirm === '') {
+		        pwCheckLabel.innerText = "비밀번호를 입력해주세요";
+		        pwCheckLabel.style.color = 'black';
+		    } else if(pwd === confirm) {
+		        pwCheckLabel.innerText = "비밀번호가 일치합니다";
+		        pwCheckLabel.style.color = 'green';
+		    } else {
+		        pwCheckLabel.innerText = "비밀번호가 일치하지 않습니다";
+		        pwCheckLabel.style.color = 'red';
+		    }
+		});
+		
+		// 비밀번호 입력란 변경 시도 같이 체크
+		passwordInput.addEventListener('input', () => {
+		    passwordConfirmInput.dispatchEvent(new Event('input'));
+		});
+	
+	  	window.addEventListener('DOMContentLoaded', () => {
+		    const memberBtn = document.getElementById('memberBtn');
+		    const sellerBtn = document.getElementById('sellerBtn');
+		    const memberField = document.getElementById('member-field');
+		    const sellerField = document.getElementById('seller-field');
+		    const userTypeInput = document.getElementById('userType');
+		    const userIdLabel = document.getElementById('userIdLabel'); // <label> 아이디 텍스트
+		    const userIdInput = document.getElementById('userId');       // <input> 실제 입력란
+		    
+			memberBtn.classList.add('active');
+			sellerBtn.classList.remove('active');
+			memberField.style.display = 'block';
+			sellerField.style.display = 'none';
+			
+			// 회원/판매자 전환
+		    memberBtn.addEventListener('click', () => {
+		    	memberBtn.classList.add('active');
+			    sellerBtn.classList.remove('active');
+			    sellerField.style.display = 'none';
+			    userTypeInput.value = 'U';
+			    userIdLabel.innerText = '아이디'; // 초기 레이블
+			    userIdInput.placeholder = '아이디 입력';
+		    });
+	
+		    sellerBtn.addEventListener('click', () => {
+			    sellerBtn.classList.add('active');
+			    memberBtn.classList.remove('active');
+			    sellerField.style.display = 'block';
+			    userTypeInput.value = 'P';
+			    userIdLabel.innerText = '사업자등록번호';
+		        userIdInput.placeholder = '사업자등록번호 입력';
+		    });
+		});
+	    
+	  	// 생년월일
+	    flatpickr("#userAge", {
+	        dateFormat: "Ymd",   // 출력 형식 
+	        maxDate: "today",      // 미래 날짜 선택 불가
+	        minDate: "1900-01-01", // 최소 선택 가능 날짜
+	        locale: "ko"           // 한국어 적용
+	    });
+	    
+	    function searchAddress() {
+    	  new daum.Postcode({
+    	    oncomplete: function(data) {
+    	      const addrInput = document.getElementById('userAddress');
+    	      addrInput.value = data.address;    // 주소
+    	    }
+    	  }).open();
+    	}
+	    
+	    // 이메일 인증
+	    window.onload = () => {
+		    let confirmData = '';
+		
+		    // 인증 메일 발송
+		    document.querySelector('.btn-verify').addEventListener('click', function() {
+		        const email = document.querySelector('#email').value.trim();
+		
+		        if (email === '') {
+		            alert('이메일이 입력되지 않았습니다.');
+		            document.querySelector('#email').focus();
+		        } else {
+		            $.ajax({
+		                url: '/login/echeck',
+		                data: { email: email },
+		                success: data => {
+		                    alert('성공적으로 메일이 발송되었습니다.');
+		                    
+		                    // 숨겨진 인증번호 입력창 보이기
+		                    document.querySelector('#emailConfirm').parentElement.style.display = 'block';
+		                    
+		                    confirmData = data;
+		                },
+		                error: data => console.log(data)
+		            });
+		        }
+		    });
+		
+		    // 인증번호 확인 (blur 이벤트 또는 입력 완료 후 버튼 누르지 않아도 가능하게 하려면 수정 가능)
+		    document.querySelector('#emailConfirm').addEventListener('change', function() {
+		        const verifyNum = this.value.trim();
+		        const resultLabel = document.querySelector('#emailCheckResult');
+		
+		        if (verifyNum === '') {
+		            alert("인증번호를 입력해주세요");
+		        } else if (confirmData === '') {
+		            alert("이메일 인증을 먼저 진행해주세요");
+		        } else {
+		            if (verifyNum === confirmData) {
+		                alert("이메일이 확인되었습니다.");
+		                this.disabled = true;
+		                resultLabel.textContent = "인증 완료 ✅";
+		                resultLabel.style.color = "green";
+		            } else {
+		                alert("인증번호가 일치하지 않습니다.");
+		                resultLabel.textContent = "인증 실패 ❌";
+		                resultLabel.style.color = "red";
+		            }
+		        }
+		    });
+		}
+
+	    // 추가정보 토글
+	    const toggleBtn = document.querySelector('.toggle-additional');
+	    const additionalInfo = document.querySelector('.additional-info');
+	
+	    toggleBtn.addEventListener('click', () => {
+		    if (additionalInfo.style.display === 'none' || additionalInfo.style.display === '') {
+			    additionalInfo.style.display = 'block';
+			    toggleBtn.textContent = '추가정보 숨기기';
+		    } else {
+			    additionalInfo.style.display = 'none';
+			    toggleBtn.textContent = '추가정보 입력하기';
+		    }
+	    });
+	    
+	    function handleSubmit() {
+	        alert("회원가입이 완료되었습니다.");
+	        return true; // true를 반환하면 실제로 서버로 폼 제출
+	      }
+  </script>
+</body>
 </html>
