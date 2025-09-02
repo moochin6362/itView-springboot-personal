@@ -1,0 +1,186 @@
+/* 전체 기본 여백 제거 */
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 오른쪽 콘텐츠 영역 (sidebar 제외) */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+    flex: 1;
+    padding: 20px 30px 30px 30px;
+    background-color: #fff;
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    height: 20px; /* 높이를 크게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.left-control button {
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-add {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #43a047; /* 약간 더 진한 초록 */
+}
+
+.search-box select {
+    padding: 10px 20px 10px 10px; /* 오른쪽 여백 확보 */
+    font-size: 14px;
+    margin-right: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    padding: 10px;
+    font-size: 14px;
+    width: 200px;
+    margin-right: 8px;
+    border: 1px solid #ccc; /* ✨ 추가 */
+    border-radius: 4px;       /* ✨ 추가 */
+}
+
+.search-box input::placeholder {
+    color: #888;
+    font-style: italic;       /* ✨ 추가 */
+}
+
+.search-box button {
+    padding: 10px 24px;        /* ✨ 변경 */
+    font-size: 14px;
+    font-weight: bold;         /* ✨ 추가 */
+    border: none;              /* ✨ 변경 */
+    border-radius: 4px;        /* ✨ 추가 */
+    cursor: pointer;
+    background-color: #dddddd; /* ✨ 변경 */
+    transition: background-color 0.2s;
+}
+
+.search-box button:hover {
+    background-color: #bbb; /* ✨ hover 개선 */
+}
+
+.csList-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+}
+
+.csList-table th,
+.csList-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.csList-table thead {
+    background-color: #dddddd;
+    font-weight: bold;
+}
+
+/* ✨ row hover 효과 추가 */
+.csList-table tr:hover {
+    background-color: #f0f8ff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+}
+
+/* 페이징 영역 전체 감싸는 div */
+.listpage {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 10px;
+}
+
+/* 페이징 숫자 리스트 */
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+/* 페이징 리스트 항목 */
+.pagination .list {
+    display: inline-block;
+}
+
+/* 각 숫자 또는 화살표 버튼 */
+.pagination .page {
+    display: block;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* 마우스 오버 시 */
+.pagination .page:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 현재 선택된 페이지 (active) */
+.pagination .page.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: 1px solid #4caf50;
+}

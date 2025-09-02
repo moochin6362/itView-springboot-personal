@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>쿠폰 등록</title>
+        <title>쿠폰 수정</title>
 
         <!-- CSS 파일 -->
         <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
@@ -26,13 +26,15 @@
 
                 <!-- 메인 컨텐츠 -->
                 <main class="main-content">
-                    <h2>쿠폰 등록</h2>
-		            <form action="/inhoAdmin/enrollCoupon" method="post" class="coupon-form">
+                    <h2>쿠폰 수정</h2>
+		            <form action="/inhoAdmin/updateCoupon" method="post" class="coupon-form">
+		                <input type="hidden" name="couponNo" th:value="${c.couponNo}" />
+		            
 		                <label for="couponName">쿠폰명</label>
-		                <input type="text" id="couponName" name="couponName" placeholder="쿠폰명을 입력하세요" required />
+		                <input type="text" id="couponName" name="couponName" th:value="${c.couponName}" required />
 		
 						<label for="couponDescription">공지 내용</label>
-                        <textarea id="couponDescription" name="couponDescription" placeholder="쿠폰 설명을 입력하세요" rows="5" required></textarea>
+                        <textarea id="couponDescription" name="couponDescription" th:text="${c.couponDescription}" rows="5" required></textarea>
                         
 		                <label for="couponTarget">쿠폰 발급대상</label>
 		                <select id="couponTarget" name="couponTarget" required>
@@ -45,17 +47,17 @@
 		                </select>
 		
 		                <label for="couponDiscount">쿠폰 할인율(%)</label>
-		                <input type="number" id="couponDiscount" name="couponDiscount" min="0" max="100" placeholder="예: 10" required />
+		                <input type="number" id="couponDiscount" name="couponDiscount" min="0" max="100" th:value="${c.couponDiscount}" required />
 		
 		                <label for="couponMinprice">사용 최소금액(원)</label>
-		                <input type="number" id="couponMinprice" name="couponMinprice" min="0" placeholder="예: 50000" required />
+		                <input type="number" id="couponMinprice" name="couponMinprice" min="0" th:value="${c.couponMinprice}"required />
 		
 		                <label for="period">쿠폰 사용기간</label>
-		                <input type="date" id="couponStartdate" name="couponStartdate" required /> ~
-		                <input type="date" id="couponEnddate" name="couponEnddate" />
+		                <input type="date" id="couponStartdate" name="couponStartdate" th:value="${#temporals.format(c.couponStartdate, 'yyyy-MM-dd')}" required /> ~
+		                <input type="date" id="couponEnddate" name="couponEnddate" th:value="${#temporals.format(c.couponEnddate, 'yyyy-MM-dd')}"/>
 		
 		                <div class="btn-group">
-		                    <button type="submit" class="btn-submit">쿠폰 등록</button>
+		                    <button type="submit" class="btn-submit">쿠폰 수정</button>
 		                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
 		                </div>
 		            </form>

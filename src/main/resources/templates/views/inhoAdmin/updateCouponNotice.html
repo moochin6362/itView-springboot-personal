@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>쿠폰 공지사항 등록</title>
+        <title>쿠폰 공지사항 수정</title>
 
         <!-- CSS 파일 -->
         <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
         
-		<!-- 에디터 -->
+        <!-- 에디터 -->
         <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     </head>
@@ -30,8 +30,9 @@
 
                 <!-- 메인 컨텐츠 -->
                 <main class="main-content">
-                    <h2>쿠폰 공지사항 등록</h2>
-                    <form action="/inhoAdmin/enrollCouponNotice" method="post" class="coupon-form" id="noticeForm">
+                    <h2>쿠폰 공지사항 수정</h2>
+                    <form action="/inhoAdmin/updateCouponBoard" method="post" class="coupon-form" id="noticeForm">
+                        <input type="hidden" id="boardId" name="boardId" th:value="${b.boardId}" />
 <!--                         <label for="coupon">쿠폰 선택</label> -->
 <!--                         <select id="coupon" name="couponId" required> -->
 <!--                             <option value="">쿠폰 선택</option> -->
@@ -41,14 +42,13 @@
 <!--                         </select> -->
 
                         <label for="boardTitle">공지 제목</label>
-                        <input type="text" id="boardTitle" name="boardTitle" placeholder="공지 제목 입력" required />
+                        <input type="text" id="boardTitle" name="boardTitle" placeholder="공지 제목 입력" th:value="${b.boardTitle}" required />
 
                         <label for="boardContent">공지 내용</label>
                         <div id="editor"></div>
-                        <textarea id="boardContent" name="boardContent" placeholder="공지 내용을 입력하세요" rows="5" style="display: none;"></textarea>
+                        <textarea id="boardContent" name="boardContent" th:text="${b.boardContent}" style="display: none;"></textarea>
 
-						<!-- 업로드된 이미지 파일명 저장용 -->
-   						<input type="hidden" name="uploadedFiles" id="uploadedFiles">
+						<input type="hidden" name="uploadedFiles" id="uploadedFiles">
 <!-- 						<label for="target">공지 대상</label> -->
 <!--                         <select id="target" name="target" required> -->
 <!--                             <option value="">대상 선택</option> -->
@@ -57,12 +57,14 @@
 <!--                             <option value="new">신규 회원</option> -->
 <!--                         </select> -->
 						
-                        <label>공지 노출기간</label>
-                        <input type="date" id="boardDate" name="boardDate" /> ~
-<!--                         <input type="date" id="endDate" name="endDate" /> -->
+                        <label>공지 작성일</label>
+                        <input type="date" id="boardDate" name="boardDate" th:value="${#temporals.format(b.boardDate, 'yyyy-MM-dd')}"/>
+                        
+                        <label>공지 수정일</label>
+                        <input type="date" id="boardModifiedDate" name="boardModifiedDate" th:value="${#temporals.format(b.boardModifiedDate, 'yyyy-MM-dd')}"/>
 
                         <div class="btn-group">
-                            <button type="submit" class="btn-submit">등록</button>
+                            <button type="submit" class="btn-submit">공지 수정</button>
                             <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
                         </div>
                     </form>
@@ -71,44 +73,47 @@
         </div>
         <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
         <script>
-		    const uploadedFilesArr = [];
-		
-		    // Toast UI Editor 초기화
-		    const editor = new toastui.Editor({
-		        el: document.querySelector('#editor'),
-		        height: '300px',
-		        initialEditType: 'wysiwyg',
-		        hideModeSwitch: true,
-		        toolbarItems: [
-		            ['heading', 'bold', 'italic', 'strike'],
-		            ['hr', 'quote'],
-		            ['ul', 'ol'],
-		            ['table', 'link'],
-		            ['image']
-		        ],
-		        hooks: {
-		            addImageBlobHook: async (blob, callback) => {
-		                const formData = new FormData();
-		                formData.append('image', blob);
-		
-		                const response = await fetch('/inhoAdmin/uploadImage', {
-		                    method: 'POST',
-		                    body: formData
-		                });
-		                const tempUrl = await response.text(); // temp URL 반환
-		                callback(tempUrl, 'image');
-		
-		                uploadedFilesArr.push(tempUrl.split('/').pop());
-		                document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
-		            }
-		        }
-		    });
-		
-		    const form = document.getElementById("noticeForm");
-		    form.addEventListener("submit", function(e) {
-		        let html = editor.getHTML();
-		        document.getElementById("boardContent").value = html;
-		    });
+	        const uploadedFilesArr = [];
+	        const initialContent = document.getElementById("boardContent").value;
+	
+	        const editor = new toastui.Editor({
+	            el: document.querySelector('#editor'),
+	            height: '500px',
+	            width: '90%',
+	            initialEditType: 'wysiwyg',
+	            hideModeSwitch: true,
+	            initialValue: initialContent,
+	            toolbarItems: [
+	                ['heading', 'bold', 'italic', 'strike'],
+	                ['hr', 'quote'],
+	                ['ul', 'ol'],
+	                ['table', 'link'],
+	                ['image']
+	            ],
+	            hooks: {
+	                addImageBlobHook: async (blob, callback) => {
+	                    const formData = new FormData();
+	                    formData.append('image', blob);
+	
+	                    const response = await fetch('/inhoAdmin/uploadImage', {method: 'POST', body: formData});
+	                    const url = await response.text();
+	                    callback(url, 'image');
+	
+	                    uploadedFilesArr.push(url.split('/').pop());
+	                    document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
+	                }
+	            }
+	        });
+	
+	        const form = document.getElementById("noticeForm");
+	        form.addEventListener("submit", function (e) {
+	            document.getElementById("boardContent").value = editor.getHTML();
+	        });
+	
+	        // 취소 버튼 클릭 시 이전 페이지로 이동
+	        document.getElementById("cancelBtn").addEventListener("click", function () {
+	            history.back();
+	        });
 		</script>
     </body>
 </html>
