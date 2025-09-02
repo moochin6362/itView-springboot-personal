@@ -8,12 +8,14 @@ import itView.springboot.vo.User;
 public interface UserMapper {
 	 
 	 //비밀번호 수정
-	 int resetPwd(User u);
+	int updatePassword(User u);
 	 
 	 //아이디 찾기
 	 User findId(
-			 @Param("email")String email, 
-			 @Param("userType") String userType);
+		 @Param("email")String email, 
+		 @Param("userType") String userType);
+
+	 
 	 
 
 

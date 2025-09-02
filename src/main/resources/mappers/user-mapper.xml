@@ -5,7 +5,7 @@
 <mapper namespace="itView.springboot.mapper.UserMapper">
 
 <!-- 비번 수정 -->
-<update id="resetPwd">
+<update id="updatePassword">
 update "USER" set user_password = #{userPassword} where user_id = #{userId}
 </update>
 

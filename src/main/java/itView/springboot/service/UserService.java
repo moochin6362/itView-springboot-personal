@@ -13,14 +13,16 @@ public class UserService {
 	private final UserMapper userMapper;
 	
 	//비밀번호 수정
-	public int resetPwd(User u) {
-		return userMapper.resetPwd(u);
+	public int updatePassword(User u) {
+		return userMapper.updatePassword(u);
 	}
 
 	//아이디 찾기
 	public User findId(String email, String userType) {
 		return userMapper.findId(email,userType);
 	}
+
+	
 
 	
 

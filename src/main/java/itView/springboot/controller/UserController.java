@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import itView.springboot.exception.UserException;
 import itView.springboot.service.UserService;
 import itView.springboot.vo.User;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -57,24 +58,34 @@ public class UserController {
     	return "/login/find_password";
     }
     
-    //비밀번호 재설정(update)
-    @PostMapping("/resetPwd")
+    
+    //비밀번호 재설정 페이지 이동
+    @GetMapping("/resetPwd")
     public String resetPwd(
-    		Model model,
-    		@ModelAttribute User u
+    		@RequestParam("userId") String userId,
+    		Model model
     		) {
-    	u.setUserPassword(u.getUserPassword()); //비번 암호화
+    	model.addAttribute("userId", userId);
+    	return "/login/reset_password";
     	
-    	int result = userService.resetPwd(u);
+    }
+    
+    //비번 업뎃시키기
+    @PostMapping("/resetPwd")
+    public String changePwd(
+    		@ModelAttribute User u, Model model) {
+    	u.setUserPassword(bcrypt.encode(u.getUserPassword()));
+    	int result = userService.updatePassword(u);
     	if(result > 0) {
-    		model.addAttribute("msg", "비밀번호 수정이 완료되었습니다.");
-    		model.addAttribute("url", "/home");
-    		return "redirect:/views/common/sendRedirect";
+    		model.addAttribute("msg", "비밀번호가 수정되었습니다.");
+    		model.addAttribute("url", "/login/login");
+    		return "/common/sendRedirect";
     	} else {
     		throw new UserException("비밀번호 수정을 실패하였습니다.");
     	}
-    	
+    
     }
+    
     
     
 }
