@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>체험단 당첨내역</title>
+
+  <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/userCommon.css}"/>
+
+  <!-- 페이지 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/ExperienceWins.css}"/>
+
+  <!-- 아이콘 -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- 공통 헤더/사이드바 -->
+  <div th:replace="~{common/myHeader}"></div>
+  <div th:replace="~{common/mySidebar}"></div>
+
+  <main class="page">
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <h1 class="page-title">체험단 당첨내역</h1>
+      <div class="page-actions">
+        <a class="icon-btn" th:href="@{/my/myPage}" aria-label="마이페이지">
+          <i class="fa-solid fa-user"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- 요약 카드 -->
+    <section class="card summary">
+      <div class="summary-item">
+        <div class="label">전체 당첨</div>
+        <div class="value" th:text="${totalWins}">6</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">배송중</div>
+        <div class="value status-shipping" th:text="${shippingCount}">2</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">수령</div>
+        <div class="value status-received" th:text="${receivedCount}">3</div>
+      </div>
+      <div class="summary-item">
+        <div class="label">리뷰대기</div>
+        <div class="value status-review" th:text="${waitingReviewCount}">1</div>
+      </div>
+    </section>
+
+    <!-- 필터 탭 -->
+    <section class="card filter-tabs">
+      <a class="tab active" href="#" data-filter="all">전체</a>
+      <a class="tab" href="#" data-filter="shipping">배송중</a>
+      <a class="tab" href="#" data-filter="received">수령</a>
+      <a class="tab" href="#" data-filter="review">리뷰대기</a>
+      <a class="tab" href="#" data-filter="finished">리뷰완료</a>
+    </section>
+
+    <!-- 리스트 -->
+    <section class="card win-list">
+
+      <!-- 단일 아이템 (반복 렌더링) -->
+      <article class="win-item" data-status="shipping">
+        <div class="thumb"></div>
+        <div class="meta">
+          <div class="brand">It:View LAB</div>
+          <div class="pname">하이드라 앰플 30ml</div>
+          <div class="detail">
+            <span class="badge status-shipping">배송중</span>
+            <span class="muted">송장번호 1234-5678-90</span>
+          </div>
+          <div class="detail">
+            <span class="muted">당첨일 2025-08-20</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="ghost-btn" href="#">배송추적</a>
+          <a class="primary-btn" th:href="@{/my/myWriteReview}">리뷰쓰기</a>
+        </div>
+      </article>
+
+      <article class="win-item" data-status="received">
+        <div class="thumb"></div>
+        <div class="meta">
+          <div class="brand">Shiny Lab</div>
+          <div class="pname">세라 리페어 크림</div>
+          <div class="detail">
+            <span class="badge status-received">수령</span>
+            <span class="muted">수령일 2025-08-26</span>
+          </div>
+          <div class="detail">
+            <span class="muted">리뷰 마감 2025-09-05</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="primary-btn outline" th:href="@{/my/myWriteReview}">리뷰쓰기</a>
+        </div>
+      </article>
+
+      <article class="win-item" data-status="review">
+        <div class="thumb"></div>
+        <div class="meta">
+          <div class="brand">Glow Factory</div>
+          <div class="pname">클렌징 오일</div>
+          <div class="detail">
+            <span class="badge status-review">리뷰대기</span>
+            <span class="muted">마감 3일 전</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="primary-btn" th:href="@{/my/myWriteReview}">리뷰쓰기</a>
+        </div>
+      </article>
+
+      <article class="win-item" data-status="finished">
+        <div class="thumb"></div>
+        <div class="meta">
+          <div class="brand">Pure:Skin</div>
+          <div class="pname">선쿠션 SPF50+</div>
+          <div class="detail">
+            <span class="badge">리뷰완료</span>
+            <span class="muted">작성일 2025-08-15</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="ghost-btn" href="#">리뷰보기</a>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- 안내 카드 -->
+    <section class="card info-card">
+      <p>
+        배송지 수정은 <a href="#" class="underline">마이 > 설정 > 배송지 관리</a>에서 변경할 수 있어요.
+        리뷰 마감일을 지나면 포인트/쿠폰 지급이 제한될 수 있습니다.
+      </p>
+    </section>
+  </main>
+
+  <!-- 간단 필터 스크립트 (필요 시) -->
+  <script>
+    document.querySelectorAll('.filter-tabs .tab').forEach(tab=>{
+      tab.addEventListener('click', (e)=>{
+        e.preventDefault();
+        document.querySelectorAll('.filter-tabs .tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const f = tab.dataset.filter;
+        document.querySelectorAll('.win-item').forEach(it=>{
+          it.style.display = (f==='all' || it.dataset.status===f) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

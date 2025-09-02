@@ -102,3 +102,36 @@ html,body{
 .sidenav:hover ~ .page{
   padding-left: calc(16px + var(--sidenav-expanded));
 }
+/* -------------------- 공통 버튼 -------------------- */
+button.primary,
+input[type="submit"].primary,
+a.primary {
+  display: inline-block;
+  background: var(--primary);   /* 기본: 대표색 */
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none; /* a 태그 밑줄 제거 */
+  transition: background 0.2s ease;
+}
+
+/* hover 시 변화 없음 → 대표색 유지 */
+button.primary:hover,
+input[type="submit"].primary:hover,
+a.primary:hover {
+  background: var(--primary);
+}
+
+/* 클릭했을 때만 연한색으로 변경 */
+button.primary:active,
+input[type="submit"].primary:active,
+a.primary:active {
+  background: #8ad8f0;
+  color: var(--text); /* 클릭 시 글자는 검정 */
+}
+

@@ -13,33 +13,14 @@ import itView.springboot.vo.User;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping({"/product", "/login", "/seller"})
+@RequestMapping({"/product"})
 @RequiredArgsConstructor
 public class ProductController {
 	
 	private final ProductService pService;
 	private final BCryptPasswordEncoder bcrypt;
 	
-	@PostMapping("login")
-	public String login(User u, Model model) {
-		System.out.println(bcrypt.encode("1111"));
-		User loginUser = pService.login(u);
-		
-		if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
-			model.addAttribute("loginUser", loginUser);
-			if(loginUser.getUserType().equals("U") || loginUser.getUserType().equals("A")) {
-				if(loginUser.getUserId().equals("b")) {
-					return "my/myPage";
-				}
-				return "redirect:/";
-			} else {
-				return "redirect:/seller/home";
-			}
-		} else {
-			throw new ProductException("로그인을 실패하였습니다.");
-		}
-		
-	}
+	
 	
 	@GetMapping("home")
 	public String sellerPageHome() {

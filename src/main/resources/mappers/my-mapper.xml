@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="itView.springboot.mapper.MyMapper">
+
+    <select id="selectUserByNo" parameterType="long"
+          resultType="itView.springboot.vo.User">
+    SELECT
+      u."USER_NO"        AS userNo,
+      u."USER_NAME"      AS userName,
+      u."USER_GENDER"    AS userGender,
+      u."USER_AGE"       AS userAge,
+      u."USER_PHONE"     AS userPhone,
+      u."USER_TYPE"      AS userType,
+      u."USER_ID"        AS userId,
+      u."USER_PASSWORD"  AS userPassword,
+      u."USER_STATUS"    AS userStatus,
+      u."USER_POINT"     AS userPoint,
+      u."USER_ADDRESS"   AS userAddress,
+      u."USER_GRADE"     AS userGrade,
+      u."EMAIL"          AS email,
+      u."BRAND_NAME"     AS brandName,
+
+   
+      u."SKIN_TYPE"      AS skinType,
+      u."PERSONAL_COLOR" AS personalColor,
+      u."SKIN_TROUBLE"   AS skinTrouble,
+      u."HEAD_SKIN"      AS headSkin
+
+    FROM "USER" u
+    WHERE u."USER_NO" = #{userNo}
+  </select>
+
+
+  <!-- 최신 대표 프로필 1장 -->
+  <select id="selectProfileImageByUser" parameterType="long"
+          resultType="itView.springboot.vo.Attachment">
+    SELECT
+      a."ATTM_NO"        AS attmNo,
+      a."ATTM_NAME"      AS attmName,
+      a."ATTM_RENAME"    AS attmRename,
+      a."ATTM_PATH"      AS attmPath,
+      a."ATTM_STATUS"    AS attmStatus,
+      a."ATTM_DATE"      AS attmDate,
+      a."ATTM_LEVEL"     AS attmLevel,
+      a."ATTM_POSITION"  AS attmPosition,
+      a."POSITION_NO"    AS positionNo
+    FROM "ATTACHMENT" a
+    WHERE a."ATTM_STATUS"='Y'
+      AND a."ATTM_POSITION"=7
+      AND a."POSITION_NO"=#{userNo}
+      AND a."ATTM_LEVEL"=0
+    ORDER BY a."ATTM_DATE" DESC
+    FETCH FIRST 1 ROW ONLY
+  </select>
+
+  <!-- 이전 프로필 비활성화 -->
+  <update id="disableOldProfileImages" parameterType="long">
+    UPDATE "ATTACHMENT"
+       SET "ATTM_STATUS"='N'
+     WHERE "ATTM_POSITION"=7
+       AND "POSITION_NO"=#{userNo}
+  </update>
+
+  <!-- 새 프로필 저장 (시퀀스명은 실제 DB와 동일) -->
+  <insert id="insertProfileImage" parameterType="itView.springboot.vo.Attachment">
+    INSERT INTO "ATTACHMENT"(
+      "ATTM_NO","ATTM_NAME","ATTM_RENAME","ATTM_PATH",
+      "ATTM_STATUS","ATTM_DATE","ATTM_LEVEL","ATTM_POSITION","POSITION_NO"
+    ) VALUES (
+      SEQ_ATTM.NEXTVAL,
+      #{attmName}, #{attmRename}, #{attmPath},
+      'Y', SYSDATE, 0, 7, #{positionNo}
+    )
+  </insert>
+
+  <!-- userId -> userNo -->
+  <select id="selectUserNoByUserId" parameterType="string" resultType="long">
+    SELECT u."USER_NO"
+      FROM "USER" u
+     WHERE u."USER_ID" = #{userId}
+  </select>
+
+  <!-- userNo 존재 여부 -->
+  <select id="existsUser" parameterType="long" resultType="int">
+    SELECT COUNT(*) FROM "USER" WHERE "USER_NO" = #{userNo}
+  </select>
+
+  <!-- 첫 사용자 번호 (⚠ 별칭 필수: ORA-17133 방지) -->
+  <select id="selectFirstUserNo" resultType="long">
+    SELECT MIN(u."USER_NO") AS userNo
+      FROM "USER" u
+  </select>
+
+  <!-- 기본/피부 정보 저장 -->
+  <update id="updateUserBasicAndSkin" parameterType="itView.springboot.vo.User">
+    UPDATE "USER"
+    <set>
+      "USER_NO" = "USER_NO",  <!-- no-op: 빈 SET 방지 -->
+      <if test="userName != null and userName != ''">"USER_NAME" = #{userName},</if>
+      <if test="email != null and email != ''">"EMAIL" = #{email},</if>
+      <if test="userGender != null and userGender != ''">"USER_GENDER" = #{userGender},</if>
+      <if test="userAge != null">"USER_AGE" = #{userAge},</if>
+      <if test="skinType != null and skinType != ''">"SKIN_TYPE" = #{skinType},</if>
+      <if test="personalColor != null and personalColor != ''">"PERSONAL_COLOR" = #{personalColor},</if>
+      <if test="skinTrouble != null and skinTrouble != ''">"SKIN_TROUBLE" = #{skinTrouble},</if>
+      <if test="headSkin != null and headSkin != ''">"HEAD_SKIN" = #{headSkin},</if>
+    </set>
+    WHERE "USER_NO" = #{userNo}
+  </update>
+  
+  <!-- 상품 검색 -->
+<select id="searchProducts" parameterType="string"
+        resultType="itView.springboot.vo.Product">
+  SELECT 
+    p."PRODUCT_NO"   AS productNo,
+    p."PRODUCT_NAME" AS productName,
+    p."PRODUCT_DETAIL" AS productDetail,
+    p."PRODUCT_PRICE"  AS productPrice,
+    p."PRODUCT_COMPANY" AS productCompany
+  FROM "PRODUCT" p
+  WHERE LOWER(p."PRODUCT_NAME") LIKE '%' || LOWER(#{keyword}) || '%'
+     OR LOWER(p."PRODUCT_DETAIL") LIKE '%' || LOWER(#{keyword}) || '%'
+</select>
+
+<!-- 리뷰 등록 -->
+<insert id="insertReview" parameterType="itView.springboot.vo.Review">
+  INSERT INTO "REVIEW"(
+    "REVIEW_NO", "REVIEW_CONTENT", "REVIEW_RATE",
+    "REVIEW_DATE", "PRODUCT_NO", "USER_NO"
+  ) VALUES (
+    SEQ_REVIEW.NEXTVAL,
+    #{reviewContent},
+    #{reviewRate},
+    SYSDATE,
+    #{productNo},
+    #{userNo}
+  )
+</insert>
+  
+  
+  
+  
+
+</mapper>

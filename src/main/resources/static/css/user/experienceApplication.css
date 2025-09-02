@@ -11,25 +11,6 @@ body {
   font-style: normal;
 }
 
-/* 사이트 최상단 헤더 */
-.site-header {
-  font-family: 'EBSHMJESaeronRA', sans-serif;
-  font-size: 72px;
-  text-align: center;
-  padding: 16px 0;
-  background: #34e5eb;     /* 대표색 */
-  color: #fff;
-  border-bottom: 2px solid #8ad8f0;
-/*   position: sticky;        스크롤해도 상단에 고정 */
-  top: 0;
-  left: 0;
-  width: 100%;             /* body 전체폭 차지 */
-  z-index: 2000;
-  height: var(--site-header-h);    /* 최상단 It:View 헤더 높이 변수 적용 */
-}
-:root {
-  --site-header-h: 68px; /* It:View 헤더 높이 (마이페이지와 동일하게 컨트롤) */
-}
 
 
 

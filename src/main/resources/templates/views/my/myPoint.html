@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>내 포인트</title>
 
-   <!-- 공통 레이아웃 CSS -->
+  <!-- 공통 레이아웃 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
 
   <!-- 페이지 전용 CSS -->
@@ -17,25 +17,12 @@
 </head>
 <body>
 
-  <!-- 전역 헤더 (공통) -->
-  <header class="site-header">
-    <a href="index">It:View</a>
-  </header>
-
-  <!-- 전역 사이드바 (공통) -->
-  <nav class="sidenav" aria-label="Primary">
-    <div class="sidenav-top">
-      <a class="nav-item" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
-      <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
-      <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
-      <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
-      <a class="nav-item" href="/Shopping/WishList"><i class="fa-solid fa-heart"></i><span>찜</span></a>
-      <a class="nav-item"><i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
-    </div>
-  </nav>
+  <!-- ✅ 공통 헤더/사이드바 include -->
+  <div th:replace="~{common/myHeader}"></div>
+  <div th:replace="~{common/mySidebar}"></div>
 
   <main class="page">
-    <!-- 상단 타이틀바 (myPage와 동일 레이아웃) -->
+    <!-- 상단 타이틀바 -->
     <div class="page-topbar">
       <h1 class="page-title">포인트</h1>
       <div class="page-actions">
@@ -68,7 +55,6 @@
 
     <!-- 포인트 내역 -->
     <section class="history" aria-live="polite">
-      <!-- 예시 데이터 (Thymeleaf로 서버에서 렌더링 가능) -->
       <div class="month">2025년 08월</div>
 
       <div class="row" data-type="save">
@@ -117,7 +103,7 @@
     </section>
   </main>
 
-  <!-- (필요 시) 탭 필터용 간단 스크립트 -->
+  <!-- 탭 필터 스크립트 -->
   <script>
     (function(){
       const tabs = document.querySelectorAll('.tabs .tab');
@@ -128,8 +114,7 @@
           tab.classList.add('active');
           const type = tab.dataset.filter;
           rows.forEach(r=>{
-            r.style.display =
-              (type === 'all' || r.dataset.type === type) ? '' : 'none';
+            r.style.display = (type === 'all' || r.dataset.type === type) ? '' : 'none';
           });
         });
       });

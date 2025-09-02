@@ -16,121 +16,141 @@
 </head>
 <body>
 
+  <!-- 전역 헤더 (공통) -->
+  <div th:replace="~{common/myHeader}"></div>
 
-<!-- 전역 헤더 (공통) -->
-  <header class="site-header"><a href="index">It:View</a></header>
+  <!-- 전역 사이드바 (공통) -->
+  <div th:replace="~{common/mySidebar}"></div>
 
-  <!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
-  <nav class="sidenav" aria-label="Primary">
-    <div class="sidenav-top">
-      <a class="nav-item active" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
-      <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
-      <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
-      <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
-      <a class="nav-item" href="/Shopping/WishList"><i class="fa-solid fa-heart"></i><span>찜</span></a>
-      <a class="nav-item"><i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
+  <main class="page">
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <button class="icon-btn back" type="button" onclick="history.back()" aria-label="뒤로">←</button>
+      <h1 class="page-title">리뷰 쓰기</h1>
+      <button class="icon-btn help" aria-label="도움말">?</button>
     </div>
-    </nav>
 
+    <!-- 안내 배너 -->
+    <section class="card tip-banner">
+      <div class="tip-text">
+        도움이 되는 리뷰를 많이 쓸수록<br/>
+        체험단 선정 확률이 올라가요
+      </div>
+      <div class="tip-illust" aria-hidden="true">💬📈</div>
+    </section>
 
-<main class="page">
-  <!-- 상단 타이틀바 -->
-  <div class="page-topbar">
-    <button class="icon-btn back" aria-label="뒤로">←</button>
-    <h1 class="page-title">리뷰 쓰기</h1>
-    <button class="icon-btn help" aria-label="도움말">?</button>
-  </div>
+    <!-- 제품 검색 -->
+    <section class="block">
+      <h2 class="block-title req">리뷰를 쓰고 싶은 제품을 검색해 보세요</h2>
+      <div class="search-box">
+        <span class="search-ic">🔍</span>
+        <input class="search-input" type="text" placeholder="제품명이나 성분명으로 찾아보세요"/>
+      </div>
+    </section>
 
-  <!-- 안내 배너 -->
-  <section class="card tip-banner">
-    <div class="tip-text">
-      도움이 되는 리뷰를 많이 쓸수록<br/>
-      체험단 선정 확률이 올라가요
-    </div>
-    <div class="tip-illust" aria-hidden="true">💬📈</div>
-  </section>
+    <!-- 검색 결과 리스트 -->
+    <section class="block" style="margin-top:16px">
+      <div id="searchResults" class="card" style="display:none;padding:12px"></div>
+    </section>
 
-  <!-- 제품 검색 -->
-  <section class="block">
-    <h2 class="block-title req">리뷰를 쓰고 싶은 제품을 검색해 보세요</h2>
-    <div class="search-box">
-      <span class="search-ic">🔍</span>
-      <input class="search-input" type="text" placeholder="제품명이나 성분명으로 찾아보세요"/>
-    </div>
-  </section>
+    <hr class="divider"/>
 
-  <hr class="divider"/>
+    <!-- 리뷰 작성 폼 -->
+    <form th:action="@{/my/review}" method="post" id="reviewForm">
+      <input type="hidden" name="productNo" id="productNo">
 
-  <!-- 별점 -->
-  <section class="block">
-    <h2 class="block-title center req">이 제품 어떠셨나요?</h2>
-    <div class="stars">
-      <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="5점"></label>
-      <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4점"></label>
-      <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3점"></label>
-      <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2점"></label>
-      <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1점"></label>
-    </div>
-  </section>
+      <!-- 별점 -->
+      <section class="block">
+        <h2 class="block-title center req">이 제품 어떠셨나요?</h2>
+        <div class="stars">
+          <input type="radio" id="star5" name="reviewRate" value="5"/><label for="star5"></label>
+          <input type="radio" id="star4" name="reviewRate" value="4"/><label for="star4"></label>
+          <input type="radio" id="star3" name="reviewRate" value="3"/><label for="star3"></label>
+          <input type="radio" id="star2" name="reviewRate" value="2"/><label for="star2"></label>
+          <input type="radio" id="star1" name="reviewRate" value="1"/><label for="star1"></label>
+        </div>
+      </section>
 
-  <!-- 추천 여부 -->
-  <section class="block">
-    <h2 class="block-title center req">이 제품을 다른 고객에게 추천하시나요?</h2>
-    <div class="chip-group single center">
-      <input id="rec-no"  name="recommend" type="radio"/>
-      <label for="rec-no"  class="chip chip-ghost">👎 아니요</label>
+      <!-- 리뷰 내용 -->
+      <section class="block">
+        <h3 class="q-title pos">좋았던 점 혹은 나만의 팁 <span class="req-dot">*</span></h3>
+        <textarea class="ta" name="reviewContent" rows="5"
+          placeholder="제품을 사용한 날짜와 기간, 좋았던 점을 자세히 남겨주세요" required></textarea>
+        <div class="count">0/5,000 (최소 20자)</div>
+      </section>
 
-      <input id="rec-yes" name="recommend" type="radio"/>
-      <label for="rec-yes" class="chip chip-ghost">👍 추천해요</label>
-    </div>
-  </section>
+      <!-- 안내사항 -->
+      <section class="notice card">
+        <ul>
+          <li>제품과 무관한 사진을 첨부하거나 사이트 기준에 맞지 않는 내용 작성 시 리뷰 수정 요청을 드리며, 다음 영업일 내에 검수하여 포인트가 지급됩니다. (주말/공휴일 제외)</li>
+        </ul>
+      </section>
 
-  <hr class="divider"/>
+      <!-- 하단 CTA -->
+      <div class="submit-wrap">
+        <button type="submit" class="primary big">리뷰 등록하기</button>
+      </div>
+    </form>
+  </main>
 
-  <!-- 사진 첨부하기 (외곽선 큰 버튼) -->
-  <section class="block">
-    <h2 class="block-title">사진과 리뷰를 남겨보세요</h2>
-    <button type="button" class="upload-btn">📷 사진 첨부하기</button>
-  </section>
+  <!-- JS -->
+  <script>
+  (function(){
+    const $input = document.querySelector('.search-input');
+    const $list  = document.getElementById('searchResults');
+    const $productNo = document.getElementById('productNo');
 
-  <!-- 좋은 점 -->
-  <section class="block">
-    <h3 class="q-title pos">어떤 점이 좋았나요? <span class="req-dot">*</span></h3>
-    <p class="hint"><span class="ic">i</span> 만족했던 사용감, 제형, 추천 피부타입 등을 적어주세요</p>
-    <textarea class="ta" rows="5" placeholder="제품을 사용한 날짜와 기간, 좋았던 점을 자세히 남겨주세요"></textarea>
-    <div class="count">0/5,000 (최소 20자)</div>
-  </section>
+    function render(list){
+      if(!list || list.length === 0){
+        $list.style.display = 'none';
+        $list.innerHTML = '';
+        return;
+      }
+      $list.style.display = 'block';
+      $list.innerHTML = list.map(p => `
+        <div class="row" data-no="${p.productNo}" 
+             style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid #eee">
+          <div>
+            <div style="font-weight:700">${p.productName}</div>
+            <div style="font-size:12px;color:#666">${p.productDetail ?? ''}</div>
+          </div>
+          <button type="button" class="mini-btn">선택</button>
+        </div>
+      `).join('');
+      // 선택 버튼 핸들러
+      $list.querySelectorAll('.row .mini-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const row = e.target.closest('.row');
+          const no  = row.getAttribute('data-no');
+          $productNo.value = no;
+          // 시각 피드백
+          $list.querySelectorAll('.row').forEach(r=>r.style.background='transparent');
+          row.style.background = '#f0f9ff';
+        });
+      });
+    }
 
-  <!-- 아쉬운 점 -->
-  <section class="block">
-    <h3 class="q-title neg">어떤 점이 아쉬웠나요? <span class="req-dot">*</span></h3>
-    <p class="hint"><span class="ic">i</span> 아쉬웠던 사용감, 트러블, 비추천 이유 등을 적어주세요</p>
-    <textarea class="ta" rows="5" placeholder="제품의 아쉬운 점을 자세히 남겨주세요"></textarea>
-    <div class="count">0/5,000 (최소 20자)</div>
-  </section>
+    let timer;
+    $input.addEventListener('input', function(){
+      const q = this.value.trim();
+      clearTimeout(timer);
+      if(q.length < 1){ render([]); return; }
+      timer = setTimeout(()=>{
+        fetch(`/my/searchProduct?keyword=` + encodeURIComponent(q))
+          .then(r=>r.json())
+          .then(render)
+          .catch(()=>render([]));
+      }, 250);
+    });
 
-  <!-- 나만의 팁 (선택) -->
-  <section class="block">
-    <h3 class="q-title tip">나만의 팁이 있나요? <small class="optional">(선택)</small></h3>
-    <p class="hint"><span class="ic">i</span> 나만의 사용법, 도움되는 정보 등을 적어주세요</p>
-    <textarea class="ta" rows="4" placeholder="다른 화해 고객에게 알려주고 싶은 꿀팁을 남겨주세요"></textarea>
-    <div class="count">0/5,000</div>
-  </section>
-
-  <!-- 안내사항 -->
-  <section class="notice card">
-    <ul>
-      <li>제품과 무관한 사진을 첨부하거나 사이트 기준에 맞지 않는 내용 작성 시 리뷰 수정 요청을 드리며, 다음 영업일 내에 검수하여 포인트가 지급됩니다. (주말/공휴일 제외)</li>
-      
-    </ul>
-  </section>
-
-  <!-- 하단 CTA -->
-  <div class="submit-wrap">
-    <button class="primary big">리뷰 등록하기</button>
-  </div>
-
-</main>
-
+    // 폼 제출 전, productNo 선택 확인
+    document.getElementById('reviewForm').addEventListener('submit', function(e){
+      if(!$productNo.value){
+        e.preventDefault();
+        alert('리뷰를 작성할 제품을 먼저 검색해서 선택해주세요.');
+      }
+    });
+  })();
+  </script>
 </body>
 </html>

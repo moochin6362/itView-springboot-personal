@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-@Controller
+//@Controller
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class AuthController {
