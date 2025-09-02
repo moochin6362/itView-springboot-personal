@@ -137,4 +137,8 @@ public class CommunityService {
     public int deleteBoard(int boardId) {
         return communityMapper.deleteBoard(boardId);
     }
+
+    public Attachment selectFirstImage(int boardId, String boardType) {
+        return communityMapper.selectFirstImage(boardId, boardType);
+    }
 }

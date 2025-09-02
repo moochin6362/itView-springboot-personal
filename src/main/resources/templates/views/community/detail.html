@@ -63,10 +63,10 @@
         <div class="btn-wrap d-flex justify-content-between">
             <a href="/community/list" class="btn btn-outline-secondary">목록</a>
             <div>
-                <a th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"
+                <a th:if="${session.loginUser != null and session.loginUser.userNo == community.userNo}"
                    th:href="@{/community/{boardId}/updateForm(boardId=${community.boardId})}" class="btn btn-primary">수정</a>
                 <!-- 삭제 버튼 (모달 띄우기) -->
-                <button th:if="${session.loginUser != null and session.loginUser.userType == 'A'}"
+                <button th:if="${session.loginUser != null and session.loginUser.userNo == community.userNo}"
                         type="button"
                         class="btn btn-danger"
                         data-bs-toggle="modal"

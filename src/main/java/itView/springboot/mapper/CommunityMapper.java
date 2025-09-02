@@ -32,4 +32,7 @@ public interface CommunityMapper {
 
 
     int deleteBoard(int boardId);
+
+    Attachment selectFirstImage(@Param("boardId") int boardId, @Param("boardType") String boardType);
+
 }

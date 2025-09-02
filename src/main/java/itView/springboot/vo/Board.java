@@ -18,4 +18,7 @@ public class Board {
 	private String boardType;
 	private String boardStatus;
 	private int userNo;
+
+    // 👉 썸네일 경로 (DB에는 없음)
+    private String thumbnailPath;
 }

@@ -2,6 +2,7 @@ package itView.springboot.controller;
 
 import itView.springboot.common.Pagination;
 import itView.springboot.service.CommunityService;
+import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,12 +34,19 @@ public class CommunityController {
             Model model,
             HttpServletRequest request) {
 
-        // 검색 포함 게시글 수 가져오기
         int listCount = communityService.getListCountWithSearch(1, keyword, type);
 
         PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 8);
 
         List<Board> communitys = communityService.selectBoardListWithSearch(pi, keyword, type);
+
+        // 썸네일 이미지 셋팅
+        for (Board board : communitys) {
+            Attachment thumbnail = communityService.selectFirstImage(board.getBoardId(), "1"); // boardType = "1"
+            if (thumbnail != null) {
+                board.setThumbnailPath("/uploadFilesFinal/community/" + thumbnail.getAttmRename());
+            }
+        }
 
         model.addAttribute("communitys", communitys);
         model.addAttribute("pi", pi);
@@ -48,6 +56,7 @@ public class CommunityController {
 
         return "community/list";
     }
+
 
 
     // 작성폼 페이지

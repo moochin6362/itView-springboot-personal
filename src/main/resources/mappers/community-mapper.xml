@@ -135,6 +135,15 @@
         UPDATE BOARD SET BOARD_STATUS = 'N' WHERE BOARD_ID = #{boardId}
     </update>
 
+    <select id="selectFirstImage" resultType="itView.springboot.vo.Attachment">
+        SELECT *
+        FROM attachment
+        WHERE position_no = #{boardId}
+        AND attm_position = #{boardType}
+        AND attm_status = 'Y'
+        ORDER BY attm_no ASC
+        FETCH FIRST 1 ROWS ONLY
+    </select>
 
 
 
