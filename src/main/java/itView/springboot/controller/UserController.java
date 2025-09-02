@@ -1,11 +1,16 @@
 package itView.springboot.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import itView.springboot.exception.UserException;
 import itView.springboot.service.UserService;
@@ -17,6 +22,35 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    
+    
+    //아이디 찾기
+    @GetMapping("/findId")
+    public String findIdPage() {
+    	return "/login/findId";
+    }
+    
+    @PostMapping("/findId")
+    @ResponseBody
+    public Map<String, String> findId(
+    		@RequestParam String userType,
+    		@RequestParam String email,
+    		@RequestParam String userPassword) {
+    	Map<String, String> result =new HashMap<String, String>();
+    	User u = userService.findId(email, userPassword, userType);
+    	if(u != null) {
+    		result.put("userId", u.getUserId());
+    	} else {
+    		result.put("userId", null);
+    	}
+    	
+    	return result;
+    }
+    
+    
+    
+    
+    
     
     //비밀번호 찾기
     @GetMapping("/findPwd")

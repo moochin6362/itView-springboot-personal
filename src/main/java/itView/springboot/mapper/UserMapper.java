@@ -11,6 +11,9 @@ public interface UserMapper {
 	 //비밀번호 수정
 	 int resetPwd(User u);
 	 
+	 //아이디 찾기
+	 User findId(String email, String userPassword, String userType);
+	 
 
 
 	

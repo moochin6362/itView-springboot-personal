@@ -1,14 +1,7 @@
 package itView.springboot.service;
 
-import java.util.Map;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import itView.springboot.mapper.UserMapper;
 import itView.springboot.vo.User;
@@ -20,6 +13,11 @@ public class UserService {
 	//비밀번호 수정
 	public int resetPwd(User u) {
 		return userMapper.resetPwd(u);
+	}
+
+	//아이디 찾기
+	public User findId(String email, String userPassword, String userType) {
+		return userMapper.findId(email,userPassword,userType);
 	}
 
 	

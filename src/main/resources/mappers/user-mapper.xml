@@ -9,4 +9,23 @@
 update "USER" set user_password = #{userPassword} where user_id = #{userId}
 </update>
 
+<!-- 아이디 찾기 -->
+<select id="findId" resultType="User">
+select user_id 
+from "USER" 
+where 
+	email = #{email} 
+	and user_password = #{userPassword}
+	and user_type = #{userType}
+</select>
+
+
+
+
+
+
+
+
+
+
 </mapper>
