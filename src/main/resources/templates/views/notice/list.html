@@ -107,7 +107,16 @@
           th:onclick="|location.href='/notice/detail?boardId=${notice.boardId}&page=${pi.currentPage}'|"
           style="cursor:pointer;">
         <td>[[${notice.boardId}]]</td>
-        <td class="text-start">[[${notice.boardTitle}]]</td>
+          <td class="text-start">
+                      <span th:switch="${notice.boardType}">
+                        <span th:case="1">[공지사항]</span>
+                        <span th:case="2">[이벤트]</span>
+                        <span th:case="3">[문의사항]</span>
+                        <span th:case="4">[쿠폰]</span>
+                        <span th:case="5">[커뮤니티]</span>
+                      </span>
+              [[${notice.boardTitle}]]
+          </td>
         <td>관리자</td>
         <td>[[${notice.boardDate}]]</td>
       </tr>
