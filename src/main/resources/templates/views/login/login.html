@@ -12,7 +12,9 @@
     <main class="login-main-wrapper">
         <div class="login-container">  
             <form action="/login/login" method="post">
-            <div class="login-title">LOG IN</div>
+            <div class="login-title">
+            	<a th:href="@{/home}">LOG IN</a>
+            </div>
                 <div class="login-select-loginType-container">
                     회원 유형을 선택하세요
                 </div>
