@@ -37,15 +37,15 @@
 		                </tr>
 		                <tr>
 		                    <th>회원 유형</th>
-		                    <td th:text="${user.userType}"></td>
+		                    <td th:text="${user.userType == 'P' ? '판매자' : '일반회원'}"></td>
 		                </tr>
 		                <tr>
 		                    <th>활동 여부</th>
-		                    <td th:text="${user.userStatus}"></td>
+		                    <td th:text="${user.userStatus == 'Y'? '활동 중' : '휴면계정'}"></td>
 		                </tr>
 		                <tr>
 		                    <th>누적 신고횟수</th>
-		                    <td th:text="${user.reportCount}">회</td>
+		                    <td th:text="${user.reportCount + ' 회'}"></td>
 		                </tr>
 		            </table>
 		         </div>
