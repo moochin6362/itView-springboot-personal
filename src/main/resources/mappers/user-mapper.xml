@@ -11,11 +11,10 @@ update "USER" set user_password = #{userPassword} where user_id = #{userId}
 
 <!-- 아이디 찾기 -->
 <select id="findId" resultType="User">
-select user_id 
+select *
 from "USER" 
 where 
-	email = #{email} 
-	and user_password = #{userPassword}
+	email = #{email}
 	and user_type = #{userType}
 </select>
 

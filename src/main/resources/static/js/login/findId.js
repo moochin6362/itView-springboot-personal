@@ -25,7 +25,7 @@ document.getElementById("findIdForm").addEventListener("submit", function(e){
     .then(res => res.json())
     .then(data => {
         if(data.userId){
-            document.getElementById("foundUserId").innerText = "당신의 아이디는: " + data.userId;
+            document.getElementById("foundUserId").innerText = "회원님의 아이디는: " + data.userId + " 입니다.";
         } else {
             document.getElementById("foundUserId").innerText = "일치하는 아이디가 없습니다.";
         }

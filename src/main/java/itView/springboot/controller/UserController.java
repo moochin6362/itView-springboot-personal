@@ -3,6 +3,7 @@ package itView.springboot.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final BCryptPasswordEncoder bcrypt;
     
     
     //아이디 찾기
@@ -33,12 +35,13 @@ public class UserController {
     @PostMapping("/findId")
     @ResponseBody
     public Map<String, String> findId(
-    		@RequestParam String userType,
-    		@RequestParam String email,
-    		@RequestParam String userPassword) {
-    	Map<String, String> result =new HashMap<String, String>();
-    	User u = userService.findId(email, userPassword, userType);
-    	if(u != null) {
+    		@RequestParam("userType") String userType,
+    		@RequestParam("email") String email,
+    		@RequestParam("userPassword")String userPassword) {
+    	Map<String, String> result = new HashMap<String, String>(); //userId만 map에 담아서 반환..하는건데
+    	
+    	User u = userService.findId(email,userType);
+    	if(u != null && bcrypt.matches(userPassword, u.getUserPassword())) {
     		result.put("userId", u.getUserId());
     	} else {
     		result.put("userId", null);
@@ -46,10 +49,6 @@ public class UserController {
     	
     	return result;
     }
-    
-    
-    
-    
     
     
     //비밀번호 찾기
@@ -76,4 +75,6 @@ public class UserController {
     	}
     	
     }
+    
+    
 }
