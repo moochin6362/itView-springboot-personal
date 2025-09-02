@@ -15,7 +15,7 @@ public class Order {
 	private Date orderDate;
 	private int orderCount;
 	private String orderStatus;
-	private String paymentState;
+	private String paymentMethod;
 	private int payPrice;
 	private String deliveryCompany;
 	private int deliveryNo;
