@@ -18,13 +18,13 @@ import itView.springboot.vo.Wishlist;
 @Mapper
 public interface ShoppingMapper {
 
-	int checkDelete(List<Integer> cNo);
+	int checkDelete(@Param("cNo")List<Integer> cNo);
 
 	ArrayList<Cart> selectProduct(int uNo);
 
 	int productDelete(int cNo);
 
-	ArrayList<Attachment> selectThumbList(ArrayList<Integer> pNo);
+	ArrayList<Attachment> selectThumbList(@Param("pNo") ArrayList<Integer> pN);
 
 	ArrayList<CouponBox> selectCouponList(int uNo);
 
