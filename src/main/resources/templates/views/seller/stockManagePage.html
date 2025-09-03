@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,51 +8,70 @@
 </head>
 <body>
 
-	<div class="header">판매자님, 환영합니다.</div>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 
 	<div class="layout">
-		<div class="sidebar">
-			<div class="sidebar-item">상품 등록</div>
-			<div class="sidebar-item">상품 수정</div>
-			<div class="sidebar-item active">재고 관리</div>
-			<div class="sidebar-item">쿠폰 관리</div>
-			<div class="sidebar-item">상품 Q&A</div>
-		</div>
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
 			<h2>재고 관리 페이지</h2>
 
-			<!-- 재고 목록 예시 -->
-			<div class="stock-item">
-				<div class="stock-name">[상품명1] 촉촉한 수분크림</div>
-				<div class="stock-controls">
-					<input type="number" min="0" value="100" />
-					<button>수정</button>
-					<button class="delete-btn">삭제</button>
+			<!-- 재고 목록 -->
+			<form>
+				<div class="stock-item" th:each="p : ${list}">
+					<input type="hidden" name="productNo" th:value="${p.productNo}"/>
+					<input type="hidden" name="userNo" th:value="${p.userNo}"/>
+					<div class="stock-name">상품 번호 [[${p.productNo}]] [[${p.productName}]]</div>
+					<div class="stock-controls">
+						<input type="number" min="0" name="productStock" th:value="${p.productStock}"/>
+						<button type="button" class="editButtons">수정</button>
+					</div>
 				</div>
-			</div>
-
-			<div class="stock-item">
-				<div class="stock-name">[상품명2] 고보습 핸드크림</div>
-				<div class="stock-controls">
-					<input type="number" min="0" value="55" />
-					<button>수정</button>
-					<button class="delete-btn">삭제</button>
-				</div>
-			</div>
-
-			<div class="stock-item">
-				<div class="stock-name">[상품명3] 데일리 선크림</div>
-				<div class="stock-controls">
-					<input type="number" min="0" value="200" />
-					<button>수정</button>
-					<button class="delete-btn">삭제</button>
-				</div>
-			</div>
-
-			<!-- 필요한 만큼 추가 가능 -->
+			</form>
 		</div>
 	</div>
+	
+	<script>
+		window.onload = () =>{
+			const buttons = document.querySelectorAll('.editButtons');
+			for(button of buttons){
+				button.addEventListener('click', e => {
+					//const productStock = e.target.previousElementSibling.value;
+					//const productNo = e.target.parentElement.parentElement.children[0].value;
+					//const userNo = e.target.parentElement.parentElement.children[1].value;
+					//console.log(productStock)
+					//console.log(productNo)
+					//console.log(userNo)
+					
+					const product = {
+						'productStock' : e.target.previousElementSibling.value,
+						'productNo' : e.target.parentElement.parentElement.children[0].value,
+						'userNo' : e.target.parentElement.parentElement.children[1].value
+					}
+					
+					fetch('/product/Stock', {
+						method: 'PUT',
+						headers: {
+							'Content-Type' : 'application/json'
+						},
+						body : JSON.stringify(product)
+					})
+					.then(response => response.json())
+					.then(data => {
+						if(data > 0){
+							alert('재고량 수정이 성공하였습니다.')
+						} else {
+							alert('재고량 수정 중 오류가 발생했습니다.')
+							location.reload();
+						}
+					})
+					.catch(err => {
+						console.log(err)
+					})
+				});
+			}
+		}
+	</script>
 
 </body>
 </html>

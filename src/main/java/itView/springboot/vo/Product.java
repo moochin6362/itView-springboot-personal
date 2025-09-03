@@ -28,4 +28,6 @@ public class Product {
 	
 	// join시 가져올 이름
 	private String brandName;
+	private String userAge;
+	private String gender;
 }

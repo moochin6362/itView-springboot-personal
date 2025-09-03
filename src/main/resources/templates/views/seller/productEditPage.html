@@ -1,60 +1,141 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>상품 수정 페이지</title>
 <link href="/css/seller/productInsertPage.css" rel="stylesheet" type="text/css" />
+<link href="/summernote/summernote-lite.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="/summernote/summernote-lite.js"></script>
+<script src="/summernote/summernote-ko-KR.js"></script>
 </head>
 <body>
 
-	<div class="header">판매자님, 환영합니다.</div>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 
 	<div class="layout">
-		<div class="sidebar">
-			<div class="sidebar-item">상품 등록</div>
-			<div class="sidebar-item active">상품 수정</div>
-			<div class="sidebar-item">재고 관리</div>
-			<div class="sidebar-item">쿠폰 관리</div>
-			<div class="sidebar-item">상품 Q&A</div>
-		</div>
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
-		<div class="content">
+		<div class="content" th:each="p : ${list}">
 			<h2>상품 수정 페이지</h2>
-			<form>
+			<form action="/product/editProduct" method="POST" encType="multipart/form-data">
+				<input type="hidden" name="productNo" th:value="${p.productNo}"/>
+				
 				<div class="form-group">
-					<label>상품명</label> <input type="text" value="기존 상품명 예시" />
+					<label>상품명</label> 
+					<input type="text" name="productName" th:value="${p.productName}"/>
 				</div>
 
 				<div class="form-group">
 					<label>상품 설명</label>
-					<textarea>기존 설명 내용 예시</textarea>
+					<textarea id="summernote" name="productDetail" th:utext="${p.productDetail}"></textarea>
 				</div>
 				
 				<div class="form-group">
-					<label>제조 회사</label> <input type=text placeholder="제조 회사명을 입력하세요" />
+					<label>제조 회사</label> 
+					<input type=text name="productCompany" th:value="${session.loginUser.brandName}" readonly/>
 				</div>
 
 				<div class="form-group">
-					<label>상품 이미지</label> <input type="file" />
+					<label>상품 이미지</label>
+					<input type="file" name="productImage"/>
 				</div>
 
 				<div class="form-group">
-					<label>재고 수량</label> <input type="number" min="0" value="100" />
+					<label>재고 수량</label> 
+					<input type="number" name="productStock" min="0" th:value="${p.productStock}" />
 				</div>
 
 				<div class="form-group">
-					<label>상품 가격</label> <input type="number" min="0" />
+					<label>상품 가격</label> 
+					<input type="number" name="productPrice" min="0" th:value="${p.productPrice}"/>
 				</div>
 
 				<div class="form-buttons">
 					<button type="submit">완료</button>
-					<button type="button">취소</button>
-					<button type="button" class="delete-btn">삭제</button>
+					<button type="button" onclick="location.href='javascript:history.back()'">취소</button>
 				</div>
 			</form>
 		</div>
 	</div>
-
+	<script>
+	// 상품 설명 작성
+	$('#summernote').summernote({
+		toolbar : [
+			['fontname', ['fontname']],
+			['fontsize', ['fontsize']],
+			['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+			['color', ['forecolor', 'color']],
+			['table', ['table']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['height', ['height']],
+			['insert', ['picture', 'link', 'video']]
+		],
+		fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '돋움체', '바탕체'],
+		fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
+		height: 450,
+		lang: "ko-KR",
+		
+		
+		// 이미지 업로드 처리
+		callbacks : {                                                    
+			onImageUpload : function(files) {   
+                // 다중 이미지 처리를 위해 for문을 사용했습니다.
+				for (var i = 0; i < files.length; i++) {
+					imageUploader(files[i], this);
+				}
+			},
+			// 이미지 삭제
+			onMediaDelete: function(target){
+				//console.log('onMediaDelete 호출')
+				//console.log(target)
+				
+				let src = target[0].src;
+				
+				$.ajax({
+					url: '/seller/imageDelete',
+					type: 'POST',
+					data: { imageUrl: src},
+					success: data => {
+						console.log(data);
+					},
+					error: data => {
+						console.log(data)
+					}
+				});
+			}
+		}
+		
+		
+	});
+	
+	function imageUploader(file, el){
+		let formData = new FormData();
+		formData.append('file', file);
+		
+		$.ajax({
+			url : '/seller/imageUpload',
+			type : 'post',
+			data : formData,
+			enctype : 'multipart/form-data',
+			processData : false,
+			contentType : false,
+			success : function(data){
+				
+				const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+				
+				//console.log(parsedData)
+				
+				const imageUrl = '/' + parsedData.url;
+// 				console.log(imageUrl)
+// 				console.log(parsedData.url)
+				$(el).summernote('insertImage', imageUrl)
+					
+			},
+			error : data => console.log(data)
+		});
+	}
+	</script>
 </body>
 </html>

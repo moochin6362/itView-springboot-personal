@@ -1,0 +1,106 @@
+:root {
+  --main-color: #27c7c7;
+  --bg-color: #eefbfb;
+  --text-color: #333;
+  --border-radius: 8px;
+  --font-family: 'Arial', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: #fff;
+  color: var(--text-color);
+}
+
+.header {
+  height: 60px;
+  background-color: white;
+  border-bottom: 2px solid var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+.sidebar {
+  width: 220px;
+  background-color: var(--bg-color);
+  border-right: 1px solid var(--main-color);
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-item {
+  margin: 15px 0;
+  padding: 10px 20px;
+  width: 80%;
+  text-align: center;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebar-item.active,
+.sidebar-item:hover {
+  background-color: #8ad8f0;
+  color: white;
+}
+
+.layout {
+  display: flex;
+  height: 100vh; /* 필요 시 */
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.product-header, .product-card {
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px;
+  align-items: center;
+}
+
+.product-header {
+  font-weight: bold;
+  color: #00c8f8;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-card {
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.product-item {
+  flex: 1;
+  cursor: pointer;
+}
+
+.product-head {
+	margin-left: 26%;
+}
+
+.editButton {
+  background-color: #eefbfb;
+  color: black;
+  border: 1px solid #c2e4e4;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}

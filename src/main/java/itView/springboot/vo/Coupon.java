@@ -24,6 +24,7 @@ public class Coupon {
 	private Date couponCreatedate;
 	private int couponMinprice;
 	private int userNo;
+	private String couponStatus;
 	
 	// join시 가져올 이름
 	private String userName;

@@ -94,24 +94,23 @@ body {
 </head>
 <body>
 
-	<div class="container product-container">
+	<div class="container product-container" th:each="p : ${list}">
 		<div class="row">
 			<!-- 좌측: 이미지 및 썸네일 -->
 			<div class="col-md-6">
-				<img
-					src="https://image.oliveyoung.co.kr/cfimages/cf-goods/uploads/images/thumbnails/550/10/0000/0021/A00000021326715ko.jpg?l=ko"
-					class="product-image mb-3" alt="상품 이미지">
+				<img th:src="@{/} + ${attm.attmRename}" class="product-image mb-3" alt="상품 이미지">
 			</div>
-
 			<!-- 우측: 상품 정보 -->
 			<div class="col-md-6">
-				<p class="brand-name">스킨앤랩</p>
-				<h1 class="product-title">베리어덤 링거 앰플 70ml + 70ml 더블기획</h1>
-				<p class="product-price">
-					28,000원
-					<del style="font-size: 14px; color: #999;">46,000원</del>
+				<p class="brand-name">[[${p.brandName}]]</p>
+				<h1 class="product-title">[[${p.productName}]]</h1>
+				<p class="product-price" th:text="${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + '원'}">
 				</p>
-				<p class="text-danger">🌟 277명이 보고 있어요</p>
+				<p class="text-danger">
+					<select>
+						<option th:each="c : ${cList}">[[${c.couponName}]]</option>
+					</select>
+				</p>
 
 				<hr>
 
@@ -125,8 +124,8 @@ body {
 				</div>
 
 				<div class="mb-3 quantity-box">
-					<label>수량</label> <input type="number" class="form-control w-25"
-						value="1" min="1">
+					<label>수량</label> 
+					<input type="number" class="form-control w-25" value="1" min="1" th:max="${p.productStock}">
 				</div>
 
 				<div class="total-price mb-3">총 상품금액: 28,000원</div>
@@ -151,12 +150,8 @@ body {
 						data-bs-target="#review" type="button" role="tab">후기</button>
 				</li>
 			</ul>
-			<div class="tab-content" id="productTabContent">
-				<div class="tab-pane fade show active p-3" id="detail"
-					role="tabpanel">
-					<p>이곳에는 상품의 상세 정보, 성분, 사용 방법 등을 포함할 수 있습니다.</p>
-					<img src="https://via.placeholder.com/800x400" class="img-fluid"
-						alt="상세 이미지">
+			<div class="tab-content" id="productTabContent" style="text-align: center;">
+				<div class="tab-pane fade show active p-3" id="detail" role="tabpanel" th:utext="${p.productDetail}">
 				</div>
 				<div class="tab-pane fade p-3" id="review" role="tabpanel">
 					<h5 class="rating">고객 리뷰 ⭐ 5.0 (9,913건)</h5>
@@ -167,7 +162,6 @@ body {
 		</div>
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

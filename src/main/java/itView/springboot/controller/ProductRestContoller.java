@@ -8,6 +8,8 @@ import java.util.Date;
 
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.Attachment;
+import itView.springboot.vo.Coupon;
+import itView.springboot.vo.Product;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -52,7 +56,7 @@ public class ProductRestContoller {
 	public String[] saveFile(MultipartFile upload) {
 		
 		// 파일 저장소 지정
-		String savePath = "c:\\uploadFilesFinal";
+		String savePath = "C:\\uploadFilesFinal\\product";
 		
 		// 폴더 생성
 		File folder = new File(savePath);
@@ -71,7 +75,6 @@ public class ProductRestContoller {
 		try {
 			upload.transferTo(new File(renamePath));
 		} catch (IllegalStateException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -82,5 +85,42 @@ public class ProductRestContoller {
 		
 		return returnArr;
 		
+	}
+	
+	@PostMapping("imageDelete")
+	public String imageDelete(@RequestParam("imageUrl") String imageUrl) {
+		
+		//System.out.println(imageUrl);
+		
+		// 이미지 URL 에서 파일 이름만 가져오기
+		String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+		
+		// 파일 경로
+		String savePath = "C:\\Users\\user\\Desktop\\itView-springboot\\src\\main\\resources\\static\\image\\upload";
+		
+		File file = new File(savePath + "\\" + fileName);
+		
+		if(file.exists()) {
+			if(file.delete()) {
+				return "파일 삭제 성공";
+			} else {
+				return "파일 삭제 실패";
+			}
+		} else {
+			return "파일이 존재하지 않음";
+		}
+	}
+	
+	// 상품 재고량 수정
+	@PutMapping("Stock")
+	public int editStock(@RequestBody Product product) {
+		//System.out.println(product);
+		return pService.editStock(product);
+	}
+	
+	// 상품 할인율 수정
+	@PutMapping("Coupon")
+	public int editCoupon(@RequestBody Coupon coupon) {
+		return pService.editCoupon(coupon);
 	}
 }
