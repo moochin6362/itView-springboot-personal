@@ -12,4 +12,8 @@ public class Cart {
 	private int amout;
 	private int userNo;
 	private int productNo;
+	private String productCompany;
+	private int productPrice;
+	private String productName;
+	private int productStock;
 }

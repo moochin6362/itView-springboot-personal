@@ -14,4 +14,8 @@ public class Wishlist {
 	private Date wishDate;
 	private int productNo;
 	private int userNo;
+	
+	private String productCompany;
+	private int productPrice;
+	private String productName;
 }

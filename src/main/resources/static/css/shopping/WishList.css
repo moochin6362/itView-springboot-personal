@@ -1,0 +1,121 @@
+body {
+	background: #f7f8f9;
+}
+
+.all{
+margin-right: 5%;
+	margin-left: 7%;
+	margin-bottom:3%;
+	margin-top:2%;
+}
+.wish-Top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#sort {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 8px 8px;
+	font-size: 16px;
+	outline: none;
+	cursor: pointer;
+}
+
+.quantity {
+	color: gray;
+	margin-left: 2%;
+	margin-right: 2%;
+	font-size: 18px;
+}
+
+hr {
+	margin-bottom: 1.5%;
+}
+
+.product-list {
+	display: flex;
+	gap: 5%;
+	margin-left: 2%;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.product-item {
+	display: flex;
+	align-items: flex-start;
+	width: 20%;
+	margin-top: 1.5%;
+	flex-direction: column;
+}
+
+.check {
+	margin-bottom: 6%;
+	transform: scale(1.5);
+	cursor: pointer;
+}
+
+.product-image {
+	position: relative;
+	background-color: #aaa;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 8px;
+	width: 240px; /* 고정 크기 */
+	height: 230px;
+	border-radius: 6px;
+}
+
+.delete-btn {
+	position: absolute;
+	background: none;
+	border: none;
+	color: gray;
+	font-size: 18px;
+	top: 2.5%;
+	right: 2%;
+}
+
+.product-info p {
+	margin: 2px 0;
+	text-align: left;
+}
+
+.price {
+	color: #8ad8f0;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.brand {
+	font-size: 18px;
+}
+
+.name {
+	color: gray;
+	font-size: 18px;
+}
+
+#cart-insert {
+	margin-top: 2%;
+	margin-left: 2%;
+	margin-right: 2%;
+	display: block;
+	width: calc(100% - 4%);
+	padding: 13px 0;
+	background-color: #eefbfb;
+	color: black;
+	font-size: 18px;
+	font-weight: bold;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 1px solid #c2e4e4;
+}
+
+#cart-insert:hover {
+	background: #8ad8f0;
+	color: white;
+}

@@ -1,0 +1,149 @@
+* {
+	box-sizing: border-box
+}
+
+.form {
+	background: #f0f4f9;
+	border: 1px solid #cccccc;
+	border-radius: 8px;
+	padding: 4px 0;
+	padding-bottom: 0;
+	margin-right: 5%;
+	margin-bottom:3%;
+	margin-left: 7%;
+}
+
+body {
+
+	background: #f7f8f9;
+}
+
+.title {
+	text-align: center;
+	font-weight: bold;
+	font-size: 22px;
+	margin-right: 5%;
+	margin-left: 3%;
+}
+
+.order-notice {
+	border: 1px solid #ccc;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	color: gray;
+	padding-left: 2%;
+	padding-right: 2%;
+}
+
+.order-notice summary {
+	color: black;
+	margin-bottom: 2%;
+}
+
+.order-box {
+	padding-left: 2%;
+	padding-right: 2%;
+	padding: 10px;
+	padding-top: 1.5%;
+	padding-left: 2%;
+	padding-right: 2%;
+	background: #ffffff;
+}
+
+.order-count {
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.order-count, .delivery-link {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.order-body {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.order-image {
+	width: 130px;
+	height: 130px;
+	background-color: #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 15px;
+	margin-top: 1%;
+	border-radius: 6px;
+}
+
+.order-info {
+	flex: 1;
+}
+
+.order-info p {
+	margin: 3px 0;
+}
+
+.order-info .status {
+	font-weight: bold;
+}
+
+.order-info .price {
+	color: #8ad8f0;
+	font-weight: bold;
+}
+
+.order-info .name {
+	color: gray;
+}
+
+.review-btn {
+	background-color: #eefbfb;
+	color: black;
+	padding: 11px 17px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	white-space: nowrap;
+	font-weight: bold;
+	font-size: 15px;
+	border: 1px solid #c2e4e4;
+}
+
+.review-btn:hover {
+	color: white;
+	background: #8ad8f0;
+}
+
+.cs-link {
+	align-items: center;
+	text-decoration: none;
+	color: gray;
+	display: block;
+	margin: 10px auto 5px;
+	width: fit-content;
+}
+
+.order-detail summary {
+	margin-bottom: 1%;
+	margin-top: 1%;
+}
+
+.order-detail details {
+	border: 1px solid #ccc;
+	border-left: none;
+	border-right: none;
+	padding-left: 2%;
+	padding-right: 2%;
+	padding-top:0.7%;
+	padding-bottom:0.4%;
+}
+
+.order-detail p {
+	color: gray;
+	padding-left: 2%;
+	padding-right: 2%;
+}

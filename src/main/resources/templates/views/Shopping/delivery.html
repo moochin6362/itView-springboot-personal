@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>배송조회</title>
@@ -95,22 +95,7 @@ body {
 	color: gray;
 }
 
-.delivery-cancel-btn {
-	background-color: #eefbfb;
-	color: black;
-	padding: 11px 20px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	white-space: nowrap;
-	font-weight: bold;
-	font-size: 15px;
-}
 
-.delivery-cancel-btn:hover {
-	color: white;
-	background: #8ad8f0;
-}
 
 .consumer-inform {
 	font-weight: bold;
@@ -151,36 +136,44 @@ body {
     </nav>
 	<p class="title">배송조회</p>
 	<form class="form">
-		<div class="delivery-num">
-			<p>송장번호</p>
-		</div>
-		<!-- 송장번호 나오면 배송중/ 아직 배송이 시작되지 않았습니다 나오면 배송전/ 배송이 완료되었습니다 나오면 배송완료 -->
-
-		<div class="order-box">
-			<div class="order-body">
-				<div class="order-image">(이미지)</div>
-				<div class="order-info">
-					<p class="price">가격</p>
-					<p class="name">상품이름</p>
-				</div>
-				<button class="delivery-cancel-btn">배송취소</button>
+		<div class="delivery" th:each="o:${olist}">
+			<div class="delivery-num">
+				<p class="delivery-status">
+					송장번호 | 
+					<span th:switch="${o.deliveryStatus}">
+						<span th:case="'before'">아직 배송이 시작되지 않았습니다.</span>
+						<span th:case="'shipping'">[[${o.deliveryNo}]]</span>
+						<span th:case="'after'">배송이 완료되었습니다.</span>
+					</span>
+				</p>
 			</div>
 
+			<div class="order-box">
+				<div class="order-body">
+					<div class="order-image">
+						<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
+							th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
+							width="100%" height="100%" style="border-radius: 8px;" />
+					</div>
+					<div class="order-info">
+						<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
+						<p class="name">[[${o.productName}]]</p>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div class="consumer-inform" style="background: #ffffff;">
+		<div class="consumer-inform" style="background: #ffffff;" th:each="o:${olist}">
 			<div class="name">
-				<p>(이름)</p>
+				<p>수령인 / [[${o.userName}]]</p>
 			</div>
 			<div class="address">
-				<p>(주소)</p>
+				<p>주소 / [[${o.userAddress}]]</p>
 			</div>
 			<div class="phone">
-				<p>(전화번호)</p>
+				<p>전화번호 / [[${o.userPhone}]]</p>
 			</div>
-			<div class="delivery-request">
-				<p>배송 요청사항</p>
-			</div>
+
 		</div>
 	</form>
 </body>

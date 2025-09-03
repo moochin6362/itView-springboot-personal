@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>장바구니</title>
-<link rel="stylesheet" href="../../../css/user/userCommon.css"/>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
 
- <!-- 아이콘(CDN) -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+<!-- 아이콘(CDN) -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+	integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
 body {
-
 	background: #f7f8f9;
 }
-.all{
-margin-right: 5%;
+
+.all {
+	margin-right: 5%;
 	margin-left: 7%;
-	margin-bottom:3%;
-	margin-top:2%;
+	margin-bottom: 3%;
+	margin-top: 2%;
 }
+
 .check {
 	margin-bottom: 1%;
 }
@@ -31,11 +34,23 @@ input[type="checkbox"] {
 	margin-right: 8px;
 }
 
+input[type="checkbox"]:indeterminate {
+	transform: scale(1.5);
+	margin-right: 8px;
+	accent-color: lightgray;
+}
+
 #checkdelete {
 	float: right;
 	font-size: 16px;
 	background: none;
 	border: none;
+	color: gray;
+}
+
+#checkdelete:hover {
+	font-weight: bold;
+	color: black;
 }
 
 .cart-header {
@@ -51,6 +66,11 @@ input[type="checkbox"] {
 	font-size: 15px;
 }
 
+.delete-btn:hover {
+	color: black;
+	font-weight: bold;
+}
+
 .cartitem {
 	border: 1px solid #ccc;
 	border-radius: 6px;
@@ -59,8 +79,8 @@ input[type="checkbox"] {
 	padding: 10px 16px;
 	margin-top: 15px;
 	margin-bottom: 18px;
-	margin-left:1%;
-	margin-right:1%;
+	margin-left: 1%;
+	margin-right: 1%;
 }
 
 .cart-header label {
@@ -231,10 +251,12 @@ select[name="coupon-option"] {
 	font-weight: bold;
 	font-size: 18px;
 }
-.minus:hover{
-	background:gray;
-	color:white;
+
+.minus:hover {
+	background: gray;
+	color: white;
 }
+
 .plus {
 	background: #eefbfb;
 	color: gray;
@@ -248,115 +270,366 @@ select[name="coupon-option"] {
 	background: #8ad8f0;
 	color: white;
 }
+
+.qty-btn:disabled,
+.qty-btn:disabled:hover {
+	background-color: lightgray !important;
+	color: #999 !important;
+	cursor: not-allowed !important;
+	opacity: 0.6 !important;
+	pointer-events:none;
+}
+
+ 
 </style>
 </head>
 <body>
-<!-- 전역 헤더 (공통) -->
-  <header class="site-header"><a href="index">It:View</a></header>
+	<!-- 전역 헤더 (공통) -->
+	<header class="site-header">
+		<a href="index">It:View</a>
+	</header>
 
-  <!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
-  <nav class="sidenav" aria-label="Primary">
-    <div class="sidenav-top">
-      <a class="nav-item active" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
-      <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
-      <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
-      <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
-      <a class="nav-item" href="/Shopping/WishList"><i class="fa-solid fa-heart"></i><span>찜</span></a>
-      <a class="nav-item"><i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
-    </div>
-    </nav>
-    <div class="all">
-	<div class="check">
-		<label><input type="checkbox" id="checkAll">전체선택</label>
-		<button type="submit" id="checkdelete">선택삭제</button>
-	</div>
-	<hr>
-	<div class="cartitem">
-		<div class="cart-header">
-			<label><input type="checkbox"> 브랜드 이름 2</label>
-			<button class="delete-btn">X</button>
+	<!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
+	<nav class="sidenav" aria-label="Primary">
+		<div class="sidenav-top">
+			<a class="nav-item active" href="/my/myInfo"><i
+				class="fa-solid fa-user"></i><span>마이페이지</span></a> <a class="nav-item"
+				href="/experience/experienceApplication"><i
+				class="fa-solid fa-gift"></i><span>체험단 신청</span></a> <a class="nav-item"
+				href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
+			<a class="nav-item" href="/Shopping/cart"><i
+				class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a> <a
+				class="nav-item" href="/Shopping/WishList"><i
+				class="fa-solid fa-heart"></i><span>찜</span></a> <a class="nav-item"><i
+				class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
 		</div>
-		<div class="cart-body">
-			<div class="item-image">(이미지)</div>
-			<div class="item">
-				<div class="item-price">(상품가격)</div>
-				<div class="item-name">상품이름</div>
-
-				<div class="quantity">
-					<button class="qty-btn minus">-</button>
-					<span>1</span>
-					<button class="qty-btn plus">+</button>
+	</nav>
+	<div class="all">
+		<div class="check">
+			<label><input type="checkbox" id="checkAll">전체선택</label>
+			<button type="submit" id="checkdelete">선택삭제</button>
+		</div>
+		<hr>
+		<div class="cartitem" th:each="c:${clist}">
+			<div class="cart-header">
+				<label><input type="checkbox" class="checkItem"
+					th:value="${c.cartNo}">[[{c.productCompany}]]</label>
+				<button type="button" class="delete-btn"
+					th:data-cartno="${c.cartNo}">X</button>
+			</div>
+			<div class="cart-body">
+				<div class="item-image">
+					<img th:each="a:${alist}" th:if="${a.positionNo==c.productNo}"
+						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
+						width="100%" height="100%" style="border-radius: 8px;" />
 				</div>
+				<div class="item">
+					<div class="item-price" th:data-price="${c.productPrice}"
+						th:text="${#numbers.formatInteger(c.productPrice * c.amount,3,'COMMA')}+'원'">가격</div>
+					<div class="item-name" th:text="${c.productName}">이름</div>
+
+					<div class="quantity">
+						<button class="qty-btn minus" type="button">-</button>
+						<span th:text="${c.amount}" class="qty"
+							th:data-stock="${c.productStock}">갯수</span>
+						<button class="qty-btn plus" type="button">+</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="cartitem">
+			<div class="cart-header">
+				<label><input type="checkbox" class="checkItem"> 브랜드
+					이름 1</label>
+				<button class="delete-btn">X</button>
+			</div>
+			<div class="cart-body">
+				<div class="item-image">품절</div>
+				<div class="item">
+					<div class="item-price">(상품가격)</div>
+					<div class="item-name">상품이름</div>
+					<div class="quantity">
+						<button class="qty-btn minus">-</button>
+						<span>1</span>
+						<button class="qty-btn plus">+</button>
+					</div>
+				</div>
+
+			</div>
+			<div class="cart-header">
+				<label><input type="checkbox" class="checkItem"></label>
+				<button class="delete-btn" type="button">X</button>
+			</div>
+			<div class="cart-body">
+				<div class="item-image">품절</div>
+				<div class="item">
+					<div class="item-price">(상품가격)</div>
+					<div class="item-name">상품이름</div>
+					<div class="quantity">
+						<button class="qty-btn minus">-</button>
+						<span>1</span>
+						<button class="qty-btn plus">+</button>
+					</div>
+				</div>
+
 			</div>
 
 		</div>
-	</div>
-	<div class="cartitem">
-		<div class="cart-header">
-			<label><input type="checkbox"> 브랜드 이름 1</label>
-			<button class="delete-btn">X</button>
-		</div>
-		<div class="cart-body">
-			<div class="item-image">품절</div>
-			<div class="item">
-				<div class="item-price">(상품가격)</div>
-				<div class="item-name">상품이름</div>
-				<div class="quantity">
-					<button class="qty-btn minus">-</button>
-					<span>1</span>
-					<button class="qty-btn plus">+</button>
-				</div>
+		<hr>
+		<div class="payment">
+			<p class="predict">예상결제금액</p>
+
+			<div class="total">
+				<p class="total-price">총 상품금액</p>
+				<p class="total-product" style="color: black;">(상품만가격)</p>
 			</div>
-
-		</div>
-		<div class="cart-header">
-			<label><input type="checkbox"></label>
-			<button class="delete-btn" type="button">X</button>
-		</div>
-		<div class="cart-body">
-			<div class="item-image">품절</div>
-			<div class="item">
-				<div class="item-price">(상품가격)</div>
-				<div class="item-name">상품이름</div>
-				<div class="quantity">
-					<button class="qty-btn minus">-</button>
-					<span>1</span>
-					<button class="qty-btn plus">+</button>
-				</div>
+			<div class="coupon">
+				<p class="coupon-notice">쿠폰할인</p>
+				<select id="sort" name="coupon-option">
+					<option value="notice" selected>쿠폰을 선택해주세요</option>
+					<option value="all" th:each="coupon:${couponlist}"
+										th:attr="data-brand=${coupon.">[[${coupon.couponName}]]</option>
+					
+				</select>
 			</div>
-
+			<div class="total">
+				<p class="total-coupon">총 주문금액</p>
+				<p class="total-discount-price" style="color: black;">(쿠폰적용한가격)</p>
+			</div>
+			<div class="point">
+				<p class="point-exception">예상 적립 포인트</p>
+				<p class="point-amount" style="color: black;">(포인트 적립)</p>
+			</div>
 		</div>
-
-	</div>
-	<hr>
-	<div class="payment">
-		<p class="predict">예상결제금액</p>
-
-		<div class="total">
-			<p class="total-price">총 상품금액</p>
-			<p class="total-product" style="color: black;">(상품만가격)</p>
-		</div>
-		<div class="coupon">
-			<p class="coupon-notice">쿠폰할인</p>
-			<select id="sort" name="coupon-option">
-				<option value="notice" selected>쿠폰을 선택해주세요</option>
-				<option value="like">상품이 마음에 들지 않아요</option>
-				<option value="change-address">배송지를 변경하고 싶어요</option>
-				<option value="order-false">주문을 잘못했어요</option>
-				<option value="delivery-delay">배송이 지연되었어요</option>
-				<option value="service">서비스가 불만족스러워요</option>
-			</select>
-		</div>
-		<div class="total">
-			<p class="total-coupon">총 주문금액</p>
-			<p class="total-discount-price" style="color: black;">(쿠폰적용한가격)</p>
-		</div>
-		<div class="point">
-			<p class="point-exception">예상 적립 포인트</p>
-			<p class="point-amount" style="color: black;">(포인트 적립)</p>
-		</div>
-	</div>
-	<button type="submit" id="product-order">상품 주문하기</button>
+		<button type="submit" id="product-order">상품 주문하기</button>
 	</div>
 </body>
+<script>
+	window.onload=()=>{
+		const all = document.getElementById('checkAll');
+		const items = document.querySelectorAll('.checkItem');
+		const checkdelete = document.getElementById('checkdelete');
+		const deleteBtn = document.querySelectorAll('.delete-btn');
+		
+		const minusBtn = document.querySelectorAll('.qty-btn.minus');
+		const plusBtn=document.querySelectorAll('.qty-btn.plus');
+		const qtySpan=document.querySelectorAll('.qty');
+		
+		const itemPrice=document.querySelectorAll('.item-price');
+		const cartItem=document.querySelectorAll('.cartitem');
+		const totalProduct = document.querySelector('.total-product');
+		
+		if(all != null){
+			all.addEventListener('change',()=>{
+				for(let i =0; i<items.length; i++){
+					items[i].checked=all.checked;
+				}
+				all.indeterminate = false;
+				
+				let sum=0;
+				cartItem.forEach(product=>{
+					if(product.querySelector('.checkItem').checked){
+						const unit = parseInt(product.querySelector('.item-price').dataset.price);
+						const qty=parseInt(product.querySelector('.qty').textContent);
+						sum+=unit*qty;
+					}
+				});
+				
+				totalProduct.textContent=sum.toLocaleString()+'원';
+			});
+			
+			items.forEach(check =>{
+				check.addEventListener('change',()=>{
+					const total = items.length;
+					//item에 들어잇는 개별 체크박스들 중에서 체크된 것만 골라서 그 개수를 셈
+					// [...]->이게 nodelist를 배열로 변환하는것 
+					//filer-> 배열을 훑으면서 조건을 통과하는 요소만 모아서 새 배열을 반환 
+					//즉 체크된 박스들만 걸러서 배열로 만든다
+					const checked = [...items].filter(c=>c.checked).length;
+					
+					all.checked=(checked===total);
+					
+					//일부만 선택된 상태면 '전체선책'체크박스를 회색 상태로 만든다
+					//indeterminate는 js에만 잇는 요소
+					//체크된개수 > 0(적어도 하나는 체크됨), 체크된 개수<total(일부만)->일부만 체크되면 true
+					all.indeterminate=(checked>0 && checked < total);
+					
+					let sum=0;
+					cartItem.forEach(product=>{
+						if(product.querySelector('.checkItem').checked){
+							const unit = parseInt(product.querySelector('.item-price').dataset.price);
+							const qty=parseInt(product.querySelector('.qty').textContent);
+							sum+=unit*qty;
+						}
+					});
+					
+					totalProduct.textContent=sum.toLocaleString()+'원';
+				});
+			})
+			
+		}
+		
+		if(checkdelete != null){
+			checkdelete.addEventListener('click',()=>{
+				const checkedItems=[];
+				
+				for(let i =0; i<items.length; i++){
+					if(items[i].checked){
+						checkedItems.push(items[i].value);
+					}
+				}
+				
+				if(checkedItems.length === 0){
+					alert('삭제할 상품을 선택하세요.');
+					return;
+				}
+				$.ajax({
+					url:'/Shopping/checkDelete',
+					type:'post',
+					traditional:true,
+					data:{cartNo:checkedItems},
+					success: data =>{
+						if(data > 0){
+							alert('선택한 상품이 삭제되었습니다.');
+							location.reload();
+						}else{
+							alert('상품 삭제 중 오류가 발생했습니다.');
+						}
+					},
+					error:data => console.log(data)
+				});
+			});
+			
+		}	
+			
+		
+		deleteBtn.forEach(btn=>{
+			btn.addEventListener('click',()=>{
+				
+				const cartNo=btn.dataset.cartno;
+				
+				if(cartNo!=null){
+					if(confirm('상품을 삭제하시겠습니까?')){
+						$.ajax({
+							url:'/Shopping/productDelete',
+							type:'post',
+							data:{cartNo:cartNo},
+							success: data =>{
+								if(data > 0){
+									alert('상품이 삭제되었습니다.');
+									location.reload();
+								}else{
+									alert('상품 삭제 중 오류가 발생했습니다.');
+								}
+							},
+							error:data => console.log(data)
+						});
+					}
+	
+				}
+			});
+		})
+		
+		
+		
+		
+		
+		qtySpan.forEach((span,i)=>{
+			const qty=parseInt(span.textContent);
+			const stock=parseInt(qtySpan[i].dataset.stock);
+			if(qty===1){
+				minusBtn[i].disabled=true;
+			}
+			if(qty>=stock){
+				plusBtn[i].disabled=true;
+			}
+		});
+		
+		
+		
+		minusBtn.forEach((btn,i)=>{
+			btn.addEventListener('click',()=>{
+				let qty=parseInt(qtySpan[i].textContent);
+				const stock=parseInt(qtySpan[i].dataset.stock);
+				if(qty>1){
+					qty=qty-1;
+					qtySpan[i].textContent=qty;
+				}
+				
+				if(qty===1){
+					btn.disabled=true;
+				}else{
+					btn.disabled=false;
+				}
+				
+				if(qty<stock){
+					plusBtn[i].disabled=false;
+				}
+				
+				const item=parseInt(itemPrice[i].dataset.price);
+				const total=item * qty;
+				itemPrice[i].textContent=total.toLocaleString()+'원'
+				
+				let sum=0;
+				cartItem.forEach(product=>{
+					if(product.querySelector('.checkItem').checked){
+						const unit = parseInt(product.querySelector('.item-price').dataset.price);
+						const qty=parseInt(product.querySelector('.qty').textContent);
+						sum+=unit*qty;
+					}
+				});
+				
+				totalProduct.textContent=sum.toLocaleString()+'원';
+				
+			});
+		});
+		
+		plusBtn.forEach((btn,i)=>{
+			btn.addEventListener('click',()=>{
+				let qty=parseInt(qtySpan[i].textContent);
+				const stock=parseInt(qtySpan[i].dataset.stock);
+				
+				if(qty<stock){
+					qty=qty+1;
+					qtySpan[i].textContent=qty;
+					
+					if(qty===1){
+						minusBtn[i].disabled=true;
+					}else{
+						minusBtn[i].disabled=false;
+					}
+					const item=parseInt(itemPrice[i].dataset.price);
+					const total=item * qty;
+					itemPrice[i].textContent=total.toLocaleString()+'원'
+				}else{
+					alert('상품이 더 이상 존재하지 않습니다. 😅');
+				}
+				
+				if(qty===stock){
+					btn.disabled=true;
+				}
+				let sum=0;
+				cartItem.forEach(product=>{
+					if(product.querySelector('.checkItem').checked){
+						const unit = parseInt(product.querySelector('.item-price').dataset.price);
+						const qty=parseInt(product.querySelector('.qty').textContent);
+						sum+=unit*qty;
+					}
+				});
+				
+				totalProduct.textContent=sum.toLocaleString()+'원';
+			});
+			
+			
+		});
+		
+		
+		
+	}
+	
+	
+	
+		
+	
+</script>
 </html>

@@ -24,4 +24,10 @@ public class Order {
 	private int userNo;
 	private int personalCouponNo;
 	
+	private String productName;
+	private int productPrice;
+	
+	private String userPhone;
+	private String userAddress;
+	private String userName;
 }
