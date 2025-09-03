@@ -1,10 +1,7 @@
 package itView.springboot.service;
 
 import itView.springboot.mapper.CommunityMapper;
-import itView.springboot.vo.Attachment;
-import itView.springboot.vo.Board;
-import itView.springboot.vo.PageInfo;
-import itView.springboot.vo.User;
+import itView.springboot.vo.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
@@ -140,5 +137,25 @@ public class CommunityService {
 
     public Attachment selectFirstImage(int boardId, String boardType) {
         return communityMapper.selectFirstImage(boardId, boardType);
+    }
+
+    public int insertReply(Reply reply) {
+        return communityMapper.insertReply(reply);
+    }
+
+    public int updateReply(Reply reply) {
+        return communityMapper.updateReply(reply);
+    }
+
+    public int deleteReply(int replyNo) {
+        return communityMapper.deleteReply(replyNo);
+    }
+
+    public List<Reply> selectReplyList(int boardId) {
+        return communityMapper.selectReplyList(boardId);
+    }
+
+    public Reply findReplyById(Integer parentId) {
+        return communityMapper.findReplyById(parentId);
     }
 }

@@ -161,4 +161,98 @@
     <update id="deleteAttachment" parameterType="int">UPDATE ATTACHMENT SET ATTM_STATUS = 'N' WHERE POSITION_NO =
         #{boardId}
     </update>
+
+
+
+
+
+
+
+
+
+    <!-- 댓글 목록 -->
+    <select id="selectReplyList" parameterType="int" resultType="itView.springboot.vo.Reply">
+        SELECT R.REPLY_NO,
+        R.REPLY_CONTENT,
+        R.REPLY_DATE,
+        R.REPLY_MODIFIED_DATE,
+        R.PARENT_ID,
+        R.REPLY_STATUS,
+        R.BOARD_ID,
+        R.USER_NO,
+        U.USER_NAME
+        FROM REPLY R
+        JOIN "USER" U ON R.USER_NO = U.USER_NO
+        WHERE R.BOARD_ID = #{boardId}
+        AND R.REPLY_STATUS = 'Y'
+        ORDER BY R.PARENT_ID ASC, R.REPLY_NO ASC
+    </select>
+
+    <!-- 댓글 등록 -->
+    <insert id="insertReply" parameterType="itView.springboot.vo.Reply" keyProperty="replyNo">
+        <selectKey keyProperty="replyNo" resultType="int" order="BEFORE">
+            SELECT SEQ_REPLY.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO REPLY (
+        REPLY_NO,
+        REPLY_CONTENT,
+        REPLY_DATE,
+        PARENT_ID,
+        REPLY_STATUS,
+        BOARD_ID,
+        USER_NO
+        ) VALUES (
+        #{replyNo},
+        #{replyContent},
+        SYSDATE,
+        #{parentId}, <!-- null 또는 부모 댓글 번호 그대로 들어감 -->
+        'Y',
+        #{boardId},
+        #{userNo}
+        )
+    </insert>
+
+
+
+    <!-- 댓글 수정 -->
+    <update id="updateReply" parameterType="itView.springboot.vo.Reply">
+        UPDATE REPLY
+        SET REPLY_CONTENT = #{replyContent},
+        REPLY_MODIFIED_DATE = SYSDATE
+        WHERE REPLY_NO = #{replyNo}
+    </update>
+
+    <!-- 댓글 삭제 (상태값 변경) -->
+    <update id="deleteReply" parameterType="int">
+        UPDATE REPLY
+        SET REPLY_STATUS = 'N'
+        WHERE REPLY_NO = #{replyNo}
+    </update>
+
+
+    <!-- 단일 댓글 조회 -->
+    <select id="findReplyById" parameterType="int" resultType="itView.springboot.vo.Reply">
+        SELECT R.REPLY_NO,
+        R.REPLY_CONTENT,
+        R.REPLY_DATE,
+        R.REPLY_MODIFIED_DATE,
+        R.PARENT_ID,
+        R.REPLY_STATUS,
+        R.BOARD_ID,
+        R.USER_NO,
+        U.USER_NAME
+        FROM REPLY R
+        JOIN "USER" U ON R.USER_NO = U.USER_NO
+        WHERE R.REPLY_NO = #{replyNo}
+        AND R.REPLY_STATUS = 'Y'
+    </select>
+
+
+
+
+
+
+
+
+
 </mapper>
