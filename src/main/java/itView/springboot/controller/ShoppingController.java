@@ -72,7 +72,10 @@ public class ShoppingController {
 			}
 		}
 
-		ArrayList<Attachment> alist = sService.selectThumbList(pNo);
+		ArrayList<Attachment> alist = new ArrayList<>();
+		if (!pNo.isEmpty()) {
+		    alist = sService.selectThumbList(pNo);
+		}
 		ArrayList<CouponBox> couponlist = sService.selectCouponList(uNo);
 		model.addAttribute("clist", clist);
 		model.addAttribute("alist", alist);
@@ -81,7 +84,7 @@ public class ShoppingController {
 	}
 
 	// 장바구니에서 선택삭제 버튼 눌럿을때
-	@PostMapping("checkdelete")
+	@PostMapping("checkDelete")
 	@ResponseBody
 	public int checkdelete(@RequestParam("cartNo") List<Integer> cNo) {
 		int result = sService.checkDelete(cNo);

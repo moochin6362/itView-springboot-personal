@@ -5,17 +5,20 @@
 <mapper namespace="itView.springboot.mapper.ShoppingMapper">
 	
 	<delete id="checkDelete">
-		update from cart
-		where cart_no=#{cartNo}
+		delete from cart
+		where cart_no in
+		<foreach collection="cNo" item="cartNo" open="(" separator="," close=")">
+			#{cartNo}
+    	</foreach>
 	</delete>
 	<select id="selectProduct" resultType="Cart">
 		select * 
 		from cart c
 			join product p on c.product_no=p.product_no
-		where user_no=#{userNo}
+		where c.user_no=#{userNo}
 	</select>
 	<delete id="productDelete">
-		update from cart
+		delete from cart
 		where cart_no=#{cartNo}
 	</delete>
 	<select id="selectThumbList" resultType="Attachment">
@@ -33,9 +36,9 @@
 		select * 
 		from coupon_box cb
 			join coupon c on c.coupon_no=cb.coupon_no
-		where user_no=#{userNo}
-			and coupon_used ='N'
-		order by coupon_startdate desc
+		where cb.user_no=#{userNo}
+			and cb.coupon_used ='N'
+		order by c.coupon_startdate desc
     		
 			
 	</select>
