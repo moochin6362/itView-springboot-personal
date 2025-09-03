@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,16 +7,10 @@
 <link href="/css/seller/sellerPage.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<div class="header">판매자님, 환영합니다.</div>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 
 	<div class="wrapper">
-		<div class="sidebar">
-			<div class="sidebar-item">상품 등록</div>
-			<div class="sidebar-item">상품 수정</div>
-			<div class="sidebar-item">재고 관리</div>
-			<div class="sidebar-item">쿠폰 관리</div>
-			<div class="sidebar-item">상품 Q&A</div>
-		</div>
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
 			<!-- 여기에 콘텐츠가 들어갈 예정 -->
@@ -25,18 +19,5 @@
 		</div>
 	</div>
 	
-	<script>
-		window.onload = () => {
-			const buttons = document.querySelectorAll('.sidebar-item');
-			for(const button of buttons){
-				button.addEventListener('click', e => {
-					const value = e.target.innerText;
-					if(value == '상품 등록') {
-						location.href = 'insertProductPage';
-					}
-				});
-			}
-		}
-	</script>
 </body>
 </html>

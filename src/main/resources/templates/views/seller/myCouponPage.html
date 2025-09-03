@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>내 쿠폰 보기</title>
+<link href="/css/seller/stockManagePage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+
+	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2>내 쿠폰 보기 페이지</h2>
+
+			<!-- 재고 목록 -->
+			<div class="stock-item" th:each="c : ${list}">
+				<input type="hidden" th:value="${c.couponNo}"/>
+				<div class="stock-name">쿠폰 명 : [[${c.couponName}]]</div>
+				<div class="stock-controls">
+				할인율(%)
+					<input type="number" max="100" th:value="${c.couponDiscount}"/>
+					<label>사용 가능</label>
+					<input type="radio" th:name="${cStat.index}" th:checked="${c.couponStatus == 'Y' ? true : false}"/>
+					<label>사용 불가</label>
+					<input type="radio" th:name="${cStat.index}" th:checked="${c.couponStatus == 'N' ? true : false}"/>
+					<button type="submit" class="editButtons">수정</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		window.onload = () => {
+			const buttons = document.querySelectorAll('.editButtons');
+			for(const button of buttons){
+				button.addEventListener('click', function(){
+					//console.log(this.innerText)
+					const listDiv = this.parentElement.parentElement;
+					/*console.log(listDiv)
+					const couponNo = listDiv.children[0].value;
+					const couponDiscount = listDiv.children[2].children[0].value
+					console.log(couponNo)
+					console.log(couponDiscount)
+					*/
+					
+					let radioButton = listDiv.querySelector('input[type=radio]:checked').previousElementSibling.innerText;
+					//console.log(radioButton)
+					
+					if(radioButton == '사용 가능'){
+						radioButton = 'Y';
+					} else {
+						radioButton = 'N';
+					}
+					
+					const coupon = {
+						'couponNo' : listDiv.children[0].value,
+						'couponDiscount' : listDiv.children[2].children[0].value,
+						'couponStatus' : radioButton
+					}
+					
+					//console.log(coupon)
+					
+					fetch('/product/Coupon',{
+						method: 'PUT',
+						headers: {
+							'Content-Type' : 'application/json'
+						},
+						body : JSON.stringify(coupon)
+					})
+					.then(response => response.json())
+					.then(data => {
+						if(data > 0) {
+							alert('쿠폰 수정이 성공하였습니다.')
+						} else {
+							alert('쿠폰 수정 중 오류가 발생했습니다.')
+							//location.reload();
+						}
+					})
+					.catch(err => {
+						console.log(err)
+					})
+					
+				});
+			}
+		}
+	</script>
+	
+</body>
+</html>

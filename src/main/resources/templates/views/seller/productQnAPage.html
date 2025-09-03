@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,16 +8,10 @@
 </head>
 <body>
 
-	<div class="header">판매자님, 환영합니다.</div>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 
 	<div class="layout">
-		<div class="sidebar">
-			<div class="sidebar-item">상품 등록</div>
-			<div class="sidebar-item">상품 수정</div>
-			<div class="sidebar-item">재고 관리</div>
-			<div class="sidebar-item">쿠폰 관리</div>
-			<div class="sidebar-item active">상품 Q&A</div>
-		</div>
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
 			<h2>상품 Q&A 페이지</h2>

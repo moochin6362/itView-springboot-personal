@@ -22,5 +22,8 @@ public class WebConfig implements WebMvcConfigurer {
         // community 폴더
         registry.addResourceHandler("/uploadFilesFinal/community/**")
                 .addResourceLocations("file:///c:/uploadFilesFinal/community/");
+        // 판매자 관련
+        registry.addResourceHandler("/**")
+				.addResourceLocations("file:///c:/uploadFilesFinal/product/", "classpath:/static");
     }
 }

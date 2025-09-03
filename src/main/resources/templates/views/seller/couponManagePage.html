@@ -1,49 +1,46 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>쿠폰 관리 페이지</title>
-<link href="/css/seller/couponManagePage.css"
-	rel="stylesheet" type="text/css" />
+<title>쿠폰 등록 페이지</title>
+<link href="/css/seller/couponManagePage.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
-	<div class="header">판매자님, 환영합니다.</div>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 
 	<div class="layout">
-		<div class="sidebar">
-			<div class="sidebar-item">상품 등록</div>
-			<div class="sidebar-item">상품 수정</div>
-			<div class="sidebar-item">재고 관리</div>
-			<div class="sidebar-item active">쿠폰 관리</div>
-			<div class="sidebar-item">상품 Q&A</div>
-		</div>
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
-			<h2>쿠폰 관리 페이지</h2>
-			<form>
+			<h2>쿠폰 등록 페이지</h2>
+			<form action="/seller/insertCoupon" method="POST">
+				<input type="hidden" name="userNo" th:value="${session.loginUser.userNo}"/>
+				
 				<div class="form-group">
-					<label>쿠폰 명</label> <input type="text" placeholder="쿠폰 이름을 입력하세요" />
+					<label>쿠폰 명</label> 
+					<input type="text" name="couponName" placeholder="쿠폰 이름을 입력하세요" />
+				</div>
+				
+				<div class="form-group">
+					<label>쿠폰 내용</label> 
+					<input type="text" name="couponDescription" placeholder="쿠폰 내용을 입력하세요" />
 				</div>
 
 				<div class="form-group">
-					<label>할인율 (%)</label> <input type="number" step="5" min="5"
-						max="100" placeholder="예: 10" />
+					<label>할인율 (%)</label> 
+					<input type="number" step="5" min="5" max="100" name="couponDiscount" placeholder="예: 10" />
 				</div>
 
 				<div class="form-group">
-					<label>상품 선택</label> <select>
-						<option>상품 명1</option>
-						<option>상품 명2</option>
-						<option>상품 명3</option>
-						<option>상품 명4</option>
-						<option>상품 명5</option>
-					</select>
+					<label>최소 주문 금액</label> 
+					<input type="number" name="couponMinprice" placeholder="예: 30000" />
 				</div>
-
+				
 				<div class="form-group">
-					<label>최소 주문 금액</label> <input type="number" placeholder="예: 30000" />
+					<label>쿠폰 종료 날짜</label> 
+					<input type="date" name="couponEndDate"/>
 				</div>
 
 				<div class="form-buttons">

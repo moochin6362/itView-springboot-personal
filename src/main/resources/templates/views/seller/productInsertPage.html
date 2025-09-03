@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>상품 등록 페이지</title>
-	<link href="/css/seller/productInsertPage.css"rel="stylesheet" type="text/css" />
-	<link href="/summernote/summernote-lite.css" rel="stylesheet"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>상품 등록 페이지</title>
+<link href="/css/seller/productInsertPage.css" rel="stylesheet"
+	type="text/css" />
+<link href="/summernote/summernote-lite.css" rel="stylesheet" />
 <!-- 	<link href="../../../static/css/seller/sidebar.css" rel="stylesheet"/> -->
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<script src="/summernote/summernote-lite.js"></script>
-	<script src="/summernote/summernote-ko-KR.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="/summernote/summernote-lite.js"></script>
+<script src="/summernote/summernote-ko-KR.js"></script>
 </head>
 <body>
 
-	<div class="header">판매자님, 환영합니다.</div>
-<!-- 	<div th:replace="~{views/common/sidebar :: sidebar}"></div> -->
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 
 	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
 			<h2>상품 등록 페이지</h2>
-			<form>
+			<form action="/product/insertProduct" method="POST" encType="multipart/form-data">
+				<input type="hidden" name="categoryParent" id="categoryParent"/>
+				<input type="hidden" name="categoryName" id="categoryName"/>
 				<div class="form-group">
-					<label>상품명</label> <input type="text" placeholder="상품명을 입력하세요" />
+					<label>상품명</label> <input type="text" name="productName" placeholder="상품명을 입력하세요" />
 				</div>
 
 				<div class="form-group">
@@ -31,19 +34,23 @@
 				</div>
 
 				<div class="form-group">
-					<label>제조 회사</label> <input type=text placeholder="제조 회사명을 입력하세요" />
+					<label>제조 회사</label> 
+					<input type=text name="productCompany" th:value="${session.loginUser.brandName}" readonly/>
 				</div>
 
 				<div class="form-group">
-					<label>상품 대표 이미지</label> <input type="file" multiple/>
+					<label>상품 대표 이미지</label> 
+					<input type="file" name="productImage" />
 				</div>
 
 				<div class="form-group">
-					<label>재고 수량</label> <input type="number" min="0" />
+					<label>재고 수량</label> 
+					<input type="number" name="productStock" min="0" />
 				</div>
 
 				<div class="form-group">
-					<label>상품 가격</label> <input type="number" min="0" />
+					<label>상품 가격</label> 
+					<input type="number" name="productPrice" min="0" />
 				</div>
 
 				<!-- 카테고리 선택 -->
@@ -67,67 +74,102 @@
 					<div class="option-group">
 						<p class="option-title">추천 피부 타입</p>
 						<div class="option-row">
-							<button type="button" class="option-button">건성</button>
-							<button type="button" class="option-button">지성</button>
-							<button type="button" class="option-button">민감성</button>
-							<button type="button" class="option-button">복합성</button>
-							<button type="button" class="option-button">수부지</button>
+							<input type="radio" id="skinType1" name="skinType" value="건성">
+							<label for="skinType1">건성</label> 
+							<input type="radio" id="skinType2" name="skinType" value="지성"> 
+							<label for="skinType2">지성</label> 
+							<input type="radio" id="skinType3" name="skinType" value="민감성"> 
+							<label for="skinType3">민감성</label>
+							<input type="radio" id="skinType4" name="skinType" value="복합성">
+							<label for="skinType4">복합성</label> 
+							<input type="radio" id="skinType5" name="skinType" value="수부지"> 
+							<label for="skinType5">수부지</label>
+							<input type="radio" id="skinType6" name="skinType" value="공용"> 
+							<label for="skinType6">공용</label>
 						</div>
 					</div>
 
 					<div class="option-group">
 						<p class="option-title">추천 연령</p>
 						<div class="option-row">
-							<button type="button" class="option-button">모든 연령</button>
-							<button type="button" class="option-button">10대</button>
-							<button type="button" class="option-button">20대</button>
-							<button type="button" class="option-button">30대</button>
-							<button type="button" class="option-button">40대</button>
-							<button type="button" class="option-button">50대</button>
-							<button type="button" class="option-button">60대</button>
+							<input type="radio" id="ageGroup0" name="userAge" value="모든 연령">
+							<label for="ageGroup0">모든 연령</label> 
+							<input type="radio" id="ageGroup1" name="userAge" value="10대"> 
+							<label for="ageGroup1">10대</label> 
+							<input type="radio" id="ageGroup2" name="userAge" value="20대"> 
+							<label for="ageGroup2">20대</label>
+							<input type="radio" id="ageGroup3" name="userAge" value="30대">
+							<label for="ageGroup3">30대</label> 
+							<input type="radio" id="ageGroup4" name="userAge" value="40대"> 
+							<label for="ageGroup4">40대</label> 
+							<input type="radio" id="ageGroup5" name="userAge" value="50대"> 
+							<label for="ageGroup5">50대</label>
+							<input type="radio" id="ageGroup6" name="userAge" value="60대">
+							<label for="ageGroup6">60대</label>
 						</div>
 					</div>
 
 					<div class="option-group">
 						<p class="option-title">추천 성별</p>
 						<div class="option-row">
-							<button type="button" class="option-button">남자</button>
-							<button type="button" class="option-button">여자</button>
-							<button type="button" class="option-button">모든 성별</button>
+							<input type="radio" id="gender1" name="gender" value="남자">
+							<label for="gender1">남자</label> 
+							<input type="radio" id="gender2" name="gender" value="여자"> 
+							<label for="gender2">여자</label>
+							<input type="radio" id="gender3" name="gender" value="모든 성별">
+							<label for="gender3">모든 성별</label>
 						</div>
 					</div>
 
 					<div class="option-group">
 						<p class="option-title">퍼스널컬러</p>
 						<div class="option-row">
-							<button type="button" class="option-button">봄 웜톤</button>
-							<button type="button" class="option-button">여름 쿨톤</button>
-							<button type="button" class="option-button">가을 웜톤</button>
-							<button type="button" class="option-button">겨울 쿨톤</button>
-							<button type="button" class="option-button">해당 없음</button>
+							<input type="radio" id="personalColor1" name="personalColor" value="봄 웜톤"> 
+							<label for="personalColor1">봄 웜톤</label> 
+							<input type="radio" id="personalColor2" name="personalColor" value="여름 쿨톤"> 
+							<label for="personalColor2">여름 쿨톤</label>
+							<input type="radio" id="personalColor3" name="personalColor" value="가을 웜톤"> 
+							<label for="personalColor3">가을 웜톤</label>
+							<input type="radio" id="personalColor4" name="personalColor" value="겨울 쿨톤"> 
+							<label for="personalColor4">겨울 쿨톤</label>
+							<input type="radio" id="personalColor5" name="personalColor" value="해당 없음"> 
+							<label for="personalColor5">해당 없음</label>
 						</div>
 					</div>
 
 					<div class="option-group">
 						<p class="option-title">피부 태그</p>
 						<div class="option-row">
-							<button type="button" class="option-button">미백/잡티</button>
-							<button type="button" class="option-button">피지/블랙헤드</button>
-							<button type="button" class="option-button">속건조</button>
-							<button type="button" class="option-button">주름/탄력</button>
-							<button type="button" class="option-button">각질</button>
+							<input type="radio" id="skinTag1" name="skinTrouble" value="미백/잡티">
+							<label for="skinTag1">미백/잡티</label> 
+							<input type="radio" id="skinTag2" name="skinTrouble" value="피지/블랙헤드"> 
+							<label for="skinTag2">피지/블랙헤드</label> 
+							<input type="radio" id="skinTag3" name="skinTrouble" value="속건조"> 
+							<label for="skinTag3">속건조</label>
+							<input type="radio" id="skinTag4" name="skinTrouble" value="주름/탄력">
+							<label for="skinTag4">주름/탄력</label> 
+							<input type="radio" id="skinTag5" name="skinTrouble" value="각질">
+							<label for="skinTag5">각질</label>
+							<input type="radio" id="skinTag6" name="skinTrouble" value="해당 없음">
+							<label for="skinTag6">해당 없음</label>
 						</div>
 					</div>
 
 					<div class="option-group">
 						<p class="option-title">두피/모발</p>
 						<div class="option-row">
-							<button type="button" class="option-button">탈모</button>
-							<button type="button" class="option-button">손상모</button>
-							<button type="button" class="option-button">열감두피</button>
-							<button type="button" class="option-button">지성두피</button>
-							<button type="button" class="option-button">비듬/각질</button>
-							<button type="button" class="option-button">해당 없음</button>
+							<input type="radio" id="scalpHair1" name="headSkin" value="탈모">
+							<label for="scalpHair1">탈모</label> 
+							<input type="radio" id="scalpHair2" name="headSkin" value="손상모"> 
+							<label for="scalpHair2">손상모</label> 
+							<input type="radio" id="scalpHair3" name="headSkin" value="열감두피"> 
+							<label for="scalpHair3">열감두피</label>
+							<input type="radio" id="scalpHair4" name="headSkin" value="지성두피">
+							<label for="scalpHair4">지성두피</label> 
+							<input type="radio" id="scalpHair5" name="headSkin" value="비듬/각질"> 
+							<label for="scalpHair5">비듬/각질</label> 
+							<input type="radio" id="scalpHair6" name="headSkin" value="해당 없음"> 
+							<label for="scalpHair6">해당 없음</label>
 						</div>
 					</div>
 				</div>
@@ -140,7 +182,7 @@
 		</div>
 	</div>
 
-<script>
+	<script>
 	// 상품 설명 작성
 	$('#summernote').summernote({
 		toolbar : [
@@ -160,14 +202,35 @@
 		
 		
 		// 이미지 업로드 처리
-		callbacks : {
-			onImageUpload : function(files, editor, welEditable){
-				// 다중 이미지 처리를 위해 for문 사용
-				for (let i = 0; i < files.length; i++){
+		callbacks : {                                                    
+			onImageUpload : function(files) {   
+                // 다중 이미지 처리를 위해 for문을 사용했습니다.
+				for (var i = 0; i < files.length; i++) {
 					imageUploader(files[i], this);
 				}
+			},
+			// 이미지 삭제
+			onMediaDelete: function(target){
+				//console.log('onMediaDelete 호출')
+				//console.log(target)
+				
+				let src = target[0].src;
+				
+				$.ajax({
+					url: '/seller/imageDelete',
+					type: 'POST',
+					data: { imageUrl: src},
+					success: data => {
+						console.log(data);
+					},
+					error: data => {
+						console.log(data)
+					}
+				});
 			}
 		}
+		
+		
 	});
 	
 	function imageUploader(file, el){
@@ -182,7 +245,16 @@
 			processData : false,
 			contentType : false,
 			success : function(data){
-				$(el).summernote('editor.insertImage', data.url);
+				
+				const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+				
+				console.log(parsedData)
+				
+				const imageUrl = '/' + parsedData.url;
+// 				console.log(imageUrl)
+// 				console.log(parsedData.url)
+				$(el).summernote('insertImage', imageUrl)
+					
 			},
 			error : data => console.log(data)
 		});
@@ -235,12 +307,18 @@
 
           // 👉 여기에 선택된 카테고리 처리 코드 넣으면 됨 (예: 숨겨진 input에 저장)
           console.log("선택됨:", selectedMain, selectedSub);
+          document.querySelector('#categoryParent').value = selectedMain
+          document.querySelector('#categoryName').value = selectedSub
         });
         subCategoryEl.appendChild(subBtn);
       });
     });
     mainCategoryEl.appendChild(btn);
   });
+  
+	window.onload = () => {
+		
+	}
 </script>
 </body>
 </html>
