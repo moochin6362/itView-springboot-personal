@@ -32,6 +32,24 @@ public class AdminService {
 	public UserReport selectUser(int userNo) {
 		return mapper.selectUser(userNo);
 	}
+
+	
+	//신고당한 회원 리스트
+	public int getReportListCount(int boardType, String value, String condition) {
+		return mapper.getReportListCount(boardType, value, condition);
+	}
+	
+	public ArrayList<User> selecReportList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportList(rowBounds, value, condition);
+	}
+	//신고게시판 상세보기
+	public UserReport selectReport(int userNo) {
+		return mapper.selectReport(userNo);
+	}
+	
+	
 	
 	
 

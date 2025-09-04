@@ -47,8 +47,10 @@ public class ProductController {
 		
 		if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
 			model.addAttribute("loginUser", loginUser);
-			if(loginUser.getUserType().equals("U") || loginUser.getUserType().equals("A")) {
+			if(loginUser.getUserType().equals("U")){
 				return "redirect:/";
+			} else if(loginUser.getUserType().equals("A")) {
+				return "redirect:/inhoAdmin/enrollCouponNotice";
 			} else {
 				return "redirect:/seller/home";
 			}

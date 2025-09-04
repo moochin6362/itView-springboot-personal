@@ -23,8 +23,17 @@ public interface AdminMapper {
 			@Param("value") String value, 
 			@Param("condition")String condition);
 
-	//회원상세조회
+	//회원상세보기
 	UserReport selectUser(int userNo);
+
+	
+	//신고게시판 조회
+	int getReportListCount(int boardType, String value, String condition);
+
+	ArrayList<User> selectReportList(RowBounds rowBounds, String value, String condition);
+
+	//신고게시판 상세보기
+	UserReport selectReport(int userNo);
 
 	
 	

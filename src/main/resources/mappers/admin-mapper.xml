@@ -67,10 +67,69 @@ select count(*)
 </select>
 
 
+<!-- 신고부분
+	(1)신고회원리스트 조회 -->
+<select id="getReportListCount" resultType="int">
+select count(*) 
+    from (
+        select u.user_no, u.user_id, u.user_name, u.user_type,
+        r.report_no, r.report_title, r.report_date, r.report_modify_Date,r.report_status,
+        r.report_type, r.reporter_user_id, r.report_target_no
+        from "USER" u
+        left join REPORT r on u.user_no = r.reporter_user_id
+        
+	<if test="value != null and value != ''">
+		<choose>
+			<when test="condition == 'title'">
+				where upper(report_title) like '%' || #{value} || '%'
+			</when>
+			<when test="condition == 'writer'">
+				where upper(user_name) like '%'|| #{value} ||'%'
+			</when>
+			<when test="condition == 'reportType'">
+				where upper(report_type) = #{value} 
+			</when>
+			<when test="condition == 'reportStatus'">
+				where upper(report_status) = #{value}
+			</when>
+			<otherwise>
+            	where (title like '%' || #{value} || '%')
+            </otherwise>
+		</choose>
+	</if>
+</select>
+
+<select id="selectReportList" resultType="itView.springboot.dto.ReportDetail">
+    SELECT u.user_no, u.user_id, u.user_name, u.user_type,
+           r.report_no, r.report_title, r.report_date, r.report_modify_date,
+           r.report_status, r.report_type, r.reporter_user_id, r.report_target_no
+    FROM "USER" u
+    LEFT JOIN REPORT r ON u.user_no = r.reporter_user_id
+    <where>
+        <if test="value != null and value != ''">
+            <choose>
+                <when test="condition == 'title'">
+                    AND UPPER(r.report_title) LIKE '%' || UPPER(#{value}) || '%'
+                </when>
+                <when test="condition == 'userName'">
+                    AND UPPER(u.user_name) LIKE '%' || UPPER(#{value}) || '%'
+                </when>
+                <when test="condition == 'reportType'">
+                    AND UPPER(r.report_type) = UPPER(#{value})
+                </when>
+                <when test="condition == 'reportStatus'">
+                    AND UPPER(r.report_status) = UPPER(#{value})
+                </when>
+            </choose>
+        </if>
+    </where>
+    ORDER BY r.report_date DESC
+</select>
 
 
-
-
+<select id="selectReport" parameterType="int" resultType="itView.springboot.dto.ReportDetail">
+	select * from report where report_no = #{reportNo}
+</select>
 
 
 

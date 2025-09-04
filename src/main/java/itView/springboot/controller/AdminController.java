@@ -64,14 +64,62 @@ public class AdminController {
 	}
 	
 	
-	
-	//관리자 신고게시판 이동
+	//관리자 신고게시판 :신고받은 회원 list 가져오기 (1회 이상 && report_status = 'Y')
 	@GetMapping("/report")
-	public String rpBoardPage() {
-		return "admin/admin_report_board";
+	public String reportList(
+		@RequestParam(value = "page", defaultValue = "1") int currentPage,
+        @RequestParam(value = "value", required = false) String value,
+        @RequestParam(value = "condition", defaultValue = "all") String condition,
+        Model model,
+        HttpServletRequest request) {
+	
+		int listCount = adService.getReportListCount(1, value, condition);
+
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+
+        ArrayList<User> reportList = adService.selecReportList(pi, value, condition);
+
+        model.addAttribute("reportList", reportList);
+        model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
+        model.addAttribute("value", value);
+        model.addAttribute("condition", condition);
+
+	
+        return "admin/admin_report_board";
 	}
 	
+
+	//신고 게시판 상세조회 : 관리자만 볼 수 있는 게시판
+	@GetMapping("/reportDetail")
+	public String reportDetailPage(
+			@RequestParam("userNo")int userNo,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model
+			) {
+		UserReport user = adService.selectReport(userNo);
+		model.addAttribute("user", user);
+		model.addAttribute("page",page);
 		
+		return "admin/admin_report_detail";
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//관리자 일반문의게시판 이동
 	@GetMapping("/gBoard")
 	public String gBoardPage() {
