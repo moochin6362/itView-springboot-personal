@@ -39,78 +39,25 @@ public class ProductController {
 	private final ProductService pService;
 	private final BCryptPasswordEncoder bcrypt;
 	
-    // 로그인 페이지
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login/login";
-    }
-	
-    @PostMapping("login")
-    public String login(User u, Model model,
-                        @RequestParam("beforeURL") String beforeURL,
-                        @RequestParam("userType") String userType) {
 
-        User loginUser = pService.login(u);
-
-        if (loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
-            
-            // userType => 로그인 실패
-            if (!loginUser.getUserType().equals(userType)) {
-                throw new LoginException("해당 유형의 회원이 아닙니다.");
-            }
-
-            model.addAttribute("loginUser", loginUser);
-
-            switch (loginUser.getUserType()) {
-                case "U":
-                    return "redirect:/";
-                case "P":
-                    return "redirect:/seller/home";
-                case "A":
-                    return "redirect:/inhoAdmin/enrollCouponNotice";
-                default:
-                    throw new UserException("알 수 없는 사용자 유형입니다.");
-            }
-        } else {
-            throw new LoginException("아이디 또는 비밀번호가 잘못되었습니다.");
-        }
-    }
-    //로그인했을 떄 관리자면 관리자 페이지 넘어가는 경로
-    @GetMapping("/enrollCouponNotice")
-    public String enrollCouponNotice() {
-       return "inhoAdmin/enrollCouponNotice";
-    }
+	@PostMapping("login")
+	public String login(User u, Model model) {
+		//System.out.println(bcrypt.encode("1234"));
+		User loginUser = pService.login(u);
+		
+		if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
+			model.addAttribute("loginUser", loginUser);
+			if(loginUser.getUserType().equals("U") || loginUser.getUserType().equals("A")) {
+				return "redirect:/";
+			} else {
+				return "redirect:/seller/home";
+			}
+		} else {
+			throw new ProductException("로그인을 실패하였습니다.");
+		}
+		
+	}
 	
-	//로그아웃
-	@GetMapping("logout")
-	public String logout(SessionStatus status) {
-	    status.setComplete();
-	    return "redirect:/";
-	}	
-	
-	
-	
-	
-	
-	
-//	@PostMapping("login")
-//	public String login(User u, Model model) {
-//		//System.out.println(bcrypt.encode("1234"));
-//		User loginUser = pService.login(u);
-//		
-//		if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
-//			model.addAttribute("loginUser", loginUser);
-//			if(loginUser.getUserType().equals("U") || loginUser.getUserType().equals("A")) {
-//				return "redirect:/";
-//			} else {
-//				return "redirect:/seller/home";
-//			}
-//		} else {
-//			throw new ProductException("로그인을 실패하였습니다.");
-//		}
-//		
-//	}
-//	
 	@GetMapping("home")
 	public String sellerPageHome() {
 		return "seller/sellerPage";

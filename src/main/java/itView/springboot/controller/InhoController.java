@@ -41,11 +41,11 @@ public class InhoController {
     private final InhoService uService;
     private final BCryptPasswordEncoder bcrypt;
     
-//    // 로그인 페이지 이동
-//    @GetMapping("/login")
-//    public String loginPage() {
-//        return "login/login";
-//    }
+    // 로그인 페이지 이동
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login/login";
+    }
 //    @PostMapping("login")
 //    public String login(User u, Model model) {
 //    	User loginUser = uService.login(u);
