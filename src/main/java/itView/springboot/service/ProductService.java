@@ -2,6 +2,7 @@ package itView.springboot.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -75,4 +76,7 @@ public class ProductService {
 	}
 
 
+    public List<Product> getLatestProducts() {
+		return mapper.getLatestProducts();
+    }
 }

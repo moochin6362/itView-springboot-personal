@@ -1,6 +1,7 @@
 package itView.springboot.mapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -40,7 +41,6 @@ public interface ProductMapper {
 
 	int deleteAttm(int productNo);
 
-	
-
+	List<Product> getLatestProducts();
 }
 

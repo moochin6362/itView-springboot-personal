@@ -30,4 +30,9 @@ public class Product {
 	private String brandName;
 	private String userAge;
 	private String gender;
+
+	// 그냥 Attachment.attmRename 필드만 추가
+	private String attmRename;
+
+
 }

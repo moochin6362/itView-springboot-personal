@@ -84,4 +84,21 @@
 		where position_no = #{productNo}
 	</delete>
 
+	<select id="getLatestProducts" resultType="Product">
+		SELECT p.PRODUCT_NO,
+		p.PRODUCT_NAME,
+		p.PRODUCT_DETAIL,
+		p.PRODUCT_PRICE,
+		a.ATTM_RENAME AS attmRename
+		FROM PRODUCT p
+		LEFT JOIN ATTACHMENT a
+		ON p.PRODUCT_NO = a.POSITION_NO
+		AND a.ATTM_LEVEL = 0
+		AND a.ATTM_POSITION = 0
+		ORDER BY p.PRODUCT_NO DESC
+		FETCH FIRST 10 ROWS ONLY
+	</select>
+
+
+
 </mapper>
