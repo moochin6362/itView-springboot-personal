@@ -22,19 +22,19 @@
 				button.addEventListener('click', e => {
 					let value = e.target.innerText;
 					if(value == '상품 등록') {
-						location.href = 'insertProductPage';
+						location.href = '/seller/insertProductPage';
 					} else if(value == '재고 관리'){
-						location.href = 'stockManagePage';
+						location.href = '/seller/stockManagePage';
 					} else if(value == '쿠폰 등록'){
-						location.href = 'couponManagePage';
+						location.href = '/seller/couponManagePage';
 					} else if(value == '상품 Q&A'){
-						location.href = 'productQnAPage';
+						location.href = '/seller/productQnAPage';
 					} else if(value == '내 상품 보기'){
-						location.href = 'myProductPage';
+						location.href = '/seller/myProductPage';
 					} else if(value == '내 쿠폰 보기'){
-						location.href = 'myCouponPage';
+						location.href = '/seller/myCouponPage';
 					} else if(value == '판매 내역'){
-						location.href = 'mySellingPage'
+						location.href = '/seller/mySellingPage'
 					}
 				});
 			}

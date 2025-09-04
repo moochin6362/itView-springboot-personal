@@ -20,7 +20,7 @@ public class Coupon {
 	private String couponTarget;
 	private int couponDiscount;
 	private Date couponStartdate;
-	private Date couponEndDate;
+	private Date couponEnddate;
 	private Date couponCreatedate;
 	private int couponMinprice;
 	private int userNo;
