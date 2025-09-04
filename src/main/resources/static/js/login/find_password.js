@@ -11,7 +11,7 @@ document.querySelector('.btn-verify').addEventListener('click', function() {
 		return;
     } else {
         $.ajax({
-            url: '/login/echeck',
+            url: '/login/emailCheck',
             data: { email: email },
             success: data => {
                 alert('메일이 발송되었습니다.');

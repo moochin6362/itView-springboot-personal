@@ -41,22 +41,28 @@ public class InhoController {
     private final InhoService uService;
     private final BCryptPasswordEncoder bcrypt;
     
-    // 로그인 페이지 이동
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login/login";
-    }
+//    // 로그인 페이지 이동
+//    @GetMapping("/login")
+//    public String loginPage() {
+//        return "login/login";
+//    }
+//    @PostMapping("login")
+//    public String login(User u, Model model) {
+//    	User loginUser = uService.login(u);
+//    	if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
+//			model.addAttribute("loginUser", loginUser);
+//			return "redirect:/inhoAdmin/enrollCouponNotice"; 
+//		} else {
+//			throw new AdminException("로그인을 실패하였습니다.");
+//		}
+//    }
     
-    @PostMapping("login")
-    public String login(User u, Model model) {
-    	User loginUser = uService.login(u);
-    	if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
-			model.addAttribute("loginUser", loginUser);
-			return "redirect:/inhoAdmin/enrollCouponNotice"; 
-		} else {
-			throw new AdminException("로그인을 실패하였습니다.");
-		}
-    }
+    
+    
+    
+    
+    
+    
     
     // 회원가입 페이지 이동
     @GetMapping("/signUp")

@@ -164,3 +164,8 @@
     font-weight: normal;
     font-style: normal;
 }
+
+a {
+  text-decoration: none; 
+  color: inherit;        /* 부모의 글자색을 따라감 */
+}
