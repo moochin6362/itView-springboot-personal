@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import itView.springboot.common.Pagination;
+import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.service.AdminService;
 import itView.springboot.vo.PageInfo;
@@ -97,26 +98,13 @@ public class AdminController {
 			@RequestParam(value="page", defaultValue="1") int page,
 			Model model
 			) {
-		UserReport user = adService.selectReport(userNo);
+		ReportDetail user = adService.selectReportDetail(userNo);
 		model.addAttribute("user", user);
 		model.addAttribute("page",page);
 		
 		return "admin/admin_report_detail";
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

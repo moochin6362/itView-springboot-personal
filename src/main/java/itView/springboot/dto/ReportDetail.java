@@ -12,10 +12,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ReportDetail {
-	private int userNo;
-    private String userId;
-    private String userName;
-    private String userType;
 	private int reportNo;
 	private String reportTitle;
 	private Date reportDate;
@@ -24,5 +20,10 @@ public class ReportDetail {
 	private String reportStatus;
 	private String reportType;
 	private int reporterUserId;
+	 private int reportTargetNo;
+	
+	private int userNo;
+    private String userId;
+    private String userName;
 
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
+import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.vo.User;
 
@@ -28,12 +29,18 @@ public interface AdminMapper {
 
 	
 	//신고게시판 조회
-	int getReportListCount(int boardType, String value, String condition);
+	int getReportListCount(
+			@Param("boardType") int boardType, 
+			@Param("value") String value, 
+			@Param("condition")String condition);
 
-	ArrayList<User> selectReportList(RowBounds rowBounds, String value, String condition);
+	ArrayList<User> selectReportList(
+			@Param("rowBounds") RowBounds rowBounds,
+			@Param("value") String value, 
+			@Param("condition")String condition);
 
 	//신고게시판 상세보기
-	UserReport selectReport(int userNo);
+	ReportDetail selectReportDetail(int userNo);
 
 	
 	

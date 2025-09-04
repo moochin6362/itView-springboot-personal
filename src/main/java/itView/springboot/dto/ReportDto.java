@@ -24,6 +24,7 @@ public class ReportDto {
 	private int reporterUserId;
 	private int reportTargetNo;
 	
+	
 	private String targetUserId;   // 신고받은 사용자 ID
     private int reportCount;       // 해당 사용자가 받은 신고 총 수
 }

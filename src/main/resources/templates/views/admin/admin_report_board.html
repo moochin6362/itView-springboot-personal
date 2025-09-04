@@ -31,8 +31,8 @@
 			            <form th:action="@{/admin/report}" method="get">
 			                <select name="condition" class="form-select">
 			               		<option value="reportType" th:selected="${condition == 'reportType'}">신고 유형</option>
-			                    <option value="reportTitle"  th:selected="${condition == 'title'}">제목</option>
-			                    <option value="userName" th:selected="${condition == 'userName'}">작성자</option>
+			                    <option value="reportTitle"  th:selected="${condition == 'reportTitle'}">제목</option>
+			                    <option value="writer" th:selected="${condition == 'writer'}">작성자</option>
 			                    <option value="reportStatus" th:selected="${condition == 'reportStatus'}">신고글 상태</option>
 			                </select>
 			                <input type="search" name="value" class="form-control" style="width:250px; display:inline;">
@@ -62,9 +62,9 @@
 			                <tr>
 			                    <td th:text="${report.reportType}"></td>
 			                    <td th:text="${report.reportTitle}"></td>
-			                    <td th:text="${report.userId}"></td>
+			                    <td th:text="${report.writer}"></td>
 			                    <td th:text="${report.reportDate}"></td>
-			                    <td th:text="${report.reportStatus == 'Y' ? Y : N}"></td>
+			                    <td th:text="${report.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
 			                </tr>
 			            </tbody>
 			        </table>
@@ -78,7 +78,7 @@
 	                	   </a>
 	                	   <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>    
 			           </li>
-		              
+		               
 		              
 		              	<li class="admin-board-page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
 		               	   th:classappend="${p == pi.currentPage} ? 'active'">
