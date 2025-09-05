@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.mapper.AdminMapper;
+import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,16 @@ public class AdminService {
 	public ReportDetail selectReportDetail(int userNo) {
 		return mapper.selectReportDetail(userNo);
 	}
-	
+	//일반 문의게시판
+		public Integer gBoardListCount(int boardType) {
+			return mapper.gBoardListCount(boardType);
+		}
+		public ArrayList<Board> selectgBoardList(PageInfo pi) {
+			int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+			RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			return mapper.selectBoardList(rowBounds);
+		}
+}
 	
 	
 	

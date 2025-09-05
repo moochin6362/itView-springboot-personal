@@ -17,6 +17,7 @@ import itView.springboot.common.Pagination;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.service.AdminService;
+import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -111,13 +112,24 @@ public class AdminController {
 		
 	}
 	
-	
+
 	//관리자 일반문의게시판 이동
 	@GetMapping("/gBoard")
-	public String gBoardPage() {
+	public String gBoardPage(
+			@RequestParam(value = "page", defaultValue = "1") int currentPage,
+			HttpServletRequest request,
+			Model model
+			) {
+	 	int gBoardListCount = adService.gBoardListCount(1);
+        PageInfo pi = Pagination.getPageInfo(currentPage, gBoardListCount, 10);
+        ArrayList<Board> gBoardList = adService.selectgBoardList(pi);
+
+        model.addAttribute("gBoardList", gBoardList);
+        model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
+
 		return"admin/admin_general_board";
 	}
-	
 	
 	//관리자 판매자 문의게시판 이동
 	@GetMapping("/pBoard")
