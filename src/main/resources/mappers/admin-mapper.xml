@@ -161,6 +161,32 @@ select count(*)
 
 
 
+<!-- 판매자 문의게시판 조회하기 -->
+<select id="pBoardListCount" parameterType="int" resultType="java.lang.Integer">
+	select count(*) from board where board_type = '3' and board_status = 'Y'
+</select>
+<select id="selectpBoardList" resultType="Board">
+	select 
+		b.board_id,
+		b.board_title,
+		b.board_content,
+		b.board_date,
+		b.board_modified_date,
+		b.board_type,
+		b.board_status,
+		b.user_no,
+		b.board_reply_status,
+		u.brand_name
+	from board b
+	join
+		"USER" u 
+		 on b.user_no = u.user_no
+	where board_type='7' and board_status ='Y'
+</select>
+
+
+
+
 
 
 </mapper>

@@ -164,9 +164,9 @@
             <a th:href="@{/login/signUp}">회원가입</a>
             <a th:if="${session.loginUser == null}" th:href="@{/login/login}">로그인</a>
             <a th:if="${session.loginUser != null}" th:href="@{/login/logout}">로그아웃</a>
-            <a th:if="${session.loginUser != null && session.loginUser.userType == "u" }" th:href="@{/my/mypage}">마이페이지</a>
-       <a th:if="${session.loginUser != null && session.loginUser.userType == "p" }" th:href="@{/seller/home}">판매자 마이페이지</a>
-            <a th:if="${session.loginUser != null && session.loginUser.userType == "a" }" th:href="@{/inhoAdmin/enrollCouponNotice}">관리자 마이페이지</a>
+            <a th:if="${session.loginUser != null && session.loginUser.userType == 'U' }" th:href="@{/my/mypage}">마이페이지</a>
+       		<a th:if="${session.loginUser != null && session.loginUser.userType == 'P' }" th:href="@{/seller/home}">판매자 마이페이지</a>
+            <a th:if="${session.loginUser != null && session.loginUser.userType == 'A' }" th:href="@{/inhoAdmin/enrollCouponNotice}">관리자 마이페이지</a>
             <a th:if="${loginUser!=null and loginUser.userType=='u'}" th:href="@{/Shopping/cart}">장바구니</a>
             <a href="#">주문배송</a>
         </div>

@@ -132,7 +132,17 @@ public class AdminController {
 	
 	//관리자 판매자 문의게시판 이동
 	@GetMapping("/pBoard")
-	public String pBoardPage() {
+	public String pBoardPage(
+		@RequestParam(value = "page", defaultValue = "1") int currentPage,
+		HttpServletRequest request,
+		Model model) {
+	 	int pBoardListCount = adService.pBoardListCount(1);
+        PageInfo pi = Pagination.getPageInfo(currentPage, pBoardListCount, 10);
+        ArrayList<Board> pBoardList = adService.selectpBoardList(pi);
+
+        model.addAttribute("pBoardList", pBoardList);
+        model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
 		return"admin/admin_partner_board";
 	}
 		
