@@ -15,6 +15,7 @@ import itView.springboot.vo.Board;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.Point;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -200,7 +201,12 @@ public class InhoService {
 		return mapper.addPoint(map);
 	}
 
+	public int getRankingCount(HashMap<String, String> map) {
+		return mapper.getRankingCount(map);
+	}
 
-
+	public ArrayList<Product> selectRankingList(HashMap<String, String> map) {
+		return mapper.selectRankingList(map);
+	}
 
 }

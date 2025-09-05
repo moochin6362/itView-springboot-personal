@@ -11,6 +11,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Point;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.User;
 
 @Mapper
@@ -59,6 +60,10 @@ public interface InhoMapper {
 	 int getPointByName(String pointName);
 
 	 int addPoint(Map<String, Object> map);
+
+	 int getRankingCount(HashMap<String, String> map);
+
+	 ArrayList<Product> selectRankingList(HashMap<String, String> map);
 
 
 }

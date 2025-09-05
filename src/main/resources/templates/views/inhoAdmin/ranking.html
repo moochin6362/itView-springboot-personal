@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쇼핑몰 예제</title>
+	<link href="/css/inhoCss/rankingList.css" rel="stylesheet" />
+    <style>
+        /* 상품 카드 */
+        .product-card {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: #6ec1e4;
+        }
+        .product-image {
+            background-color: #f8f9fa;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+	<div th:replace="~{common/header :: header}"></div>
+	<div class="container">
+		<div class="product-list">
+			<div class="product-card" th:each="p: ${list}">
+			    <div class="section-id">
+			        <div class="product-id">[[${p.productNo}]]</div>
+			        <input type="checkbox" name="productNo" th:value="${p.productNo}"/>
+			    </div>
+		        <div class="section-image">
+					<img width="100%" height="225" />
+		        </div>
+		        <div class="section-info">
+		           	<p>[[${p.productName}]]</p>
+		           	<p th:text="${p.matchRate != null ? #numbers.formatDecimal(p.matchRate, 0, 1) + '%': '-'}"></p>
+		           	<p>[[${p.productPrice}]] 원</p>
+		           	<p>[[${p.productDetail}]]</p>
+		           	<p>[[${p.productCompany}]]</p>
+		        </div>
+			</div>
+		</div>
+	                
+	    <div class="listpage">
+		    <ul class="pagination">
+		        <li class="list" th:if="${pi.currentPage > 1}">
+		            <a class="page" th:href="@{${loc}(page=${pi.currentPage-1})}" th:if="${ map['value'] == null}">
+		                <span>&laquo;</span>
+		            </a>
+		            <a class="page" th:href="@{${loc}(page=${pi.currentPage-1})}" th:if="${ map['value'] != null}">
+		                <span>&laquo;</span>
+		            </a>
+		        </li>
+		        
+		        <li class="list" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+		            <a class="page" th:href="@{${loc}(page=${p})}" 
+		               th:classappend="${p == pi.currentPage} ? 'active' : ''" th:if="${ map['value'] == null}">[[${p}]]</a>
+		            <a class="page" th:href="@{${loc}(page=${p})}" 
+		               th:classappend="${p == pi.currentPage} ? 'active' : ''" th:if="${ map['value'] != null}">[[${p}]]</a>
+		        </li>
+		
+		        <li class="list" th:if="${pi.currentPage < pi.maxPage}">
+		            <a class="page" th:href="@{${loc}(page=${pi.currentPage+1})}" th:if="${ map['value'] == null}">
+		                <span>&raquo;</span>
+		            </a>
+		            <a class="page" th:href="@{${loc}(page=${pi.currentPage+1})}" th:if="${ map['value'] != null}">
+		                <span>&raquo;</span>
+		            </a>
+		        </li>
+		    </ul>
+		</div>
+	</div>
+	<div th:replace="~{common/footer :: footer}"></div>
+</body>
+</html>
+
+
+		
+

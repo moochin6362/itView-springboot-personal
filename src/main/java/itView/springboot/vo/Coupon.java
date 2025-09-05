@@ -1,6 +1,8 @@
 package itView.springboot.vo;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +21,12 @@ public class Coupon {
 	private String couponDescription;
 	private String couponTarget;
 	private int couponDiscount;
-	private Date couponStartdate;
-	private Date couponEnddate;
-	private Date couponCreatedate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate couponStartdate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate couponEnddate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate couponCreatedate;
 	private int couponMinprice;
 	private int userNo;
 	private String couponStatus;

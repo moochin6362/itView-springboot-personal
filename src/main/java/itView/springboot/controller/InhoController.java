@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import itView.springboot.common.Pagination;
+import itView.springboot.common.ProductMatchingRate;
 import itView.springboot.exception.AdminException;
 import itView.springboot.service.InhoService;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.Point;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -56,9 +58,7 @@ public class InhoController {
 //			throw new AdminException("로그인을 실패하였습니다.");
 //		}
 //    }
-    
-    
-    
+     
     // 회원가입 페이지 이동
     @GetMapping("/signUp")
     public String signUpPage() {
@@ -324,6 +324,46 @@ public class InhoController {
     	} else {
     		throw new AdminException("포인트 수정을 실패하였습니다.");
     	}
+    }
+    
+    @GetMapping("/ranking")
+    public String rankingList(@RequestParam(value="page", defaultValue="1") int currentPage, 
+			Model model, HttpServletRequest request, @RequestParam HashMap<String, String> map,
+			HttpSession session) {
+    	
+    	User loginUser = (User)session.getAttribute("loginUser");
+    	
+    	ArrayList<Product> list = uService.selectRankingList(map);
+    	
+    	if(loginUser != null) {
+    		ProductMatchingRate matcher = new ProductMatchingRate();
+    		for (Product p : list) {
+    		
+    			double rate = matcher.calculateMatchRate(loginUser, p);
+    			p.setMatchRate(rate); // Product VO에 추가해둔 matchRate 세팅
+    		}
+        }
+        
+        // 매칭률 순으로 정렬 (선택사항)
+    	list.sort((p1, p2) -> {
+    	    double m1 = p1.getMatchRate() != null ? p1.getMatchRate() : 0.0;
+    	    double m2 = p2.getMatchRate() != null ? p2.getMatchRate() : 0.0;
+    	    return Double.compare(m2, m1); // 내림차순 정렬
+    	});
+        
+        int listCount = uService.getRankingCount(map);
+    	PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 16);
+    	
+    	int start = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        int end = Math.min(start + pi.getBoardLimit(), listCount);
+        ArrayList<Product> plist = new ArrayList<>(list.subList(start, end));
+    	
+    	model.addAttribute("list", plist);
+    	model.addAttribute("pi", pi);
+    	model.addAttribute("loc", request.getRequestURI());
+    	model.addAttribute("map", map);
+    	
+    	return "inhoAdmin/ranking";
     }
     
     

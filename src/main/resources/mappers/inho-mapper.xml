@@ -243,4 +243,35 @@
         where user_no = #{userNo}
     </update>
 
+	<select id="getRankingCount">
+		select count(*)
+		from product
+		<if test="value != null">
+			<choose>
+				<!-- name, description은 일부만 검색해도 결과가 나오도록 -->
+				<when test="condition == 'name' or condition == 'detail'">
+					where product_${condition} like '%${value}%'
+				</when>
+				
+			</choose>
+		</if>
+	</select>
+	
+	<select id="selectRankingList">
+		select *
+		from product
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where product_name like '%${value}%'
+				</when>
+				<when test="condition == 'description'">
+					where product_description like '%${value}%'
+				</when>
+			</choose>
+		</if>
+		order by product_no desc
+	</select>
+	
+	
 </mapper>
