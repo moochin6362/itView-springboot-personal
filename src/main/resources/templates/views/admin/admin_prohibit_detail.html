@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매금지 상세페이지</title>
+    <link rel="stylesheet" href="/css/adminCss/admin_prohibit_detail.css">
+    <script src="/js/admin/admin_prohibit_detail.js" defer></script>
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+     <script src="/js/inhoAdmin/sidebar.js" defer></script>
+     <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body>
+
+	<div class="container">
+		<!-- 사이드바 -->
+		<div th:replace="~{common/sidebar :: sidebar}"></div>
+		<!-- 컨텐츠 영역 -->
+	    <div class="content-area">
+			<!-- 헤더 -->
+			<div th:replace="~{common/header2 :: header2}"></div>
+	
+	
+		    <div class="admin-proBoard-detail-wrapper">
+		        <div class="admin-proBoard-detail-container" data-id="proBoardDetail"> <!--게시판-->
+		            <table class="admin-proBoard-detail-table">  <!--게시판 헤더-->
+		                <tr>
+		                    <th>금지 제품명</th>
+		                    <td>롬앤 멜팅 글라스 립밤</td>
+		                </tr>
+		                <tr>
+		                    <th>제품 브랜드</th>
+		                    <td>롬앤</td>
+		                </tr>
+		                <tr>
+		                    <th>작성일</th>
+		                    <td>2025-09-01</td>
+		                </tr>
+		            </table>
+		
+		            <div class="admin-proBoard-detail-content">
+		                <div class="detail-content">
+		                   공지사항 부분 : 금지사유 상세하게 쓰겠지
+		                </div>
+		            </div>
+		         </div>
+		        <div class="proBoard-btn-box">
+                    <button id="back-btn" type="button">
+                        목록으로
+                    </button>
+                    <button id="delete-btn" type="button">
+                        삭제하기
+                    </button>
+                </div>
+                <!-- 모달창 -->
+                <div id="deleteModal" class="modal" style="display:none;">
+	                <div class="modal-content">
+	                    <span class="close">&times;</span>
+	                    <p id="deleteBoard"></p>
+	                    <div class="modal-button-box">
+	                        <button id="delete">예</button>
+	                        <button id="dontDelete">아니요</button>
+	                    </div>
+	                    
+	                </div>
+                </div>
+
+			</div>
+		</div>
+    </div>
+</body>
+</html>

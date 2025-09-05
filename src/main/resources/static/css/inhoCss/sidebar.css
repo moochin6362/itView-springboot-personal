@@ -8,6 +8,11 @@
     box-shadow: 6px 0 20px rgba(0, 0, 0, 0.15);
     position: relative;
     z-index: 4;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
 }
 
 /* 왼쪽 아이콘바 */
@@ -83,33 +88,47 @@
     transform: translateX(4px);
 }
 
-/* 서브메뉴 */
+/* 서브메뉴 ul */
 .submenu {
-    display: none;
-    padding-left: 25px;
+    display: none; /* 기본 숨김 */
     margin-top: 6px;
     transition: all 0.3s ease;
+    list-style: none; /* ul 기본 점 제거 */
 }
 
-.submenu .submenu-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 8px;
-    color: #444;
+/* li 기본 점 제거 */
+.submenu li::marker {
+    content: none;
+}
+
+/* 서브메뉴 li */
+.submenu li {
+	padding-left: 0; /* li 기본 들여쓰기 제거 */
+    margin-bottom: 4px;
+}
+
+/* 서브메뉴 링크 a */
+.submenu li a {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    color: #444;
+    text-decoration: none;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.submenu .submenu-item:hover {
+/* 호버 효과 */
+.submenu li a:hover {
     background: #eefbfb;
     color: #1aa1a8;
 }
 
-/* 서브메뉴 원형 아이콘 */
-.submenu-item span {
+/* 원형 아이콘 */
+.submenu li a span {
     display: inline-block;
     width: 8px;
     height: 8px;

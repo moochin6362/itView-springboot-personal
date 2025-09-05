@@ -21,4 +21,5 @@ public class Board {
 
     // 👉 썸네일 경로 (DB에는 없음)
     private String thumbnailPath;
+    private String userName;
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>내 상품 보기</title>
+<link href="/css/seller/myProductPage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+	<div class="layout">
+		<div class="sidebar" th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<!-- 제목 -->
+			<div class="product-header">
+				<div>상품 번호</div>
+				<div class="product-head">상품 명</div>
+				<div class="product-head">재고량</div>
+			</div>
+
+			<!-- 상품 리스트 -->
+			<div class="product-list">
+				<div class="product-card" th:each="p : ${list}">
+					<div class="product-item">[[${p.productNo}]]</div>
+					<div class="product-item">[[${p.productName}]]</div>
+					<div class="product-item">[[${p.productStock}]] 개</div>
+					<button class="editButton">수정</button>
+					<button class="editButton">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		window.onload = () => {
+			const items = document.querySelectorAll('.product-item');
+			for(const item of items){
+				item.addEventListener('click', e => {
+					//console.log(e.target.previousElementSibling.innerText)
+					const productNo = e.target.previousElementSibling.innerText;
+					location.href = '/product/' + productNo;
+				});
+			}
+			const buttons = document.querySelectorAll('.editButton');
+			for(const button of buttons){
+				button.addEventListener('click', e => {
+					const productNo = e.target.parentElement.children[0].innerText;
+					//console.log(productNo);
+					//console.log(e.target.innerText);
+					if(e.target.innerText == '수정'){
+						location.href = '/product/productEdit/' + productNo;
+					} else {
+						
+						if(confirm('정말 삭제하시겠습니까?')){
+							location.href = '/product/productDelete/' + productNo;
+						} 
+					}
+				});
+			}
+			
+			
+		}
+	</script>
+	
+</body>
+</html>

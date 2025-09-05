@@ -22,4 +22,5 @@ public class Report {
 	private String reportType;
 	private int reporterUserId;
 	private int reportTargetNo;
+	private String reportReplyStatus;
 }

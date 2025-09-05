@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itView.springboot.mapper.ShoppingMapper">
+	
+	<delete id="checkDelete">
+		delete from cart
+		where cart_no in
+		<foreach collection="cNo" item="cartNo" open="(" separator="," close=")">
+			#{cartNo}
+    	</foreach>
+	</delete>
+	<select id="selectProduct" resultType="Cart">
+		select * 
+		from cart c
+			join product p on c.product_no=p.product_no
+		where c.user_no=#{userNo}
+	</select>
+	<delete id="productDelete">
+		delete from cart
+		where cart_no=#{cartNo}
+	</delete>
+	<select id="selectThumbList" resultType="Attachment">
+		select * 
+		from attachment
+		where attm_position=0
+			and attm_level=0
+			and position_no in
+			<foreach collection="pNo" item="no" open="(" separator="," close=")">
+				#{no}
+			</foreach>
+	</select>
+	
+	<select id="selectCouponList" resultType="CouponBox">
+		select * 
+		from coupon_box cb
+			join coupon c on c.coupon_no=cb.coupon_no
+		where cb.user_no=#{userNo}
+			and cb.coupon_used ='N'
+		order by c.coupon_startdate desc
+    		
+			
+	</select>
+	<!-- ========================위시리스트========================== -->
+	
+	<select id="selectWishList" resultType="Wishlist">
+		select * 
+		from wishlist
+		where user_no=#{userNo}
+	</select>
+	
+	<delete id="wishcheckDelete">
+		update from wishlist
+		where wishlist_no=#{wishlistNo}
+	</delete>
+	
+	<delete id="wishproductDelete">
+		update from wishlist
+		where wishlist_no=#{wishlistNo}
+	</delete>
+	<update id="updateWishToCart">
+		update cart
+		set amount=amount+1
+		where user_no=#{userNo}
+			and product_no in (
+				select w.product_no
+				from wishlist w
+				where w.wishlist_no in
+				<foreach collection="wNo" item="wishno" open="(" separator="," close=")">
+					#{wishno}
+				</foreach>
+			)
+	</update>
+	
+	
+	<insert id="insertWishToCart">
+		insert into cart (cart_no,amount,user_no,product_no)
+		select seq_cart.nextval,1,#{userNo},w.product_no
+		from wishlist w
+		where w.wishlist_no in
+			<foreach collection="wNo" item="wishno" open="(" separator="," close=")">
+				#{wishno}
+			</foreach>
+		and not exists(
+			select 1
+			from cart c
+			where c.user_no=#{userNo}
+			and c.product_no=w.product_no
+		)
+	</insert>
+	
+	<!-- ========================= 주문내역 =============================================-->
+	<select id="selectOrder" resultType="Order">
+		select *
+		from "ORDER"
+		where order_no=#{orderNo}
+	</select>
+	<select id="selectProductNoForOrder" resultType="int">
+		select o.order_target_no AS product_no
+  		from "ORDER" o
+  		where o.order_no = #{orderNo}
+    	and o.order_type = 1
+
+  		UNION ALL
+
+  		select c.product_no
+  		from "ORDER" o
+  		join cart c on c.cart_no = o.order_target_no
+  		where o.order_no = #{orderNo}
+    	and o.order_type = 2
+	</select>
+	
+	<insert id="orderToCart">
+		insert into cart (cart_no,amount,user_no,product_no)
+		select seq_cart.nextval,1,#{userNo},
+			case when o.order_type=1 then o.order_target_no
+				when o.order_type=2 then c.product_no
+			end ad product_no
+		from "ORDER" o
+		left join cart c
+			on (o.order_type=2 and c.cart_no=o.order_target_no)
+		where o.order_no in
+			<foreach collection="oNo" item="orderNo" open="(" separator="," close=")">
+      			#{orderNo}
+    		</foreach>
+    	and o.user_no=#{userNo}
+    	and not exists(
+    		select 1
+    		from cart c
+    		where c.user_no=#{userNo}
+    			and c.product_no=case
+    								when o.order_Type=1 then o.order_target_no
+    								else c.product_no
+    							end
+    	)
+		
+	</insert>
+	<update id="purchaseConfirm">
+		update "ORDER"
+		set order_status='confirmed'
+		where delivery_status='after' and order_no in
+			<foreach collection="oNo" item="orderNo" open="(" separator="," close=")">
+      			#{orderNo}
+    		</foreach>
+		and user_no=#{userNo}
+	</update>
+	<update id="orderCancel">
+		update "ORDER"
+		set order_status ='cancel'
+		where order_no in
+			<foreach collection="oNo" item="orderNo" open="(" separator="," close=")">
+      			#{orderNo}
+    		</foreach>
+		and user_no=#{userNo}
+	</update>
+	
+</mapper>

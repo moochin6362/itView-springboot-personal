@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>주문상세</title>
@@ -117,7 +117,7 @@ body {
 .review-btn {
 	background-color: #eefbfb;
 	color: black;
-	padding: 11px 17px;
+	padding: 11px 25px;
 	border: none;
 	border-radius: 6px;
 	cursor: pointer;
@@ -137,8 +137,9 @@ body {
 	text-decoration: none;
 	color: gray;
 	display: block;
-	margin: 10px auto 5px;
+	margin: 7px auto 5px;
 	width: fit-content;
+	margin-left:20px;
 }
 
 .order-detail summary {
@@ -181,7 +182,7 @@ body {
 <p class="title">주문상세</p>
 <form class="form">
 <div class="order-notice">
-  <p class="date">(결제날짜/시간)</p>
+  <p class="date" th:inline="text">결제날짜 / [[${order.orderDate}]]</p>
   <details>
 	  <summary>배송/교환/반품 안내 </summary>
 	  <p style="padding-left:2%;padding-right:2%;">
@@ -193,9 +194,32 @@ body {
 	  </p>
 </details>
 </div>
-<div class="order-box">
-    <span class="order-count">(주문상품갯수)</span>
-    <a href="/Shopping/delivery" class="deivery-link">배송조회</a>
+<div class="order-box" th:each="o:${olist}">
+    <span class="order-count">[[${o.orderCount}]]개</span>
+    <a th:href="@{/Shopping/delivery(orderNo=${o.orderNo})}" class="delivery-link">배송조회</a>
+	  <div class="order-body">
+	    <div class="order-image"><img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
+						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
+						width="100%" height="100%" style="border-radius: 8px;" /></div>
+	    <div class="order-info">
+	    	<p class="status" th:if="${o.deliveryStatus !='after'">
+				<span th:switch="${o.orderStatus}">
+					<span th:case="'completed'">구매완료</span>
+					<span th:case="'confirmed'">구매확정</span>
+					<span th:case="'cancel'">주문취소</span>
+				</span>
+			</p>
+			<p class="status" th:if="${o.deliveryStatus =='after'">
+				<span th:switch="${o.deliveryStatus}">
+					<span th:case="'after'">배송완료</span>
+				</span>
+			</p>
+	      <p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
+	      <p class="name">[[${o.productName}]]</p>
+	    </div>
+	    <button class="review-btn" th:if="${o.orderStatus=='confirmed'}" onclick="location.href='#'">리뷰쓰러가기</button>
+	    <a th:href="@{#}" class="cs-link">상품문의하기 ></a>
+	  </div>
 	  <div class="order-body">
 	    <div class="order-image">(이미지)</div>
 	    <div class="order-info">
@@ -204,25 +228,37 @@ body {
 	      <p class="name">상품이름</p>
 	    </div>
 	    <button class="review-btn">리뷰쓰러가기</button> <!-- //구매확정일때만 나타나기 -->
+	    <a href="#" class="cs-link">상품문의하기 ></a>
 	  </div>
-  	<a href="#" class="cs-link">상품문의하기 ></a>
+	  <div class="order-body">
+	    <div class="order-image">(이미지)</div>
+	    <div class="order-info">
+	      <p class="status">구매확정</p>
+	      <p class="price">가격</p>
+	      <p class="name">상품이름</p>
+	    </div>
+	    <button class="review-btn">리뷰쓰러가기</button> <!-- //구매확정일때만 나타나기 -->
+	    <a href="#" class="cs-link">상품문의하기 ></a>
+	  </div>
 </div>
-<div class= "order-detail">
+<div class= "order-detail" th:each="o:${olist}">
 <details style="border-bottom: none;">
 	  <summary>주문자 정보 </summary>
-	  <p>(주문자)</p>
-	  <p>(연락처)</p>
+	  <p>주문자 / [[${o.userNo}]]</p>
+	  <p>연락처 / [[${o.userPhone}]]</p>
 </details>
 
 <details style="border-bottom: none;">
 	  <summary >결제 정보 </summary>
-	  <p>(결제 방법)</p>
-	  <p>(총 상품금액)</p>
+	  <p>결제 방법 / [[${o.paymentMethod}]]</p>
+	  <p>총 상품금액 /[[${#numbers.formatInteger((order != null && order.payPrice != null) ? order.payPrice : 0, 3, 'COMMA')}]]원 </p>
 </details>
 
 <details style="border-bottom: none;">
-	  <summary>배송지 정보 </summary>
-	  <p>(주소)</p>
+	  <summary>배송 정보 </summary>
+	  <p>주소 / [[${order.userAddress}]]</p>
+	  <p>수령인 / [[${order.userName}]]</p>
+	  <p>전화번호 [[${order.userPhone}]]</p>
 </details>
 </div>
 

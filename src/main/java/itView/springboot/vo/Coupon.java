@@ -20,10 +20,11 @@ public class Coupon {
 	private String couponTarget;
 	private int couponDiscount;
 	private Date couponStartdate;
-	private Date couponEndDate;
-	private Date couponCreateDate;
+	private Date couponEnddate;
+	private Date couponCreatedate;
 	private int couponMinprice;
 	private int userNo;
+	private String couponStatus;
 	
 	// join시 가져올 이름
 	private String userName;

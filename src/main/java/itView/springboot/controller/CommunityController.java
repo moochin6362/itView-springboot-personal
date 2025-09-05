@@ -2,9 +2,7 @@ package itView.springboot.controller;
 
 import itView.springboot.common.Pagination;
 import itView.springboot.service.CommunityService;
-import itView.springboot.vo.Attachment;
-import itView.springboot.vo.Board;
-import itView.springboot.vo.PageInfo;
+import itView.springboot.vo.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -65,14 +63,17 @@ public class CommunityController {
         return "community/write";
     }
 
-    // 디테일 페이지
+    // 댓글 목록 불러오기 (디테일에서 같이)
     @GetMapping("/detail")
-    public String writeForm(@RequestParam("boardId") int boardId,
-                            @RequestParam(value = "page", defaultValue = "1") int page,
-                            Model model) {
+    public String detail(@RequestParam("boardId") int boardId,
+                         @RequestParam(value = "page", defaultValue = "1") int page,
+                         Model model) {
 
         Board community = communityService.selectBoard(boardId);
+        List<Reply> replies = communityService.selectReplyList(boardId);
+
         model.addAttribute("community", community);
+        model.addAttribute("replies", replies);
         model.addAttribute("page", page);
 
         return "community/detail";
@@ -156,5 +157,48 @@ public class CommunityController {
 
         return "redirect:/community/detail?boardId=" + board.getBoardId() + "&page=1";
     }
+
+    // 댓글 등록
+    @PostMapping("/reply/insert")
+    public String insertReply(Reply reply, HttpSession session) {
+        // 로그인 사용자 세팅
+        reply.setUserNo(((User) session.getAttribute("loginUser")).getUserNo());
+
+        // 댓글/대댓글 구분
+        if (reply.getParentId() != null && reply.getParentId() == 0) {
+            // 일반 댓글
+            reply.setParentId(null);
+        } else if (reply.getParentId() != null) {
+            // 대댓글이면 최상위 댓글 ID 가져오기
+            Reply parent = communityService.findReplyById(reply.getParentId()); // 부모 댓글 조회
+            if (parent.getParentId() == null) {
+                // 부모가 최상위 댓글이면 그대로
+                reply.setParentId(parent.getReplyNo());
+            } else {
+                // 부모가 대댓글이면 최상위 댓글 ID로 교체
+                reply.setParentId(parent.getParentId());
+            }
+        }
+
+        communityService.insertReply(reply);
+        return "redirect:/community/detail?boardId=" + reply.getBoardId();
+    }
+
+
+    // 댓글 수정
+    @PostMapping("/reply/edit")
+    public String editReply(Reply reply, HttpSession session) {
+        communityService.updateReply(reply);
+        return "redirect:/community/detail?boardId=" + reply.getBoardId();
+    }
+
+    // 댓글 삭제
+    @PostMapping("/reply/delete")
+    public String deleteReply(@RequestParam("replyNo") int replyNo,
+                              @RequestParam("boardId") int boardId) {
+        communityService.deleteReply(replyNo);
+        return "redirect:/community/detail?boardId=" + boardId;
+    }
+
 
 }

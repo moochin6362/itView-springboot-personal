@@ -1,0 +1,84 @@
+    body {
+      font-family: 'Apple SD Gothic Neo', sans-serif;
+      background-color: #fff;
+      color: #333;
+    }
+
+    .product-container {
+      margin-top: 60px;
+    }
+
+    .product-image {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .brand-name {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .product-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .product-price {
+      font-size: 26px;
+      color: #8ad8f0;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .delivery-info, .payment-info {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .quantity-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .total-price {
+      font-size: 20px;
+      color: #8ad8f0;
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+      padding-top: 15px;
+    }
+
+    .btn-cart, .btn-buy {
+      font-size: 16px;
+      padding: 12px;
+    }
+
+    .btn-cart {
+      background-color: #fff;
+      border: 2px solid #8ad8f0;
+      color: #8ad8f0;
+    }
+
+    .btn-buy {
+      background-color: #eefbfb;
+      color: black;
+    }
+
+    .thumbnail-list img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .rating {
+      color: #f93;
+    }
+
+    .tabs-section {
+      margin-top: 50px;
+    }

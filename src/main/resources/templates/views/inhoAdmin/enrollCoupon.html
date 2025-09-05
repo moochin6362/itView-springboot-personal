@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>쿠폰 등록</title>
+
+        <!-- CSS 파일 -->
+        <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+        <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+        <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+        <!-- 아이콘 & 폰트 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- 사이드바 -->
+            <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+            <!-- 컨텐츠 영역 -->
+            <div class="content-area">
+                <!-- 헤더 -->
+                <div th:replace="~{common/header2 :: header2}"></div>
+
+                <!-- 메인 컨텐츠 -->
+                <main class="main-content">
+                    <h2>쿠폰 등록</h2>
+		            <form action="/inhoAdmin/enrollCoupon" method="post" class="coupon-form">
+		                <label for="couponName">쿠폰명</label>
+		                <input type="text" id="couponName" name="couponName" placeholder="쿠폰명을 입력하세요" required />
+		
+						<label for="couponDescription">공지 내용</label>
+                        <textarea id="couponDescription" name="couponDescription" placeholder="쿠폰 설명을 입력하세요" rows="5" required></textarea>
+                        
+		                <label for="couponTarget">쿠폰 발급대상</label>
+		                <select id="couponTarget" name="couponTarget" required>
+		                    <option value="">대상 선택</option>
+		                    <option value="all">전체 회원</option>
+		                    <option value="D">브론즈 회원</option>
+		                    <option value="C">실버 회원</option>
+		                    <option value="B">골드 회원</option>
+		                    <option value="A">다이아 회원</option>
+		                </select>
+		
+		                <label for="couponDiscount">쿠폰 할인율(%)</label>
+		                <input type="number" id="couponDiscount" name="couponDiscount" min="0" max="100" placeholder="예: 10" required />
+		
+		                <label for="couponMinprice">사용 최소금액(원)</label>
+		                <input type="number" id="couponMinprice" name="couponMinprice" min="0" placeholder="예: 50000" required />
+		
+		                <label for="period">쿠폰 사용기간</label>
+		                <input type="date" id="couponStartdate" name="couponStartdate" required /> ~
+		                <input type="date" id="couponEnddate" name="couponEnddate" />
+		
+		                <div class="btn-group">
+		                    <button type="submit" class="btn-submit">쿠폰 등록</button>
+		                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+		                </div>
+		            </form>
+                </main>
+            </div>
+        </div>
+        <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+        
+    </body>
+</html>
+
+

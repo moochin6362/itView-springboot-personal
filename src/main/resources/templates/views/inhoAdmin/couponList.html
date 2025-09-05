@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쿠폰 공지</title>
+
+	<!-- CSS 파일 -->
+    <link href="/css/inhoCss/commonList.css" rel="stylesheet" />
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+    <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{common/header2 :: header2}"></div>
+
+            <div class="main-content">
+                <div class="top-controls">
+                	<div class="left-control">
+                    	<form th:action="@{/inhoAdmin/enrollCoupon}" method="get" style="display: inline;">
+                        	<button class="btn-add" type="submit">쿠폰등록</button>
+                        </form>
+                    </div>
+                    <div class="right-control">
+                        <div class="search-box">
+                        	<select style="display: inline; width: auto;">
+                        		<option value="name" th:selected="${map['condition'] != null && map['condition'] == 'name'}">제목</option>
+<!--                         		<option value="writer" th:selected="${map['condition'] != null && map['condition'] == 'writer'}">작성자</option> -->
+                        	</select>
+                            <input type="text" placeholder="공지검색" th:value="${map['value'] != null ? map['value'] : ''}"/>
+                            <button type="button" id="couponSearch">검색</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 쿠폰 테이블 -->
+                <table class="csList-table">
+                    <thead>
+                        <tr>
+                        	<th>쿠폰번호</th>
+                            <th>쿠폰제목</th>
+                            <th>작성자</th>
+                            <th>등록일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="c: ${list}" class="coupon-row">
+                        	<td>[[${c.couponNo}]]</td>
+                            <td>[[${c.couponName}]]</td>
+                            <td>[[${c.userName}]]</td>
+                            <td>[[${c.couponCreatedate}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="listpage">
+				    <ul class="pagination">
+				        <li class="list" th:if="${pi.currentPage > 1}">
+				            <a class="page" th:href="@{${loc}(page=${pi.currentPage-1})}" th:if="${ map['value'] == null}">
+				                <span>&laquo;</span>
+				            </a>
+				            <a class="page" th:href="@{${loc}(page=${pi.currentPage-1})}" th:if="${ map['value'] != null}">
+				                <span>&laquo;</span>
+				            </a>
+				        </li>
+				        
+				        <li class="list" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+				            <a class="page" th:href="@{${loc}(page=${p})}" 
+				               th:classappend="${p == pi.currentPage} ? 'active' : ''" th:if="${ map['value'] == null}">[[${p}]]</a>
+				            <a class="page" th:href="@{${loc}(page=${p})}" 
+				               th:classappend="${p == pi.currentPage} ? 'active' : ''" th:if="${ map['value'] != null}">[[${p}]]</a>
+				        </li>
+				
+				        <li class="list" th:if="${pi.currentPage < pi.maxPage}">
+				            <a class="page" th:href="@{${loc}(page=${pi.currentPage+1})}" th:if="${ map['value'] == null}">
+				                <span>&raquo;</span>
+				            </a>
+				            <a class="page" th:href="@{${loc}(page=${pi.currentPage+1})}" th:if="${ map['value'] != null}">
+				                <span>&raquo;</span>
+				            </a>
+				        </li>
+				    </ul>
+				</div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+    <script th:inline="javascript">
+	    const rows = document.querySelectorAll('.coupon-row');
+	    rows.forEach(row => {
+	        row.addEventListener('click', function (e) {
+	            // 버튼 클릭 등은 제외
+	            if (e.target.closest('button')) return;
+ 				const couponNo = row.children[0].innerText.trim(); // 첫 번째 <td>의 csNo
+	            const currentPage = /*[[${pi.currentPage}]]*/ 1;
+	            window.location.href = '/inhoAdmin/coupon/' + couponNo + '/' + currentPage;
+	        });
+	    });
+	    
+	    document.getElementById('couponSearch').addEventListener('click', e => {
+        	const valueInput = e.target.previousElementSibling;
+        	const conditionSelect = valueInput.previousElementSibling;
+        	window.location.href = '/inhoAdmin/couponSearch?value=' + valueInput.value + '&condition=' + conditionSelect.value;
+        })
+    </script>
+</body>
+</html>

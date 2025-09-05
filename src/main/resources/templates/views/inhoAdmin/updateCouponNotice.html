@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>쿠폰 공지사항 수정</title>
+
+        <!-- CSS 파일 -->
+        <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+        <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+        <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+        <!-- 아이콘 & 폰트 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+        
+        <!-- 에디터 -->
+        <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <!-- 사이드바 -->
+            <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+            <!-- 컨텐츠 영역 -->
+            <div class="content-area">
+                <!-- 헤더 -->
+                <div th:replace="~{common/header2 :: header2}"></div>
+
+                <!-- 메인 컨텐츠 -->
+                <main class="main-content">
+                    <h2>쿠폰 공지사항 수정</h2>
+                    <form action="/inhoAdmin/updateCouponBoard" method="post" class="coupon-form" id="noticeForm">
+                        <input type="hidden" id="boardId" name="boardId" th:value="${b.boardId}" />
+<!--                         <label for="coupon">쿠폰 선택</label> -->
+<!--                         <select id="coupon" name="couponId" required> -->
+<!--                             <option value="">쿠폰 선택</option> -->
+<!--                             <option value="1">여름 할인 쿠폰</option> -->
+<!--                             <option value="2">VIP 회원 전용 쿠폰</option> -->
+<!--                             <option value="3">신규 가입 쿠폰</option> -->
+<!--                         </select> -->
+
+                        <label for="boardTitle">공지 제목</label>
+                        <input type="text" id="boardTitle" name="boardTitle" placeholder="공지 제목 입력" th:value="${b.boardTitle}" required />
+
+                        <label for="boardContent">공지 내용</label>
+                        <div id="editor"></div>
+                        <textarea id="boardContent" name="boardContent" th:text="${b.boardContent}" style="display: none;"></textarea>
+
+						<input type="hidden" name="uploadedFiles" id="uploadedFiles">
+<!-- 						<label for="target">공지 대상</label> -->
+<!--                         <select id="target" name="target" required> -->
+<!--                             <option value="">대상 선택</option> -->
+<!--                             <option value="all">전체 회원</option> -->
+<!--                             <option value="vip">VIP 회원</option> -->
+<!--                             <option value="new">신규 회원</option> -->
+<!--                         </select> -->
+						
+                        <label>공지 작성일</label>
+                        <input type="date" id="boardDate" name="boardDate" th:value="${#temporals.format(b.boardDate, 'yyyy-MM-dd')}"/>
+                        
+                        <label>공지 수정일</label>
+                        <input type="date" id="boardModifiedDate" name="boardModifiedDate" th:value="${#temporals.format(b.boardModifiedDate, 'yyyy-MM-dd')}"/>
+
+                        <div class="btn-group">
+                            <button type="submit" class="btn-submit">공지 수정</button>
+                            <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+        <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+        <script>
+	        const uploadedFilesArr = [];
+	        const initialContent = document.getElementById("boardContent").value;
+	
+	        const editor = new toastui.Editor({
+	            el: document.querySelector('#editor'),
+	            height: '500px',
+	            width: '90%',
+	            initialEditType: 'wysiwyg',
+	            hideModeSwitch: true,
+	            initialValue: initialContent,
+	            toolbarItems: [
+	                ['heading', 'bold', 'italic', 'strike'],
+	                ['hr', 'quote'],
+	                ['ul', 'ol'],
+	                ['table', 'link'],
+	                ['image']
+	            ],
+	            hooks: {
+	                addImageBlobHook: async (blob, callback) => {
+	                    const formData = new FormData();
+	                    formData.append('image', blob);
+	
+	                    const response = await fetch('/inhoAdmin/uploadImage', {method: 'POST', body: formData});
+	                    const url = await response.text();
+	                    callback(url, 'image');
+	
+	                    uploadedFilesArr.push(url.split('/').pop());
+	                    document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
+	                }
+	            }
+	        });
+	
+	        const form = document.getElementById("noticeForm");
+	        form.addEventListener("submit", function (e) {
+	            document.getElementById("boardContent").value = editor.getHTML();
+	        });
+	
+	        // 취소 버튼 클릭 시 이전 페이지로 이동
+	        document.getElementById("cancelBtn").addEventListener("click", function () {
+	            history.back();
+	        });
+		</script>
+    </body>
+</html>

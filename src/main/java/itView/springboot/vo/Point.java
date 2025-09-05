@@ -17,4 +17,6 @@ public class Point {
 	private Date pointCreatedate;
 	private Date pointEnddate;
 	private int userNo;
+	
+	private String userName;
 }

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itView.springboot.mapper.InhoMapper">
+
+	<insert id="insertUser" >
+		<selectKey keyProperty="userNo" resultType="int" order="BEFORE">
+			select seq_user.nextval from dual
+		</selectKey>
+		INSERT INTO "USER" (
+			USER_NO,
+	      	USER_NAME,
+	      	USER_GENDER,
+	      	USER_AGE,
+	      	USER_PHONE,
+	      	USER_TYPE,
+	      	USER_ID,
+	      	USER_PASSWORD,
+	      	USER_STATUS,
+	      	USER_POINT,
+	      	USER_ADDRESS,
+	      	USER_GRADE,
+	      	EMAIL,
+	      	BRAND_NAME,
+	      	SKIN_TYPE,
+	      	PERSONAL_COLOR,
+	      	SKIN_TROUBLE,
+	      	HEAD_SKIN,
+	      	KAKAO_ID
+		) VALUES (
+	      	#{userNo},
+	      	#{userName},
+	      	#{userGender},
+	      	#{userAge},
+	      	#{userPhone},
+	      	#{userType},
+	      	#{userId},
+	      	#{userPassword},
+	      	'Y',
+	      	#{userPoint},
+	      	#{userAddress},
+	      	'D',
+	      	#{email},
+	      	#{brandName},
+	      	#{skinType},
+	      	#{personalColor},
+	      	#{skinTrouble},
+	      	#{headSkin},
+	      	#{kakaoId}
+		)
+	</insert>
+	
+	<select id="login">
+		select * from "USER"
+		where user_id = #{userId} and user_status = 'Y'
+	</select>
+	
+	<select id="checkId">
+		select count(*)
+		from "USER"
+		where user_id = #{userId}
+	</select>
+	
+	<insert id="enrollCouponNotice">
+		<selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into board
+		values(#{boardId}, #{boardTitle}, sysdate, #{boardModifiedDate}, 
+				'4', 'Y', #{userNo}, #{boardContent})
+	</insert>
+	
+	<!-- 첨부파일 등록 -->
+    <insert id="insertAttachment">
+        INSERT INTO ATTACHMENT (
+        ATTM_NO,
+        ATTM_NAME,
+        ATTM_RENAME,
+        ATTM_PATH,
+        ATTM_STATUS,
+        ATTM_DATE,
+        ATTM_LEVEL,
+        ATTM_POSITION,
+        POSITION_NO
+        ) VALUES (
+        SEQ_ATTM.NEXTVAL,
+        #{attmName},
+        #{attmRename},
+        #{attmPath},
+        'Y',
+        SYSDATE,
+        1,
+        1,
+        #{positionNo}
+        )
+    </insert>
+	
+	<insert id="enrollCoupon">
+		<selectKey keyProperty="couponNo" resultType="int" order="BEFORE">
+			select seq_coupon.nextval from dual
+		</selectKey>
+		insert into Coupon
+		values(#{couponNo}, #{couponName}, #{couponDescription}, #{couponTarget}, #{couponDiscount},
+				#{couponStartdate}, #{couponEnddate}, sysdate, #{couponMinprice}, #{userNo}, default)
+	</insert>
+	
+	<select id="selectTargetUser">
+		select *
+		from "USER"
+		where user_grade = #{couponTarget}
+	</select>
+
+	<insert id="insertCouponBox">
+		insert into coupon_box
+		values (seq_coupon_box.nextval, 'N', #{userNo}, #{couponNo})
+	</insert>
+	
+	<select id="getCouponCount">
+		select count(*)
+		from coupon
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where coupon_name like '%${value}%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="selectCouponList">
+		select *
+		from coupon
+			join "USER" using(user_no)
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where coupon_name like '%${value}%'
+				</when>
+			</choose>
+		</if>
+		order by coupon_no desc
+	</select>
+	
+	<select id="getCouponBoardCount">
+		select count(*)
+		from board
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'title'">
+					where board_title like '%${value}%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="selectCouponBoardList">
+		select *
+		from board
+			join "USER" using(user_no)
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'title'">
+					where board_title like '%${value}%'
+				</when>
+			</choose>
+		</if>
+		order by board_id desc
+	</select>
+	
+	<select id="selectCoupon">
+		select *
+		from coupon
+		where coupon_no = #{couponNo}
+	</select>
+	
+	<select id="selectCouponBoard">
+		select *
+		from board
+		where board_id = #{boardId}
+	</select>
+	
+	<update id="updateCoupon">
+		update coupon
+		set coupon_name = #{couponName}, coupon_description = #{couponDescription}, coupon_target = #{couponTarget},
+			coupon_discount = #{couponDiscount}, coupon_startdate = #{couponStartdate}, coupon_enddate = #{couponEnddate},
+			coupon_minprice = #{couponMinprice}
+		where coupon_no = #{couponNo}
+	</update>
+
+	<update id="updateCouponBoard">
+		update board
+		set board_title = #{boardTitle}, board_content = #{boardContent}, board_type = '4', board_modified_date = sysdate
+		where board_id = #{boardId}
+	</update>
+	
+	<insert id="enrollPoint">
+		insert into point
+		values(seq_point.nextval, #{pointName}, #{pointDescription}, #{pointValue}, sysdate, #{pointEnddate}, #{userNo})
+	</insert>
+	
+	<update id="updatePoint">
+		update point
+		set point_name = #{pointName}, point_description = #{pointDescription}, point_value = #{pointValue},
+			point_enddate = #{pointEnddate}
+	</update>
+	
+	<select id="getPointCount">
+		select count(*)
+		from point
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where point_name like '%${value}%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="selectPointList">
+		select *
+		from point
+			join "USER" using(user_no)
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where point_name like '%${value}%'
+				</when>
+			</choose>
+		</if>
+		order by point_no desc
+	</select>
+	
+	<select id="getPointByName">
+        select point_value
+        from point
+        where point_name = #{pointName}
+    </select>
+    
+    <update id="addPoint">
+        update "USER"
+        set user_point = user_point + #{point}
+        where user_no = #{userNo}
+    </update>
+
+</mapper>

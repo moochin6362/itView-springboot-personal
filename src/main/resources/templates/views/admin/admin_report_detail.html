@@ -34,29 +34,31 @@
 		            <table class="admin-report-detail-table">  <!--게시판 헤더-->
 		                <tr>
 		                    <th>신고자</th>
-		                    <td>익명의 신고자</td>
+		                    <td th:text="${user.writer}"></td>
 		                </tr>
 		                <tr>
 		                    <th>신고 제목</th>
-		                    <td>쿠폰 사기당한 것 같습니다.</td>
+		                    <td th:text="${user.reportTitle}"></td>
 		                </tr>
 		                <tr>
 		                    <th>신고 날짜</th>
-		                    <td>2025-09-03</td>
+		                    <td th:text="${user.reportDate}"></td>
 		                </tr>
 		                <tr>
 		                    <th>신고 유형</th>
-		                    <td>회원 신고</td>
+		                    <td th:text="${user.reportType == 'B' ? '게시판신고' 
+               							 : (user.reportType == 'R' ? '리뷰신고' : '회원신고')}">
+							</td>
 		                </tr>
 		                 <tr>
-		                    <th>신고 대상</th>
-		                    <td>cosrx</td>
+		                    <th>신고 상태</th>
+		                    <td th:text="${user.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
 		                </tr>
 		            </table>
 		
 		            <div class="admin-report-detail-content">
-		                <div class="detail-content">
-		                    사기당한거같아요......
+		                <div class="detail-content"
+		                	th:text="${user.reportContent}">
 		                </div>
 		            </div>
 		         </div>

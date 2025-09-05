@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>포인트 수정</title>
+
+        <!-- CSS 파일 -->
+        <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+        <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+        <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+        <!-- 아이콘 & 폰트 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- 사이드바 -->
+            <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+            <!-- 컨텐츠 영역 -->
+            <div class="content-area">
+                <!-- 헤더 -->
+                <div th:replace="~{common/header2 :: header2}"></div>
+
+                <!-- 메인 컨텐츠 -->
+                <main class="main-content">
+                    <h2>포인트 수정</h2>
+		            <form action="/inhoAdmin/updatePoint" method="post" class="coupon-form">
+		                <label for="pointName">포인트명</label>
+		                <input type="text" id="pointName" name="pointName" placeholder="포인트명을 입력하세요" th:value="${p.pointName}" required />
+		
+						<label for="pointDescription">포인트 내용</label>
+                        <textarea id="pointDescription" name="pointDescription" placeholder="포인트 설명을 입력하세요" th:text="${p.pointDescription}" rows="5" required></textarea>
+                        
+		                <label for="pointValue">포인트 크기</label>
+		                <input type="number" id="pointValue" name="pointValue" min="0" placeholder="예: 10" th:value="${p.pointValue}" required />
+		
+		                <label for="pointCreatedate">포인트 생성일</label>
+		                <input type="date" id="pointCreatedate" name="pointCreatedate" th:value="${#temporals.format(p.pointCreatedate, 'yyyy-MM-dd')}" readonly />
+		                
+		                <label for="pointEnddate">포인트 만료일</label>
+		                <input type="date" id="pointEnddate" name="pointEnddate" th:value="${#temporals.format(p.pointEnddate, 'yyyy-MM-dd')}" />
+		                
+		
+		                <div class="btn-group">
+		                    <button type="submit" class="btn-submit">포인트 수정</button>
+		                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+		                </div>
+		            </form>
+                </main>
+            </div>
+        </div>
+        <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+        
+    </body>
+</html>
+
+

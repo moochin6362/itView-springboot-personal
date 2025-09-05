@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="sellerSidebar">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="sidebar">
+		<div class="sidebar-item">내 상품 보기</div>
+		<div class="sidebar-item">내 쿠폰 보기</div>
+		<div class="sidebar-item">상품 등록</div>
+		<div class="sidebar-item">재고 관리</div>
+		<div class="sidebar-item">쿠폰 등록</div>
+		<div class="sidebar-item">판매 내역</div>
+		<div class="sidebar-item">상품 Q&A</div>
+	</div>
+	
+	<script>
+		window.addEventListener('load', () => {
+			const buttons = document.querySelectorAll('.sidebar-item');
+			for(const button of buttons){
+				button.addEventListener('click', e => {
+					let value = e.target.innerText;
+					if(value == '상품 등록') {
+						location.href = '/seller/insertProductPage';
+					} else if(value == '재고 관리'){
+						location.href = '/seller/stockManagePage';
+					} else if(value == '쿠폰 등록'){
+						location.href = '/seller/couponManagePage';
+					} else if(value == '상품 Q&A'){
+						location.href = '/seller/productQnAPage';
+					} else if(value == '내 상품 보기'){
+						location.href = '/seller/myProductPage';
+					} else if(value == '내 쿠폰 보기'){
+						location.href = '/seller/myCouponPage';
+					} else if(value == '판매 내역'){
+						location.href = '/seller/mySellingPage'
+					}
+				});
+			}
+		})  
+	</script>
+</body>
+</html>

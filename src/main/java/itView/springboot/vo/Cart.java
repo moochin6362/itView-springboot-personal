@@ -9,7 +9,11 @@ import lombok.Setter;
 @Getter
 public class Cart {
 	private int cartNo;
-	private int amout;
+	private int amount;
 	private int userNo;
 	private int productNo;
+	private String productCompany;
+	private int productPrice;
+	private String productName;
+	private int productStock;
 }

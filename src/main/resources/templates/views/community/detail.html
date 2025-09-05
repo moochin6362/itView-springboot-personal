@@ -48,13 +48,90 @@
             margin: 10px 0;
         }
 
+            .comment-section {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .comment-section {
+  max-width: 100%;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.comment-box,
+.reply-box {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.reply-box {
+  margin-left: 40px;
+  background-color: #f1f1f1;
+}
+
+.comment-header {
+  font-weight: bold;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.comment-meta {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 5px;
+}
+
+.comment-actions {
+  margin-top: 10px;
+}
+
+.comment-actions span {
+  margin-right: 15px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #007bff;
+  user-select: none;
+}
+
+.comment-actions span:hover {
+  text-decoration: underline;
+}
+
+textarea.form-control {
+  resize: none;
+  font-size: 0.95rem;
+  min-height: 80px;
+  border-radius: 8px;
+}
+
+.main-comment-input textarea.form-control {
+  width: 100%;
+  max-width: 100%;
+}
+
+.btn-custom {
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.btn-custom:hover {
+  background-color: #333;
+}
+
+
     </style>
 </head>
 <body>
 
 <div th:replace="~{common/header :: header}"></div>
 
-<!-- 커뮤니티 상세 (CSS수정 안함)--> 
+<!-- 커뮤니티 상세 (CSS수정 안함)-->
 <main class="container my-5">
     <div class="notice-card">
         <h2 class="notice-title">
@@ -71,7 +148,8 @@
             <a href="/community/list" class="btn btn-outline-secondary">목록</a>
             <div>
                 <a th:if="${session.loginUser != null and session.loginUser.userNo == community.userNo}"
-                   th:href="@{/community/{boardId}/updateForm(boardId=${community.boardId})}" class="btn btn-primary">수정</a>
+                   th:href="@{/community/{boardId}/updateForm(boardId=${community.boardId})}"
+                   class="btn btn-primary">수정</a>
                 <!-- 삭제 버튼 (모달 띄우기) -->
                 <button th:if="${session.loginUser != null and session.loginUser.userNo == community.userNo}"
                         type="button"
@@ -107,7 +185,151 @@
     </div>
 </div>
 
+<div class="comment-section">
+
+    <!-- 댓글 입력 -->
+    <form th:action="@{/community/reply/insert}" method="post" class="main-comment-input">
+        <textarea name="replyContent" class="form-control mb-2" placeholder="댓글을 입력하세요" required></textarea>
+        <input type="hidden" name="boardId" th:value="${community.boardId}" />
+        <input type="hidden" name="parentId" value="0"/>
+        <button type="submit" class="btn btn-custom btn-sm">등록</button>
+    </form>
+
+    <!-- 댓글 목록 -->
+    <div th:each="reply : ${replies}" th:if="${reply.parentId == null}">
+        <div class="comment-box" th:attr="data-comment-id=${reply.replyNo}">
+            <div class="comment-header" th:text="${reply.userName}"></div>
+            <div class="comment-content" th:text="${reply.replyContent}"></div>
+            <div class="comment-meta" th:text="${#dates.format(reply.replyDate,'yyyy.MM.dd HH:mm')}"></div>
+
+            <div class="comment-actions mt-2" th:if="${session.loginUser != null}">
+                <span onclick="toggleReply(this)">답글쓰기</span>
+                <span th:if="${session.loginUser.userNo == reply.userNo}" onclick="editComment(this)" th:attr="data-reply-no=${reply.replyNo}">수정</span>
+                <form th:if="${session.loginUser.userNo == reply.userNo}" th:action="@{/community/reply/delete}" method="post" style="display:inline;" onsubmit="return confirm('댓글을 삭제하시겠습니까?')">
+                    <input type="hidden" name="replyNo" th:value="${reply.replyNo}"/>
+                    <input type="hidden" name="boardId" th:value="${community.boardId}"/>
+                    <button type="submit" class="btn btn-link p-0">삭제</button>
+                </form>
+            </div>
+
+            <!-- 대댓글 입력 -->
+            <form th:action="@{/community/reply/insert}" method="post" class="reply-input d-none">
+                <textarea name="replyContent" class="form-control my-2" placeholder="답글을 입력하세요" required></textarea>
+                <input type="hidden" name="boardId" th:value="${community.boardId}"/>
+                <input type="hidden" name="parentId" th:value="${reply.replyNo}"/>
+                <button type="submit" class="btn btn-outline-secondary btn-sm me-2">등록</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleReply(this)">취소</button>
+            </form>
+
+            <!-- 대댓글 목록 -->
+            <div th:each="subReply : ${replies}" th:if="${subReply.parentId == reply.replyNo}">
+                <div class="reply-box" th:attr="data-comment-id=${subReply.replyNo}">
+                    <div class="comment-header" th:text="${subReply.userName}"></div>
+                    <div class="comment-content" th:text="${subReply.replyContent}"></div>
+                    <div class="comment-meta" th:text="${#dates.format(subReply.replyDate,'yyyy.MM.dd HH:mm')}"></div>
+
+                    <div class="comment-actions mt-2" th:if="${session.loginUser != null}">
+                        <span onclick="toggleReply(this)">답글쓰기</span>
+                        <span th:if="${session.loginUser.userNo == subReply.userNo}" onclick="editComment(this)" th:attr="data-reply-no=${subReply.replyNo}">수정</span>
+                        <form th:if="${session.loginUser.userNo == subReply.userNo}" th:action="@{/community/reply/delete}" method="post" style="display:inline;" onsubmit="return confirm('댓글을 삭제하시겠습니까?')">
+                            <input type="hidden" name="replyNo" th:value="${subReply.replyNo}"/>
+                            <input type="hidden" name="boardId" th:value="${community.boardId}"/>
+                            <button type="submit" class="btn btn-link p-0">삭제</button>
+                        </form>
+                    </div>
+
+                    <!-- 대댓글 답글 입력 -->
+                    <form th:action="@{/community/reply/insert}" method="post" class="reply-input d-none">
+                        <textarea name="replyContent" class="form-control my-2" placeholder="답글을 입력하세요" required></textarea>
+                        <input type="hidden" name="boardId" th:value="${community.boardId}"/>
+                        <input type="hidden" name="parentId" th:value="${reply.replyNo}"/>
+                        <button type="submit" class="btn btn-outline-secondary btn-sm me-2">등록</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggleReply(this)">취소</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 수정 모달 -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="editForm" th:action="@{/community/reply/edit}" method="post" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">댓글 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editTextarea" name="replyContent" class="form-control" rows="4" required></textarea>
+                <input type="hidden" name="replyNo" id="editCommentId"/>
+                <input type="hidden" name="boardId" th:value="${community.boardId}"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="submit" class="btn btn-custom">저장</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <div th:replace="~{common/footer :: footer}"></div>
+
+<script>
+    function editComment(el) {
+        const commentBox = el.closest('.comment-box, .reply-box');
+        const commentContent = commentBox.querySelector('.comment-content');
+        const currentText = commentContent.textContent.trim();
+
+        const commentId = el.dataset.replyNo || commentBox.dataset.commentId;
+
+        document.getElementById('editTextarea').value = currentText;
+        document.getElementById('editCommentId').value = commentId;
+
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
+    }
+
+    function toggleReply(el) {
+        const commentBox = el.closest('.comment-box, .reply-box');
+        const replyForm = el.closest('.comment-box, .reply-box').querySelector(':scope > .reply-input');
+        if (!replyForm) return;
+
+        if (replyForm.classList.contains('d-none')) {
+            replyForm.classList.remove('d-none');
+            el.style.display = 'none';
+            replyForm.querySelector('textarea').focus();
+        } else {
+            replyForm.classList.add('d-none');
+            el.style.display = 'inline';
+        }
+    }
+
+
+
+    function deleteComment(el) {
+        const container = el.closest('.comment-box, .reply-box');
+        const commentId = container.dataset.commentId;
+
+        if (confirm("댓글을 삭제하시겠습니까?")) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = 'community/delete';
+            form.style.display = 'none';
+
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'commentId';
+            inputId.value = commentId;
+
+            form.appendChild(inputId);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
 
 </body>
 </html>

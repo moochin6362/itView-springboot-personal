@@ -1,5 +1,5 @@
 :root {
-  --main-color: #34e5eb;
+  --main-color: #27c7c7;
   --bg-color: #eefbfb;
   --text-color: #333;
   --border-radius: 8px;
@@ -143,6 +143,32 @@ body {
 .option-button.active {
   background-color: #8ad8f0;
   color: white;
+}
+
+.option-row input[type="radio"] {
+    display: none;
+  }
+
+.option-row label {
+  background-color: #eefbfb;
+  color: black;
+  border: 1px solid #c2e4e4;
+  border-radius: var(--border-radius, 4px);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-right: 8px;
+  display: inline-block;
+  user-select: none;
+}
+
+.option-row input[type="radio"]:checked + label {
+  background-color: #c2e4e4;
+  border-color: #7acccc;
+}
+
+.option-row label:hover {
+  background-color: #d6f0f0;
 }
 
 @media (max-width: 768px) {

@@ -24,7 +24,7 @@ public class ajaxController {
 	
 	
 	// 이메일 인증
-    @GetMapping("/echeck")
+    @GetMapping("/emailCheck")
     public String checkEmail(@RequestParam("email") String email) {
        MimeMessage mimeMessage = mailSender.createMimeMessage();
        

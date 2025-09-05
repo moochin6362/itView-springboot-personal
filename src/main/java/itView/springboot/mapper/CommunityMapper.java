@@ -2,6 +2,7 @@ package itView.springboot.mapper;
 
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
+import itView.springboot.vo.Reply;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -35,4 +36,13 @@ public interface CommunityMapper {
 
     Attachment selectFirstImage(@Param("boardId") int boardId, @Param("boardType") String boardType);
 
+    int insertReply(Reply reply);
+
+    int updateReply(Reply reply);
+
+    int deleteReply(int replyNo);
+
+    List<Reply> selectReplyList(int boardId);
+
+    Reply findReplyById(Integer parentId);
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>신고 누적 상품 관리</title>
+
+        <!-- CSS 파일 -->
+        <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+        <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+        <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+        <!-- 아이콘 & 폰트 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- 사이드바 -->
+            <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+            <!-- 컨텐츠 영역 -->
+            <div class="content-area">
+                <!-- 헤더 -->
+                <div th:replace="~{common/header2 :: header2}"></div>
+
+                <!-- 메인 컨텐츠 -->
+                <main class="main-content">
+                    <h2>상품 상세 정보</h2>
+		            <div class="product-info">
+		                <p><strong>상품명:</strong> <span id="productName">예시 상품명</span></p>
+		                <p><strong>카테고리:</strong> <span id="category">패션</span></p>
+		                <p><strong>가격:</strong> <span id="price">50,000원</span></p>
+		                <p><strong>판매자:</strong> <span id="price">나이키</span></p>
+		                <p><strong>누적 경고 횟수:</strong> <span id="warningCount">3회</span></p>
+		            </div>
+		
+		            <form action="/inhoAdmin/productDetail" method="post">
+		                <input type="hidden" name="productId" value="123" />
+		
+		                <label>판매정지 기간 선택</label>
+		                <div class="radio-group">
+		                    <label><input type="radio" name="suspendPeriod" value="3" required /> 3일</label>
+		                    <label><input type="radio" name="suspendPeriod" value="7" /> 7일</label>
+		                    <label><input type="radio" name="suspendPeriod" value="14" /> 14일</label>
+		                    <label><input type="radio" name="suspendPeriod" value="30" /> 30일</label>
+		                    <label><input type="radio" name="suspendPeriod" value="30" /> 90일</label>
+		                    <label><input type="radio" name="suspendPeriod" value="0" /> 영구정지</label>
+		                </div>
+		
+		                <div class="btn-group">
+		                    <button type="submit" class="btn-submit">판매정지 적용</button>
+		                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+		                </div>
+		            </form>
+                </main>
+            </div>
+        </div>
+        <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+    </body>
+</html>
+

@@ -7,5 +7,98 @@
 		from "USER"
 		where user_id = #{userId} and user_status = 'Y'
 	</select>
+	
+	<insert id="insertProduct">
+		<selectKey order="BEFORE" keyProperty="productNo" resultType="_int">
+			select seq_product.nextval from dual 
+		</selectKey>
+		insert into product
+		values(#{productNo}, #{productName}, #{productDetail}, #{productStock}, #{productPrice}, #{productCategory}, #{productCompany}, default, #{userNo}, #{skinType}, #{personalColor}, #{skinTrouble}, #{headSkin})
+	</insert>
+	
+	<insert id="insertAttm">
+		insert into attachment
+		values(seq_attm.nextval, #{attmName}, #{attmRename}, #{attmPath}, default, sysdate, 0, 0, #{positionNo})
+	</insert>
+	
+	<select id="selectMyProduct" resultType="Product">
+		select *
+		from product
+		where user_no = #{userNo}
+		<if test="productNo != 0">
+			and product_no = #{productNo}
+		</if>
+		order by product_no desc
+	</select>
+	
+	<update id="editStock">
+		update product
+		set product_stock = #{productStock}
+		where product_no = #{productNo} and user_no = #{userNo}
+	</update>
+	
+	<insert id="insertCoupon">
+		insert into coupon
+		values(seq_coupon.nextval, #{couponName}, #{couponDescription}, 'All', #{couponDiscount}, sysdate, sysdate, sysdate, #{couponMinprice}, #{userNo}, default)
+	</insert>
+	
+	<select id="selectMyCoupon" resultType="Coupon">
+		select *
+		from coupon
+		where user_no = #{userNo}
+	</select>
+	
+	<update id="editCoupon">
+		update coupon
+		set coupon_discount = #{couponDiscount}, coupon_status = #{couponStatus}
+		where coupon_no = #{couponNo}
+	</update>
+	
+	<select id="selectMyAttm" resultType="Attachment">
+		select *
+		from attachment
+		where attm_level = 0 and attm_position = 0 and position_no = #{productNo}
+	</select>
+	
+	<update id="editProduct">
+		update product
+		set product_name = #{productName}, product_detail = #{productDetail}, product_stock = #{productStock}, product_price = #{productPrice}
+		where product_no = #{productNo}
+	</update>
+	
+	<delete id="deleteMyAttm">
+		delete 
+		from attachment
+		where attm_no = #{attmNo}
+	</delete>
+	
+	<delete id="deleteProduct">
+		delete
+		from product
+		where product_no = #{productNo}
+	</delete>
+	
+	<delete id="deleteAttm">
+		delete
+		from attachment
+		where position_no = #{productNo}
+	</delete>
+
+	<select id="getLatestProducts" resultType="Product">
+		SELECT p.PRODUCT_NO,
+		p.PRODUCT_NAME,
+		p.PRODUCT_DETAIL,
+		p.PRODUCT_PRICE,
+		a.ATTM_RENAME AS attmRename
+		FROM PRODUCT p
+		LEFT JOIN ATTACHMENT a
+		ON p.PRODUCT_NO = a.POSITION_NO
+		AND a.ATTM_LEVEL = 0
+		AND a.ATTM_POSITION = 0
+		ORDER BY p.PRODUCT_NO DESC
+		FETCH FIRST 10 ROWS ONLY
+	</select>
+
+
 
 </mapper>

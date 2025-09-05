@@ -12,4 +12,7 @@ public class CouponBox {
 	private String couponUsed;
 	private int userNo;
 	private int couponNo;
+	
+	
+	private String couponName;
 }

@@ -10,12 +10,15 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Reply {
-	private int replyNo;
+	private Integer replyNo;
 	private String replyContent;
 	private Date replyDate;
 	private Date replyModifiedDate;
-	private int parentId;
+	private Integer parentId;
 	private String replyStatus;
-	private int boardId;
-	private int userNo;
+	private Integer boardId;
+	private Integer userNo;
+
+	// 댓글 작성자 이름 추가
+	private String userName;
 }

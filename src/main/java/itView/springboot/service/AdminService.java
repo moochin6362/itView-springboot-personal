@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
+import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.mapper.AdminMapper;
 import itView.springboot.vo.PageInfo;
@@ -32,6 +33,25 @@ public class AdminService {
 	public UserReport selectUser(int userNo) {
 		return mapper.selectUser(userNo);
 	}
+
+	
+	//신고당한 회원 리스트
+	public int getReportListCount(int boardType, String value, String condition) {
+		return mapper.getReportListCount(boardType, value, condition);
+	}
+	
+	public ArrayList<User> selecReportList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportList(rowBounds, value, condition);
+	}
+	
+	//신고게시판 상세보기
+	public ReportDetail selectReportDetail(int userNo) {
+		return mapper.selectReportDetail(userNo);
+	}
+	
+	
 	
 	
 

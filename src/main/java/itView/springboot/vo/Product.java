@@ -28,4 +28,11 @@ public class Product {
 	
 	// join시 가져올 이름
 	private String brandName;
+	private String userAge;
+	private String gender;
+
+	// 그냥 Attachment.attmRename 필드만 추가
+	private String attmRename;
+
+
 }
