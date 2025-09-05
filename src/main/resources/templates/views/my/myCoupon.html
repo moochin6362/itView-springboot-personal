@@ -34,7 +34,7 @@
     <!-- 상단 탭 -->
     <nav class="top-tabs" aria-label="쿠폰 탭">
       <button class="tab active" type="button">보유 쿠폰</button>
-      <a class="tab link" href="#">쿠폰 등록</a>
+    
     </nav>
 
     <!-- 카테고리 칩 -->
@@ -48,17 +48,12 @@
       <button class="chip" type="button">기타</button>
     </div>
 
-    <!-- 쿠폰 코드 등록 -->
-    <form class="coupon-form" method="post" th:action="@{/coupon/register}">
-      <label class="sr-only" for="couponCode">쿠폰 코드</label>
-      <input id="couponCode" name="code" placeholder="쿠폰 코드" />
-      <button type="submit" class="btn primary">등록하기</button>
-    </form>
+   
 
     <!-- 비어있는 상태 -->
     <section class="empty">
       <p class="empty-text">보유 쿠폰이 없어요</p>
-      <a class="btn link" href="#">쿠폰등록 하러가기</a>
+     
     </section>
 
     <!-- 유의사항 -->

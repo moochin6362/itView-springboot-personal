@@ -5,13 +5,14 @@
 
 <mapper namespace="itView.springboot.mapper.MyMapper">
 
-    <select id="selectUserByNo" parameterType="long"
+  <!-- 사용자 조회 (USER_AGE: DATE 그대로 매핑) -->
+  <select id="selectUserByNo" parameterType="long"
           resultType="itView.springboot.vo.User">
     SELECT
       u."USER_NO"        AS userNo,
       u."USER_NAME"      AS userName,
       u."USER_GENDER"    AS userGender,
-      u."USER_AGE"       AS userAge,
+      u."USER_AGE"       AS userAge,      -- DATE(생년)
       u."USER_PHONE"     AS userPhone,
       u."USER_TYPE"      AS userType,
       u."USER_ID"        AS userId,
@@ -22,17 +23,13 @@
       u."USER_GRADE"     AS userGrade,
       u."EMAIL"          AS email,
       u."BRAND_NAME"     AS brandName,
-
-   
       u."SKIN_TYPE"      AS skinType,
       u."PERSONAL_COLOR" AS personalColor,
       u."SKIN_TROUBLE"   AS skinTrouble,
       u."HEAD_SKIN"      AS headSkin
-
     FROM "USER" u
     WHERE u."USER_NO" = #{userNo}
   </select>
-
 
   <!-- 최신 대표 프로필 1장 -->
   <select id="selectProfileImageByUser" parameterType="long"
@@ -64,7 +61,7 @@
        AND "POSITION_NO"=#{userNo}
   </update>
 
-  <!-- 새 프로필 저장 (시퀀스명은 실제 DB와 동일) -->
+  <!-- 새 프로필 저장 -->
   <insert id="insertProfileImage" parameterType="itView.springboot.vo.Attachment">
     INSERT INTO "ATTACHMENT"(
       "ATTM_NO","ATTM_NAME","ATTM_RENAME","ATTM_PATH",
@@ -88,21 +85,21 @@
     SELECT COUNT(*) FROM "USER" WHERE "USER_NO" = #{userNo}
   </select>
 
-  <!-- 첫 사용자 번호 (⚠ 별칭 필수: ORA-17133 방지) -->
+  <!-- 첫 사용자 번호 -->
   <select id="selectFirstUserNo" resultType="long">
     SELECT MIN(u."USER_NO") AS userNo
       FROM "USER" u
   </select>
 
-  <!-- 기본/피부 정보 저장 -->
+  <!-- 기본/피부 정보 저장 (USER_AGE: DATE) -->
   <update id="updateUserBasicAndSkin" parameterType="itView.springboot.vo.User">
     UPDATE "USER"
     <set>
-      "USER_NO" = "USER_NO",  <!-- no-op: 빈 SET 방지 -->
+      "USER_NO" = "USER_NO",
       <if test="userName != null and userName != ''">"USER_NAME" = #{userName},</if>
       <if test="email != null and email != ''">"EMAIL" = #{email},</if>
       <if test="userGender != null and userGender != ''">"USER_GENDER" = #{userGender},</if>
-      <if test="userAge != null">"USER_AGE" = #{userAge},</if>
+      <if test="userAge != null">"USER_AGE" = #{userAge},</if>  <!-- ✅ DATE -->
       <if test="skinType != null and skinType != ''">"SKIN_TYPE" = #{skinType},</if>
       <if test="personalColor != null and personalColor != ''">"PERSONAL_COLOR" = #{personalColor},</if>
       <if test="skinTrouble != null and skinTrouble != ''">"SKIN_TROUBLE" = #{skinTrouble},</if>
@@ -110,38 +107,79 @@
     </set>
     WHERE "USER_NO" = #{userNo}
   </update>
-  
-  <!-- 상품 검색 -->
-<select id="searchProducts" parameterType="string"
-        resultType="itView.springboot.vo.Product">
-  SELECT 
-    p."PRODUCT_NO"   AS productNo,
-    p."PRODUCT_NAME" AS productName,
-    p."PRODUCT_DETAIL" AS productDetail,
-    p."PRODUCT_PRICE"  AS productPrice,
-    p."PRODUCT_COMPANY" AS productCompany
-  FROM "PRODUCT" p
-  WHERE LOWER(p."PRODUCT_NAME") LIKE '%' || LOWER(#{keyword}) || '%'
-     OR LOWER(p."PRODUCT_DETAIL") LIKE '%' || LOWER(#{keyword}) || '%'
-</select>
 
-<!-- 리뷰 등록 -->
-<insert id="insertReview" parameterType="itView.springboot.vo.Review">
-  INSERT INTO "REVIEW"(
-    "REVIEW_NO", "REVIEW_CONTENT", "REVIEW_RATE",
-    "REVIEW_DATE", "PRODUCT_NO", "USER_NO"
-  ) VALUES (
-    SEQ_REVIEW.NEXTVAL,
-    #{reviewContent},
-    #{reviewRate},
-    SYSDATE,
-    #{productNo},
-    #{userNo}
-  )
-</insert>
-  
-  
-  
-  
+  <!-- 상품 검색 -->
+  <select id="searchProducts" parameterType="string"
+          resultType="itView.springboot.vo.Product">
+    SELECT 
+      p."PRODUCT_NO"     AS productNo,
+      p."PRODUCT_NAME"   AS productName,
+      p."PRODUCT_DETAIL" AS productDetail,
+      p."PRODUCT_PRICE"  AS productPrice,
+      p."PRODUCT_COMPANY" AS productCompany
+    FROM "PRODUCT" p
+    WHERE LOWER(p."PRODUCT_NAME") LIKE '%' || LOWER(#{keyword}) || '%'
+       OR LOWER(p."PRODUCT_DETAIL") LIKE '%' || LOWER(#{keyword}) || '%'
+  </select>
+
+  <!-- 리뷰 등록 -->
+  <insert id="insertReview" parameterType="itView.springboot.vo.Review">
+    INSERT INTO "REVIEW"(
+      "REVIEW_NO", "REVIEW_CONTENT", "REVIEW_RATE",
+      "REVIEW_DATE", "PRODUCT_NO", "USER_NO"
+    ) VALUES (
+      SEQ_REVIEW.NEXTVAL,
+      #{reviewContent},
+      #{reviewRate},
+      SYSDATE,
+      #{productNo},
+      #{userNo}
+    )
+  </insert>
+
+  <!-- 닉네임 중복 -->
+  <select id="countByUserName" resultType="int">
+    SELECT COUNT(*)
+      FROM "USER"
+     WHERE "USER_NAME" = #{userName}
+     <if test="excludeUserNo != null">
+       AND "USER_NO" &lt;&gt; #{excludeUserNo}
+     </if>
+  </select>
+
+  <!-- 내가 쓴 리뷰 + 상품 썸네일 -->
+  <select id="selectMyReviews" parameterType="long" resultType="map">
+    SELECT
+      r."REVIEW_NO"      AS "reviewNo",
+      r."REVIEW_CONTENT" AS "reviewContent",
+      r."REVIEW_RATE"    AS "reviewRate",
+      r."REVIEW_DATE"    AS "reviewDate",
+      r."PRODUCT_NO"     AS "productNo",
+      p."PRODUCT_NAME"   AS "productName",
+      CASE
+        WHEN a."ATTM_RENAME" IS NOT NULL
+          THEN NVL(a."ATTM_PATH", '/uploadFilesFinal/') || a."ATTM_RENAME"
+        ELSE '/uploadFilesFinal/default-product.png'
+      END AS "productImageUrl"
+    FROM "REVIEW" r
+    LEFT JOIN "PRODUCT" p
+           ON p."PRODUCT_NO" = r."PRODUCT_NO"
+    LEFT JOIN (
+      SELECT x."POSITION_NO",
+             x."ATTM_PATH", x."ATTM_RENAME",
+             ROW_NUMBER() OVER (
+               PARTITION BY x."POSITION_NO"
+               ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC
+             ) AS rn
+        FROM "ATTACHMENT" x
+       WHERE x."ATTM_POSITION" = 0  -- 상품
+         AND x."ATTM_LEVEL"    = 0  -- 대표
+         AND x."ATTM_STATUS"   = 'Y'
+    ) a
+      ON a."POSITION_NO" = r."PRODUCT_NO"
+     AND a.rn = 1
+    WHERE r."USER_NO" = #{userNo}
+    ORDER BY r."REVIEW_DATE" DESC
+  </select>
 
 </mapper>

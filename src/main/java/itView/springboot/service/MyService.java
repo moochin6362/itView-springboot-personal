@@ -3,6 +3,7 @@ package itView.springboot.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -30,8 +31,6 @@ public class MyService {
     public User getUser(Long userNo) {
         return myMapper.selectUserByNo(userNo);
     }
-
-    
 
     public String getProfileImageUrl(Long userNo) {
         Attachment a = myMapper.selectProfileImageByUser(userNo);
@@ -77,30 +76,34 @@ public class MyService {
         log.info("updateUserBasicAndSkin userNo={}, affectedRows={}", u.getUserNo(), rows);
         return rows;
     }
-    
+
     public Long findUserNoByUserId(String userId) {
         if (userId == null || userId.isBlank()) return null;
         return myMapper.selectUserNoByUserId(userId);
     }
-    
-    /** 🔎 상품 검색 */
+
+    /** 상품 검색 */
     public List<Product> searchProducts(String keyword) {
         if (keyword == null || keyword.isBlank()) return java.util.List.of();
         return myMapper.searchProducts(keyword.trim());
     }
 
-    /** 💬 리뷰 저장 */
+    /** 리뷰 저장 */
     @Transactional
     public int insertReview(Review review) {
         if (review == null) return 0;
-        // 방어코드(필수값)
         if (review.getProductNo() <= 0 || review.getUserNo() <= 0 || review.getReviewRate() <= 0) {
             return 0;
         }
         return myMapper.insertReview(review);
     }
-    
-    
-    
-    
+
+    public int countNickname(String nickname, Long excludeUserNo) {
+        if (nickname == null || nickname.isBlank()) return Integer.MAX_VALUE;
+        return myMapper.countByUserName(nickname.trim(), excludeUserNo);
+    }
+
+    public List<Map<String,Object>> getMyReviewsMap(long userNo) {
+        return myMapper.selectMyReviews(userNo);
+    }
 }

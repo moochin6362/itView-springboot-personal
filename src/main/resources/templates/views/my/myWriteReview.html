@@ -29,18 +29,43 @@
       <a class="back-btn" href="javascript:history.back()" aria-label="뒤로가기">
         <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
       </a>
-      <h1 class="page-title">내 리뷰</h1>
-      <div class="page-actions">
-        <button class="icon-btn" aria-label="알림">🔔</button>
-        <button class="icon-btn" aria-label="장바구니">🛍️</button>
-      </div>
+      
+    
     </div>
 
-    <!-- 비어있음 안내 -->
-    <section class="empty-state">
-      <h2 class="empty-title">내가 쓴 리뷰가 없어요</h2>
-      <p class="empty-sub">분석한 결과를 보려면 리뷰를 써 주세요</p>
-    </section>
+	<section class="empty-state" th:if="${#lists.isEmpty(myReviews)}">
+  <h2 class="empty-title">내가 쓴 리뷰가 없어요</h2>
+  <p class="empty-sub">리뷰를 작성하면 이곳에 목록이 나타납니다.</p>
+</section>
+
+<section class="card" th:if="${!#lists.isEmpty(myReviews)}">
+  <h2 class="section-bar">내 리뷰</h2>
+  <ul class="review-list">
+    <li class="review-item" th:each="r : ${myReviews}">
+      <div class="ri-top">
+       <img class="ri-thumb"
+     th:src="${r['productImageUrl']}"
+     alt="상품 이미지"
+     onerror="this.onerror=null; this.src='/uploadFilesFinal/default-product.png';"/>
+
+        <div class="ri-head">
+          <span class="ri-product" th:text="${r['productName']}">상품명</span>
+          <span class="ri-date"
+                th:text="${#dates.format(r['reviewDate'], 'yyyy.MM.dd')}">2025.09.05</span>
+        </div>
+      </div>
+      <div class="ri-rate">
+        <span th:each="i : ${#numbers.sequence(1,5)}">
+          <i th:class="${i <= (r['reviewRate']?:0)} ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i>
+        </span>
+        <b th:text="${r['reviewRate']}">0</b>/5
+      </div>
+      <div class="ri-content" th:text="${r['reviewContent']}">내용</div>
+    </li>
+  </ul>
+</section>
+
+  
 
     <!-- 전체 조회수 카드 -->
     <section class="stat-card">
@@ -77,6 +102,17 @@
     <div class="cta-wrap">
       <a class="primary-btn" href="/my/write">내가 사용해 본 제품 리뷰 쓰기</a>
     </div>
+  
+    
+    
+    
   </main>
+  
+  
+  
 </body>
+
+
+
+
 </html>

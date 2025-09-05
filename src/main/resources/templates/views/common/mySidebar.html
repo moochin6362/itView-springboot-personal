@@ -21,8 +21,12 @@
       <i class="fa-solid fa-heart"></i><span>찜</span>
     </a>
 
-    <a class="nav-item" th:href="@{/my/logout}">
-      <i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span>
-    </a>
-  </div>
+		<form th:action="@{/go/logout}" method="post" style="display: inline">
+			<button type="submit" class="nav-item">
+				<i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span>
+			</button>
+		</form>
+
+
+	</div>
 </nav>

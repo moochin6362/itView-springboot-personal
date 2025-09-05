@@ -13,18 +13,18 @@ import itView.springboot.vo.User;
 
 @Controller
 @RequiredArgsConstructor
-public class GoController {   // ← 클래스에 @RequestMapping 달지 않습니다!
+public class GoController {   
 
     private final ProductService pService;
     private final BCryptPasswordEncoder bcrypt;
 
-    /** 로그인 페이지 (GET) */
+    
     @GetMapping({"/go/login", "/login/login"})
     public String loginPage() {
         return "login/login";   // templates/login/login.html
     }
 
-    /** 로그인 처리 (POST) */
+  
     @PostMapping({"/go/login", "/login/login"})
     public String doLogin(User form,
                           HttpServletRequest request,

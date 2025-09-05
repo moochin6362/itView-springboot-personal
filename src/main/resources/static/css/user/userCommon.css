@@ -135,3 +135,13 @@ a.primary:active {
   color: var(--text); /* 클릭 시 글자는 검정 */
 }
 
+/* "내 리뷰" 타이틀을 포인트 컬러로 */
+.card > .section-bar {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+/* 별점 색상: 채운 별 = 노랑, 빈 별 = 연회색 */
+.ri-rate i.fa-solid.fa-star { color: #FFC107; }  /* 노란색 */
+.ri-rate i.fa-regular.fa-star { color: #e5e7eb; } /* 빈 별(회색) */
+
