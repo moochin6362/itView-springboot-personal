@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-//@Controller
+@Controller
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class AuthController {
@@ -20,10 +20,10 @@ public class AuthController {
     //private final JwtTokenProvider jwtTokenProvider;  // JWT 발급
 
     // 로그인 페이지
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login/login";
-    }
+//    @GetMapping("/login")
+//    public String loginPage() {
+//        return "login/login";
+//    }
 
     // 로그인 처리
 //    @PostMapping("/login")
@@ -85,14 +85,14 @@ public class AuthController {
 
    
     // 로그아웃
-    @GetMapping("/logout")
-    public String logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("JWT_TOKEN", null);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
-        SecurityContextHolder.clearContext();
-        return "redirect:/login/login";
-    }
+//    @GetMapping("/logout")
+//    public String logout(HttpServletResponse response) {
+//        Cookie cookie = new Cookie("JWT_TOKEN", null);
+//        cookie.setPath("/");
+//        cookie.setMaxAge(0);
+//        cookie.setHttpOnly(true);
+//        response.addCookie(cookie);
+//        SecurityContextHolder.clearContext();
+//        return "redirect:/login/login";
+//    }
 }

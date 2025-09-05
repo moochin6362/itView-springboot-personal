@@ -13,6 +13,7 @@
 		<div class="sidebar-item">쿠폰 등록</div>
 		<div class="sidebar-item">판매 내역</div>
 		<div class="sidebar-item">상품 Q&A</div>
+		<div class="sidebar-item">홈 페이지로 이동</div>
 	</div>
 	
 	<script>
@@ -35,6 +36,8 @@
 						location.href = '/seller/myCouponPage';
 					} else if(value == '판매 내역'){
 						location.href = '/seller/mySellingPage'
+					} else if(value == '홈 페이지로 이동'){
+						location.href = '/';
 					}
 				});
 			}

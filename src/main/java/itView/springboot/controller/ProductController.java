@@ -174,6 +174,8 @@ public class ProductController {
 		ArrayList<Coupon> cList = pService.selectMyCoupon(userNo);
 		Attachment attm = pService.selectMyAttm(productNo);
 		
+		//System.out.println(attm.getAttmRename());
+		
 		model.addAttribute("list", list);
 		model.addAttribute("cList", cList);
 		model.addAttribute("attm", attm);

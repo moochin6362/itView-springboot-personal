@@ -10,6 +10,7 @@ import itView.springboot.mapper.ProductMapper;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import lombok.RequiredArgsConstructor;
 
@@ -79,4 +80,9 @@ public class ProductService {
     public List<Product> getLatestProducts() {
 		return mapper.getLatestProducts();
     }
+
+	public ArrayList<Review> selectReview(int productNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import itView.springboot.service.ProductService;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Review;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -122,5 +125,11 @@ public class ProductRestContoller {
 	@PutMapping("Coupon")
 	public int editCoupon(@RequestBody Coupon coupon) {
 		return pService.editCoupon(coupon);
+	}
+	
+	// 상품 리뷰 조회
+	@GetMapping("productReview/{no}")
+	public ArrayList<Review> selectReview(@PathVariable("no") int productNo){
+		return pService.selectReview(productNo);
 	}
 }

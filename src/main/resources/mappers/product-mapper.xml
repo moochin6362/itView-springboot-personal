@@ -83,6 +83,12 @@
 		from attachment
 		where position_no = #{productNo}
 	</delete>
+	
+	<select id="selectReview">
+		select *
+		from review
+		where product_no = #{productNo}
+	</select>
 
 	<select id="getLatestProducts" resultType="Product">
 		SELECT p.PRODUCT_NO,
