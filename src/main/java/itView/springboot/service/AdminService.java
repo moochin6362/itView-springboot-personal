@@ -52,18 +52,26 @@ public class AdminService {
 		return mapper.selectReportDetail(userNo);
 	}
 	//일반 문의게시판
-		public Integer gBoardListCount(int boardType) {
-			return mapper.gBoardListCount(boardType);
-		}
-		public ArrayList<Board> selectgBoardList(PageInfo pi) {
-			int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
-			RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-			return mapper.selectBoardList(rowBounds);
-		}
+	public Integer gBoardListCount(int boardType) {
+		return mapper.gBoardListCount(boardType);
+	}
+	public ArrayList<Board> selectgBoardList(PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectBoardList(rowBounds);
+	}
+		
+		
+		
+		
+		
+		
+		
+		
 }
 	
 	
 	
 
 
-}
+

@@ -140,7 +140,22 @@ select count(*)
 	select count(*) from board where board_type = '3' and board_status = 'Y'
 </select>
 <select id="selectBoardList" resultType="Board">
-	select * from board where board_type='3' and board_status ='Y'
+	select 
+		b.board_id,
+		b.board_title,
+		b.board_content,
+		b.board_date,
+		b.board_modified_date,
+		b.board_type,
+		b.board_status,
+		b.user_no,
+		b.board_reply_status,
+		u.user_id
+	from board b
+	join
+		"USER" u 
+		 on b.user_no = u.user_no
+	where board_type='3' and board_status ='Y'
 </select>
 
 

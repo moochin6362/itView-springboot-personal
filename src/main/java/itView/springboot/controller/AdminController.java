@@ -112,7 +112,6 @@ public class AdminController {
 		
 	}
 	
-
 	//관리자 일반문의게시판 이동
 	@GetMapping("/gBoard")
 	public String gBoardPage(

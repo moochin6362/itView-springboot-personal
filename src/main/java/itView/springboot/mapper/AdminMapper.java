@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
+import itView.springboot.vo.Board;
 import itView.springboot.vo.User;
 
 @Mapper
