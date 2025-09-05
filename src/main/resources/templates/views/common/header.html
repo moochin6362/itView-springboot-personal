@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <title>it:View</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
-    </script>
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
-          rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
 
     <style>
         @font-face {
@@ -21,20 +23,8 @@
             margin: 0;
         }
 
-        /* 헤더 */
         header {
-            border-bottom: 3px solid #2b2929; /* 기존 색상 유지 */
-            margin-bottom: 0;  /* 아래 여백 제거 */
-            padding-bottom: 0; /* 아래 패딩 제거 */
-        }
-
-        #heroCarousel {
-            margin-top: 0;           /* 기존 my-4 제거해서 위 여백 없앰 */
-
-        }
-        #heroCarousel .carousel-item img {
-            display: block; /* inline-block 기본 여백 제거 */
-            line-height: 0;
+            border-bottom: 3px solid #2b2929;
         }
 
         .logo {
@@ -50,7 +40,6 @@
             color: #00c8d5;
         }
 
-        /* 상단 링크 */
         .top-links {
             font-size: 0.85rem;
         }
@@ -66,7 +55,6 @@
             color: #34e5eb;
         }
 
-        /* 검색창 */
         .search-bar {
             flex: 1;
             max-width: 600px;
@@ -94,13 +82,6 @@
             border-color: #00c8d5;
         }
 
-        /* 네비게이션 */
-        .navbar {
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-            background-color: #fff;
-        }
-
         .navbar-nav .nav-link {
             font-weight: 600;
             color: #333;
@@ -112,43 +93,36 @@
             color: #34e5eb;
         }
 
-        /* 드롭다운 메가 */
-        .dropdown-mega .dropdown-menu {
-            display: none; /* 기본 숨김 */
+        .dropdown-menu.mega-menu {
             width: 100%;
             left: 0;
             right: 0;
             top: 100%;
+            border: none;
             border-radius: 0;
-            padding: 20px 40px;
-            background-color: #f9f9f9;
-            flex-wrap: wrap;
+            padding: 1rem 2rem;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .dropdown-menu.show {
-            display: flex; /* 부트스트랩 JS에서 클릭 시 show 클래스 붙음 */
-        }
-
-
-
-        .mega-menu .col h6 {
+        .dropdown-menu .col h6 {
             color: #34e5eb;
             font-weight: 700;
-            margin-bottom: 12px;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
         }
 
-        .mega-menu .col a {
-            color: #555;
-            display: block;
-            margin-bottom: 6px;
-            transition: color 0.3s;
+        .dropdown-menu .dropdown-item {
+            font-size: 0.85rem;
+            color: #333;
+            padding: 0.25rem 0;
         }
 
-        .mega-menu .col a:hover {
+        .dropdown-menu .dropdown-item:hover {
             color: #00c8d5;
+            background: none;
         }
 
-        /* 푸터 */
         footer {
             background-color: #222;
             color: #fff;
@@ -157,25 +131,22 @@
     </style>
 </head>
 <body>
-<!-- 상단 헤더 -->
 <header>
-	<div class="container py-1 d-flex justify-content-end">
+    <div class="container py-1 d-flex justify-content-end">
         <div class="top-links">
-            <a th:href="@{/login/signUp}">회원가입</a>
+            <a th:if="${session.loginUser == null}" th:href="@{/login/signUp}">회원가입</a>
             <a th:if="${session.loginUser == null}" th:href="@{/login/login}">로그인</a>
             <a th:if="${session.loginUser != null}" th:href="@{/login/logout}">로그아웃</a>
             <a th:if="${session.loginUser != null && session.loginUser.userType == 'U' }" th:href="@{/my/mypage}">마이페이지</a>
-       		<a th:if="${session.loginUser != null && session.loginUser.userType == 'P' }" th:href="@{/seller/home}">판매자 마이페이지</a>
+            <a th:if="${session.loginUser != null && session.loginUser.userType == 'P' }" th:href="@{/seller/home}">판매자 마이페이지</a>
             <a th:if="${session.loginUser != null && session.loginUser.userType == 'A' }" th:href="@{/inhoAdmin/enrollCouponNotice}">관리자 마이페이지</a>
             <a th:if="${loginUser!=null and loginUser.userType=='u'}" th:href="@{/Shopping/cart}">장바구니</a>
-            <a href="#">주문배송</a>
+            <a th:if="${session.loginUser != null && session.loginUser.userType == 'U' }" href="#">주문배송</a>
         </div>
     </div>
-    <div class="container d-flex justify-content-between align-items-center py-2">
-        <!-- 로고 -->
-        <a th:href="@{/}" class="logo">it:View</a>
 
-        <!-- 검색창 -->
+    <div class="container d-flex justify-content-between align-items-center py-2">
+        <a th:href="@{/}" class="logo">it:View</a>
         <form class="d-flex search-bar" action="/search">
             <div class="input-group">
                 <input class="form-control" type="search" name="q" placeholder="상품, 브랜드, 성분 검색" aria-label="Search" />
@@ -184,37 +155,60 @@
         </form>
     </div>
 
-    <!-- 네비게이션 -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-top border-bottom">
         <div class="container">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item dropdown dropdown-mega">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarMega" role="button" data-bs-toggle="dropdown">카테고리</a>
-                    <div class="dropdown-menu mega-menu shadow" aria-labelledby="navbarMega">
-                        <div class="row w-100">
-                            <div class="col">
-                                <h6>스킨케어</h6>
-                                <a class="dropdown-item" href="#">스킨/토너</a>
-                                <a class="dropdown-item" href="#">에센스/앰플</a>
-                            </div>
-                            <div class="col">
-                                <h6>메이크업</h6>
-                                <a class="dropdown-item" href="#">립메이크업</a>
-                                <a class="dropdown-item" href="#">아이메이크업</a>
-                            </div>
-                            <div class="col">
-                                <h6>헤어케어</h6>
-                                <a class="dropdown-item" href="#">샴푸/린스</a>
-                                <a class="dropdown-item" href="#">트리트먼트</a>
-                            </div>
-                            <div class="col">
-                                <h6>건강식품</h6>
-                                <a class="dropdown-item" href="#">비타민</a>
-                                <a class="dropdown-item" href="#">영양제</a>
+
+                <!-- ✅ 카테고리 드롭다운 (클릭 방식) -->
+                <li class="nav-item dropdown position-static">
+                    <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">카테고리</a>
+                    <div class="dropdown-menu mega-menu" aria-labelledby="categoryDropdown">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <h6>스킨케어</h6>
+                                    <a class="dropdown-item" href="#">스킨/토너</a>
+                                    <a class="dropdown-item" href="#">에센스/세럼/앰플</a>
+                                    <a class="dropdown-item" href="#">크림</a>
+                                    <a class="dropdown-item" href="#">로션</a>
+                                    <a class="dropdown-item" href="#">미스트/오일</a>
+                                </div>
+                                <div class="col-md-2">
+                                    <h6>클렌징</h6>
+                                    <a class="dropdown-item" href="#">클렌징폼/젤</a>
+                                    <a class="dropdown-item" href="#">오일/밤</a>
+                                    <a class="dropdown-item" href="#">워터/밀크</a>
+                                    <a class="dropdown-item" href="#">필링/스크럽</a>
+                                    <a class="dropdown-item" href="#">티슈/패드</a>
+                                    <a class="dropdown-item" href="#">립&아이리무버</a>
+                                </div>
+                                <div class="col-md-2">
+                                    <h6>메이크업</h6>
+                                    <a class="dropdown-item" href="#">립메이크업</a>
+                                    <a class="dropdown-item" href="#">베이스메이크업</a>
+                                    <a class="dropdown-item" href="#">아이메이크업</a>
+                                </div>
+                                <div class="col-md-2">
+                                    <h6>헤어케어</h6>
+                                    <a class="dropdown-item" href="#">샴푸/린스</a>
+                                    <a class="dropdown-item" href="#">트리트먼트/팩</a>
+                                    <a class="dropdown-item" href="#">헤어에센스</a>
+                                    <a class="dropdown-item" href="#">염색약/펌</a>
+                                </div>
+                                <div class="col-md-2">
+                                    <h6>바디케어</h6>
+                                    <a class="dropdown-item" href="#">바디워시</a>
+                                    <a class="dropdown-item" href="#">바디로션</a>
+                                    <a class="dropdown-item" href="#">바디오일</a>
+                                    <a class="dropdown-item" href="#">핸드/풋케어</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </li>
+
+                <!-- 기타 메뉴 -->
                 <li class="nav-item"><a class="nav-link" href="@{/inhoAdmin/ranking}">랭킹</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">체험단</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/notice/list}">공지사항</a></li>

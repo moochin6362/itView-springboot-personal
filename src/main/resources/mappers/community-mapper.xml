@@ -25,24 +25,29 @@
     </select>
 
     <!-- 검색 포함 게시글 목록 -->
-    <select id="selectBoardListWithSearch" resultType="Board">
-        SELECT * FROM BOARD
-        WHERE BOARD_STATUS='Y'
-        AND BOARD_TYPE IN (5)
+    <select id="selectBoardListWithSearch" resultType="itView.springboot.vo.Board">
+        SELECT B.*,
+        U.USER_NAME,
+        U.BRAND_NAME
+        FROM BOARD B
+        JOIN "USER" U ON B.USER_NO = U.USER_NO
+        WHERE B.BOARD_STATUS='Y'
+        AND B.BOARD_TYPE IN (5)
         <if test="keyword != null and keyword != ''">
             <choose>
                 <when test="type == 'title'">
-                    AND BOARD_TITLE LIKE '%' || #{keyword} || '%'
+                    AND B.BOARD_TITLE LIKE '%' || #{keyword} || '%'
                 </when>
                 <when test="type == 'content'">
-                    AND BOARD_CONTENT LIKE '%' || #{keyword} || '%'
+                    AND B.BOARD_CONTENT LIKE '%' || #{keyword} || '%'
                 </when>
                 <otherwise>
-                    AND (BOARD_TITLE LIKE '%' || #{keyword} || '%' OR BOARD_CONTENT LIKE '%' || #{keyword} || '%')
+                    AND (B.BOARD_TITLE LIKE '%' || #{keyword} || '%'
+                    OR B.BOARD_CONTENT LIKE '%' || #{keyword} || '%')
                 </otherwise>
             </choose>
         </if>
-        ORDER BY BOARD_ID DESC
+        ORDER BY B.BOARD_ID DESC
     </select>
 
 
@@ -56,20 +61,26 @@
     </select>
 
 
-    <!--  게시글 목록 조회  -->
-    <select id="selectBoardList" resultType="Board">
-        SELECT *
-        FROM BOARD
-        WHERE board_status='Y'
-        AND BOARD_TYPE IN (5)
-        ORDER BY BOARD_ID DESC
+    <!-- 일반 게시글 목록 -->
+    <select id="selectBoardList" resultType="itView.springboot.vo.Board">
+        SELECT B.*,
+        U.USER_NAME,
+        U.BRAND_NAME
+        FROM BOARD B
+        JOIN "USER" U ON B.USER_NO = U.USER_NO
+        WHERE B.BOARD_STATUS='Y'
+        AND B.BOARD_TYPE IN (5)
+        ORDER BY B.BOARD_ID DESC
     </select>
-    <!--  게시글 상세 조회  -->
+    <!-- 게시글 상세 목록   -->
     <select id="selectBoard" parameterType="int" resultType="itView.springboot.vo.Board">
-        SELECT *
-        FROM BOARD
-        WHERE BOARD_ID = #{boardId} and BOARD_STATUS = 'Y'
-        ORDER BY BOARD_ID DESC
+        SELECT B.*,
+        U.USER_NAME,
+        U.BRAND_NAME
+        FROM BOARD B
+        JOIN "USER" U ON B.USER_NO = U.USER_NO
+        WHERE B.BOARD_ID = #{boardId}
+        AND B.BOARD_STATUS = 'Y'
     </select>
 
 

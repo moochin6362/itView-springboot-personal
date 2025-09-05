@@ -330,4 +330,13 @@ public class ProductController {
 			throw new ProductException("상품 삭제를 실패하였습니다.");
 		}
 	}
+
+	// 상품 상세페이지
+	@GetMapping("/detail/{productNo}")
+	public String productdetail(@PathVariable int productNo, Model model) {
+
+		return "Shopping/detail";
+	}
+
+
 }
