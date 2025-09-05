@@ -41,9 +41,14 @@ public interface AdminMapper {
 
 	//신고게시판 상세보기
 	ReportDetail selectReportDetail(int userNo);
+	//일반 문의게시판 조회
+	Integer gBoardListCount(
+			@Param("boardType") int boardType);
+	ArrayList<Board> selectBoardList(
+			@Param("rowBounds") RowBounds rowBounds);
 
-	
-	
+		
+		
 
 
-}
+	}
