@@ -1,10 +1,15 @@
 package itView.springboot.controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -107,7 +112,6 @@ public class AdminController {
 	}
 	
 	
-	
 	//관리자 일반문의게시판 이동
 	@GetMapping("/gBoard")
 	public String gBoardPage() {
@@ -115,12 +119,34 @@ public class AdminController {
 	}
 	
 	
-	//관리자 일반문의게시판 이동
+	//관리자 판매자 문의게시판 이동
 	@GetMapping("/pBoard")
 	public String pBoardPage() {
 		return"admin/admin_partner_board";
 	}
 		
+	//관리자 판매금지게시판 이동
+	@GetMapping("/proBoard")
+	public String proBoardPage() {
+		return "admin/admin_prohibit_board";
+	}
+	
+//	//판매금지 게시판 글 삭제
+//	@PostMapping("/deleteProBoard")
+//	public ResponseEntity<String> deleteProBoard(
+//			@RequestBody Map<String, Object> request) {
+//			int boardId = (int) request.get("id");
+//
+//	    // 서비스 호출해서 삭제 처리
+//	    boolean deleted = adService.deleteBoard(boardId);
+//
+//	    if (deleted) {
+//	        return ResponseEntity.ok("삭제 성공");
+//	    } else {
+//	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제 실패");
+//	    }
+//	}
+
 	
 	
 	

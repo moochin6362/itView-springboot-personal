@@ -1,5 +1,7 @@
 package itView.springboot.vo;
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +13,7 @@ public class User {
 	private int userNo; //pk
 	private String userName; //실명
 	private String userGender;
-	private int userAge;
+	private Date userAge;
 	private String userPhone;
 	private String userType; //p:판매자 a:관리자 u:일반소비자
 	private String userId;	

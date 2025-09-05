@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매금지 게시판</title>
+    <link rel="stylesheet" href="/css/adminCss/admin_prohibit_board.css">
+    <script src="/js/admin/admin_prohibit_board.js" defer></script>
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+     <script src="/js/inhoAdmin/sidebar.js" defer></script>
+     <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body>
+	<div class="container">
+		<!-- 사이드바 -->
+		<div th:replace="~{common/sidebar :: sidebar}"></div>
+		<!-- 컨텐츠 영역 -->
+	    <div class="content-area">
+			<!-- 헤더 -->
+			<div th:replace="~{common/header2 :: header2}"></div>
+	
+		   <div class="admin-proBoard-wrapper">
+		       <div class="admin-proBoard-header">
+		           <div class="admin-proBoard-title">판매금지 관리</div>
+		           <div class="admin-proBoard-searchBox">
+		               <form th:action="@{/admin/proBoard}" method="get">
+		                   <select name="condition" class="form-select">
+		                       <option value="userId" th:selected="${condition == 'userId'}">회원 아이디</option>
+		                       <option value="userType" th:selected="${condition == 'userType'}">가입 유형</option>
+		                       <option value="userStatus"th:selected="${condition == 'userStatus'}">활동 상태</option>
+		                       <option value="reportCount" th:selected="${condition == 'reportCount'}">누적 신고횟수</option>
+		                   </select>
+		                   <input type="search" name="value" class="form-control"
+		                   		  placeholder="검색어 입력"
+		                   		  style="width:250px; display:inline;">
+		                   <button class="proBoard-btn" type="submit">
+		                       <i class="ti ti-search"></i>
+		                   </button>
+		               </form>
+		           </div>
+		       </div>
+		       <hr class="admin-proBoard-divider"/>
+		
+		       <div class="admin-proBoard-table">
+		           <table id="admin-proBoard-table-header" class="admin-genBoard-table-header">
+		               <thead>
+		                   <tr>
+		                       <th>글 번호</th>
+		                       <th>금제 제품명</th>
+		                       <th>제품 브랜드</th> 
+		                       <th>금지 사유</th>
+		                       <th>작성일</th>
+		                   </tr>
+		               </thead>
+		               <tbody id="admin-proBoard-table-body"
+			               	  class="admin-genBoard-table-body">
+		                   <tr>
+		                       <td>1</td>
+		                       <td>롬앤 멜팅밤</td>
+		                       <td>롬앤</td>
+		                       <td>구순염 유발 가능</td>
+		                       <td>2025-12-01</td>
+		                   </tr>
+		               </tbody>
+		           </table>
+		           <ul class="admin-proBoard-pagination">
+		               <li class="admin-proBoard-page-item" th:classappend="${pi.currentPage == 1} ? 'disabled'">
+				           <a class="page-link"
+			                   th:if="${pi.currentPage > 1}"
+			                   th:href="@{${loc}(page=${pi.currentPage-1})}"
+			                   aria-label="Previous">
+	                       <span aria-hidden="true">&laquo;</span>
+	                	   </a>
+	                	   <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>    
+			           </li>
+		              
+		              
+		               <li class="admin-proBoard-page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+		               	   th:classappend="${p == pi.currentPage} ? 'active'">
+			               <a class="page-link" th:href="@{${loc}(page=${p})}">[[${p}]]</a>
+            		   </li>
+		               
+		               <li class="admin-proBoard-page-item" th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+				           	<a class="page-link"
+			                   th:if="${pi.currentPage < pi.maxPage}"
+			                   th:href="@{${loc}(page=${pi.currentPage+1})}"
+			                   aria-label="Next">
+			                   <span aria-hidden="true">&raquo;</span>
+	                		</a> 
+                			<span class="page-link" th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
+            			</li>
+		           </ul>
+		       </div>
+			</div>
+       </div>
+   </div>
+
+
+
+</body>
+</html>
