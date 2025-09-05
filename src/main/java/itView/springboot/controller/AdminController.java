@@ -143,6 +143,7 @@ public class AdminController {
         model.addAttribute("pBoardList", pBoardList);
         model.addAttribute("pi", pi);
         model.addAttribute("loc", request.getRequestURL());
+        
 		return"admin/admin_partner_board";
 	}
 		
