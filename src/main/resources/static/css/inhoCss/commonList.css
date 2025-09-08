@@ -123,8 +123,12 @@ html {
     font-weight: bold;
 }
 
+.csList-table tbody tr {
+    cursor: pointer;
+}
+
 /* ✨ row hover 효과 추가 */
-.csList-table tr:hover {
+.csList-table tbody tr:hover {
     background-color: #f0f8ff;
     transition: background-color 0.2s ease-in-out;
 }

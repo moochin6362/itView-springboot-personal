@@ -48,6 +48,7 @@ public class InhoController {
     public String loginPage() {
         return "login/login";
     }
+    
 //    @PostMapping("login")
 //    public String login(User u, Model model) {
 //    	User loginUser = uService.login(u);
@@ -58,7 +59,7 @@ public class InhoController {
 //			throw new AdminException("로그인을 실패하였습니다.");
 //		}
 //    }
-     
+    
     // 회원가입 페이지 이동
     @GetMapping("/signUp")
     public String signUpPage() {
@@ -199,10 +200,19 @@ public class InhoController {
     	if(c != null) {
     		model.addAttribute("c", c);
     		model.addAttribute("page", page);
-    		return "inhoAdmin/updateCoupon";
+    		return "inhoAdmin/couponDetail";
     	} else {
     		throw new AdminException("쿠폰 상세보기를 실패하였습니다.");
     	}
+    }
+    
+    // 쿠폰 수정 페이지 이동
+    @GetMapping("updateCoupon")
+    public String updateCouponPage(@RequestParam("couponNo") int cId, @RequestParam("page") int page, Model model) {
+    	Coupon c = uService.selectCoupon(cId);
+    	model.addAttribute("c", c);
+        model.addAttribute("page", page);
+    	return "inhoAdmin/updateCoupon";
     }
     
     // 쿠폰 수정
@@ -365,6 +375,5 @@ public class InhoController {
     	
     	return "inhoAdmin/ranking";
     }
-    
     
 }

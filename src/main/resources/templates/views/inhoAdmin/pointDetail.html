@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>포인트 상세</title>
+        <!-- CSS 파일 -->
+	    <link href="/css/inhoCss/commonDetail.css" rel="stylesheet" />
+	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+	    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+	
+	    <!-- 아이콘 & 폰트 -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+	    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- sidebar 조각 삽입 -->
+	        <div th:replace="~{common/sidebar :: sidebar}"></div>
+	
+	        <div class="content-area">
+	            <!-- header 조각 삽입 -->
+	            <div th:replace="~{common/header2 :: header2}"></div>
+                <div class="main-content">
+                    <h2 class="page-title">결제 상세 정보</h2>
+                    <table class="detail-table">
+                        <tr>
+                            <th>주문번호</th>
+                            <td>#0003</td>
+                        </tr>
+                        <tr>
+                            <th>품목/수량</th>
+                            <td>참치캔 / 30개</td>
+                        </tr>
+                        <tr>
+                            <th>구매자</th>
+                            <td>이루강</td>
+                        </tr>
+                        <tr>
+                            <th>배송지</th>
+                            <td>서울시 중구</td>
+                        </tr>
+                        <tr>
+                            <th>결제수단</th>
+                            <td>신용카드</td>
+                        </tr>
+                        <tr>
+                            <th>결제상태</th>
+                            <td><span class="status paid">결제완료</span></td>
+                        </tr>
+                        <tr>
+                            <th>쿠폰적용</th>
+                            <td>X</td>
+                        </tr>
+                        <tr>
+                            <th>총 가격</th>
+                            <td>140,000원</td>
+                        </tr>
+                        <tr>
+                            <th>배송상태</th>
+                            <td class="delivery-status">
+                                <label><input type="radio" name="delivery" value="ready" checked /> 배송준비중</label>
+                                <label><input type="radio" name="delivery" value="shipped" /> 배송중</label>
+                                <label><input type="radio" name="delivery" value="completed" /> 배송완료</label>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="form-actions">
+                        <button class="btn-submit">수정</button>
+                        <button class="btn-reset" onclick="history.back()">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+    </body>
+</html>
