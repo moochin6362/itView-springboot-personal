@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 
 @Mapper
@@ -40,5 +41,9 @@ public interface ProductMapper {
 	int deleteAttm(int productNo);
 
 	List<Product> getLatestProducts();
+
+	Product selectMyProductDetail(Product product);
+
+	ArrayList<Review> selectReview(int productNo);
 }
 

@@ -15,17 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import itView.springboot.exception.LoginException;
 import itView.springboot.exception.ProductException;
-import itView.springboot.exception.UserException;
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -125,7 +122,7 @@ public class ProductController {
 		
 		ArrayList<Coupon> list = pService.selectMyCoupon(userNo);
 		
-		System.out.println(list);
+		//System.out.println(list);
 		
 		model.addAttribute("list", list);
 		return "seller/myCouponPage";
@@ -148,15 +145,38 @@ public class ProductController {
 		product.setProductNo(productNo);
 		product.setUserNo(userNo);
 		
-		ArrayList<Product> list = pService.selectMyProduct(product);
+		Product p = pService.selectMyProductDetail(product);
 		ArrayList<Coupon> cList = pService.selectMyCoupon(userNo);
 		Attachment attm = pService.selectMyAttm(productNo);
+		ArrayList<Review> rList = pService.selectReview(productNo);
 		
 		//System.out.println(attm.getAttmRename());
 		
-		model.addAttribute("list", list);
+		if(p.getIngredient().equals("natural")) {
+			p.setIngredient("천연 & 식물 유래 성분");
+		} else if(p.getIngredient().equals("vitamin")) {
+			p.setIngredient("비타민 & 항산화 성분");
+		} else if(p.getIngredient().equals("peptide")) {
+			p.setIngredient("기능성 펩타이드 & 단백질 성분");
+		} else if(p.getIngredient().equals("moisture")) {
+			p.setIngredient("보습 & 피부장벽 특화 성분");
+		} else if(p.getIngredient().equals("cleansing")) {
+			p.setIngredient("피부 정화 & 각질 케어 성분");
+		}
+		
+		if(p.getEcoFriendly().equals("Y")) {
+			p.setEcoFriendly("친환경 제품");
+		} else {
+			p.setEcoFriendly("일반 제품");
+		}
+		
+		System.out.println(cList);
+		System.out.println(rList);
+		
+		model.addAttribute("p", p);
 		model.addAttribute("cList", cList);
 		model.addAttribute("attm", attm);
+		model.addAttribute("rList", rList);
 		
 		return "seller/myProductDetail";
 	}

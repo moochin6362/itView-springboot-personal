@@ -5,10 +5,12 @@ import java.sql.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 public class Review {
 	private int reviewNo;
 	private String reviewContent;
@@ -17,4 +19,5 @@ public class Review {
 	private Date reviewModifyDate;
 	private int productNo;
 	private int userNo;
+	private String userName;
 }

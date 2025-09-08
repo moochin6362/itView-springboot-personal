@@ -128,8 +128,8 @@ public class ProductRestContoller {
 	}
 	
 	// 상품 리뷰 조회
-	@GetMapping("productReview/{no}")
-	public ArrayList<Review> selectReview(@PathVariable("no") int productNo){
-		return pService.selectReview(productNo);
-	}
+//	@GetMapping("productReview/{no}")
+//	public ArrayList<Review> selectReview(@PathVariable("no") int productNo){
+//		return pService.selectReview(productNo);
+//	}
 }

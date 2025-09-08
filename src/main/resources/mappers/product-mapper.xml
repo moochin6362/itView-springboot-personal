@@ -7,7 +7,7 @@
 			select seq_product.nextval from dual 
 		</selectKey>
 		insert into product
-		values(#{productNo}, #{productName}, #{productDetail}, #{productStock}, #{productPrice}, #{productCategory}, #{productCompany}, default, #{userNo}, #{skinType}, #{personalColor}, #{skinTrouble}, #{headSkin})
+		values(#{productNo}, #{productName}, #{productDetail}, #{productStock}, #{productPrice}, #{productCategory}, #{productCompany}, default, #{userNo}, #{skinType}, #{personalColor}, #{skinTrouble}, #{headSkin}, #{userAge}, #{gender}, #{ingredient}, #{ecoFriendly})
 	</insert>
 	
 	<insert id="insertAttm">
@@ -40,6 +40,7 @@
 		select *
 		from coupon
 		where user_no = #{userNo}
+		order by coupon_no desc
 	</select>
 	
 	<update id="editCoupon">
@@ -81,6 +82,7 @@
 	<select id="selectReview">
 		select *
 		from review
+			 join "USER" using(user_no)
 		where product_no = #{productNo}
 	</select>
 
@@ -97,6 +99,13 @@
 		AND a.ATTM_POSITION = 0
 		ORDER BY p.PRODUCT_NO DESC
 		FETCH FIRST 10 ROWS ONLY
+	</select>
+	
+	<select id="selectMyProductDetail">
+		select *
+		from product
+			 join "USER" using(user_no)
+		where user_no = #{userNo} and product_no = #{productNo}
 	</select>
 
 

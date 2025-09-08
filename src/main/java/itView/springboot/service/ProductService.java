@@ -79,7 +79,10 @@ public class ProductService {
     }
 
 	public ArrayList<Review> selectReview(int productNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return mapper.selectReview(productNo);
+	}
+
+	public Product selectMyProductDetail(Product product) {
+		return mapper.selectMyProductDetail(product);
 	}
 }

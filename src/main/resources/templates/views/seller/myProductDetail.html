@@ -91,11 +91,76 @@ body {
 .tabs-section {
 	margin-top: 50px;
 }
+
+/* 기본 배경 색상 설정 */
+#review {
+    background-color: rgba(138, 216, 240, 0.4);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* 각 리뷰 카드 스타일 */
+.review-card {
+    background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 리뷰 헤더 (사용자 이름과 평점) */
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.ratingStar {
+    font-size: 1.5em;
+    color: #ff9800;
+}
+
+/* 리뷰 본문 스타일 */
+.review-content {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* 답변 영역 스타일 */
+.response {
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+
+.response-header {
+    font-weight: bold;
+    color: black;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.response-content {
+    font-size: 1em;
+    color: #333;
+    margin-top: 5px;
+    text-align: left;
+}
 </style>
 </head>
 <body>
 
-	<div class="container product-container" th:each="p : ${list}">
+	<div class="container product-container">
 		<input type="hidden" id="productNo" th:value="${p.productNo}"/>
 		<div class="row">
 			<!-- 좌측: 이미지 및 썸네일 -->
@@ -106,8 +171,9 @@ body {
 			<div class="col-md-6">
 				<p class="brand-name">[[${p.brandName}]]</p>
 				<h1 class="product-title">[[${p.productName}]]</h1>
-				<p class="product-price" th:text="${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + '원'}">
-				</p>
+				<p class="product-price" th:text="${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + '원'}"/>
+				<p>[[${p.ingredient}]]</p>
+				<p>[[${p.ecoFriendly}]]</p>
 				<p class="text-danger">
 					<select>
 						<option th:each="c : ${cList}">[[${c.couponName}]]</option>
@@ -147,7 +213,24 @@ body {
 				<div class="tab-pane fade show active p-3" id="detail" role="tabpanel" th:utext="${p.productDetail}">
 				</div>
 				<div class="tab-pane fade p-3" id="review" role="tabpanel">
-					
+				    <div th:each="r : ${rList}">
+				        <div class="review-card">
+				            <!-- 리뷰 내용 -->
+				            <div class="review-header">
+				                <span class="user-name">[[${r.userName}]]</span>
+				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
+				            </div>
+				            <div class="review-content">[[${r.reviewContent}]]</div>
+				            
+				            <!-- 리뷰에 대한 답변 영역 -->
+				            <div class="response">
+				                <div class="response-header">[[${p.brandName}]]</div>
+				                <div class="response-content">
+				                    <p>여기에 답변 내용이 들어갑니다.</p>
+				                </div>
+				            </div>
+				        </div>
+				    </div>
 				</div>
 				<div class="tab-pane fade p-3" id="QnA" role="tabpanel">
 					<h5 class="rating">배송이 안와요</h5>
@@ -168,19 +251,32 @@ body {
 // 				document.querySelector('#review').textContent = starString;
 // 			});
 
-			document.querySelector('#review-tab').addEventListener('click', () => {
-				const productNo = document.querySelector('#productNo').value;
-				//console.log(productNo)
-				fetch('/product/productReview/' + productNo)
-				.then(res => res.json())
-				.then(data => {
-					//console.log(data[0].reviewContent)
+// 			document.querySelector('#review-tab').addEventListener('click', () => {
+// 				const productNo = document.querySelector('#productNo').value;
+// 				//console.log(productNo)
+// 				fetch('/product/productReview/' + productNo)
+// 				.then(res => res.json())
+// 				.then(data => {
+// 					//console.log(data[0].reviewContent)
 					
-					const filledStar = '\u2605';
-				})
-				.catch(err => console.log(err))
-			});
-		}
+// 					const filledStar = '\u2605';
+// 				})
+// 				.catch(err => console.log(err))
+// 			});
+
+
+			const ratingStars = document.querySelectorAll('.ratingStar');
+			//console.log(ratingStar)
+			for(ratingStar of ratingStars){
+				const rating = ratingStar.innerText;
+				//console.log(rating)
+				const filledStar = '\u2605';
+				const starString = filledStar.repeat(rating);
+				//console.log(starString)
+				ratingStar.innerText = starString;
+				
+			}
+ 		}
 	</script>
 </body>
 </html>
