@@ -1,23 +1,28 @@
 package itView.springboot.service;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
+import itView.springboot.dto.prohibitProduct;
 import itView.springboot.mapper.AdminMapper;
+import itView.springboot.mapper.InhoMapper;
+import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
 	private final AdminMapper mapper;
+	private final InhoMapper inhoMapper;
 
 	//회원조회하기
 	public int getUserListCount(int boardType, String value, String condition) {
@@ -70,6 +75,67 @@ public class AdminService {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectpBoardList(rowBounds);
+	}
+
+	
+	//판매금지 게시판(검색,조회)
+	public Integer getproListCount(int boardType, String value, String condition) {
+		return mapper.getproListCount(boardType, value, condition);
+	}
+	public ArrayList<prohibitProduct> selecProhibitList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selecProhibitList(rowBounds, value, condition);
+	}
+	
+	
+	
+	//판매금지 제품 등록
+	public void proBoardEnroll(Board b, String uploadedFiles, HttpSession session) {
+		 User user = (User)session.getAttribute("loginUser");
+	        b.setUserNo(user.getUserNo());
+
+	        // 게시글 저장 → boardId 생성
+	        mapper.proBoardEnroll(b);
+	        int boardId = b.getBoardId();
+
+	        if (uploadedFiles != null && !uploadedFiles.isEmpty()) {
+	            String[] files = uploadedFiles.split(",");
+	            String tempDir = "c:/uploadFilesFinal/temp";
+	            String finalDir = "c:/uploadFilesFinal/notice";
+
+	            File noticeFolder = new File(finalDir);
+	            if (!noticeFolder.exists()) {
+	                noticeFolder.mkdirs(); // ❗ 폴더 생성
+	            }
+
+	            for(String fileName : files){
+	                if(fileName == null || fileName.trim().isEmpty()) continue;
+
+	                File tempFile = new File(tempDir, fileName);
+	                File finalFile = new File(finalDir, fileName);
+
+	                // Windows에서 renameTo 실패할 경우 대비
+	                if (!tempFile.renameTo(finalFile)) {
+	                    java.nio.file.Path source = tempFile.toPath();
+	                    java.nio.file.Path target = finalFile.toPath();
+	                    try {
+	                        java.nio.file.Files.copy(source, target);
+	                        tempFile.delete();
+	                    } catch (Exception e) {
+	                        e.printStackTrace();
+	                    }
+	                }
+
+	                // DB 저장
+	                Attachment attm = new Attachment();
+	                attm.setAttmName(fileName.substring(fileName.indexOf("_")+1));
+	                attm.setAttmRename(fileName);
+	                attm.setAttmPath("/uploadFilesFinal/notice");
+	                attm.setPositionNo(boardId);
+	                inhoMapper.insertAttachment(attm);
+	            }
+	        }
 	}
 		
 		

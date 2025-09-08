@@ -1,26 +1,27 @@
 package itView.springboot.controller;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import itView.springboot.common.Pagination;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
+import itView.springboot.dto.prohibitProduct;
 import itView.springboot.service.AdminService;
+import itView.springboot.service.ProductService;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminController {
 	private final AdminService adService;
+	private final ProductService pService;
 	
 	//관리자 회원조회 list가져오기
 	@GetMapping("/searchUser")
@@ -147,13 +149,94 @@ public class AdminController {
 		return"admin/admin_partner_board";
 	}
 		
-	//관리자 판매금지게시판 이동
+	//관리자 판매금지게시판 (검색조회)
 	@GetMapping("/proBoard")
-	public String proBoardPage() {
+	public String proBoardPage(
+			@RequestParam(value = "page", defaultValue = "1") int currentPage,
+	        @RequestParam(value = "value", required = false) String value,
+	        @RequestParam(value = "condition", defaultValue = "all") String condition,
+	        Model model,
+	        HttpServletRequest request) {
+		int prolistCount = adService.getproListCount(1, value, condition);
+
+        PageInfo pi = Pagination.getPageInfo(currentPage, prolistCount, 10);
+
+        ArrayList<prohibitProduct> prohibitList = adService.selecProhibitList(pi, value, condition);
+
+        model.addAttribute("prohibitList", prohibitList);
+        model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
+        model.addAttribute("value", value);
+        model.addAttribute("condition", condition);
+
+		
 		return "admin/admin_prohibit_board";
 	}
 	
-//	//판매금지 게시판 글 삭제
+	//판매금지 글쓰기view
+	@GetMapping("/proWrite")
+	public String proEnrollPage(
+			HttpSession session,
+			Model model) {
+		User loginUser = (User)session.getAttribute("loginUser");
+		if(loginUser == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+	        model.addAttribute("url", "/login/login");
+	        return "common/sendRedirect";
+		}
+		 if (!"A".equals(loginUser.getUserType())) {
+		        model.addAttribute("msg", "권한이 없습니다.");
+		        model.addAttribute("url", "/");
+		     return "common/sendRedirect";
+		 }
+	
+		 return "admin/admin_prohibit_board_write";
+	}
+	
+	
+	//금지제품 등록하기
+	@PostMapping("/proEnroll")
+	public String proEnroll(
+			HttpSession session, 
+			@ModelAttribute Board b,
+			@RequestParam(value="uploadedFiles", required=false) String uploadedFiles,
+			Model model) {
+		//작성자 확인 + 권한 확인
+		User loginUser = (User)session.getAttribute("loginUser");
+		if(loginUser == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+	        model.addAttribute("url", "/login/login");
+	        return "common/sendRedirect";
+		}
+		if (!"A".equals(loginUser.getUserType())) {
+	        model.addAttribute("msg", "권한이 없습니다.");
+	        model.addAttribute("url", "/");
+	        return "common/sendRedirect";
+		}
+		
+    	b.setUserNo(loginUser.getUserNo());
+    	
+    	if(uploadedFiles != null && !uploadedFiles.isEmpty()){
+            String[] files = uploadedFiles.split(",");
+            String content = b.getBoardContent();
+            for(String fileName : files){
+                // HTML 내 temp 경로를 notice 경로로 변경
+                content = content.replace("/uploadFilesFinal/temp/" + fileName,
+                        "/uploadFilesFinal/notice/" + fileName);
+            }
+            b.setBoardContent(content);
+        }
+    	
+    	adService.proBoardEnroll(b, uploadedFiles, session);
+    	
+        model.addAttribute("msg", "공지를 등록하였습니다.");
+        model.addAttribute("url", "/admin/proBoard");
+        return "common/sendRedirect";
+    }
+
+	
+	
+	//판매금지 게시판 글 삭제
 //	@PostMapping("/deleteProBoard")
 //	public ResponseEntity<String> deleteProBoard(
 //			@RequestBody Map<String, Object> request) {
@@ -168,10 +251,6 @@ public class AdminController {
 //	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제 실패");
 //	    }
 //	}
-
-	
-	
-	
 	
 	
 	

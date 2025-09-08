@@ -29,10 +29,9 @@
 		           <div class="admin-proBoard-searchBox">
 		               <form th:action="@{/admin/proBoard}" method="get">
 		                   <select name="condition" class="form-select">
-		                       <option value="userId" th:selected="${condition == 'userId'}">회원 아이디</option>
-		                       <option value="userType" th:selected="${condition == 'userType'}">가입 유형</option>
-		                       <option value="userStatus"th:selected="${condition == 'userStatus'}">활동 상태</option>
-		                       <option value="reportCount" th:selected="${condition == 'reportCount'}">누적 신고횟수</option>
+		                       <option value="productName" th:selected="${condition == 'productName'}">제품명</option>
+		                       <option value="productCompany" th:selected="${condition == 'productCompany'}">브랜드</option>
+		                       <option value="boardDate"th:selected="${condition == 'boardDate'}">공지 작성일</option>
 		                   </select>
 		                   <input type="search" name="value" class="form-control"
 		                   		  placeholder="검색어 입력"
@@ -49,21 +48,22 @@
 		           <table id="admin-proBoard-table-header" class="admin-genBoard-table-header">
 		               <thead>
 		                   <tr>
-		                       <th>글 번호</th>
-		                       <th>금제 제품명</th>
-		                       <th>제품 브랜드</th> 
-		                       <th>금지 사유</th>
-		                       <th>작성일</th>
+		                       <th>작성자</th>	<!-- userName-->
+		                       <th>금지 제품명</th>	<!-- productName -->
+		                       <th>제품 브랜드</th>  <!-- productCompany -->
+		                       <th>금지 사유</th> <!-- boardTitle -->
+		                       <th>작성일</th>	<!-- boardDate -->
 		                   </tr>
 		               </thead>
 		               <tbody id="admin-proBoard-table-body"
-			               	  class="admin-genBoard-table-body">
+			               	  class="admin-genBoard-table-body"
+			               	  th:each="pro : ${prohibitList}">
 		                   <tr>
-		                       <td>1</td>
-		                       <td>롬앤 멜팅밤</td>
-		                       <td>롬앤</td>
-		                       <td>구순염 유발 가능</td>
-		                       <td>2025-12-01</td>
+		                       <td>관리자</td>
+		                       <td th:text="${pro.productName}"></td>
+		                       <td th:text="${pro.productCompany}"></td>
+		                       <td th:text="${pro.boardTitle}"></td>
+		                       <td th:text="${#dates.format(pro.boardDate,'yyyy-MM-dd')}"></td>
 		                   </tr>
 		               </tbody>
 		           </table>

@@ -184,6 +184,95 @@ select count(*)
 	where board_type='7' and board_status ='Y'
 </select>
 
+<!-- 판매금지 제품 조회 -->
+<select id="getproListCount" parameterType="int" resultType="java.lang.Integer">
+SELECT COUNT(*)
+    FROM BOARD b
+    JOIN PRODUCT p ON b.USER_NO = p.USER_NO
+    <where>
+    	b.BOARD_STATUS = 'Y' AND BOARD_TYPE='8'
+        <if test="value != null and value != ''">
+            <choose>
+                <when test="condition == 'productName'">
+                    AND UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%'
+                </when>
+                <when test="condition == 'productCompany'">
+                    AND UPPER(p.PRODUCT_COMPANY) LIKE '%' || UPPER(#{value}) || '%'
+                </when>
+                <when test="condition == 'boardDate'">
+                    AND TO_CHAR(b.BOARD_DATE, 'YYYY-MM-DD') = #{value}
+                </when>
+                <otherwise>
+                    AND (UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%')
+                </otherwise>
+            </choose>
+        </if>
+    </where>
+</select>
+
+<select id="selecProhibitList" resultType="itView.springboot.dto.prohibitProduct">
+SELECT p.product_no,
+	   p.product_name,
+	   p.PRODUCT_CATEGORY,
+       p.PRODUCT_COMPANY,
+       p.PRODUCT_STATE,
+       b.BOARD_ID,
+       b.BOARD_TITLE,
+       b.BOARD_CONTENT,
+       b.BOARD_DATE,
+       b.BOARD_MODIFIED_DATE,
+       b.BOARD_TYPE,
+       b.BOARD_STATUS
+    FROM BOARD b
+    JOIN PRODUCT p ON b.USER_NO = p.USER_NO
+    <where>
+    	b.BOARD_STATUS = 'Y'AND BOARD_TYPE='8'
+        <if test="value != null and value != ''">
+            <choose>
+                <when test="condition == 'productName'">
+                    AND UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%'
+                </when>
+                <when test="condition == 'productCompany'">
+                    AND UPPER(p.PRODUCT_COMPANY) LIKE '%' || UPPER(#{value}) || '%'
+                </when>
+                <when test="condition == 'boardDate'">
+                    AND TO_CHAR(b.BOARD_DATE, 'YYYY-MM-DD') = #{value}
+                </when>
+                <otherwise>
+                    AND (UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%')
+                </otherwise>
+            </choose>
+        </if>
+    </where>
+</select>
+
+<!-- 판매금지 제품 공지사항 등록 -->
+<insert id="proBoardEnroll" parameterType="Board">
+	<selectKey  keyProperty="boardId" resultType="int" order="BEFORE">
+		select seq_board.nextval from dual
+	</selectKey>
+	INSERT INTO board (
+	    board_id,
+	    board_title,
+	    board_date,
+	    board_modified_date,
+	    board_type,
+	    board_status,
+	    user_no,
+	    board_content
+	) VALUES (
+	    #{boardId},
+	    #{boardTitle},
+	    SYSDATE,
+	    SYSDATE,
+	    '8',
+	    'Y',
+	    #{userNo},
+	    #{boardContent}
+	)
+
+</insert>
+
 
 
 

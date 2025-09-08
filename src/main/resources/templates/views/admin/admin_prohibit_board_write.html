@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>판매금지상품 공지 작성</title>
+
+        <!-- CSS 파일 -->
+        <link href="/css/adminCss/admin_prohibit_board_write.css" rel="stylesheet" />
+        <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+        <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+        <!-- 아이콘 & 폰트 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+        
+		<!-- 에디터 -->
+        <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <!-- 사이드바 -->
+            <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+            <!-- 컨텐츠 영역 -->
+            <div class="content-area">
+                <!-- 헤더 -->
+                <div th:replace="~{common/header2 :: header2}"></div>
+
+                <!-- 메인 컨텐츠 -->
+                <main class="main-content">
+                    <h2>판매금지상품 공지 작성</h2>
+                    <form action="/admin/proEnroll" method="post" class="coupon-form" id="prohibitForm">
+
+                        <label for="boardTitle">공지 제목</label>
+                        <input type="text" id="boardTitle" name="boardTitle" placeholder="공지 제목 입력" required />
+                        
+                        <label for="productCompany">브랜드명</label>
+                        <input type="text" id="productCompany" name="productCompany" placeholder="해당 제품 브랜드명" required />
+                        
+                        <label for="productName">금지 제품명</label>
+                        <input type="text" id="productName" name="productName" placeholder="제품명" required />
+                        
+                        <label for="productCategory">금지 제품 카테고리</label>
+                        <input type="text" id="productCategory" name="productCategory" placeholder="제품 카테고리" required />   
+
+                        <label for="boardContent">공지 내용</label>
+                        <div id="editor"></div>
+                        <textarea id="boardContent" name="boardContent" placeholder="공지 내용을 입력하세요" rows="5" style="display: none;"></textarea>
+
+						<!-- 업로드된 이미지 파일명 저장용 -->
+   						<input type="hidden" name="uploadedFiles" id="uploadedFiles">
+
+				
+                        <div class="btn-group">
+                            <button type="submit" class="btn-submit">등록</button>
+                            <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+                        </div>
+                    </form>
+                </main>
+            </div>
+        </div>
+        <script th:src="@{/js/admin/admin_prohibit_board_write.js}"></script>
+        <script>
+		    const uploadedFilesArr = [];
+		
+		    // Toast UI Editor 초기화
+		    const editor = new toastui.Editor({
+		        el: document.querySelector('#editor'),
+		        height: '300px',
+		        initialEditType: 'wysiwyg',
+		        hideModeSwitch: true,
+		        toolbarItems: [
+		            ['heading', 'bold', 'italic', 'strike'],
+		            ['hr', 'quote'],
+		            ['ul', 'ol'],
+		            ['table', 'link'],
+		            ['image']
+		        ],
+		        hooks: {
+		            addImageBlobHook: async (blob, callback) => {
+		                const formData = new FormData();
+		                formData.append('image', blob);
+		
+		                const response = await fetch('/inhoAdmin/uploadImage', {
+		                    method: 'POST',
+		                    body: formData
+		                });
+		                const tempUrl = await response.text(); // temp URL 반환
+		                callback(tempUrl, 'image');
+		
+		                uploadedFilesArr.push(tempUrl.split('/').pop());
+		                document.getElementById('uploadedFiles').value = uploadedFilesArr.join(',');
+		            }
+		        }
+		    });
+		
+		    const form = document.getElementById("prohibitForm");
+		    form.addEventListener("submit", function(e) {
+		        let html = editor.getHTML();
+		        document.getElementById("boardContent").value = html;
+		    });
+		</script>
+    </body>
+</html>

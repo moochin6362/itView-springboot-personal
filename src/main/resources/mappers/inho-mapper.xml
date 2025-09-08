@@ -68,7 +68,7 @@
 		</selectKey>
 		insert into board
 		values(#{boardId}, #{boardTitle}, sysdate, #{boardModifiedDate}, 
-				'4', 'Y', #{userNo}, #{boardContent})
+				'4', 'Y', #{userNo}, #{boardContent}, default)
 	</insert>
 	
 	<!-- 첨부파일 등록 -->
