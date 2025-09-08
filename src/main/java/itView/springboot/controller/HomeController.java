@@ -77,7 +77,7 @@ public class HomeController {
         model.addAttribute("pi", pi);
         model.addAttribute("loc", request.getRequestURL());
         model.addAttribute("products", products);
-        model.addAttribute("selectedCategories", categories); // 선택된 필터 표시용
+//        model.addAttribute("selectedCategories", categories); // 선택된 필터 표시용
         model.addAttribute("q", q); // 검색어 유지용
 
         return "search/search";
