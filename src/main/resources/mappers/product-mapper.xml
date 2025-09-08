@@ -2,12 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="itView.springboot.mapper.ProductMapper">
 	
-	<select id="login" resultType="User">
-		select *
-		from "USER"
-		where user_id = #{userId} and user_status = 'Y'
-	</select>
-	
 	<insert id="insertProduct">
 		<selectKey order="BEFORE" keyProperty="productNo" resultType="_int">
 			select seq_product.nextval from dual 

@@ -31,34 +31,12 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@SessionAttributes("loginUser")
-@RequestMapping({"/product", "/login", "/seller"})
+@RequestMapping({"/product","/seller"})
 @RequiredArgsConstructor
 public class ProductController {
-	
 	private final ProductService pService;
 	private final BCryptPasswordEncoder bcrypt;
 	
-
-	@PostMapping("login")
-	public String login(User u, Model model) {
-		//System.out.println(bcrypt.encode("1234"));
-		User loginUser = pService.login(u);
-		
-		if(loginUser != null && bcrypt.matches(u.getUserPassword(), loginUser.getUserPassword())) {
-			model.addAttribute("loginUser", loginUser);
-			if(loginUser.getUserType().equals("U")){
-				return "redirect:/";
-			} else if(loginUser.getUserType().equals("A")) {
-				return "redirect:/inhoAdmin/enrollCouponNotice";
-			} else {
-				return "redirect:/seller/home";
-			}
-		} else {
-			throw new ProductException("로그인을 실패하였습니다.");
-		}
-		
-	}
 	
 	@GetMapping("home")
 	public String sellerPageHome() {

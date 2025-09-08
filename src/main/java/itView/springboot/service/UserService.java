@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserMapper userMapper;
-	
+	//로그인
+	public User login(User u) {
+		return userMapper.login(u);
+	}
 	//비밀번호 수정
 	public int updatePassword(User u) {
 		return userMapper.updatePassword(u);

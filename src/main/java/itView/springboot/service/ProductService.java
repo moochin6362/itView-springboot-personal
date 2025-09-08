@@ -20,9 +20,6 @@ public class ProductService {
 	
 	private final ProductMapper mapper;
 
-	public User login(User u) {
-		return mapper.login(u);
-	}
 
 	public int insertProduct(Product product) {
 		return mapper.insertProduct(product);

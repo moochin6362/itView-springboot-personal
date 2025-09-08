@@ -6,6 +6,8 @@ import itView.springboot.vo.User;
 
 @Mapper
 public interface UserMapper {
+	//로그인
+	User login(User u);
 	 
 	 //비밀번호 수정
 	int updatePassword(User u);

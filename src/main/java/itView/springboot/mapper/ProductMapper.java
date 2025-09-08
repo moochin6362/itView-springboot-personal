@@ -13,8 +13,6 @@ import itView.springboot.vo.User;
 @Mapper
 public interface ProductMapper {
 
-	User login(User u);
-
 	int insertProduct(Product product);
 
 	ArrayList<Product> selectMyProduct(Product product);
