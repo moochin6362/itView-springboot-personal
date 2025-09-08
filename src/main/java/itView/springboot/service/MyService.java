@@ -15,6 +15,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
+import itView.springboot.vo.experienceGroup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -106,4 +107,47 @@ public class MyService {
     public List<Map<String,Object>> getMyReviewsMap(long userNo) {
         return myMapper.selectMyReviews(userNo);
     }
+    
+    //포인트
+    public int getPointBalance(long userNo) {
+        Integer v = myMapper.selectPointBalance(userNo);
+        return v == null ? 0 : v;
+    }
+    
+    public java.util.List<itView.springboot.vo.Point> getPointHistory(long userNo) {
+        return myMapper.selectPointHistory(userNo);
+    }
+
+    public java.util.List<itView.springboot.vo.Coupon> getMyCoupons(long userNo) {
+        return myMapper.selectMyCoupons(userNo);
+    }
+
+    public java.util.List<java.util.Map<String,Object>> getRecentWishlistMap(long userNo) {
+        return myMapper.selectTop3WishlistMap(userNo);
+    }
+    
+    /** 모집글 검색 */
+    public java.util.List<experienceGroup> searchExperienceGroups(String keyword) {
+        String kw = (keyword == null) ? "" : keyword.trim();
+        return myMapper.searchExperienceGroups(kw);
+        
+    }
+
+ // 중복 신청 여부
+    public int countMyExperienceApply(Long userNo, int expNo) {
+        return myMapper.countMyExperienceApply(userNo, expNo);
+    }
+
+    // 신청 저장
+    public int insertExperienceApply(Long userNo, int expNo, String applyContent) {
+        return myMapper.insertExperienceApply(userNo, expNo, applyContent);
+    }
+
+    public List<Map<String,Object>> getExperienceWins(long userNo) {
+        return myMapper.selectExperienceWins(userNo);
+    }
+
+
+	
+ 
 }

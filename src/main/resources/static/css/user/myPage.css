@@ -123,3 +123,53 @@ a:hover, .link:hover{text-decoration:underline}
   display: block;
 }
 
+/* ===== 프로필 카드: 가운데 정렬 + 큰 아바타 ===== */
+.profile-card{
+  display:flex;
+  flex-direction:column;           /* 세로 배치 */
+  align-items:center;              /* 가로 가운데 */
+  gap:14px;
+  text-align:center;               /* 텍스트도 가운데 */
+  padding:24px;
+}
+
+/* 아바타 크게 */
+.profile-card .avatar{
+  width:128px;
+  height:128px;
+  border-radius:50%;
+  background:#edf2f7;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 14px rgba(0,0,0,.06);
+}
+
+/* 기존 48px 고정값을 덮어쓰기: 이미지가 컨테이너(아바타) 꽉 차게 */
+.profile-card .avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  display:block;
+}
+
+/* 닉네임/칩 가운데 정렬 */
+.profile-card .profile-meta{ width:100%; }
+.profile-card .nickname{ font-size:18px; font-weight:800; }
+.profile-card .chips{ justify-content:center; }
+
+/* '내정보 변경' 링크를 카드 하단 가운데로 */
+.profile-card .chevron{
+  align-self:center;               /* 가운데 위치 */
+  font-size:16px;
+  color:var(--primary);
+  text-decoration:none;
+  margin-top:4px;
+}
+
+/* 데스크톱에서 조금 더 크게 */
+@media (min-width: 1024px){
+  .profile-card .avatar{ width:144px; height:144px; }
+  .profile-card .nickname{ font-size:20px; }
+}
+
+

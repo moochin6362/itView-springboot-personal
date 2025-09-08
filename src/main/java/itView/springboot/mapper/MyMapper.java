@@ -10,6 +10,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
+import itView.springboot.vo.experienceGroup;
 
 @Mapper
 public interface MyMapper {
@@ -34,4 +35,32 @@ public interface MyMapper {
                         @Param("excludeUserNo") Long excludeUserNo);
 
     List<Map<String,Object>> selectMyReviews(@Param("userNo") long userNo);
+    
+    // 포인트잔액(이력 합계)
+    Integer selectPointBalance(@org.apache.ibatis.annotations.Param("userNo") long userNo);
+
+    // 내역 목록
+    java.util.List<itView.springboot.vo.Point> selectPointHistory(@org.apache.ibatis.annotations.Param("userNo") long userNo);
+
+    // 보유 쿠폰(사용 가능) 목록
+    java.util.List<itView.springboot.vo.Coupon> selectMyCoupons(
+            @org.apache.ibatis.annotations.Param("userNo") long userNo);
+    
+ // 최근 찜 3개 (+대표 이미지 URL까지)
+    java.util.List<java.util.Map<String, Object>> selectTop3WishlistMap(
+            @org.apache.ibatis.annotations.Param("userNo") long userNo);
+
+    List<experienceGroup> searchExperienceGroups(@Param("keyword") String keyword);
+
+ // 중복 신청 체크
+    int countMyExperienceApply(@Param("userNo") Long userNo,
+                               @Param("expNo") int expNo);
+
+    // 신청 저장
+    int insertExperienceApply(@Param("userNo") Long userNo,
+                              @Param("expNo") int expNo,
+                              @Param("applyContent") String applyContent);
+
+    List<Map<String,Object>> selectExperienceWins(@Param("userNo") long userNo);
+
 }

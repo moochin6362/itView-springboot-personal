@@ -25,24 +25,18 @@
     <!-- 상단 타이틀바 -->
     <div class="page-topbar">
       <h1 class="page-title">포인트</h1>
-      <div class="page-actions">
-        <button class="icon-btn" aria-label="알림">🔔</button>
-        <button class="icon-btn" aria-label="장바구니">🛍️</button>
-      </div>
     </div>
 
     <!-- 포인트 카드 -->
     <section class="point-card card" aria-labelledby="pointHeading">
       <div class="card-left">
         <h2 id="pointHeading" class="card-title">내 포인트</h2>
-        <div class="point-big" th:text="${pointBalance} + 'P'">15P</div>
+        <div class="point-big" th:text="${pointBalance} + 'P'">0P</div>
         <p class="muted" th:text="${expireSoonText}">
-          포인트 사용 만료기간은 3년입니당
+          소멸 예정 포인트는 각 적립건의 만료일을 확인하세요.
         </p>
       </div>
-      <button class="info" type="button" aria-label="포인트 안내">
-        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-      </button>
+     
     </section>
 
     <!-- 필터 탭 -->
@@ -53,67 +47,66 @@
       <button class="tab" type="button" data-filter="expire">소멸</button>
     </nav>
 
-    <!-- 포인트 내역 -->
-    <section class="history" aria-live="polite">
-      <div class="month">2025년 08월</div>
+    <!-- 포인트 내역 (널/빈 리스트 안전) -->
+    <section class="history" aria-live="polite"
+             th:if="${histories != null and !#lists.isEmpty(histories)}">
+      <div th:each="h, stat : ${histories}"
+           th:with="
+              curr=${#dates.format(h.pointCreatedate,'yyyy년 MM월')},
+              prev=${stat.index > 0 ? #dates.format(histories[stat.index-1].pointCreatedate,'yyyy년 MM월') : ''},
+              type=${h.pointValue > 0} ? 'save' : ((h.pointDescription != null and #strings.contains(h.pointDescription,'소멸')) ? 'expire' : 'use')
+           ">
 
-      <div class="row" data-type="save">
-        <div>
-          <p class="row-title">리뷰 작성 보상</p>
-          <div class="date">2025-08-20 14:21</div>
-        </div>
-        <div class="right">
-          <div class="amount plus">+200P</div>
-          <div class="expire">소멸 예정일: 2026-08-20</div>
+        <!-- 월 헤더 -->
+        <div class="month" th:if="${stat.index == 0 or curr != prev}"
+             th:text="${curr}">2025년 08월</div>
+
+        <!-- 목록 행 -->
+        <div class="row" th:attr="data-type=${type}">
+          <div>
+            <p class="row-title"
+               th:text="${h.pointName != null ? h.pointName : (h.pointValue > 0 ? '포인트 적립' : '포인트 차감')}">
+              포인트 항목
+            </p>
+            <div class="date"
+                 th:text="${h.pointCreatedate != null ? #dates.format(h.pointCreatedate,'yyyy-MM-dd HH:mm') : ''}">
+              2025-08-20 14:21
+            </div>
+          </div>
+          <div class="right">
+            <div class="amount"
+                 th:classappend="${h.pointValue > 0} ? ' plus' : ''"
+                 th:text="${(h.pointValue > 0 ? '+' : '') + h.pointValue} + 'P'">
+              +0P
+            </div>
+            <div class="expire" th:if="${h.pointEnddate != null}"
+                 th:text="'소멸 예정일: ' + ${#dates.format(h.pointEnddate,'yyyy-MM-dd')}">
+              소멸 예정일: 2026-08-20
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="row" data-type="use">
-        <div>
-          <p class="row-title">주문 결제 사용</p>
-          <div class="date">2025-08-18 09:12</div>
-        </div>
-        <div class="right">
-          <div class="amount">-150P</div>
-        </div>
-      </div>
-
-      <div class="row" data-type="expire">
-        <div>
-          <p class="row-title">포인트 소멸</p>
-          <div class="date">2022-08-01 00:00</div>
-        </div>
-        <div class="right">
-          <div class="amount">-30P</div>
-        </div>
-      </div>
-
-      <div class="month">2025년 07월</div>
-
-      <div class="row" data-type="save">
-        <div>
-          <p class="row-title">신규 가입 축하</p>
-          <div class="date">2025-07-28 11:00</div>
-        </div>
-        <div class="right">
-          <div class="amount plus">+1000P</div>
-          <div class="expire">소멸 예정일: 2026-07-28</div>
-        </div>
-      </div>
+    <!-- 데이터 없을 때 -->
+    <section class="history"
+             th:if="${histories == null or #lists.isEmpty(histories)}">
+      <div class="card">포인트 내역이 없습니다.</div>
     </section>
   </main>
 
   <!-- 탭 필터 스크립트 -->
   <script>
-    (function(){
+    (function () {
       const tabs = document.querySelectorAll('.tabs .tab');
-      const rows = document.querySelectorAll('.history .row');
-      tabs.forEach(tab=>{
-        tab.addEventListener('click', ()=>{
-          tabs.forEach(t=>t.classList.remove('active'));
+      const rows = () => document.querySelectorAll('.history .row');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
           const type = tab.dataset.filter;
-          rows.forEach(r=>{
+          rows().forEach(r => {
             r.style.display = (type === 'all' || r.dataset.type === type) ? '' : 'none';
           });
         });

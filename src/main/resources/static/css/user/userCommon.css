@@ -144,4 +144,40 @@ a.primary:active {
 /* 별점 색상: 채운 별 = 노랑, 빈 별 = 연회색 */
 .ri-rate i.fa-solid.fa-star { color: #FFC107; }  /* 노란색 */
 .ri-rate i.fa-regular.fa-star { color: #e5e7eb; } /* 빈 별(회색) */
+/* --- Fix 1: 접힌 상태에서 라벨이 튀어나오는 문제 방지 --- */
+.sidenav { overflow: hidden; }                   /* 넘친 라벨 잘라내기 */
+
+.sidenav:not(:hover) .nav-item {                 /* 접힘 상태: 아이콘만 중앙 정렬 */
+  justify-content: center;
+}
+.sidenav:not(:hover) .nav-item span {            /* 접힘 상태: 라벨 자체를 숨겨서 공간 제거 */
+  display: none;
+}
+
+/* 펼쳐졌을 때는 라벨 보이고 왼쪽 정렬 */
+.sidenav:hover .nav-item { justify-content: flex-start; }
+.sidenav:hover .nav-item span { display: inline; opacity: 1; }
+
+/* --- Fix 2: 로그아웃 버튼(폼 안 버튼)도 링크와 동일한 모양으로 --- */
+.sidenav form { margin: 0; }                     /* 폼 기본 여백 제거 */
+
+.sidenav button.nav-item {
+  all: unset;                                    /* 버튼 기본 스타일 완전 리셋 */
+  display: flex; align-items: center; gap: 12px;
+  height: 48px; padding: 0 12px;
+  border-radius: 12px; border: 1px solid transparent;
+  cursor: pointer; color: #333;
+}
+
+/* 호버/액티브 스타일을 a.nav-item과 동일하게 유지 */
+.sidenav button.nav-item:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary-pressed);
+  transform: translateY(-1px);
+}
+.sidenav button.nav-item:active {
+  background: var(--primary-pressed);
+  color: #fff;
+  transform: translateY(0);
+}
 

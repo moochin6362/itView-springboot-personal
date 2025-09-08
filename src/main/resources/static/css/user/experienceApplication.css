@@ -224,5 +224,45 @@ body {
   transform: translateY(0);
 }
  
-  
+/* input이랑 똑같이 보이도록 */
+.input-like {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;    /* 기존 인풋 테두리 톤과 맞추기 */
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 높이 고정 + 리사이즈 막기 */
+.textarea-fixed {
+  height: 140px;   /* 필요하면 120~160px 사이로 조절 */
+  resize: none;
+}
+
+/* 라벨 붙었을 때 줄 맞춤 (이미 있다면 생략 가능) */
+.form-row {
+  display: grid;
+  grid-template-columns: 110px 1fr; /* 라벨 폭 */
+  align-items: center;
+  gap: 10px;
+}
+
+.form-row.no-label {
+  grid-template-columns: 1fr;
+}
+
+.form-row label {
+  color: #374151;
+  font-weight: 600;
+}
+
+.addr-search {
+  display: flex;
+  gap: 8px;
+}
+.addr-search input { flex: 1; }
+
 

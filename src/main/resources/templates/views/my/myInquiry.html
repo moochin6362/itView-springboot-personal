@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>1:1문의</title>
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>나의 문의</title>
+
   <!-- 공통 레이아웃 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
-
   <!-- 페이지 전용 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/myInquiry.css}" />
-  <!-- 아이콘(CDN) -->
+  <!-- 아이콘 CDN (v6) -->
   <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -25,121 +21,78 @@
   <!-- 전역 사이드바 (공통) -->
   <div th:replace="~{common/mySidebar}"></div>
 
-
-<main class="page">
-  <!-- 상단 타이틀바 -->
-  <div class="page-topbar">
-    <button class="icon-btn back" aria-label="뒤로">←</button>
-    <h1 class="page-title">1:1문의</h1>
-    <span class="spacer"></span>
-  </div>
-
-  <!-- 상단 안내영역 -->
-  <section class="banner">
-    <div class="banner-illust" aria-hidden="true">💬</div>
-    <div class="banner-text">
-      <b>It:View를 이용하면서 불편한 점<br/>바라는 점을 말씀해주세요</b>
-      <p>It:view는 여러분과 함께 만들어가는 서비스입니다</p>
-    </div>
-  </section>
-
-  <a href="#" class="faq-link card">자주 묻는 질문<span class="chev">›</span></a>
-
-  <form class="form" autocomplete="off">
-    <!-- 문의 유형 -->
-    <h2 class="sec-title">문의 유형</h2>
-    <div class="field">
-      <div class="select-wrap">
-        <select>
-          <option value="" selected>카테고리 선택</option>
-          <option>계정/로그인</option>
-          <option>포인트/이벤트</option>
-          <option>구매/주문</option>
-          <option>버그 신고</option>
-          <option>기타 문의</option>
-        </select>
-        <span class="arrow">▾</span>
-      </div>
-    </div>
-    <div class="field">
-      <div class="select-wrap">
-        <select>
-          <option value="" selected>서브 카테고리 선택</option>
-          <option>비밀번호 재설정</option>
-          <option>이메일 변경</option>
-          <option>쿠폰 사용</option>
-          <option>배송 문의</option>
-          <option>기타</option>
-        </select>
-        <span class="arrow">▾</span>
-      </div>
+  <main class="page">
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <a class="back-btn" href="javascript:history.back()" aria-label="뒤로가기">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+      </a>
+      <h1 class="page-title">나의 문의</h1>
+      <div class="page-actions"></div>
     </div>
 
-    <!-- 제목 -->
-    <h2 class="sec-title">문의 제목</h2>
-    <div class="field">
-      <input type="text" class="input" placeholder="50자 미만으로 입력해주세요" maxlength="50"/>
-    </div>
+    <!-- 비어있을 때 -->
+    <section class="empty-state" th:if="${#lists.isEmpty(myInquiries)}">
+      <h2 class="empty-title">작성한 문의가 없어요</h2>
+      <p class="empty-sub">상품 상세에서 ‘문의하기’를 이용해 보세요.</p>
+    </section>
 
-    <!-- 내용 -->
-    <h2 class="sec-title">문의 내용</h2>
-    <div class="field">
-      <textarea class="textarea" rows="6" placeholder="개인정보(이름, 연락처, 주민등록번호 등)가 포함되지 않도록 작성해주세요"></textarea>
-    </div>
+    <!-- 목록 -->
+    <section class="card" th:if="${!#lists.isEmpty(myInquiries)}">
+      <h2 class="section-bar">내 문의</h2>
+      <ul class="inq-list">
+        <li class="inq-item" th:each="q : ${myInquiries}">
+          <!-- 상단: 썸네일 + 상품명/작성일 + 상태칩 -->
+          <div class="inq-top">
+            <img class="inq-thumb"
+                 th:src="${q['productImageUrl']}"
+                 alt="상품 이미지"
+                 onerror="this.onerror=null; this.src='/uploadFilesFinal/default-product.png';"/>
 
-    <!-- 답변 이메일 -->
-    <h2 class="sec-title">답변 받을 이메일</h2>
-    <div class="email-row">
-      <input type="text" class="input" placeholder="아이디(예: hello)"/>
-      <span class="at">@</span>
-      <div class="select-wrap">
-        <select id="email-domain">
-          <option value="">직접입력</option>
-          <option value="naver.com">naver.com</option>
-          <option value="gmail.com">gmail.com</option>
-          <option value="daum.net">daum.net</option>
-          <option value="kakao.com">kakao.com</option>
-        </select>
-        <span class="arrow">▾</span>
-      </div>
-      <input type="text" class="input domain" id="domain-input" placeholder="도메인(예: example.com)"/>
-    </div>
+            <div class="inq-head">
+              <a class="inq-product"
+                 th:href="@{'/product/detail/' + ${q['productNo']}}"
+                 th:text="${q['productName']}">상품명</a>
+              <span class="inq-date"
+                    th:text="${#dates.format(q['createdDate'], 'yyyy.MM.dd HH:mm')}">2025.09.08 12:00</span>
+            </div>
 
-    <!-- 동의 -->
-    <div class="consent">
-      <label class="chk">
-        <input type="checkbox" />
-        <span></span>
-        <em>(필수)</em> 답변 전송을 위한 이메일 정보 수집 및 이용에 동의
-      </label>
-    </div>
+            <!-- 상태칩: ANSWERED / WAITING / REJECTED 등 -->
+            <span class="chip"
+                  th:classappend="${q['status'] == 'ANSWERED'} ? ' chip--ok' :
+                                  (${q['status'] == 'WAITING'} ? ' chip--wait' : ' chip--etc')"
+                  th:text="${q['statusName']}">답변대기</span>
+          </div>
 
-    <!-- 전송 버튼 -->
-    <div class="submit-bar">
-      <button type="submit" class="submit">관리자에게 전송하기</button>
-    </div>
-  </form>
-</main>
+          <!-- 제목/내용 요약 -->
+          <div class="inq-body">
+            <div class="inq-title" th:text="${q['title']}">문의 제목</div>
+            <div class="inq-content" th:text="${q['content']}">
+              문의 내용 미리보기…
+            </div>
 
-<script>
-  // 이메일 도메인 선택: '직접입력'이면 텍스트 입력 활성화, 그 외에는 선택값으로 채움
-  const domainSelect = document.getElementById('email-domain');
-  const domainInput  = document.getElementById('domain-input');
+            <!-- 판매자 답변(있을 때만) -->
+            <div class="inq-answer" th:if="${q['answerContent'] != null}">
+              <i class="fa-solid fa-reply" aria-hidden="true"></i>
+              <div class="ans-text" th:text="${q['answerContent']}">판매자 답변 내용…</div>
+              <div class="ans-date"
+                   th:text="${#dates.format(q['answeredDate'], 'yyyy.MM.dd HH:mm')}">2025.09.08 13:40</div>
+            </div>
+          </div>
 
-  function syncDomain() {
-    if (domainSelect.value === '') {
-      domainInput.value = '';
-      domainInput.disabled = false;
-      domainInput.placeholder = '도메인(예: example.com)';
-    } else {
-      domainInput.value = domainSelect.value;
-      domainInput.disabled = true;
-      domainInput.placeholder = '';
-    }
-  }
-  domainSelect.addEventListener('change', syncDomain);
-  syncDomain();
-</script>
+          <!-- 하단 액션 -->
+          <div class="inq-actions">
+            <a class="ghost-btn"
+               th:href="@{'/my/myInquiry/' + ${q['inquiryNo']}}">상세보기</a>
+            <a class="ghost-btn"
+               th:href="@{'/product/detail/' + ${q['productNo']} + '#qna'}">상품Q&amp;A로 이동</a>
+          </div>
+        </li>
+      </ul>
+    </section>
 
+   
+
+  </main>
 </body>
 </html>

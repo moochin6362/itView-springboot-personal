@@ -16,61 +16,58 @@
 <body>
 
 
-<!-- 로그인확인용 -->
-	<div class="card" style="margin:10px 4px; padding:8px; font-size:13px; color:#666">
-  userNo: <b th:text="${session.userNo}">null</b>,
-  userId: <b th:text="${session.userId}">null</b>,
-  name: <b th:text="${session.loginUser != null ? session.loginUser.userName : 'null'}">null</b>
-</div>
-<!-- 로그인확인용	 -->
+	<!-- 로그인확인용 -->
+	<div class="card"
+		style="margin: 10px 4px; padding: 8px; font-size: 13px; color: #666">
+		userNo: <b th:text="${session.userNo}">null</b>, userId: <b
+			th:text="${session.userId}">null</b>, name: <b
+			th:text="${session.loginUser != null ? session.loginUser.userName : 'null'}">null</b>
+	</div>
+	<!-- 로그인확인용	 -->
 
 
 
 
-  <!-- 전역 헤더 (공통) -->
-  <div th:replace="~{common/myHeader}"></div>
+	<!-- 전역 헤더 (공통) -->
+	<div th:replace="~{common/myHeader}"></div>
 
-  <!-- 전역 사이드바 (공통) -->
-  <div th:replace="~{common/mySidebar}"></div>
+	<!-- 전역 사이드바 (공통) -->
+	<div th:replace="~{common/mySidebar}"></div>
 
- 
+
 
 	<main class="page">
 		<!-- 상단 타이틀바 -->
 		<div class="page-topbar">
 			<h1 class="page-title">마이페이지</h1>
-			<div class="page-actions">
-
-				
-			</div>
+			<div class="page-actions"></div>
 
 		</div>
 
 		<!-- 프로필 카드 -->
-<section class="card profile-card">
-  <div class="avatar">
-    <!-- 실제 파일: C:\uploadFilesFinal\notice\default-avatar.png -->
-    <img th:src="${profileImageUrl}"
-         src="/uploadFilesFinal/default-avatar.png"
-     
-         alt="프로필" />
-  </div>
+		<section class="card profile-card">
+			<div class="avatar">
+				<!-- 실제 파일: C:\uploadFilesFinal\notice\default-avatar.png -->
+				<img th:src="${profileImageUrl}"
+					src="/uploadFilesFinal/default-avatar.png" alt="프로필" />
+			</div>
 
-  <div class="profile-meta">
-    <div class="nickname" th:text="${profileName}">사용자명</div>
-    <div class="chips">
-      <!-- 요구사항: 연령대 + 등급 -->
-      <span class="chip" th:text="${profileAge}">30대</span>
-      <span class="chip" th:text="${profileGrade}">일반</span>
-    </div>
-  </div>
+			<div class="profile-meta">
+				<div class="nickname" th:text="${profileName}">사용자명</div>
+				<div class="chips">
+					<!-- 요구사항: 연령대 + 등급 -->
+					<span class="chip" th:text="${profileAge}">30대</span> <span
+						class="chip" th:text="${profileGrade}">일반</span>
+				</div>
+			</div>
 
-  <!-- 화살표 누르면 내정보로 -->
-  <a class="chevron" th:href="@{/my/myInfo}" aria-label="프로필 설정 이동">내정보 변경›</a>
-</section>
-		
-		
-		
+			<!-- 화살표 누르면 내정보로 -->
+			<a class="chevron" th:href="@{/my/myInfo}" aria-label="프로필 설정 이동">내정보
+				변경›</a>
+		</section>
+
+
+
 		<!-- 매칭률 배너 -->
 		<section class="card hero-card">
 			<div class="hero-illustration" aria-hidden="true"></div>
@@ -86,12 +83,9 @@
 				<h2 class="section-title">내가 사용해 본 제품 리뷰 쓰기</h2>
 				<p class="muted">쇼핑 구매 여부와 상관 없이</p>
 			</div>
-			<div class="review-cta-right">
-				<a th:href="@{/my/myReview}" class="illustr">✍️</a>
-				
-			</div>
+
 			<div class="review-cta-full">
-				<a class="pill-btn" href="#">리뷰 쓰고 포인트 받기</a>
+				<a class="pill-btn" th:href="@{/my/myReview}">리뷰 쓰고 포인트 받기</a>
 			</div>
 		</section>
 
@@ -102,10 +96,12 @@
 
 		<!-- 마이 메뉴 -->
 		<section class="menu-list card">
-			<a class="menu-item" th:href="@{/my/myPoint}">My포인트</a> <a
-				class="menu-item" th:href="@{/my/myCoupon}">My쿠폰</a> <a
-				class="menu-item" th:href="@{/my/experienceWins}">체험단 당첨내역</a> <a
-				class="menu-item" th:href="@{/my/myWriteReview}">내가 쓴 리뷰<span>상위 몇%인지 확인하기</span></a>
+			<a class="menu-item" th:href="@{/my/myPoint}">나의 포인트</a> 
+			<a class="menu-item" th:href="@{/my/myCoupon}">나의 쿠폰</a> 
+			<a class="menu-item" th:href="@{/my/experienceWins}">체험단 당첨내역</a>
+			<a class="menu-item" th:href="@{/my/myWriteReview}">내가 쓴 리뷰<span>상위 몇%인지 확인하기</span></a>
+			<a class="menu-item" th:href="@{/my/myInquiry}">내가 쓴 문의</a>
+			<a class="menu-item" th:href="@{/my/myProductInquiry}">판매자 상품문의</a>
 		</section>
 
 		</section>
@@ -115,32 +111,40 @@
 			<h2 class="block-title">나의 관심</h2>
 			<div class="sub-block">
 				<div class="sub-title">
-					<span>최근 찜한 제품 3</span>
-					<button class="ghost">›</button>
+					<span
+						th:text="'최근 찜한 제품 ' + ${wish3 != null ? #lists.size(wish3) : 0}">최근
+						찜한 제품 3</span> <a class="ghost" th:href="@{/my/wishlist}">›</a>
 				</div>
-				<div class="card product-row">
-					<article class="product">
-						<div class="thumb"></div>
-						<div class="pname">Arencia</div>
-						<a class="mini-btn" href="#">상품 문의</a>
-					</article>
-					<article class="product">
-						<div class="thumb"></div>
-						<div class="pname">Ruten</div>
-						<a class="mini-btn" href="#">상품 문의</a>
-					</article>
-					<article class="product">
-						<div class="thumb"></div>
-						<div class="pname">Averie</div>
-						<a class="mini-btn" href="#">상품 문의</a>
-					</article>
-				</div>
-			</div>
 
-			 <a class="menu-item" href="#">FAQ</a> 
-			 <a	class="menu-item" href="#">1:1 문의</a> 
-			 
+				<!-- 리스트 있을 때 -->
+				<div class="card product-row"
+					th:if="${wish3 != null and !#lists.isEmpty(wish3)}"
+					style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px">
+					<article class="product" th:each="w : ${wish3}">
+						<div class="thumb"
+							style="width: 100%; aspect-ratio: 1/1; overflow: hidden; border-radius: 12px; background: #f2f3f5; display: flex; align-items: center; justify-content: center">
+							<img th:src="${w.productImageUrl}" alt=""
+								style="width: 100%; height: 100%; object-fit: cover" />
+						</div>
+						<div class="pname"
+							style="margin-top: 6px; font-weight: 600; font-size: 14px"
+							th:text="${w.productName}">상품명</div>
+						<div class="pprice" style="font-size: 13px; color: #667085"
+							th:text="${#numbers.formatInteger(w.productPrice,0,'COMMA')} + '원'">0원</div>
+						<a class="mini-btn"
+							th:href="@{'/product/detail/' + ${w.productNo}}"
+							style="margin-top: 6px; display: inline-block; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 12px">상품
+							보기</a>
+					</article>
+				</div>
+
+				<!-- 없을 때 -->
+				<div class="card product-row"
+					th:if="${wish3 == null or #lists.isEmpty(wish3)}"
+					style="padding: 16px; color: #667085">최근 찜한 제품이 없어요.</div>
+			</div>
 		</section>
+
 	</main>
 
 </body>

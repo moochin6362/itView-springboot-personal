@@ -7,17 +7,15 @@
 
   <!-- 공통 레이아웃 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
-
   <!-- 페이지 전용 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/myCoupon.css}" />
-
   <!-- 아이콘 -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css" />
 </head>
 <body>
 
-  <!-- ✅ 공통 헤더/사이드바만 사용 (직접 쓴 site-header 제거) -->
+  <!-- 공통 헤더/사이드바 -->
   <div th:replace="~{common/myHeader}"></div>
   <div th:replace="~{common/mySidebar}"></div>
 
@@ -31,39 +29,104 @@
       <span aria-hidden="true"></span>
     </header>
 
-    <!-- 상단 탭 -->
+    <!-- (디버그) 현재 userNo -->
+    <div class="card" style="margin:10px 4px; font-size:12px; color:#666">
+      debug userNo: <b th:text="${__debugUserNo}">-</b>
+    </div>
+
+    <!-- 상단 탭 (보유 쿠폰만 표시) -->
     <nav class="top-tabs" aria-label="쿠폰 탭">
-      <button class="tab active" type="button">보유 쿠폰</button>
-    
+      <button class="tab active" type="button" data-tab="owned">보유 쿠폰</button>
     </nav>
 
     <!-- 카테고리 칩 -->
     <div class="chips" role="tablist" aria-label="쿠폰 분류">
-      <button class="chip active" type="button">전체</button>
-      <button class="chip" type="button">상품</button>
-      <button class="chip" type="button">카테고리</button>
-      <button class="chip" type="button">브랜드</button>
-      <button class="chip" type="button">장바구니</button>
-      <button class="chip" type="button">배송</button>
-      <button class="chip" type="button">기타</button>
+      <button class="chip active" type="button" data-group="전체">전체</button>
+      <button class="chip" type="button" data-group="상품">상품</button>
+      <button class="chip" type="button" data-group="카테고리">카테고리</button>
+      <button class="chip" type="button" data-group="브랜드">브랜드</button>
+      <button class="chip" type="button" data-group="장바구니">장바구니</button>
+      <button class="chip" type="button" data-group="배송">배송</button>
+      <button class="chip" type="button" data-group="기타">기타</button>
     </div>
 
-   
+    <!-- 쿠폰 리스트 -->
+    <section class="coupon-list"
+             th:if="${coupons != null and !#lists.isEmpty(coupons)}">
+      <div class="coupon-card card"
+           th:each="c : ${coupons}"
+           th:with="
+              target=${c.couponTarget != null ? c.couponTarget : ''},
+              group= ${#strings.containsIgnoreCase(target,'상품') ? '상품' :
+                      (#strings.containsIgnoreCase(target,'카테') ? '카테고리' :
+                      (#strings.containsIgnoreCase(target,'브랜') ? '브랜드' :
+                      (#strings.containsIgnoreCase(target,'장바') || #strings.containsIgnoreCase(target,'cart') ? '장바구니' :
+                      (#strings.containsIgnoreCase(target,'배송') ? '배송' : '기타'))))}
+           "
+           th:attr="data-group=${group}">
+        <div class="coupon-head">
+          <div class="name" th:text="${c.couponName}">쿠폰명</div>
+          <div class="badge" th:text="${group}">상품</div>
+        </div>
+
+        <p class="desc" th:text="${c.couponDescription}">설명</p>
+
+        <div class="meta">
+          <div class="line">
+            <span>할인</span>
+            <b th:text="${#numbers.formatInteger(c.couponDiscount,0,'COMMA')}"></b>
+          </div>
+          <div class="line">
+            <span>최소주문</span>
+            <b th:text="${#numbers.formatInteger(c.couponMinprice,0,'COMMA')} + '원'">0원</b>
+          </div>
+          <div class="line">
+            <span>기간</span>
+            <b th:text="${#dates.format(c.couponStartdate,'yyyy-MM-dd')} + ' ~ ' + (${c.couponEnddate} != null ? #dates.format(c.couponEnddate,'yyyy-MM-dd') : '무기한')">
+              2025-09-01 ~ 2025-10-11
+            </b>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="use-btn" type="button" disabled>바로 사용</button>
+        </div>
+      </div>
+    </section>
 
     <!-- 비어있는 상태 -->
-    <section class="empty">
+    <section class="empty" th:if="${coupons == null or #lists.isEmpty(coupons)}">
       <p class="empty-text">보유 쿠폰이 없어요</p>
-     
     </section>
 
     <!-- 유의사항 -->
     <section class="notice">
       <h2 class="sr-only">유의사항</h2>
       <ul>
-        <li>사용기간이 만료된 쿠폰은 보유 목록에서 자동으로 삭제됩니다.</li>
-        <li>일부 쿠폰은 특정 카테고리/브랜드에만 적용됩니다.</li>
+        <li>사용기간이 만료된 쿠폰은 보유 목록에서 자동으로 표시되지 않습니다.</li>
+        <li>일부 쿠폰은 특정 카테고리/브랜드/상품에만 적용됩니다.</li>
       </ul>
     </section>
   </main>
+
+  <!-- 필터 스크립트: 칩 클릭 시 data-group 기준으로 필터 -->
+  <script>
+    (function(){
+      const chips = document.querySelectorAll('.chips .chip');
+      const cards = () => document.querySelectorAll('.coupon-card');
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          chips.forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          const g = chip.dataset.group;
+          cards().forEach(card => {
+            const cg = card.dataset.group || '기타';
+            card.style.display = (g === '전체' || g === cg) ? '' : 'none';
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

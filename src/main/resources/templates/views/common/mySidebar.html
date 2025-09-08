@@ -17,11 +17,11 @@
       <i class="fa-solid fa-cart-shopping"></i><span>장바구니</span>
     </a>
 
-    <a class="nav-item" th:href="@{/my/wishList}">
-      <i class="fa-solid fa-heart"></i><span>찜</span>
-    </a>
+    <a class="nav-item" th:href="@{/Shopping/WishList}">
+  <i class="fa-solid fa-heart"></i><span>찜</span>
+</a>
 
-		<form th:action="@{/go/logout}" method="post" style="display: inline">
+		<form th:action="@{/go/logout}" method="post">
 			<button type="submit" class="nav-item">
 				<i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span>
 			</button>
