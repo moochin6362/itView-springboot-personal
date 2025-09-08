@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>쇼핑몰</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* 헤더/푸터 스타일은 기존 그대로 유지 */
+
+        /* 카테고리 필터 */
+        .category-group {
+            margin-bottom: 20px;
+        }
+        .category-group h5 {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .subcategory-button {
+            margin: 3px;
+            border-radius: 20px;
+            padding: 5px 15px;
+            border: 1px solid #007bff;
+            background-color: white;
+            color: #007bff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .subcategory-button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* 상품 카드 */
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: #007bff;
+        }
+
+        .product-image {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .product-card h6 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 10px 10px 5px 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .price {
+            margin: 0 10px 10px 10px;
+        }
+
+        .price span {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .product-card .d-flex {
+            margin: 0 10px 10px 10px;
+            justify-content: space-between;
+        }
+
+        .product-card button {
+            flex: 1;
+            font-size: 0.85rem;
+            padding: 5px 0;
+            border-radius: 5px;
+        }
+
+        .product-card button:first-child {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<div th:replace="~{common/header :: header}"></div>
+
+    <form id="filterForm" method="get" action="/filter">
+        <!-- 기존 검색어를 hidden으로 넣는 곳 (예: searchTerm) -->
+        <input type="hidden" name="q" value="" />
+
+        <section class="container py-4">
+            <h3>검색 결과 필터</h3>
+            <div class="filter-section border rounded p-3 bg-white">
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>헤어:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="샴푸/린스">샴푸/린스</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="트리트먼트/팩">트리트먼트/팩</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="헤어에센스">헤어에센스</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="염색약/펌">염색약/펌</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>클렌징:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="클렌징폼/젤">클렌징폼/젤</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="오일/밤">오일/밤</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="워터/밀크">워터/밀크</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="필링/스크럽">필링/스크럽</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="티슈/패드">티슈/패드</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="립&아이리무버">립&아이리무버</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>메이크업:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="립메이크업">립메이크업</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="베이스메이크업">베이스메이크업</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="아이메이크업">아이메이크업</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>헤어케어:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="트리트먼트/팩">트리트먼트/팩</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="헤어에센스">헤어에센스</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="염색약/펌">염색약/펌</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>바디케어:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="바디케어">바디케어</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="샤워/입욕">샤워/입욕</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="핸드케어">핸드케어</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="풋케어">풋케어</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="제모/왁싱">제모/왁싱</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="데오드란트">데오드란트</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>선케어:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="선크림">선크림</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="선스틱">선스틱</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="선쿠션">선쿠션</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="선스프레이/선패치">선스프레이/선패치</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="태닝">태닝</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>맨즈케어:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="스킨케어">스킨케어</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="메이크업">메이크업</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="쉐이빙/왁싱">쉐이빙/왁싱</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="바디케어">바디케어</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="헤어케어">헤어케어</button>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="mb-3">
+                    <strong>마스크팩:</strong>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="시트팩">시트팩</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="패드">패드</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="페이셜팩">페이셜팩</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="코팩">코팩</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1 mb-1 filter-btn"
+                            data-filter-name="category" data-filter-value="패치">패치</button>
+                </div>
+
+                <!-- 선택된 필터 표시 -->
+                <div>
+                    <strong>선택된 필터:</strong>
+                    <div id="selectedFilters" class="mt-2"></div>
+                </div>
+            </div>
+        </section>
+    </form>
+
+
+    <div class="row g-4">
+        <div class="col-md-3" th:each="product : ${products}">
+            <!-- 제품 카드 전체를 링크로 -->
+            <a th:href="@{'/product/detail/' + ${product.productNo}}" class="text-decoration-none text-dark">
+                <div class="product-card position-relative p-2">
+
+                    <!-- 이미지 -->
+                    <div class="product-image mb-2">
+                        <img th:if="${product.attmRename != null}"
+                             th:src="@{'/uploadFilesFinal/' + ${product.attmRename}}"
+                             alt="썸네일"/>
+                        <img th:if="${product.attmRename == null}"
+                             src="/images/default.png"
+                             alt="기본 썸네일"/>
+                    </div>
+
+                    <!-- 상품 이름 -->
+                    <h6 th:text="${product.productName}" class="mb-1">상품명</h6>
+
+                    <!-- 가격 -->
+                    <div class="price mb-2">
+                        <span class="fw-bold text-danger" th:text="${product.productPrice} + '원'"></span>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-sm btn-outline-primary me-1">찜하기</button>
+                        <button class="btn btn-sm btn-primary">구매하기</button>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <nav aria-label="Standard pagination example" class="d-flex justify-content-end">
+        <ul class="pagination">
+
+            <!-- 이전 버튼 -->
+            <li class="page-item" th:classappend="${pi.currentPage == 1} ? 'disabled'">
+                <a class="page-link"
+                   th:if="${pi.currentPage > 1}"
+                   th:href="@{${loc}(page=${pi.currentPage-1})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+                th:classappend="${p == pi.currentPage} ? 'active'">
+                <a class="page-link" th:href="@{${loc}(page=${p})}">[[${p}]]</a>
+            </li>
+
+            <!-- 다음 버튼 -->
+            <li class="page-item" th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+                <a class="page-link"
+                   th:if="${pi.currentPage < pi.maxPage}"
+                   th:href="@{${loc}(page=${pi.currentPage+1})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <span class="page-link" th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
+            </li>
+
+        </ul>
+    </nav>
+
+    <!-- 푸터 -->
+    <div th:replace="~{common/footer :: footer}"></div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const filterForm = document.getElementById('filterForm');
+        const selectedFiltersContainer = document.getElementById('selectedFilters');
+
+        // 현재 선택된 필터 관리
+        const currentFilters = { category: new Set() };
+
+        // URL 파라미터 가져오기
+        const params = new URLSearchParams(window.location.search);
+
+        // 검색어 유지
+        const q = params.get('q') || '';
+        const input = filterForm.querySelector('input[name="q"]');
+        if (input) input.value = q;
+
+        // URL에서 category 파라미터들을 Set에 추가
+        params.getAll('category').forEach(cat => currentFilters.category.add(cat));
+
+        // URL에 있는 category에 해당하는 버튼 활성화
+        currentFilters.category.forEach(value => {
+            const btn = filterForm.querySelector(`button[data-filter-value="${value}"]`);
+            if (btn) btn.classList.add('active');
+        });
+
+        // hidden input 업데이트 & 선택된 필터 UI 표시
+        updateFormInputs();
+        updateSelectedFiltersUI();
+
+        // 필터 버튼 클릭 이벤트
+        filterForm.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = btn.dataset.filterValue;
+
+                if (currentFilters.category.has(value)) {
+                    currentFilters.category.delete(value);
+                    btn.classList.remove('active');
+                } else {
+                    currentFilters.category.add(value);
+                    btn.classList.add('active');
+                }
+
+                updateFormInputs();
+                updateSelectedFiltersUI();
+
+                // 폼 submit -> GET 방식으로 필터 적용
+                filterForm.submit();
+            });
+        });
+
+        // currentFilters 기준으로 hidden input 생성
+        function updateFormInputs() {
+            // 기존 hidden inputs 삭제
+            [...filterForm.querySelectorAll(`input[name="category"]`)].forEach(el => el.remove());
+
+            currentFilters.category.forEach(value => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'category';
+                input.value = value;
+                filterForm.appendChild(input);
+            });
+        }
+
+        // 선택된 필터 UI 갱신
+        function updateSelectedFiltersUI() {
+            selectedFiltersContainer.innerHTML = '';
+            currentFilters.category.forEach(value => {
+                const badge = document.createElement('span');
+                badge.className = 'badge bg-primary me-2';
+                badge.style.cursor = 'pointer';
+                badge.textContent = `${value} ✕`;
+                badge.title = '필터 해제';
+                badge.addEventListener('click', () => {
+                    currentFilters.category.delete(value);
+                    const btn = filterForm.querySelector(`button[data-filter-value="${value}"]`);
+                    if (btn) btn.classList.remove('active');
+                    updateFormInputs();
+                    updateSelectedFiltersUI();
+
+                    // 변경 후 폼 submit
+                    filterForm.submit();
+                });
+                selectedFiltersContainer.appendChild(badge);
+            });
+        }
+    });
+</script>
+
+
+
+
+</body>
+</html>

@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import itView.springboot.vo.*;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import itView.springboot.mapper.ProductMapper;
-import itView.springboot.vo.Attachment;
-import itView.springboot.vo.Coupon;
-import itView.springboot.vo.Product;
-import itView.springboot.vo.Review;
-import itView.springboot.vo.User;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -85,4 +82,31 @@ public class ProductService {
 	public Product selectMyProductDetail(Product product) {
 		return mapper.selectMyProductDetail(product);
 	}
+
+	public List<Product> getSearchProducts(PageInfo pi, String q) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.getSearchProducts(rowBounds, q);
+	}
+
+	public List<Product> getfilterProducts(String q, List<String> categories) {
+		return mapper.getfilterProducts(q, categories);
+	}
+
+	public int getListCountWithSearch(String q) {
+		return mapper.getListCountWithSearch(q);
+	}
+
+	// 게시글 수 가져오기
+	public int getListCountWithFilter(String q, List<String> categories) {
+		return mapper.getListCountWithFilter(q, categories);
+	}
+
+	// 페이징 적용해서 검색
+	public List<Product> getFilterProducts(PageInfo pi, String q, List<String> categories) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.getFilterProducts(rowBounds, q, categories);
+	}
+
 }

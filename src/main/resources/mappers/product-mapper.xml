@@ -100,7 +100,81 @@
 		ORDER BY p.PRODUCT_NO DESC
 		FETCH FIRST 10 ROWS ONLY
 	</select>
-	
+
+	<select id="getSearchProducts" resultType="Product" parameterType="String">
+		SELECT
+		p.PRODUCT_NO,
+		p.PRODUCT_NAME,
+		p.PRODUCT_DETAIL,
+		p.PRODUCT_PRICE,
+		a.ATTM_RENAME AS attmRename
+		FROM PRODUCT p
+		LEFT JOIN ATTACHMENT a
+		ON p.PRODUCT_NO = a.POSITION_NO
+		AND a.ATTM_LEVEL = 0
+		AND a.ATTM_POSITION = 0
+		WHERE 1=1
+		<if test="q != null and q != ''">
+			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+		</if>
+		ORDER BY p.PRODUCT_NO DESC
+	</select>
+
+	<select id="getFilterProducts" resultType="Product" parameterType="map">
+		SELECT
+		p.PRODUCT_NO,
+		p.PRODUCT_NAME,
+		p.PRODUCT_DETAIL,
+		p.PRODUCT_PRICE,
+		p.PRODUCT_CATEGORY,
+		a.ATTM_RENAME AS attmRename
+		FROM PRODUCT p
+		LEFT JOIN ATTACHMENT a
+		ON p.PRODUCT_NO = a.POSITION_NO
+		AND a.ATTM_LEVEL = 0
+		AND a.ATTM_POSITION = 0
+		WHERE 1=1
+		<if test="q != null and q != ''">
+			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+		</if>
+		<if test="categories != null and categories.size() > 0">
+			AND p.PRODUCT_CATEGORY IN
+			<foreach item="cat" collection="categories" open="(" separator="," close=")">
+				#{cat}
+			</foreach>
+		</if>
+		ORDER BY p.PRODUCT_NO DESC
+	</select>
+
+	<select id="getListCountWithFilter" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+		FROM PRODUCT p
+		WHERE 1=1
+		<if test="q != null and q != ''">
+			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+		</if>
+		<if test="categories != null and categories.size() > 0">
+			AND p.PRODUCT_CATEGORY IN
+			<foreach item="cat" collection="categories" open="(" separator="," close=")">
+				#{cat}
+			</foreach>
+		</if>
+	</select>
+
+
+	<select id="getListCountWithSearch" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM PRODUCT p
+		WHERE 1=1
+		<if test="q != null and q != ''">
+			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+		</if>
+	</select>
+
 	<select id="selectMyProductDetail">
 		select *
 		from product
