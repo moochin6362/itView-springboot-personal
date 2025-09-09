@@ -133,7 +133,6 @@ public class InhoService {
 	}
 
 	public int updateCouponBoard(Board b) {
-		System.out.println(b.getBoardContent());
 		return mapper.updateCouponBoard(b);
 	}
 
@@ -234,6 +233,15 @@ public class InhoService {
 
 	public int deletePoint(int pNo) {
 		return mapper.deletePoint(pNo);
+	}
+
+	public int updateNotice(Board b) {
+		return mapper.updateNotice(b);
+	}
+
+	public Board selectNotice(int bId) {
+		Board b = mapper.selectNotice(bId);
+		return b;
 	}
 
 }

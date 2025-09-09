@@ -77,5 +77,9 @@ public interface InhoMapper {
 
 	 int deletePoint(int pNo);
 
+	 int updateNotice(Board b);
+
+	 Board selectNotice(int bId);
+
 
 }
