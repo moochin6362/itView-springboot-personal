@@ -267,6 +267,10 @@ SELECT *
 </select>
 
 
+<update id="proBoardDelete">
+	update board set board_status ='N' where board_id=#{boardId} and board_type='8'
+</update>
+
 
 
 </mapper>

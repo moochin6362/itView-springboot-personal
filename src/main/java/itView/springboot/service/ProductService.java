@@ -109,4 +109,12 @@ public class ProductService {
 		return mapper.getFilterProducts(rowBounds, q, categories);
 	}
 
+	public int selectReviewCount(int productNo) {
+		return mapper.selectReviewCount(productNo);
+	}
+
+	public int insertReviewAnswer(ReviewAnswer reviewAnswer) {
+		return mapper.insertReviewAnswer(reviewAnswer);
+	}
+
 }

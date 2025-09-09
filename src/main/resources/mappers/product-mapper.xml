@@ -182,6 +182,10 @@
 		where user_no = #{userNo} and product_no = #{productNo}
 	</select>
 
-
+	<select id="selectReviewCount">
+		select count(*)
+		from review
+		where product_no = #{product_no}
+	</select>
 
 </mapper>

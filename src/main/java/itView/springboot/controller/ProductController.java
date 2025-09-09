@@ -149,6 +149,10 @@ public class ProductController {
 		ArrayList<Coupon> cList = pService.selectMyCoupon(userNo);
 		Attachment attm = pService.selectMyAttm(productNo);
 		ArrayList<Review> rList = pService.selectReview(productNo);
+		int reviewCount = pService.selectReviewCount(productNo);
+		
+		
+		//System.out.println(reviewCount);
 		
 		//System.out.println(attm.getAttmRename());
 		
@@ -170,13 +174,14 @@ public class ProductController {
 			p.setEcoFriendly("일반 제품");
 		}
 		
-		System.out.println(cList);
-		System.out.println(rList);
+//		System.out.println(cList);
+//		System.out.println(rList);
 		
 		model.addAttribute("p", p);
 		model.addAttribute("cList", cList);
 		model.addAttribute("attm", attm);
 		model.addAttribute("rList", rList);
+		model.addAttribute("reviewCount", reviewCount);
 		
 		return "seller/myProductDetail";
 	}

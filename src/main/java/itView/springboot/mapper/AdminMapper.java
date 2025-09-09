@@ -75,6 +75,9 @@ public interface AdminMapper {
 	//판매금지게시판 상세조회
 	Board proBoardDetail(int boardId);
 
+	//판매금지게시판 삭제
+	int proBoardDelete(int boardId);
+
 
 		
 		

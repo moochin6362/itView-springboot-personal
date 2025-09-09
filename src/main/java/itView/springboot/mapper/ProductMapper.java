@@ -9,6 +9,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
+import itView.springboot.vo.ReviewAnswer;
 import itView.springboot.vo.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -61,5 +62,9 @@ public interface ProductMapper {
 	Product selectMyProductDetail(Product product);
 
 	ArrayList<Review> selectReview(int productNo);
+
+	int selectReviewCount(int productNo);
+
+	int insertReviewAnswer(ReviewAnswer reviewAnswer);
 }
 
