@@ -92,7 +92,13 @@
         </div>
     </div>
     <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+    <script th:src="@{/js/inhoAdmin/alert.js}"></script>
     <script th:inline="javascript">
+	    const msg = /*[[${msg}]]*/ null;
+	    if (msg) {
+	        showAlert(msg);
+	    }
+    
 	    const rows = document.querySelectorAll('.coupon-row');
 	    rows.forEach(row => {
 	        row.addEventListener('click', function (e) {

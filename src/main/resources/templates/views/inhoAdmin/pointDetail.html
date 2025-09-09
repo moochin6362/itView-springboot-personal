@@ -24,7 +24,7 @@
 	            
                 <div class="main-content">
                     <h2 class="page-title">포인트 상세 정보</h2>
-                    <form method="get" th:action="@{/inhoAdmin/updatePoint}">
+                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updatePoint}">
                     	<input type="hidden" name="pointNo" th:value="${p.pointNo}">
                     	<input type="hidden" name="page" th:value="${page}">
                     	<table class="detail-table">
@@ -55,6 +55,7 @@
                     </table>
                     <div class="form-actions">
                         <button class="btn-submit">수정</button>
+                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
                         <button type="button" class="btn-reset" onclick="history.back()">취소</button>
                     </div>
                     </form>
@@ -62,5 +63,21 @@
             </div>
         </div>
 		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+		<script>
+			window.onload = () => {
+			    const delBtn = document.getElementById('deleteBtn');
+			    const form = document.getElementById('detailForm');
+	
+			    if (delBtn) {
+			        delBtn.addEventListener('click', () => {
+			            if (confirm("정말 포인트를 삭제하시겠습니까?")) {
+			            	form.method = "post";
+			                form.action = '/inhoAdmin/deletePoint';
+			                form.submit();
+			            }
+			        });
+			    }
+			}
+		</script>
     </body>
 </html>

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import itView.springboot.common.Pagination;
 import itView.springboot.common.ProductMatchingRate;
@@ -397,6 +398,43 @@ public class InhoController {
     @GetMapping("/enrollNotice")
     public String enrollNotice() {
     	return "inhoAdmin/enrollNotice";
+    }
+    
+    // 공지사항 삭제
+    @PostMapping("deleteNotice")
+    public String deleteNotice(@RequestParam("boardId") int bId, RedirectAttributes redirectAttributes) {
+    	int result = uService.deleteNotice(bId);
+    	
+	    	if(result > 0) {
+	    		redirectAttributes.addFlashAttribute("msg", "공지사항이 삭제되었습니다");
+	    		return "redirect:/inhoAdmin/NoticeList";
+	    	} else {
+	    		throw new AdminException("공지사항 삭제를 실패했습니다.");
+	    	}
+    }
+    
+    // 쿠폰 삭제
+    @PostMapping("deleteCoupon")
+    public String deleteCoupon(@RequestParam("couponNo") int cNo, RedirectAttributes redirectAttributes) {
+    	int result = uService.deleteCoupon(cNo);
+	    	if(result > 0) {
+	    		redirectAttributes.addFlashAttribute("msg", "쿠폰이 삭제되었습니다");
+	    		return "redirect:/inhoAdmin/couponList";
+	    	} else {
+	    		throw new AdminException("상품 삭제를 실패했습니다.");
+	    	}
+    }
+    
+    // 포인트 삭제
+    @PostMapping("deletePoint")
+    public String deletePoint(@RequestParam("pointNo") int pNo, RedirectAttributes redirectAttributes) {
+    	int result = uService.deletePoint(pNo);
+	    	if(result > 0) {
+	    		redirectAttributes.addFlashAttribute("msg", "포인트가 삭제되었습니다");
+	    		return "redirect:/inhoAdmin/pointList";
+	    	} else {
+	    		throw new AdminException("포인트 삭제를 실패했습니다.");
+	    	}
     }
     
     

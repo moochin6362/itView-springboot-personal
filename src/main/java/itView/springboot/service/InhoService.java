@@ -224,4 +224,16 @@ public class InhoService {
 		return mapper.selectNoticeList(map, rowBounds);
 	}
 
+	public int deleteNotice(int bId) {
+		return mapper.deleteNotice(bId);
+	}
+
+	public int deleteCoupon(int cNo) {
+		return mapper.deleteCoupon(cNo);
+	}
+
+	public int deletePoint(int pNo) {
+		return mapper.deletePoint(pNo);
+	}
+
 }

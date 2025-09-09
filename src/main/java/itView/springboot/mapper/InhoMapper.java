@@ -71,5 +71,11 @@ public interface InhoMapper {
 
 	 ArrayList<Board> selectNoticeList(HashMap<String, String> map, RowBounds rowBounds);
 
+	 int deleteNotice(int bId);
+
+	 int deleteCoupon(int cNo);
+
+	 int deletePoint(int pNo);
+
 
 }

@@ -45,6 +45,7 @@
                     <thead>
                         <tr>
                         	<th>게시판번호</th>
+                        	<th>카테고리</th>
                             <th>글제목</th>
                             <th>작성자</th>
                             <th>등록일</th>
@@ -52,7 +53,17 @@
                     </thead>
                     <tbody>
                         <tr th:each="b: ${list}" class="coupon-row">
-                        	<td>[[${b.boardId}]]
+                        	<td>[[${b.boardId}]]</td>
+                        	<td th:switch="${b.boardType}">
+							    <span th:case="1" class="type">공지사항</span>
+							    <span th:case="2" class="type">이벤트</span>
+							    <span th:case="3" class="type">문의사항</span>
+							    <span th:case="4" class="type">쿠폰</span>
+							    <span th:case="5" class="type">커뮤니티</span>
+							    <span th:case="6" class="type">회원조회</span>
+							    <span th:case="7" class="type">판매자 문의사항</span>
+							    <span th:case="8" class="type">판매금지제품</span>
+							</td>
                             <td>[[${b.boardTitle}]]</td>
                             <td>[[${b.userName}]]</td>
                             <td>[[${b.boardDate}]]</td>
@@ -92,7 +103,13 @@
         </div>
     </div>
     <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+    <script th:src="@{/js/inhoAdmin/alert.js}"></script>
     <script th:inline="javascript">
+	    const msg = /*[[${msg}]]*/ null;
+	    if (msg) {
+	        showAlert(msg);
+	    }
+	    
 	    const rows = document.querySelectorAll('.coupon-row');
 	    rows.forEach(row => {
 	        row.addEventListener('click', function (e) {

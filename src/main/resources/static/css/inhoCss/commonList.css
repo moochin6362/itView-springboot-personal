@@ -111,6 +111,15 @@ html {
     font-size: 14px;
 }
 
+.type {
+	padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.9rem;
+    background-color: #f39c12; /* 약간 진한 노랑 */
+}
+
 .csList-table th,
 .csList-table td {
     padding: 12px 16px;

@@ -24,7 +24,7 @@
 	            
                 <div class="main-content">
                     <h2 class="page-title">쿠폰 상세 정보</h2>
-                    <form method="get" th:action="@{/inhoAdmin/updateCoupon}">
+                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateCoupon}">
                     	<input type="hidden" name="couponNo" th:value="${c.couponNo}">
                     	<input type="hidden" name="page" th:value="${page}">
                     	<table class="detail-table">
@@ -67,6 +67,7 @@
                     </table>
                     <div class="form-actions">
                         <button class="btn-submit">수정</button>
+                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
                         <button type="button" class="btn-reset" onclick="history.back()">취소</button>
                     </div>
                     </form>
@@ -74,5 +75,21 @@
             </div>
         </div>
 		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+		<script>
+			window.onload = () => {
+			    const delBtn = document.getElementById('deleteBtn');
+			    const form = document.getElementById('detailForm');
+	
+			    if (delBtn) {
+			        delBtn.addEventListener('click', () => {
+			            if (confirm("정말 쿠폰을 삭제하시겠습니까?")) {
+			            	form.method = "post";
+			                form.action = '/inhoAdmin/deleteCoupon';
+			                form.submit();
+			            }
+			        });
+			    }
+			}
+		</script>
     </body>
 </html>
