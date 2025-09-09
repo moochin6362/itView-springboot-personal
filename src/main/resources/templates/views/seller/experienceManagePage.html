@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>체험단 관리 페이지</title>
+<link href="/css/seller/experienceManagePage.css" rel="stylesheet"
+	type="text/css" />
+</head>
+<body>
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+	<div class="layout">
+		<div class="sidebar"
+			th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2>체험단 신청 관리</h2>
+			
+			<div class="application-list">
+			    <div class="application-card">
+			        <div class="application-info">
+			            <p><strong>회원 이름:</strong> 홍길동</p>
+			            <p><strong>신청 내용:</strong> 제품을 체험해보고 싶습니다.</p>
+			        </div>
+			        <div class="application-actions">
+			            <button class="approve-btn">수락</button>
+			            <button class="reject-btn">거절</button>
+			        </div>
+			    </div>
+			    <div class="application-card">
+			        <div class="application-info">
+			            <p><strong>회원 이름:</strong> 홍길동</p>
+			            <p><strong>신청 내용:</strong> 제품을 체험해보고 싶습니다.</p>
+			        </div>
+			        <div class="application-actions">
+			            <button class="approve-btn">수락</button>
+			            <button class="reject-btn">거절</button>
+			        </div>
+			    </div>
+			</div>
+			
+
+<!-- 			<div class="application-list"> -->
+<!-- 				<div class="application-card" th:each="application : ${applications}"> -->
+<!-- 					<div class="application-info"> -->
+<!-- 						<p> -->
+<!-- 							<strong>회원 이름:</strong>  -->
+<!-- 							<span th:text="${application.userName}">홍길동</span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<strong>신청 내용:</strong>  -->
+<!-- 							<span th:text="${application.applicationContent}"> -->
+<!-- 							신청 사유가 여기에 표시됩니다.</span> -->
+<!-- 						</p> -->
+<!-- 					</div> -->
+<!-- 					<div class="application-actions"> -->
+<!-- 						<form th:action="@{/seller/experience/approve}" method="post" style="display: inline;"> -->
+<!-- 							<input type="hidden" th:name="applicationId" th:value="${application.id}" /> -->
+<!-- 							<button type="submit" class="approve-btn">수락</button> -->
+<!-- 						</form> -->
+<!-- 						<form th:action="@{/seller/experience/reject}" method="post" style="display: inline;"> -->
+<!-- 							<input type="hidden" th:name="applicationId" th:value="${application.id}" /> -->
+<!-- 							<button type="submit" class="reject-btn">거절</button> -->
+<!-- 						</form> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+		</div>
+	</div>
+</body>
+</html>
