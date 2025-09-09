@@ -140,6 +140,12 @@ public class AdminService {
 	public Board proBoardDetail(int boardId) {
 		return mapper.proBoardDetail(boardId);
 	}
+
+	
+	//판매금지 게시글 삭제
+	public int deleteProBoard(int id) {
+		return mapper.proBoardDelete(id);
+	}
 		
 		
 		

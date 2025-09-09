@@ -1,13 +1,19 @@
 package itView.springboot.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import itView.springboot.service.AdminService;
 import itView.springboot.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -19,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @SessionAttributes("loginUser")
 public class ajaxController {
 	private final UserService uService;
+	private final AdminService adService;
 	//이메일 샌더 설정
 	private final JavaMailSender mailSender;
 	
@@ -86,4 +93,34 @@ public class ajaxController {
       
       return random;
     }
+    
+	//판매금지 게시판 글 삭제
+	@DeleteMapping("/deleteProBoard/{boardId}")
+	@ResponseBody
+	public ResponseEntity<String>deleteProBoard(
+			@PathVariable("boardId") int boardId){
+		int result = adService.deleteProBoard(boardId);
+		
+		if(result > 0 ) {
+			return ResponseEntity.ok("공지사항을 삭제하였습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("공지사항 삭제에 실패하였습니다.");
+		}
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

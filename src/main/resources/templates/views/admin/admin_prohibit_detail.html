@@ -26,8 +26,9 @@
 	
 	
 		    <div class="admin-proBoard-detail-wrapper">
-		        <div class="admin-proBoard-detail-container" data-id="proBoardDetail"> <!--게시판-->
+		        <div class="admin-proBoard-detail-container"> <!--게시판-->
 		            <table class="admin-proBoard-detail-table">  <!--게시판 헤더-->
+		            	<input type="hidden" th:value="${proBoard.boardId}" id="proBoardDetail"/>
 		                <tr>
 		                    <th>작성자</th>
 		                    <td>관리자</td>
@@ -48,7 +49,7 @@
 		         </div>
 		        <div class="proBoard-btn-box">
                     <button id="back-btn" type="button">
-                        목록으로
+                    	목록으로
                     </button>
                     <button id="delete-btn" type="button">
                         삭제하기
@@ -60,7 +61,7 @@
 	                    <span class="close">&times;</span>
 	                    <p id="deleteBoard"></p>
 	                    <div class="modal-button-box">
-	                        <button id="delete">예</button>
+	                        <button id="delete" type="button">예</button>
 	                        <button id="dontDelete">아니요</button>
 	                    </div>
 	                </div>
@@ -69,4 +70,6 @@
 		</div>
     </div>
 </body>
+
+
 </html>

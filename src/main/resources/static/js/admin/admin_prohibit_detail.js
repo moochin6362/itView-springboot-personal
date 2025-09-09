@@ -9,14 +9,10 @@ document.getElementById('delete').addEventListener('click', function(){
     //게시글No 가져와서 해당 글 삭제하기
     const boardId = document.getElementById('proBoardDetail').value;
 
-    fetch('/admin/deleteProBoard', {
-        method:"POST",
-        headers : {
-            "content-Type" : "application/json"
-        },
-        body : JSON.stringify({id : boardId})
+    fetch(`/admin/deleteProBoard/${boardId}`, {
+        method:"DELETE",
     })
-	then(res=>{
+	.then(res=>{
 		if(res.ok){
 			alert('해당 공지를 삭제하였습니다.');
 			document.getElementById('deleteModal').style.display = "none"; // 모달 닫기
@@ -32,4 +28,13 @@ document.getElementById('delete').addEventListener('click', function(){
 document.getElementById('dontDelete').addEventListener('click', function(){
 	document.getElementById('deleteModal').style.display = "none";
 });
+
+
+//목록 버튼 클릭 -> 목록이동
+document.getElementById('back-btn').addEventListener('click', function(){
+	window.location.href='/admin/proBoard';
+});
+
+
+
 
