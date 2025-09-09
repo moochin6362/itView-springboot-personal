@@ -109,7 +109,8 @@ public class ShoppingController {
 		if (loginUser == null) {
 			return "redirect:/login";
 		}
-		ArrayList<Order>olist = sService.selectOrder(oNo);
+		int uNo = loginUser.getUserNo();
+		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
 		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(oNo);
 		
 		model.addAttribute("olist", olist);
@@ -157,6 +158,7 @@ public class ShoppingController {
 		
 		model.addAttribute("olist", olist);
 		model.addAttribute("alist", alist);
+		model.addAttribute("loginUser",loginUser);
 		
 		return "Shopping/orderDetail";
 	}

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import itView.springboot.vo.Attachment;
+import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
@@ -62,5 +63,11 @@ public interface MyMapper {
                               @Param("applyContent") String applyContent);
 
     List<Map<String,Object>> selectExperienceWins(@Param("userNo") long userNo);
+
+    //서연
+	Order selectproductbyOrder( @Param("productNo") Integer pNo, @Param("userNo") int uNo);
+	
+	//서연
+	Attachment selectThumbByOrder(Integer pNo);
 
 }

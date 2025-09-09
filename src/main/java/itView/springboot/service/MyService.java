@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import itView.springboot.mapper.MyMapper;
 import itView.springboot.vo.Attachment;
+import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
@@ -146,6 +147,18 @@ public class MyService {
     public List<Map<String,Object>> getExperienceWins(long userNo) {
         return myMapper.selectExperienceWins(userNo);
     }
+
+    //서연
+	public Order selectproductbyOrder(Integer pNo, int uNo) {
+		// TODO Auto-generated method stub
+		return myMapper.selectproductbyOrder(pNo,uNo);
+	}
+
+	//서연
+	public Attachment selectThumbByOrder(Integer pNo) {
+		// TODO Auto-generated method stub
+		return myMapper.selectThumbByOrder(pNo);
+	}
 
 
 	

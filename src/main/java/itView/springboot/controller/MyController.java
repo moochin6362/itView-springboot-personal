@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import itView.springboot.service.MyService;
+import itView.springboot.vo.Attachment;
+import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
@@ -310,8 +312,26 @@ public class MyController {
         return "my/myCoupon";
     }
 
+    //서연
     @GetMapping("/myReview")
-    public String myReview() { return "my/myReview"; }
+    public String myReview(@RequestParam("orderNo") int oNo,@RequestParam(value = "productNo", required = false) Integer pNo,Model model, HttpSession session) { 
+    	
+    	User loginUser = (User) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return "redirect:/login";
+		}
+		
+		int uNo = loginUser.getUserNo();
+    	if(pNo != null) {
+    		Order order =myService.selectproductbyOrder(pNo,uNo);
+    		Attachment attachment=myService.selectThumbByOrder(pNo);
+    		model.addAttribute("order", order);
+    		model.addAttribute("attachment",attachment);
+    	}
+    	
+    	return "my/myReview"; 
+    }
 
     @GetMapping("/myInquiry")
     public String myInquiry() { return "my/myInquiry"; }

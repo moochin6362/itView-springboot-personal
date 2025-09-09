@@ -171,6 +171,83 @@
 		)
 		order by orderNo desc
 	</select>
+	
+	
+	<select id="selectOrderDetail" resultType="Order">
+		select *
+		from(
+			select 
+				o.order_no as orderNo,
+				o.order_target_no as orderTargetNo,
+				o.order_date as orderDate,
+				o.order_count as orderCount,
+				o.order_status as orderStatus,
+				o.payment_method as paymentMethod,
+				o.pay_price as payPrice,
+				o.delivery_company as deliveryCompany,
+				o.delivery_no as deliveryNo,
+				o.delivery_status as deliveryStatus,
+				o.order_type as orderType,
+				o.user_no as userNo,
+				o.personal_coupon_no as personalCouponNo,
+				o.user_name as userName,
+				o.user_phone as userPhone,
+				o.user_address as userAddress,
+				p.product_no as productNo,
+       			p.product_name as productName,
+        		p.product_price as productPrice,
+        		p.product_stock as productStock,
+        		p.product_state as productState,
+        		a.attm_rename as attmRename
+			from "ORDER" o
+			left join product p 
+				on p.product_no=o.order_target_no
+			left join attachment a
+				on a.position_no=p.product_no
+			and a.attm_level=0
+			where o.user_no=#{userNo} and o.order_no=#{orderNo}
+			and o.order_type=1
+		
+			union all
+		
+			select 
+				o.order_no as orderNo,
+				o.order_target_no as orderTargetNo,
+				o.order_date as orderDate,
+				o.order_count as orderCount,
+				o.order_status as orderStatus,
+				o.payment_method as paymentMethod,
+				o.pay_price as payPrice,
+				o.delivery_company as deliveryCompany,
+				o.delivery_no as deliveryNo,
+				o.delivery_status as deliveryStatus,
+				o.order_type as orderType,
+				o.user_no as userNo,
+				o.personal_coupon_no as personalCouponNo,
+				o.user_name as userName,
+				o.user_phone as userPhone,
+				o.user_address as userAddress,
+				p.product_no as productNo,
+       			p.product_name as productName,
+        		p.product_price as productPrice,
+        		p.product_stock as productStock,
+        		p.product_state as productState,
+        		a.attm_rename as attmRename
+			from "ORDER" o
+			join cart c 
+				on c.cart_no=o.order_target_no
+			left join product p 
+				on p.product_no=c.product_no
+			left join attachment a
+				on a.position_no=p.product_no
+			and a.attm_level=0
+			where o.user_no=#{userNo} and o.order_no=#{orderNo}
+			and o.order_type=2
+		)
+		order by orderNo desc
+	</select>
+	
+	
 	<select id="selectProductNoForOrder" resultType="int">
 		select o.order_target_no AS product_no
   		from "ORDER" o
@@ -222,10 +299,6 @@
 		and user_no=#{userNo}
 	</update>
 	
-	<select id="selectOrderDetail" resultType="Order">
-		select *
-		from "ORDER" o
-		where o.order_no=#{orderNo} and o.user_no=#{userNo}
-	</select>
+	
 	
 </mapper>
