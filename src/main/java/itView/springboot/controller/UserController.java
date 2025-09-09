@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import itView.springboot.exception.LoginException;
-import itView.springboot.exception.ProductException;
 import itView.springboot.exception.UserException;
 import itView.springboot.service.UserService;
 import itView.springboot.vo.User;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller

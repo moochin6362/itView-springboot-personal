@@ -113,7 +113,10 @@ body {
 .order-info .name {
 	color: gray;
 }
-
+.company {
+	font-size: 18px;
+	font-weight: bold;
+}
 .review-btn {
 	background-color: #eefbfb;
 	color: black;
@@ -213,6 +216,7 @@ body {
 				</span>
 			</p>
 	      <p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
+	      <p class="company">[[${o.productCompany}]]</p>
 	      <p class="name">[[${o.productName}]]</p>
 	    </div>
 	    <a class="review-btn" th:if="${o.orderStatus=='confirmed'}" th:href="@{/my/myReview(orderNo=${o.orderNo},productNo=${o.productNo})}">리뷰쓰러가기</a>

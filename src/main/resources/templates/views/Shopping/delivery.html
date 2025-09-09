@@ -96,7 +96,10 @@ body {
 }
 
 
-
+.company {
+	font-size: 18px;
+	font-weight: bold;
+}
 .consumer-inform {
 	font-weight: bold;
 	font-size: 18px;
@@ -157,6 +160,7 @@ body {
 					</div>
 					<div class="order-info">
 						<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
+						<p class="company">[[${o.productCompany}]]</p>
 						<p class="name">[[${o.productName}]]</p>
 					</div>
 				</div>

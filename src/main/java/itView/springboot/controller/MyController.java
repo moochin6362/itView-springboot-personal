@@ -314,7 +314,7 @@ public class MyController {
 
     //서연
     @GetMapping("/myReview")
-    public String myReview(@RequestParam("orderNo") int oNo,@RequestParam(value = "productNo", required = false) Integer pNo,Model model, HttpSession session) { 
+    public String myReview(@RequestParam(value = "orderNo", required = false) Integer oNo,@RequestParam(value = "productNo", required = false) Integer pNo,Model model, HttpSession session) { 
     	
     	User loginUser = (User) session.getAttribute("loginUser");
 

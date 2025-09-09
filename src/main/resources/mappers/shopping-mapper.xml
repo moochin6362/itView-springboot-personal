@@ -123,6 +123,7 @@
         		p.product_price as productPrice,
         		p.product_stock as productStock,
         		p.product_state as productState,
+        		p.product_company as productCompany,
         		a.attm_rename as attmRename
 			from "ORDER" o
 			left join product p 
@@ -157,6 +158,7 @@
         		p.product_price as productPrice,
         		p.product_stock as productStock,
         		p.product_state as productState,
+        		p.product_company as productCompany,
         		a.attm_rename as attmRename
 			from "ORDER" o
 			join cart c 
@@ -198,6 +200,7 @@
         		p.product_price as productPrice,
         		p.product_stock as productStock,
         		p.product_state as productState,
+        		p.product_company as productCompany,
         		a.attm_rename as attmRename
 			from "ORDER" o
 			left join product p 
@@ -232,6 +235,7 @@
         		p.product_price as productPrice,
         		p.product_stock as productStock,
         		p.product_state as productState,
+        		p.product_company as productCompany,
         		a.attm_rename as attmRename
 			from "ORDER" o
 			join cart c 

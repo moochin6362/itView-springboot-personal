@@ -1,6 +1,8 @@
 package itView.springboot.vo;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
+
 public class Wishlist {
 	private int wishlistNo;
-	private Date wishDate;
+	private LocalDate wishDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private int productNo;
 	private int userNo;
 	

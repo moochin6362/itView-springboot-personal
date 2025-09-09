@@ -51,7 +51,10 @@
 .order-info .name {
 	color: gray;
 }
-	
+.company {
+	font-size: 18px;
+	font-weight: bold;
+}
 </style>
 </head>
 <body>
@@ -97,6 +100,7 @@
 		</div>
 		<div class="order-info">	
 			<p class="price" th:text="${#numbers.formatInteger(order.productPrice,3,'COMMA')}+'원'"></p>
+			<p class="company">[[${order.productCompany}]]</p>
 			<p class="name">[[${order.productName}]]</p>
 		</div>	
 	</div>

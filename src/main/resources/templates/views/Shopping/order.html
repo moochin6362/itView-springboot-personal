@@ -125,7 +125,10 @@ body {
 .order-info .name {
 	color: gray;
 }
-
+.company {
+	font-size: 18px;
+	font-weight: bold;
+}
 button {
 	background-color: #eefbfb;
 	color: black;
@@ -214,6 +217,7 @@ button:hover {
 						</span>
 					</p>
 					<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
+					<p class="company">[[${o.productCompany}]]</p>
 					<p class="name">[[${o.productName}]]</p>
 				</div>
 				

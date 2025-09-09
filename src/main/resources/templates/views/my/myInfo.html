@@ -116,7 +116,7 @@
         <label class="form-label required">생년</label>
         <div class="form-field">
           <input type="date" name="birthDate"
-                 th:value="${user?.userAge != null ? #dates.format(user.userAge,'yyyy-MM-dd') : ''}"
+                 th:value="${user != null and user.userAge != null ? #temporals.format(user.userAge, 'yyyy-MM-dd') : ''}"
                  class="input"/>
           <p class="helper">생년을 설정해야 마이페이지에 연령대가 정확히 표시됩니다.</p>
         </div>
