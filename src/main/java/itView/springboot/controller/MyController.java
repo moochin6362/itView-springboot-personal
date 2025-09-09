@@ -3,7 +3,9 @@ package itView.springboot.controller;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import itView.springboot.service.InhoService;
 import itView.springboot.service.MyService;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Order;
@@ -35,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MyController {
 
     private final MyService myService;
+    private final InhoService uService;
     private static final String LOGIN_URL = "/";
 
     /** 마이페이지(프로필/연령대/등급 표시) */
@@ -365,7 +369,7 @@ public class MyController {
         return myService.searchProducts(keyword);
     }
 
-    // 리뷰 저장
+    //리뷰 저장
     @PostMapping("/review")
     public String saveReview(@ModelAttribute Review review,
                              HttpSession session,
@@ -379,6 +383,16 @@ public class MyController {
         review.setUserNo(userNo.intValue());
         int rows = myService.insertReview(review);
         ra.addFlashAttribute("msg", rows > 0 ? "리뷰가 등록되었습니다." : "리뷰 등록 실패");
+        
+        User u = myService.getUser(userNo);
+        int reviewPoint = uService.getPointByName("리뷰작성");
+        
+        Map<String, Object> map = new HashMap<>();
+    	map.put("userNo", u.getUserNo());
+    	map.put("point", reviewPoint);
+    	
+    	int result = uService.addPoint(map);
+    	
         return "redirect:/my/myReview";
     }
 
