@@ -18,4 +18,6 @@ public class Wishlist {
 	private String productCompany;
 	private int productPrice;
 	private String productName;
+	private int productStock;
+	private String productState;
 }

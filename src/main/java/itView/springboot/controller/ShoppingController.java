@@ -2,6 +2,7 @@ package itView.springboot.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -119,34 +120,40 @@ public class ShoppingController {
 
 	
 	@GetMapping("order")
-	public String order(Model model, @RequestParam("orderNo")int oNo,HttpSession session) {
+	public String order(Model model, @RequestParam(value = "orderNo", required = false,defaultValue="0") Integer oNo,HttpSession session) {
 		
 		User loginUser = (User) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
 			return "redirect:/login";
 		}
-		ArrayList<Order>olist = sService.selectOrder(oNo);
-		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(oNo);
 		
+		
+		int uNo = loginUser.getUserNo();
+		
+		ArrayList<Order>olist = sService.selectOrder(uNo);
+	
+		Map<String, Object> count = sService.orderStatusCount(uNo);
 		model.addAttribute("olist", olist);
-		model.addAttribute("alist", alist);
-		
-		
+		model.addAttribute("count",count);
 		return "Shopping/order";
 	}
 
 	
 	@GetMapping("orderDetail")
-	public String orderDetail(Model model,@RequestParam("orderNo") int oNo,HttpSession session,@RequestParam("orderTargetNo") int otargetNo) {
+	public String orderDetail(Model model,@RequestParam("orderNo") int oNo,HttpSession session) {
 		
 		User loginUser = (User) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
 			return "redirect:/login";
 		}
-		ArrayList<Order>olist = sService.selectOrder(oNo);
+		int uNo = loginUser.getUserNo();
+		
+		
+		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
 		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(oNo);
+		
 		
 		model.addAttribute("olist", olist);
 		model.addAttribute("alist", alist);
@@ -175,8 +182,10 @@ public class ShoppingController {
 			}
 		}
 
-		ArrayList<Attachment> alist = sService.selectThumbList(pNo);
-		
+		ArrayList<Attachment> alist = new ArrayList<>();
+		if (!pNo.isEmpty()) {
+		    alist = sService.selectThumbList(pNo);
+		}
 		
 		model.addAttribute("wlist", wlist);
 		model.addAttribute("alist", alist);
@@ -185,11 +194,10 @@ public class ShoppingController {
 	} 
 
 	// 찜에서 선택 삭제 눌럿을때
-	@PostMapping("wishcheckdelete")
+	@PostMapping("wishcheckDelete")
 	@ResponseBody
-	public int wishcheckdelete(@RequestParam("wishlistNo") List<Integer> wNo) {
+	public int wishcheckDelete(@RequestParam("wishlistNo") List<Integer> wNo) {
 		int result = sService.wishcheckDelete(wNo);
-
 		return result;
 	}
 
@@ -219,17 +227,28 @@ public class ShoppingController {
 	}
 	@PostMapping("orderToCart")
 	@ResponseBody
-	public int orderToCart(@RequestParam("orderNo") int oNo) {
-		int result = sService.orderToCart(oNo);
+	public int orderToCart(@RequestParam("productNo") int pNo,HttpSession session) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+
+		int uNo = loginUser.getUserNo();
+		int result = sService.orderToCart(uNo,pNo);
+		
 		return result;
 	}
 	
 	@PostMapping("purchaseConfirm")
 	@ResponseBody
-	public int purchaseConfirm(@RequestParam("orderNo") int oNo) {
-		int result = sService.purchaseConfirm(oNo);
+	public int purchaseConfirm(@RequestParam("orderNo") int oNo,HttpSession session) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		int uNo = loginUser.getUserNo();
+		int result = sService.purchaseConfirm(oNo,uNo);
 		return result;
 	}
+	
+	
+	
 	
 	@PostMapping("orderCancel")
 	@ResponseBody
@@ -237,5 +256,7 @@ public class ShoppingController {
 		int result = sService.orderCancel(oNo);
 		return result;
 	}
+	
+	
 
 }

@@ -4,6 +4,7 @@ package itView.springboot.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,33 +25,38 @@ public interface ShoppingMapper {
 
 	int productDelete(int cNo);
 
-	ArrayList<Attachment> selectThumbList(@Param("pNo") ArrayList<Integer> pN);
+	ArrayList<Attachment> selectThumbList(@Param("pNo") ArrayList<Integer> pNo);
 
 	ArrayList<CouponBox> selectCouponList(int uNo);
 
 	ArrayList<Wishlist> selectWishList(int uNo);
 
-	int wishcheckDelete(List<Integer> wNo);
+	int wishcheckDelete(@Param("wNo") List<Integer> wNo);
 
 	int wishproductDelete(int wNo);
 
-	int insertWishToCart(@Param("userNo")int uNo, @Param("wishlistNo")List<Integer> wNo);
+	int insertWishToCart(@Param("userNo")int uNo, @Param("wNo")List<Integer> wNo);
 
-	int updateWishToCart(int uNo, List<Integer> wNo);
+	int updateWishToCart(@Param("userNo")int uNo, @Param("wNo")List<Integer> wNo);
 
-	ArrayList<Order> selectOrder(int oNo);
+	ArrayList<Order> selectOrder(int uNo);
 
-	Order selectOrderDetail(int oNo);
 
 	ArrayList<Attachment> selectThumbListByOrderNo(int oNo);
 
 	ArrayList<Integer> selectProductNoForOrder(int oNo);
 
-	int orderToCart(int oNo);
+	 int checkCart(@Param("userNo") int uNo, @Param("productNo") int pNo);
+	
+	int orderToCart(@Param("userNo") int uNo,@Param("productNo") int pNo);
 
-	int purchaseConfirm(int oNo);
-
+	int purchaseConfirm(@Param("orderNo") int oNo,@Param("userNo") int uNo);
+	
 	int orderCancel(int oNo);
+
+	Map<String, Object> orderStatusCount(@Param("userNo") int uNo);
+
+	ArrayList<Order> selectOrderDetail(@Param("orderNo") int oNo,@Param("userNo") int uNo);
 
 
 

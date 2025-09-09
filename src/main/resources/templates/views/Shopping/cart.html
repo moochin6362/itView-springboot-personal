@@ -58,13 +58,7 @@ input[type="checkbox"]:indeterminate {
 	margin-top: 1%;
 }
 
-.delete-btn {
-	float: right;
-	background: none;
-	border: none;
-	color: gray;
-	font-size: 15px;
-}
+
 
 .delete-btn:hover {
 	color: black;
@@ -92,8 +86,22 @@ input[type="checkbox"]:indeterminate {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	margin-right: 3%;
-	margin-left: 3%;
+	margin-right: 1%;
+	position:relative;
+	margin-left: 1%;
+	margin-bottom:1%;
+	margin-top:2%;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 0;   
+  right:0 ; 
+  background: none;
+  border: none;
+  color: gray;
+  font-size: 15px;
+  cursor: pointer;
 }
 
 .item-image {
@@ -107,6 +115,31 @@ input[type="checkbox"]:indeterminate {
 	margin-right: 10px;
 	margin-bottom: 10px;
 	border-radius: 6px;
+	position: relative;
+}
+.soldout {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);   
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;               
+}
+.unavailable {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);   
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;               
 }
 
 .quantity {
@@ -116,8 +149,13 @@ input[type="checkbox"]:indeterminate {
 .item-name {
 	font-size: 18px;
 	color: gray;
-	font-size: 18px;
 }
+.item-name a {
+  text-decoration: none; 
+  color: inherit;  
+  font-size: 18px;      
+}
+
 
 .item-price {
 	color: #8ad8f0;
@@ -313,78 +351,66 @@ select[name="coupon-option"] {
 		<div th:if="${#lists.isEmpty(clist)}" class="cart-empty">
    			<p>장바구니가 비어 있습니다.</p>
 		</div>
-		<div class="cartitem" th:if="${!#lists.isEmpty(clist)}" th:each="c:${clist}">
+		<div class="cartitem" th:if="${!#lists.isEmpty(clist)}"
+			th:each="c:${clist}">
+			
+			
+			
 			<div class="cart-header">
-				<label><input type="checkbox" class="checkItem"
-					th:value="${c.cartNo}">[[${c.productCompany}]]</label>
-				<button type="button" class="delete-btn"
-					th:data-cartno="${c.cartNo}">X</button>
+				<label><input type="checkbox" class="checkcompany"
+					th:value="${c.cartNo}" th:data-company="${c.productCompany}" >[[${c.productCompany}]]</label>
+
 			</div>
-			<div class="cart-body">
+			
+			<div  class="cart-body">
+				<label><input type="checkbox" class="checkItem"
+					th:value="${c.cartNo}" th:data-company="${c.productCompany}" th:disabled="${c.productStock == 0 or c.productState == 'N'}"></label>
 				<div class="item-image">
-					<img th:each="a:${alist}" th:if="${a.positionNo==c.productNo}"
+					<a th:href="@{#}">
+						<img th:each="a:${alist}" th:if="${a.positionNo==c.productNo}"
 						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
 						width="100%" height="100%" style="border-radius: 8px;" />
+					</a>
+					<div th:if="${c.productStock == 0 && c.productState =='Y'}" class="soldout">
+    					품절
+  					</div>
+  					<div th:if="${c.productState == 'N'}" class="unavailable">
+    					판매중지
+  					</div>
 				</div>
+				
 				<div class="item">
 					<div class="item-price" th:data-price="${c.productPrice}"
 						th:text="${#numbers.formatInteger(c.productPrice * c.amount,3,'COMMA')}+'원'">가격</div>
-					<div class="item-name" th:text="${c.productName}">이름</div>
+					<div class="item-name">
+						<a th:href="@{#}">
+							<span th:text="${c.productName}">이름</span>
+						</a>
+					</div>
 
 					<div class="quantity">
 						<button class="qty-btn minus" type="button">-</button>
 						<span th:text="${c.amount}" class="qty"
-							th:data-stock="${c.productStock}">갯수</span>
+							th:data-stock="${c.productStock}"
+     						th:data-state="${c.productState}">갯수</span>
 						<button class="qty-btn plus" type="button">+</button>
 					</div>
 				</div>
+				<button type="button" class="delete-btn"
+					th:data-cartno="${c.cartNo}">X</button>
 			</div>
-		</div>
-		<div class="cartitem">
-			<div class="cart-header">
-				<label><input type="checkbox" class="checkItem"> 브랜드
-					이름 1</label>
-				<button class="delete-btn">X</button>
 			</div>
-			<div class="cart-body">
-				<div class="item-image">품절</div>
-				<div class="item">
-					<div class="item-price">(상품가격)</div>
-					<div class="item-name">상품이름</div>
-					<div class="quantity">
-						<button class="qty-btn minus">-</button>
-						<span>1</span>
-						<button class="qty-btn plus">+</button>
-					</div>
-				</div>
+		
 
-			</div>
-			<div class="cart-header">
-				<label><input type="checkbox" class="checkItem"></label>
-				<button class="delete-btn" type="button">X</button>
-			</div>
-			<div class="cart-body">
-				<div class="item-image">품절</div>
-				<div class="item">
-					<div class="item-price">(상품가격)</div>
-					<div class="item-name">상품이름</div>
-					<div class="quantity">
-						<button class="qty-btn minus">-</button>
-						<span>1</span>
-						<button class="qty-btn plus">+</button>
-					</div>
-				</div>
-
-			</div>
-
-		</div>
+	
+		
 		<hr>
 		<div class="payment">
 			<p class="predict">예상결제금액</p>
 
 			<div class="total">
 				<p class="total-price">총 상품금액</p>
-				<p class="total-product" style="color: black;">(상품만가격)</p>
+				<p class="total-product" style="color: black;">0원</p>
 			</div>
 			<div class="coupon">
 				<p class="coupon-notice">쿠폰할인</p>
@@ -413,6 +439,8 @@ select[name="coupon-option"] {
 		const items = document.querySelectorAll('.checkItem');
 		const checkdelete = document.getElementById('checkdelete');
 		const deleteBtn = document.querySelectorAll('.delete-btn');
+		const checkCompany = document.querySelectorAll('.checkcompany');
+		
 		
 		const minusBtn = document.querySelectorAll('.qty-btn.minus');
 		const plusBtn=document.querySelectorAll('.qty-btn.plus');
@@ -422,11 +450,56 @@ select[name="coupon-option"] {
 		const cartItem=document.querySelectorAll('.cartitem');
 		const totalProduct = document.querySelector('.total-product');
 		
+
+		
+		checkCompany.forEach(chkbrd => {
+			  chkbrd.addEventListener('change', () => {
+			    const company = chkbrd.dataset.company;
+
+			    
+			    items.forEach(item => {
+			      if (item.dataset.company === company && !item.disabled) {
+			        item.checked = chkbrd.checked;
+			      }
+			    });
+
+			  
+			    const total = items.length;
+			    const checked = [...items].filter(c => c.checked).length;
+
+			    
+			    all.checked = (checked === total);
+			    all.indeterminate = (checked > 0 && checked < total);
+			    
+			    let sum=0;
+				cartItem.forEach(product=>{
+					if(product.querySelector('.checkItem').checked){
+						const unit = parseInt(product.querySelector('.item-price').dataset.price);
+						const qty=parseInt(product.querySelector('.qty').textContent);
+						sum+=unit*qty;
+					}
+				});
+				
+				totalProduct.textContent=sum.toLocaleString()+'원';
+			  });
+			});
+
+	
+		
 		if(all != null){
 			all.addEventListener('change',()=>{
 				for(let i =0; i<items.length; i++){
-					items[i].checked=all.checked;
+					if(!items[i].disabled){
+						items[i].checked=all.checked;
+					}
 				}
+				
+				checkCompany.forEach(chkbrd=>{
+					chkbrd.checked=all.checked;
+					chkbrd.indeterminate=false;
+					});
+				
+				
 				all.indeterminate = false;
 				
 				let sum=0;
@@ -440,6 +513,11 @@ select[name="coupon-option"] {
 				
 				totalProduct.textContent=sum.toLocaleString()+'원';
 			});
+		
+		
+				
+				
+			
 			
 			items.forEach(check =>{
 				check.addEventListener('change',()=>{
@@ -449,7 +527,17 @@ select[name="coupon-option"] {
 					//filer-> 배열을 훑으면서 조건을 통과하는 요소만 모아서 새 배열을 반환 
 					//즉 체크된 박스들만 걸러서 배열로 만든다
 					const checked = [...items].filter(c=>c.checked).length;
+					const company=check.dataset.company;
+					const companyCheckbox = [...checkCompany].find(cb => cb.dataset.company === company);
+					const companyItems = [...items].filter(i => i.dataset.company === company);
+					const checkedCount = companyItems.filter(i => i.checked).length;
 					
+					
+					
+					companyCheckbox.checked = (checkedCount === companyItems.length);
+					companyCheckbox.indeterminate = (checkedCount > 0 && checkedCount < companyItems.length);
+					
+					    
 					all.checked=(checked===total);
 					
 					//일부만 선택된 상태면 '전체선책'체크박스를 회색 상태로 만든다
@@ -467,7 +555,10 @@ select[name="coupon-option"] {
 					});
 					
 					totalProduct.textContent=sum.toLocaleString()+'원';
+					
+					
 				});
+				
 			})
 			
 		}
@@ -544,6 +635,14 @@ select[name="coupon-option"] {
 		qtySpan.forEach((span,i)=>{
 			const qty=parseInt(span.textContent);
 			const stock=parseInt(qtySpan[i].dataset.stock);
+			const state=span.dataset.state;
+			
+			if(stock==0 || state=='N'){
+				minusBtn[i].disabled=true;
+				plusBtn[i].disabled=true;
+			}
+			
+			
 			if(qty===1){
 				minusBtn[i].disabled=true;
 			}
@@ -628,8 +727,9 @@ select[name="coupon-option"] {
 				totalProduct.textContent=sum.toLocaleString()+'원';
 			});
 			
-			
-		});
+		});	
+		
+		
 		
 		
 		

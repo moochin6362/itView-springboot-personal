@@ -173,19 +173,23 @@ button:hover {
 		<div class="order-status">
 			<div class="status-item">
 				<p class="delivery">배송중</p>
-				<p class="count">0</p>
+				<p class="count" th:text="${count['shippingCount'] != null ? count['shippingCount'] : 0}"></p>
 			</div>
 			<div class="status-item">
 				<p class="delivery">배송완료</p>
-				<p class="count">0</p>
+				<p class="count" th:text="${count['deliveredCount'] != null ? count['deliveredCount'] : 0}">0</p>
 			</div>
 			<div class="status-item">
 				<p class="delivery">주문취소</p>
-				<p class="count">0</p>
+				<p class="count" th:text="${count['cancelCount'] != null ? count['cancelCount'] : 0}"></p>
 			</div>
 		</div>
 
-		<div class="order-box" th:each="o:${olist}">
+		<div th:if="${#lists.isEmpty(olist)}" class="order-empty">
+   			<p>주문내역이 비어 있습니다.</p>
+		</div>
+
+		<div th:if="${!#lists.isEmpty(olist)}" class="order-box" th:each="o:${olist}">
 			<div class="order-header">
 				<span class="order-date">[[${o.orderDate}]]</span> 
 				<a  th:href="@{/Shopping/orderDetail(orderNo=${o.orderNo})}"
@@ -198,91 +202,26 @@ button:hover {
 						width="100%" height="100%" style="border-radius: 8px;" />
 				</div>
 				<div class="order-info">
-					<p class="status" th:if="${o.deliveryStatus !='after'">
+					
+					<p class="status">
 						<span th:switch="${o.orderStatus}">
-							<span th:case="'completed'">구매완료</span>
+							<span th:case="'completed'">
+								<span th:if="${o.deliveryStatus=='before'}">주문완료</span>
+								<span th:if="${o.deliveryStatus=='after'}">배송완료</span>
+							</span>
 							<span th:case="'confirmed'">구매확정</span>
-							<span th:case="'cancel'">주문취소</span>
-						</span>
-					</p>
-					<p class="status" th:if="${o.deliveryStatus =='after'">
-						<span th:switch="${o.deliveryStatus}">
-							<span th:case="'after'">배송완료</span>
+							<span th:case="'cancel'">취소완료</span>
 						</span>
 					</p>
 					<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
 					<p class="name">[[${o.productName}]]</p>
 				</div>
+				
 			</div>
-
-			<button class="cart-btn" th:if="${o.orderStatus=='confirmed'}" th:attr="data-order-no=${o.orderNo}">장바구니 다시 담기</button>
+			<button class="cart-btn" th:if="${o.orderStatus=='confirmed'}" th:attr="data-order-no=${o.orderNo},data-product-no=${o.productNo},data-stock=${o.productStock},data-state=${o.productState}">장바구니 다시 담기</button>
 			<button class="purchase-confirmed-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus=='after'}" th:attr="data-order-no=${o.orderNo}">구매확정 하기</button>
 			<button class="order-cancel-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus == 'before'}" th:attr="data-order-no=${o.orderNo}">주문 취소하기</button>
-		</div>
-		<div class="order-box">
-			<div class="order-header">
-				<span class="order-date">(주문날짜)</span> <a
-					href="/Shopping/orderDetail" class="order-link">></a>
-			</div>
-
-			<div class="order-body">
-				<div class="order-image">(이미지)</div>
-				<div class="order-info">
-					<p class="status">배송완료</p>
-					<p class="price">가격</p>
-					<p class="name">상품이름</p>
-				</div>
-			</div>
-
-			<div class="order-body">
-				<div class="order-image">(이미지)</div>
-				<div class="order-info">
-					<p class="status">배송완료</p>
-					<p class="price">가격</p>
-					<p class="name">상품이름</p>
-				</div>
-			</div>
-
-			<div class="order-body">
-				<div class="order-image">(이미지)</div>
-				<div class="order-info">
-					<p class="status">배송완료</p>
-					<p class="price">가격</p>
-					<p class="name">상품이름</p>
-				</div>
-			</div>
-			<button class="cart-btn">구매확정 하기</button>
-		</div>
-		<div class="order-box">
-			<div class="order-header">
-				<span class="order-date">(주문날짜)</span> <a
-					href="/Shopping/orderDetail" class="order-link">></a>
-			</div>
-
-			<div class="order-body">
-				<div class="order-image">(이미지)</div>
-				<div class="order-info">
-					<p class="status">구매완료</p>
-					<p class="price">가격</p>
-					<p class="name">상품이름</p>
-				</div>
-			</div>
-			<button class="cart-btn">주문 취소하기</button>
-		</div>
-		<div class="order-box">
-			<div class="order-header">
-				<span class="order-date">(주문날짜)</span> <a
-					href="/Shopping/orderDetail" class="order-link">></a>
-			</div>
-
-			<div class="order-body">
-				<div class="order-image">(이미지)</div>
-				<div class="order-info">
-					<p class="status">취소완료</p>
-					<p class="price">가격</p>
-					<p class="name">상품이름</p>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </body>
@@ -296,18 +235,32 @@ button:hover {
 		
 		cartBtn.forEach(btn => {
 			  btn.addEventListener('click', () => {
-			    const orderNo = btn.dataset.orderNo;
+			    const productNo = btn.dataset.productNo;
+			    const stock=parseInt(btn.dataset.stock);
+			    const state = btn.dataset.state;
+			    
+			    if(stock==0){
+			    	alert("해당 상품은 품절되어 장바구니에 담을 수 없습니다.");
+			    	return;
+			    }
+			    if(state=='N'){
+			    	alert("해당 상품은 판매중지되어 장바구니에 담을 수 없습니다.");
+			    	return;
+			    }
 			    if (confirm('상품을 장바구니에 다시 추가하시겠습니까?')) {
 			      $.ajax({
 			        url: '/Shopping/orderToCart',
 			        type: 'post',
-			        data: { orderNo: orderNo },
+			        data: { productNo: productNo },
 			        success: data => {
-			          if (data > 0) {
-			            alert('상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?');
-			            location.href = '/Shopping/cart';
-			          } else {
-			            alert('상품을 장바구니에 담는 도중 오류가 발생하였습니다.');
+			          if (data >0) {
+			            if(confirm('상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?')){
+			            	location.href = '/Shopping/cart';
+			            }
+			          } else if(data==-1) {
+			            alert('상품이 이미 장바구니에 담겨있습니다.');
+			          }else{
+			        	  alert('장바구니 처리 중 오류가 발생하였습니다.')
 			          }
 			        },
 			        error: data => console.log(data)

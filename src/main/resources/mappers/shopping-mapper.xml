@@ -16,6 +16,7 @@
 		from cart c
 			join product p on c.product_no=p.product_no
 		where c.user_no=#{userNo}
+		order by p.product_company asc, c.cart_no asc
 	</select>
 	<delete id="productDelete">
 		delete from cart
@@ -46,17 +47,23 @@
 	
 	<select id="selectWishList" resultType="Wishlist">
 		select * 
-		from wishlist
-		where user_no=#{userNo}
+		from wishlist w
+			join product p on p.product_no=w.product_no
+		where w.user_no=#{userNo}
 	</select>
 	
 	<delete id="wishcheckDelete">
-		update from wishlist
-		where wishlist_no=#{wishlistNo}
+		delete from wishlist
+		where wishlist_no in
+		<foreach collection="wNo" item="wishlistNo" open="(" separator="," close=")">
+			#{wishlistNo}
+    	</foreach>
 	</delete>
 	
+
+	
 	<delete id="wishproductDelete">
-		update from wishlist
+		delete from wishlist
 		where wishlist_no=#{wishlistNo}
 	</delete>
 	<update id="updateWishToCart">
@@ -93,8 +100,76 @@
 	<!-- ========================= 주문내역 =============================================-->
 	<select id="selectOrder" resultType="Order">
 		select *
-		from "ORDER"
-		where order_no=#{orderNo}
+		from(
+			select 
+				o.order_no as orderNo,
+				o.order_target_no as orderTargetNo,
+				o.order_date as orderDate,
+				o.order_count as orderCount,
+				o.order_status as orderStatus,
+				o.payment_method as paymentMethod,
+				o.pay_price as payPrice,
+				o.delivery_company as deliveryCompany,
+				o.delivery_no as deliveryNo,
+				o.delivery_status as deliveryStatus,
+				o.order_type as orderType,
+				o.user_no as userNo,
+				o.personal_coupon_no as personalCouponNo,
+				o.user_name as userName,
+				o.user_phone as userPhone,
+				o.user_address as userAddress,
+				p.product_no as productNo,
+       			p.product_name as productName,
+        		p.product_price as productPrice,
+        		p.product_stock as productStock,
+        		p.product_state as productState,
+        		a.attm_rename as attmRename
+			from "ORDER" o
+			left join product p 
+				on p.product_no=o.order_target_no
+			left join attachment a
+				on a.position_no=p.product_no
+			and a.attm_level=0
+			where o.user_no=#{userNo}
+			and o.order_type=1
+		
+			union all
+		
+			select 
+				o.order_no as orderNo,
+				o.order_target_no as orderTargetNo,
+				o.order_date as orderDate,
+				o.order_count as orderCount,
+				o.order_status as orderStatus,
+				o.payment_method as paymentMethod,
+				o.pay_price as payPrice,
+				o.delivery_company as deliveryCompany,
+				o.delivery_no as deliveryNo,
+				o.delivery_status as deliveryStatus,
+				o.order_type as orderType,
+				o.user_no as userNo,
+				o.personal_coupon_no as personalCouponNo,
+				o.user_name as userName,
+				o.user_phone as userPhone,
+				o.user_address as userAddress,
+				p.product_no as productNo,
+       			p.product_name as productName,
+        		p.product_price as productPrice,
+        		p.product_stock as productStock,
+        		p.product_state as productState,
+        		a.attm_rename as attmRename
+			from "ORDER" o
+			join cart c 
+				on c.cart_no=o.order_target_no
+			left join product p 
+				on p.product_no=c.product_no
+			left join attachment a
+				on a.position_no=p.product_no
+			and a.attm_level=0
+			where o.user_no=#{userNo}
+			and o.order_type=2
+		)
+		order by orderNo desc
 	</select>
 	<select id="selectProductNoForOrder" resultType="int">
 		select o.order_target_no AS product_no
@@ -110,41 +185,33 @@
   		where o.order_no = #{orderNo}
     	and o.order_type = 2
 	</select>
+	<select id="checkCart" resultType="int">
+  		select count(*)
+  		from cart
+  		where user_no = #{userNo}
+    	and product_no = #{productNo}
+	</select>
 	
 	<insert id="orderToCart">
 		insert into cart (cart_no,amount,user_no,product_no)
-		select seq_cart.nextval,1,#{userNo},
-			case when o.order_type=1 then o.order_target_no
-				when o.order_type=2 then c.product_no
-			end ad product_no
-		from "ORDER" o
-		left join cart c
-			on (o.order_type=2 and c.cart_no=o.order_target_no)
-		where o.order_no in
-			<foreach collection="oNo" item="orderNo" open="(" separator="," close=")">
-      			#{orderNo}
-    		</foreach>
-    	and o.user_no=#{userNo}
-    	and not exists(
-    		select 1
-    		from cart c
-    		where c.user_no=#{userNo}
-    			and c.product_no=case
-    								when o.order_Type=1 then o.order_target_no
-    								else c.product_no
-    							end
-    	)
-		
+		values(seq_cart.nextval,1,#{userNo},#{productNo})
+			
 	</insert>
 	<update id="purchaseConfirm">
 		update "ORDER"
 		set order_status='confirmed'
-		where delivery_status='after' and order_no in
-			<foreach collection="oNo" item="orderNo" open="(" separator="," close=")">
-      			#{orderNo}
-    		</foreach>
-		and user_no=#{userNo}
+		where delivery_status='after'
+			and order_no=#{orderNo}
+			and user_no=#{userNo}
 	</update>
+	<select id="orderStatusCount" parameterType="int" resultType="map">
+		select
+			sum(case when delivery_status='shipping' then 1 else 0 end) as "shippingCount",
+			sum(case when delivery_status ='after' then 1 else 0 end)as "deliveredCount",
+			sum(case when order_status='cancel' then 1 else 0 end)as "cancelCount"
+		from "ORDER"
+		where user_no=#{userNo}
+	</select>
 	<update id="orderCancel">
 		update "ORDER"
 		set order_status ='cancel'
@@ -154,5 +221,11 @@
     		</foreach>
 		and user_no=#{userNo}
 	</update>
+	
+	<select id="selectOrderDetail" resultType="Order">
+		select *
+		from "ORDER" o
+		where o.order_no=#{orderNo} and o.user_no=#{userNo}
+	</select>
 	
 </mapper>

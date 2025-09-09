@@ -2,6 +2,7 @@ package itView.springboot.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -40,9 +41,9 @@ public class ShoppingService {
 		
 	}
 
-	public ArrayList<Order> selectOrder(int oNo) {
+	public ArrayList<Order> selectOrder(int uNo) {
 		// TODO Auto-generated method stub
-		return mapper.selectOrder(oNo);
+		return mapper.selectOrder(uNo);
 	}
 	
 	
@@ -81,19 +82,35 @@ public class ShoppingService {
 		return mapper.updateWishToCart(uNo,wNo);
 	}
 
-	public int orderToCart(int oNo) {
-		// TODO Auto-generated method stub
-		return mapper.orderToCart(oNo);
+	public int orderToCart(int uNo,int pNo) {
+		 int exist = mapper.checkCart(uNo, pNo);
+		 if (exist > 0) {
+	            return -1;
+	        }
+		return mapper.orderToCart(uNo,pNo);
 	}
 
-	public int purchaseConfirm(int oNo) {
+	public int purchaseConfirm(int oNo,int uNo) {
 		// TODO Auto-generated method stub
-		return mapper.purchaseConfirm(oNo);
+		
+		return mapper.purchaseConfirm(oNo,uNo);
 	}
 
 	public int orderCancel(int oNo) {
 		// TODO Auto-generated method stub
 		return mapper.orderCancel(oNo);
+	}
+
+	public Map<String, Object> orderStatusCount(int uNo) {
+		// TODO Auto-generated method stub
+		return mapper.orderStatusCount(uNo);
+		
+		
+	}
+
+	public ArrayList<Order> selectOrderDetail(int oNo,int uNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectOrderDetail(oNo,uNo);
 	}
 
 	

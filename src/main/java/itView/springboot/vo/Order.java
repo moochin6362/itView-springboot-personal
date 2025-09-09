@@ -24,10 +24,15 @@ public class Order {
 	private int userNo;
 	private int personalCouponNo;
 	
+	private int productNo;
 	private String productName;
 	private int productPrice;
+	private int productStock;
+	private String productState;
 	
 	private String userPhone;
 	private String userAddress;
 	private String userName;
+	
+	private String attmRename;
 }

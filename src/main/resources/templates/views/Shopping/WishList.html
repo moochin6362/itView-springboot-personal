@@ -17,7 +17,7 @@ body {
 }
 
 .all{
-margin-right: 5%;
+margin-right: 3%;
 	margin-left: 7%;
 	margin-bottom:3%;
 	margin-top:2%;
@@ -147,6 +147,31 @@ hr {
 	background: #8ad8f0;
 	color: white;
 }
+
+.soldout {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);   
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;               
+}
+.unavailable {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);   
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;               
+}
 </style>
 </head>
 <body>
@@ -180,67 +205,31 @@ hr {
 	<hr>
 
 	<span class="quantity">상품(<span class="total-product">[[${#lists.size(wlist)}]]</span>개)</span>
+	<div th:if="${#lists.isEmpty(wlist)}" class="cart-empty">
+   		<p>찜이 비어 있습니다.</p>
+	</div>
 	<div class="product-list">
-		<div class="product-item" th:each="w:${wlist}">
-			<input type="checkbox" class="check" th:value="${w.wishlistNo}" th:data-productno="${w.productNo}"/>
+		<div class="product-item" th:if="${!#lists.isEmpty(wlist)}" th:each="w:${wlist}">
+			<input type="checkbox" class="check" th:value="${w.wishlistNo}" th:data-productno="${w.productNo}" th:disabled="${w.productStock == 0 or w.productState == 'N'}"/>
 			<div class="product-image">
-				<img th:each="a:${alist}" th:if="${a.positionNo==w.productNo}"
+				<a th:href="@{#}">
+					<img th:each="a:${alist}" th:if="${a.positionNo==w.productNo}"
 						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
 						width="100%" height="100%" style="border-radius: 8px;" />
+				</a>
+						
+				<div th:if="${w.productStock == 0 && w.productState =='Y'}" class="soldout">
+    				품절
+  				</div>
+  				<div th:if="${w.productState == 'N'}" class="unavailable">
+    				판매중지
+  				</div>
 				<button class="delete-btn" type="button" th:data-wishno="${w.wishlistNo}">X</button>
 			</div>
 			<div class="product-info">
 				<p class="price" th:text="${#numbers.formatInteger(w.productPrice,3,'COMMA')}+'원'"></p>
 				<p class="brand">[[${w.productCompany}]]</p>
 				<p class="name">[[${w.productName}]]</p>
-			</div>
-		</div>
-		<div class="product-item">
-			<input type="checkbox" class="check">
-			<div class="product-image">
-				이미지1
-				<button class="delete-btn" type="button">X</button>
-			</div>
-			<div class="product-info">
-				<p class="price">가격</p>
-				<p class="brand">브랜드</p>
-				<p class="name">상품이름</p>
-			</div>
-		</div>
-		<div class="product-item">
-			<input type="checkbox" class="check">
-			<div class="product-image">
-				이미지1
-				<button class="delete-btn" type="button">X</button>
-			</div>
-			<div class="product-info">
-				<p class="price">가격</p>
-				<p class="brand">브랜드</p>
-				<p class="name">상품이름</p>
-			</div>
-		</div>
-		<div class="product-item">
-			<input type="checkbox" class="check">
-			<div class="product-image">
-				이미지1
-				<button class="delete-btn" type="button">X</button>
-			</div>
-			<div class="product-info">
-				<p class="price">가격</p>
-				<p class="brand">브랜드</p>
-				<p class="name">상품이름</p>
-			</div>
-		</div>
-		<div class="product-item">
-			<input type="checkbox" class="check">
-			<div class="product-image">
-				이미지1
-				<button class="delete-btn" type="button">X</button>
-			</div>
-			<div class="product-info">
-				<p class="price">가격</p>
-				<p class="brand">브랜드</p>
-				<p class="name">상품이름</p>
 			</div>
 		</div>
 	</div>
@@ -273,8 +262,9 @@ hr {
 					alert('삭제할 상품을 선택하세요.');
 					return;
 				}
+				if(confirm('선택한 상품을 삭제하시겠습니까?')){
 				$.ajax({
-					url:'/Shopping/wishcheckDeletewish',
+					url:'/Shopping/wishcheckDelete',
 					type:'post',
 					traditional:true,
 					data:{wishlistNo:checkedItems},
@@ -288,6 +278,7 @@ hr {
 					},
 					error:data => console.log(data)
 				});
+				}
 			});
 			
 		}	
