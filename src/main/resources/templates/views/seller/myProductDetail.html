@@ -156,6 +156,7 @@ body {
     margin-top: 5px;
     text-align: left;
 }
+
 </style>
 </head>
 <body>
@@ -203,7 +204,7 @@ body {
 					<button class="nav-link active" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail" type="button" role="tab">상세정보</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">후기</button>
+					<button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">후기 ([[${reviewCount}]])</button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="QnA-tab" data-bs-toggle="tab" data-bs-target="#QnA" type="button" role="tab">상품 Q&A</button>
@@ -217,8 +218,11 @@ body {
 				        <div class="review-card">
 				            <!-- 리뷰 내용 -->
 				            <div class="review-header">
+				            	<input type="hidden" class="reviewId" th:value="${r.reviewNo}"/>
 				                <span class="user-name">[[${r.userName}]]</span>
 				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
+				                <button class="reviewAnswerButton">답변</button>
+				                <button class="reviewDeleteButton">삭제</button>
 				            </div>
 				            <div class="review-content">[[${r.reviewContent}]]</div>
 				            
@@ -226,7 +230,7 @@ body {
 				            <div class="response">
 				                <div class="response-header">[[${p.brandName}]]</div>
 				                <div class="response-content">
-				                    <p>여기에 답변 내용이 들어갑니다.</p>
+				                    <p></p>
 				                </div>
 				            </div>
 				        </div>
@@ -243,7 +247,7 @@ body {
 	
 	<script>
 		window.onload = () => {
-// 			document.querySelector('#review-tab').addEventListener('click', () => {
+/* 			document.querySelector('#review-tab').addEventListener('click', () => {
 // 				const rating = 4;
 // 				const filledStar = '\u2605';
 // 				const starString = filledStar.repeat(rating);
@@ -259,11 +263,11 @@ body {
 // 				.then(data => {
 // 					//console.log(data[0].reviewContent)
 					
-// 					const filledStar = '\u2605';
+// 					const filledStar = '\u2605';}
 // 				})
 // 				.catch(err => console.log(err))
-// 			});
-
+			});
+			*/ 
 
 			const ratingStars = document.querySelectorAll('.ratingStar');
 			//console.log(ratingStar)
@@ -275,6 +279,26 @@ body {
 				//console.log(starString)
 				ratingStar.innerText = starString;
 				
+			}
+			
+			// 리뷰 답변 등록
+			const answerButtons = document.querySelectorAll('.reviewAnswerButton');
+			for(answerButton of answerButtons){
+				answerButton.addEventListener('click', e => {
+					//console.log(e.target)
+					const responseDiv = e.target.parentElement.nextElementSibling.nextElementSibling;
+					const reviewNo = e.target.parentElement.children[0].value;
+					//console.log(reviewNo)
+					//console.log(responseDiv)
+					fetch('/product/reviewAnswer', {
+						method: 'POST',
+						headers: {'content-type':'application/json; charset=UTF-8'},
+						body: JSON.stringify(reviewNo)
+					})
+					.then(res => res.json())
+					.then(data => console.log(data))
+					.catch(err => console.log(err))
+				})
 			}
  		}
 	</script>
