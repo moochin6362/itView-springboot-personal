@@ -67,5 +67,9 @@ public interface InhoMapper {
 
 	 Point selectPoint(int pNo);
 
+	 int getNoticeCount(HashMap<String, String> map);
+
+	 ArrayList<Board> selectNoticeList(HashMap<String, String> map, RowBounds rowBounds);
+
 
 }

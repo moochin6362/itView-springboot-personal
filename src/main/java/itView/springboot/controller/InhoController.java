@@ -378,12 +378,12 @@ public class InhoController {
     
     // 공지사항 목록 페이지 이동
     @GetMapping({"/noticeList", "noticeSearch"})
-    public String boardList(@RequestParam(value="page", defaultValue="1") int currentPage,
+    public String noticeList(@RequestParam(value="page", defaultValue="1") int currentPage,
     		Model model, HttpServletRequest request, @RequestParam HashMap<String, String> map) {
     	
-    	int listCount = uService.getCouponBoardCount(map);
+    	int listCount = uService.getNoticeCount(map);
     	PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
-    	ArrayList<Board> list = uService.selectCouponBoardList(pi,map);
+    	ArrayList<Board> list = uService.selectNoticeList(pi,map);
     	
     	model.addAttribute("list", list);
     	model.addAttribute("pi", pi);

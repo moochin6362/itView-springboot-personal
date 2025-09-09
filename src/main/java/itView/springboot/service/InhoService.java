@@ -214,4 +214,14 @@ public class InhoService {
 		return p;
 	}
 
+	public int getNoticeCount(HashMap<String, String> map) {
+		return mapper.getNoticeCount(map);
+	}
+
+	public ArrayList<Board> selectNoticeList(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectNoticeList(map, rowBounds);
+	}
+
 }

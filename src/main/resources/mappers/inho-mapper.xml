@@ -296,4 +296,30 @@
 		where point_no = #{pointNo}
 	</delete>
 	
+	<select id="getNoticeCount">
+		select count(*)
+		from board
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where board_title like '%${value}%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="selectNoticeList">
+		select *
+		from board
+			join "USER" using(user_no)
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where board_title like '%${value}%'
+				</when>
+			</choose>
+		</if>
+		order by board_id desc
+	</select>
+	
 </mapper>
