@@ -139,6 +139,7 @@
     text-indent: -9999px;
 }
 
+
 /* 메뉴 클릭(active) */
 .menu-item.active {
     background: #1aa1a8;
@@ -163,9 +164,4 @@
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHMJESaeronRA.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-}
-
-a {
-  text-decoration: none; 
-  color: inherit;        /* 부모의 글자색을 따라감 */
 }
