@@ -507,5 +507,6 @@
 			and position_no=#{productNo}
 	</select>
 
+	
 
 </mapper>

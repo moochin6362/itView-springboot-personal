@@ -70,4 +70,6 @@ public interface MyMapper {
 	//서연
 	Attachment selectThumbByOrder(Integer pNo);
 
+	
+
 }

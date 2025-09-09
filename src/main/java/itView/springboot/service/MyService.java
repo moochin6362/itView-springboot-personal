@@ -160,6 +160,8 @@ public class MyService {
 		return myMapper.selectThumbByOrder(pNo);
 	}
 
+	
+
 
 	
  

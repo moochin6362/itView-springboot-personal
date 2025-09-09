@@ -113,6 +113,7 @@ public class MyController {
         User u = myService.getUser(userNo);
         model.addAttribute("user", u);
 
+
         // 3) 화면 라디오 체크용 "연령대 밴드"(10/20/30…)
         Integer ageBand = null;
         if (u != null) {
