@@ -8,7 +8,6 @@ import org.apache.ibatis.session.RowBounds;
 
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
-import itView.springboot.dto.prohibitProduct;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.User;
 
@@ -65,13 +64,16 @@ public interface AdminMapper {
 			@Param("value") String value, 
 			@Param("condition")String condition);
 
-	ArrayList<prohibitProduct> selecProhibitList(
+	ArrayList<Board> selecProhibitList(
 			@Param("rowBounds") RowBounds rowBounds,
 			@Param("value") String value, 
 			@Param("condition")String condition);
 
 	//판매금지제품 등록
 	int proBoardEnroll(Board b);
+
+	//판매금지게시판 상세조회
+	Board proBoardDetail(int boardId);
 
 
 		

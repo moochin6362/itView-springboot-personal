@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>판매금지 게시판</title>
     <link rel="stylesheet" href="/css/adminCss/admin_prohibit_board.css">
-    <script src="/js/admin/admin_prohibit_board.js" defer></script>
     <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
     <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
      <script src="/js/inhoAdmin/sidebar.js" defer></script>
@@ -29,8 +28,8 @@
 		           <div class="admin-proBoard-searchBox">
 		               <form th:action="@{/admin/proBoard}" method="get">
 		                   <select name="condition" class="form-select">
-		                       <option value="productName" th:selected="${condition == 'productName'}">제품명</option>
-		                       <option value="productCompany" th:selected="${condition == 'productCompany'}">브랜드</option>
+		                       <option value="boardTitle" th:selected="${condition == 'boardTitle'}">제품명</option>
+		                       <option value="boardId" th:selected="${condition == 'boardId'}">게시판 번호</option>
 		                       <option value="boardDate"th:selected="${condition == 'boardDate'}">공지 작성일</option>
 		                   </select>
 		                   <input type="search" name="value" class="form-control"
@@ -48,21 +47,24 @@
 		           <table id="admin-proBoard-table-header" class="admin-genBoard-table-header">
 		               <thead>
 		                   <tr>
-		                       <th>작성자</th>	<!-- userName-->
-		                       <th>금지 제품명</th>	<!-- productName -->
-		                       <th>제품 브랜드</th>  <!-- productCompany -->
-		                       <th>금지 사유</th> <!-- boardTitle -->
-		                       <th>작성일</th>	<!-- boardDate -->
+		                   	   <th>No</th>		<!-- 게시판 번호 -->
+		                       <th>공지제목</th>	<!-- 관리자로 고정-->
+		                       <th>작성자</th>	<!-- boardTitle -->
+		                       <th>공지일</th>	<!-- boardDate -->
 		                   </tr>
 		               </thead>
 		               <tbody id="admin-proBoard-table-body"
 			               	  class="admin-genBoard-table-body"
 			               	  th:each="pro : ${prohibitList}">
 		                   <tr>
+		                       <td th:text="${pro.boardId}"></td>
+		                       <td>
+		                       	<a
+		                       	  th:href="@{/admin/proDetail(boardId=${pro.boardId})}"
+		                       	  th:text="${pro.boardTitle}">
+		                       	</a>
+		                       </td>
 		                       <td>관리자</td>
-		                       <td th:text="${pro.productName}"></td>
-		                       <td th:text="${pro.productCompany}"></td>
-		                       <td th:text="${pro.boardTitle}"></td>
 		                       <td th:text="${#dates.format(pro.boardDate,'yyyy-MM-dd')}"></td>
 		                   </tr>
 		               </tbody>

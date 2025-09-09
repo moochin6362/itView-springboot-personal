@@ -1,11 +1,37 @@
+/* 전체 레이아웃 */
+body {
+	font-family: 'Malgun Gothic', Arial, sans-serif;
+	background-color: #eefbfb; /* 민트 배경 */
+	margin: 0;
+	padding: 0;
+	display: flex;
+	height: 100vh;
+}
+
+/* 최상위 컨테이너 */
+.container {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+/* 콘텐츠 영역 */
+.content-area {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background: #f9f9f9;
+	overflow-y: auto;
+}
 .admin-proBoard-detail-wrapper{
-    width: 55%;
-    height: 100%;
-    margin: auto;
+   min-width: 94.5%;
+    margin: 0 auto;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+     background-color:white;
+     padding: 40px;
 }
 
 .admin-proBoard-detail-container{
@@ -120,8 +146,8 @@
 	width: 300px; 
 	text-align: center; 
 	}
+	
 .modal-button-box{
-    background-color:#34e5eb;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -132,23 +158,27 @@
     flex-direction: row;
     margin-top: 20px;
     font-size: 10px;
-    color:white;
-    font-weight: 530;
     width:auto;
 }
-.modal-button-box:hover{
-    background-color:#8ad8f0;
+
+#delete, #dontDelete {
+    border-radius: 8px;
+    border:none;
+    background-color: #ddd;
+    height: 30px;
+    color:black;
+    font-size: 13px;
+    font-weight: 530;
+    width: 20%;
     cursor: pointer;
 }
 
-.login-button-box{
-    flex-direction: row;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap:20px;
-    margin-top: 100px;
+/* hover 공통 */
+#delete:hover, #dontDelete:hover {
+    background-color:#8ad8f0;
+    color:white;
 }
+
 
 .close { 
 	float: right; 

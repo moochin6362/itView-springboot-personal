@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import itView.springboot.common.Pagination;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
-import itView.springboot.dto.prohibitProduct;
 import itView.springboot.service.AdminService;
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.Board;
@@ -161,7 +160,7 @@ public class AdminController {
 
         PageInfo pi = Pagination.getPageInfo(currentPage, prolistCount, 10);
 
-        ArrayList<prohibitProduct> prohibitList = adService.selecProhibitList(pi, value, condition);
+        ArrayList<Board> prohibitList = adService.selecProhibitList(pi, value, condition);
 
         model.addAttribute("prohibitList", prohibitList);
         model.addAttribute("pi", pi);
@@ -234,6 +233,41 @@ public class AdminController {
         return "common/sendRedirect";
     }
 
+	//판매금지 게시판 상세페이지
+	@GetMapping("proDetail")
+	public String proDetailPage(
+			@RequestParam("boardId")int boardId,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model, HttpSession session) {
+		//작성자 확인 + 권한 확인
+			User loginUser = (User)session.getAttribute("loginUser");
+			if(loginUser == null) {
+				model.addAttribute("msg", "로그인이 필요합니다.");
+		        model.addAttribute("url", "/login/login");
+		        return "common/sendRedirect";
+			}
+			if (!"A".equals(loginUser.getUserType())) {
+		        model.addAttribute("msg", "권한이 없습니다.");
+		        model.addAttribute("url", "/");
+		        return "common/sendRedirect";
+			}
+		
+			Board proBoard = adService.proBoardDetail(boardId);
+			model.addAttribute("proBoard", proBoard);
+			model.addAttribute("page",page);
+			System.out.println(proBoard);
+			
+		return "admin/admin_prohibit_detail";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//판매금지 게시판 글 삭제

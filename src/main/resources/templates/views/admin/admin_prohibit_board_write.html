@@ -33,21 +33,12 @@
                     <h2>판매금지상품 공지 작성</h2>
                     <form action="/admin/proEnroll" method="post" class="coupon-form" id="prohibitForm">
 
-                        <label for="boardTitle">공지 제목</label>
-                        <input type="text" id="boardTitle" name="boardTitle" placeholder="공지 제목 입력" required />
+                        <label for="boardTitle">판매금지 제품 및 브랜드</label>
+                        <input type="text" id="boardTitle" name="boardTitle" placeholder="판매금지 제품과 브랜드를 입력하세요. ex)롬앤 멜팅 립글로스" required />
                         
-                        <label for="productCompany">브랜드명</label>
-                        <input type="text" id="productCompany" name="productCompany" placeholder="해당 제품 브랜드명" required />
-                        
-                        <label for="productName">금지 제품명</label>
-                        <input type="text" id="productName" name="productName" placeholder="제품명" required />
-                        
-                        <label for="productCategory">금지 제품 카테고리</label>
-                        <input type="text" id="productCategory" name="productCategory" placeholder="제품 카테고리" required />   
-
                         <label for="boardContent">공지 내용</label>
                         <div id="editor"></div>
-                        <textarea id="boardContent" name="boardContent" placeholder="공지 내용을 입력하세요" rows="5" style="display: none;"></textarea>
+                        <textarea id="boardContent" name="boardContent" placeholder="판매 금지 사유 등 상세 공지내용 작성" rows="5" style="display: none;"></textarea>
 
 						<!-- 업로드된 이미지 파일명 저장용 -->
    						<input type="hidden" name="uploadedFiles" id="uploadedFiles">

@@ -125,14 +125,14 @@ input, .proBoard-btn:focus{
 .admin-proBoard-table td:nth-child(1){ width: 20%; }
 .admin-proBoard-table th:nth-child(2),
 .admin-proBoard-table td:nth-child(2){ /* 제목 부분*/
-    width: 25%;
+    width: 40%;
     white-space: nowrap;     
     overflow: hidden;         
     text-overflow: ellipsis;
     }
 .admin-proBoard-table th:nth-child(3),
 .admin-proBoard-table td:nth-child(3){ 
-    width: 25%; 
+    width: 10%; 
     white-space: nowrap;      
     overflow: hidden;         
     text-overflow: ellipsis;

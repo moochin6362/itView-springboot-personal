@@ -210,40 +210,29 @@ SELECT COUNT(*)
     </where>
 </select>
 
-<select id="selecProhibitList" resultType="itView.springboot.dto.prohibitProduct">
-SELECT p.product_no,
-	   p.product_name,
-	   p.PRODUCT_CATEGORY,
-       p.PRODUCT_COMPANY,
-       p.PRODUCT_STATE,
-       b.BOARD_ID,
-       b.BOARD_TITLE,
-       b.BOARD_CONTENT,
-       b.BOARD_DATE,
-       b.BOARD_MODIFIED_DATE,
-       b.BOARD_TYPE,
-       b.BOARD_STATUS
+<select id="selecProhibitList" resultType="Board">
+SELECT *
     FROM BOARD b
-    JOIN PRODUCT p ON b.USER_NO = p.USER_NO
     <where>
-    	b.BOARD_STATUS = 'Y'AND BOARD_TYPE='8'
+    	BOARD_STATUS = 'Y'AND BOARD_TYPE='8'
         <if test="value != null and value != ''">
             <choose>
-                <when test="condition == 'productName'">
-                    AND UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%'
+                <when test="condition == 'boardTitle'">
+                    AND UPPER(board_title) LIKE '%' || UPPER(#{value}) || '%'
                 </when>
-                <when test="condition == 'productCompany'">
-                    AND UPPER(p.PRODUCT_COMPANY) LIKE '%' || UPPER(#{value}) || '%'
+                <when test="condition == 'boardNo'">
+                    AND board_id LIKE '%' || #{value} || '%'
                 </when>
                 <when test="condition == 'boardDate'">
-                    AND TO_CHAR(b.BOARD_DATE, 'YYYY-MM-DD') = #{value}
+                    AND TO_CHAR(BOARD_DATE, 'YYYYMMDD') = #{value}
                 </when>
                 <otherwise>
-                    AND (UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%')
+                    AND (UPPER(board_title) LIKE '%' || UPPER(#{value}) || '%')
                 </otherwise>
             </choose>
         </if>
     </where>
+     ORDER BY BOARD_DATE DESC  <!-- 최신순 -->
 </select>
 
 <!-- 판매금지 제품 공지사항 등록 -->
@@ -273,7 +262,9 @@ SELECT p.product_no,
 
 </insert>
 
-
+<select id="proBoardDetail" parameterType="int" resultType="Board">
+	select * from board where board_id = #{boardId} and board_type='8' and board_status = 'Y'
+</select>
 
 
 

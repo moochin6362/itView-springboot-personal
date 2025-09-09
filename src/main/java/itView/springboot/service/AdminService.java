@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
-import itView.springboot.dto.prohibitProduct;
 import itView.springboot.mapper.AdminMapper;
 import itView.springboot.mapper.InhoMapper;
 import itView.springboot.vo.Attachment;
@@ -82,7 +81,7 @@ public class AdminService {
 	public Integer getproListCount(int boardType, String value, String condition) {
 		return mapper.getproListCount(boardType, value, condition);
 	}
-	public ArrayList<prohibitProduct> selecProhibitList(PageInfo pi, String value, String condition) {
+	public ArrayList<Board> selecProhibitList(PageInfo pi, String value, String condition) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selecProhibitList(rowBounds, value, condition);
@@ -136,6 +135,10 @@ public class AdminService {
 	                inhoMapper.insertAttachment(attm);
 	            }
 	        }
+	}
+
+	public Board proBoardDetail(int boardId) {
+		return mapper.proBoardDetail(boardId);
 	}
 		
 		

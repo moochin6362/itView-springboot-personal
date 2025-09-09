@@ -29,23 +29,21 @@
 		        <div class="admin-proBoard-detail-container" data-id="proBoardDetail"> <!--게시판-->
 		            <table class="admin-proBoard-detail-table">  <!--게시판 헤더-->
 		                <tr>
-		                    <th>금지 제품명</th>
-		                    <td>롬앤 멜팅 글라스 립밤</td>
+		                    <th>작성자</th>
+		                    <td>관리자</td>
 		                </tr>
 		                <tr>
-		                    <th>제품 브랜드</th>
-		                    <td>롬앤</td>
+		                    <th>금지 제품</th>
+		                    <td th:text="${proBoard.boardTitle}"></td>
 		                </tr>
 		                <tr>
 		                    <th>작성일</th>
-		                    <td>2025-09-01</td>
+		                    <td th:text="${proBoard.boardDate}"></td>
 		                </tr>
 		            </table>
 		
 		            <div class="admin-proBoard-detail-content">
-		                <div class="detail-content">
-		                   공지사항 부분 : 금지사유 상세하게 쓰겠지
-		                </div>
+		                <div class="detail-content" th:utext="${proBoard.boardContent}"></div>
 		            </div>
 		         </div>
 		        <div class="proBoard-btn-box">
@@ -65,10 +63,8 @@
 	                        <button id="delete">예</button>
 	                        <button id="dontDelete">아니요</button>
 	                    </div>
-	                    
 	                </div>
                 </div>
-
 			</div>
 		</div>
     </div>
