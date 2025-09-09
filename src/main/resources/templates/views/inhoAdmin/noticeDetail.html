@@ -24,37 +24,38 @@
 	            
                 <div class="main-content">
                     <h2 class="page-title">공지사항 상세 페이지</h2>
-                    <form method="get" th:action="@{/inhoAdmin/updateNotice}">
-                    	<input type="hidden" name="boardId" th:value="${n.boardId}">
+                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateNotice}">
+                    	<input type="hidden" name="boardId" th:value="${b.boardId}">
                     	<input type="hidden" name="page" th:value="${page}">
                     	<table class="detail-table">
                         <tr>
                             <th>공지사항번호</th>
-                            <td>[[${n.boardId}]]</td>
+                            <td>[[${b.boardId}]]</td>
                         </tr>
                         <tr>
                             <th>제목</th>
-                            <td>[[${n.boardTitle}]]</td>
+                            <td>[[${b.boardTitle}]]</td>
                         </tr>
                         <tr>
                             <th>내용</th>
-                            <td>[[${n.boardContent}]]</td>
+                            <td th:utext="${b.boardContent}"></td>
                         </tr>
                         <tr>
                             <th>작성자</th>
-                            <td>[[${n.userNo}]]</td>
+                            <td>[[${b.userNo}]]</td>
                         </tr>
                         <tr>
                             <th>작성일</th>
-                            <td>[[${n.boardDate}]]</td>
+                            <td>[[${b.boardDate}]]</td>
                         </tr>
                         <tr>
                             <th>수정일</th>
-                            <td>[[${n.boardModifiedDate}]]</td>
+                            <td th:text="${b.boardModifiedDate != null ? b.boardModifiedDate : '-'}"></td>
                         </tr>
                     </table>
                     <div class="form-actions">
                         <button class="btn-submit">수정</button>
+                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
                         <button type="button" class="btn-reset" onclick="history.back()">취소</button>
                     </div>
                     </form>
@@ -62,5 +63,21 @@
             </div>
         </div>
 		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+		<script>
+			window.onload = () => {
+			    const delBtn = document.getElementById('deleteBtn');
+			    const form = document.getElementById('detailForm');
+	
+			    if (delBtn) {
+			        delBtn.addEventListener('click', () => {
+			            if (confirm("정말 공지사항을 삭제하시겠습니까?")) {
+			            	form.method = "post";
+			                form.action = '/inhoAdmin/deleteNotice';
+			                form.submit();
+			            }
+			        });
+			    }
+			}
+		</script>
     </body>
 </html>

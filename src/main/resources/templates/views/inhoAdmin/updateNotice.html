@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>쿠폰 공지사항 수정</title>
+        <title>공지사항 수정</title>
 
         <!-- CSS 파일 -->
         <link href="/css/inhoCss/commonContent.css" rel="stylesheet" />
@@ -30,16 +30,19 @@
 
                 <!-- 메인 컨텐츠 -->
                 <main class="main-content">
-                    <h2 class="page-title">쿠폰 공지사항 수정</h2>
-                    <form action="/inhoAdmin/updateCouponBoard" method="post" class="coupon-form" id="noticeForm">
+                    <h2 class="page-title">공지사항 수정</h2>
+                    <form action="/inhoAdmin/updateNotice" method="post" class="coupon-form" id="noticeForm">
                         <input type="hidden" id="boardId" name="boardId" th:value="${b.boardId}" />
-<!--                         <label for="coupon">쿠폰 선택</label> -->
-<!--                         <select id="coupon" name="couponId" required> -->
-<!--                             <option value="">쿠폰 선택</option> -->
-<!--                             <option value="1">여름 할인 쿠폰</option> -->
-<!--                             <option value="2">VIP 회원 전용 쿠폰</option> -->
-<!--                             <option value="3">신규 가입 쿠폰</option> -->
-<!--                         </select> -->
+                        
+						<label for="boardType">공지사항 분류</label>
+                        <select id="boardType" name="boardType" required>
+                            <option value="" disabled>--공지 분류 선택--</option>
+						    <option value="1" th:selected="${b.boardType == 1}">공지사항</option>
+						    <option value="2" th:selected="${b.boardType == 2}">이벤트</option>
+						    <option value="4" th:selected="${b.boardType == 4}">쿠폰</option>
+						    <option value="5" th:selected="${b.boardType == 4}">커뮤니티</option>
+						    <option value="8" th:selected="${b.boardType == 8}">판매금지제품</option>
+                        </select>
 
                         <label for="boardTitle">공지 제목</label>
                         <input type="text" id="boardTitle" name="boardTitle" placeholder="공지 제목 입력" th:value="${b.boardTitle}" required />
