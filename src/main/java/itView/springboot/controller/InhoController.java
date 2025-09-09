@@ -81,8 +81,8 @@ public class InhoController {
     	return "inhoAdmin/enrollCouponNotice";
     }
     
-    @PostMapping("/enrollCouponNotice")
-    public String enrollCouponNotice(HttpSession session, @ModelAttribute Board b,
+    @PostMapping("/enrollNotice")
+    public String enrollNotice(HttpSession session, @ModelAttribute Board b,
     								@RequestParam(value="uploadedFiles", required=false) String uploadedFiles) {
     	User loginUser = (User)session.getAttribute("loginUser");
     	b.setUserNo(loginUser.getUserNo());
@@ -98,8 +98,8 @@ public class InhoController {
             b.setBoardContent(content);
         }
     	
-    	uService.enrollCouponNotice(b, uploadedFiles, session);
-    	return "redirect:/inhoAdmin/couponBoardList";
+    	uService.enrollNotice(b, uploadedFiles, session);
+    	return "redirect:/inhoAdmin/noticeList";
     	
     }
     
@@ -159,7 +159,7 @@ public class InhoController {
         return "inhoAdmin/productDetail";
     }
     
-    // 쿠폰리스트 페이지
+    // 쿠폰리스트 페이지 
     @GetMapping({"/couponList", "couponSearch"})
     public String couponList(@RequestParam(value="page", defaultValue="1") int currentPage,
     							Model model, HttpServletRequest request, @RequestParam HashMap<String, String> map) {
@@ -209,7 +209,7 @@ public class InhoController {
     	}
     }
     
-    // 쿠폰 공지사항 리스트 페이지 이동
+    // 쿠폰 공지사항 리스트 페이지 이동 // boardType 4(쿠폰)만 나오게 검색 수정
     @GetMapping({"/couponBoardList", "couponBoardSearch"})
     public String couponBoardList(@RequestParam(value="page", defaultValue="1") int currentPage,
 			Model model, HttpServletRequest request, @RequestParam HashMap<String, String> map) {
@@ -227,7 +227,7 @@ public class InhoController {
     }
     
     // 쿠폰 공지사항 상세 페이지
-    @GetMapping("/couponBoard/{id}/{page}")
+    @GetMapping({"/couponBoard/{id}/{page}", "/notice/{id}/{page}"})
     public String selectCouponBoard(@PathVariable("id") int bId, @PathVariable("page") int page, Model model) {
     	Board b = uService.selectCouponBoard(bId);
     	if(b != null) {
@@ -235,7 +235,7 @@ public class InhoController {
     		model.addAttribute("page", page);
     		return "inhoAdmin/updateCouponNotice";
     	} else {
-    		throw new AdminException("쿠폰 공지 상세보기를 실패하였습니다.");
+    		throw new AdminException("공지 상세보기를 실패하였습니다.");
     	}
     }
     
@@ -281,6 +281,19 @@ public class InhoController {
         return "inhoAdmin/pointList";
     }
     
+    // 포인트 상세페이지
+    @GetMapping("/point/{id}/{page}")
+    public String selectPoint(@PathVariable("id") int pNo, @PathVariable("page") int page, Model model) {
+    	Point p = uService.selectPoint(pNo);
+    	if(p != null) {
+    		model.addAttribute("p", p);
+    		model.addAttribute("page", page);
+    		return "inhoAdmin/pointDetail";
+    	} else {
+    		throw new AdminException("쿠폰 상세보기를 실패하였습니다.");
+    	}
+    }
+    
     // 포인트 등록 페이지 이동
     @GetMapping("/enrollPoint")
     public String enrollPointPage() {
@@ -304,16 +317,20 @@ public class InhoController {
     
     // 포인트 수정 페이지 이동
     @GetMapping("/updatePoint")
-    public String updatePointPage(@ModelAttribute Point p) {
+    public String updatePointPage(@RequestParam("pointNo") int pNo, @RequestParam("page") int page, Model model) {
+    	Point p = uService.selectPoint(pNo);
+    	model.addAttribute("p", p);
+    	model.addAttribute("page", page);
         return "inhoAdmin/updatePoint";
     }
     
+    // 포인트 수정
     @PostMapping("/updatePoint")
     public String updatePoint(@ModelAttribute Point p) {
     	int result = uService.updatePoint(p);
     	
     	if(result > 0) {
-    		return "redirect:/inhoAdmin/updatePoint";
+    		return "redirect:/inhoAdmin/pointList";
     	} else {
     		throw new AdminException("포인트 수정을 실패하였습니다.");
     	}
@@ -358,5 +375,29 @@ public class InhoController {
     	
     	return "inhoAdmin/ranking";
     }
+    
+    // 공지사항 목록 페이지 이동
+    @GetMapping({"/noticeList", "noticeSearch"})
+    public String boardList(@RequestParam(value="page", defaultValue="1") int currentPage,
+    		Model model, HttpServletRequest request, @RequestParam HashMap<String, String> map) {
+    	
+    	int listCount = uService.getCouponBoardCount(map);
+    	PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+    	ArrayList<Board> list = uService.selectCouponBoardList(pi,map);
+    	
+    	model.addAttribute("list", list);
+    	model.addAttribute("pi", pi);
+    	model.addAttribute("loc", request.getRequestURI());
+    	model.addAttribute("map", map);
+    	
+    	return "inhoAdmin/noticeList";
+    }
+    
+    // 쿠폰 공지 등록 페이지 이동
+    @GetMapping("/enrollNotice")
+    public String enrollNotice() {
+    	return "inhoAdmin/enrollNotice";
+    }
+    
     
 }

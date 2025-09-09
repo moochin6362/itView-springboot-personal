@@ -38,12 +38,12 @@ public class InhoService {
 		return mapper.checkId(userId);
 	}
 
-	public void enrollCouponNotice(Board b, String uploadedFiles, HttpSession session) {
+	public void enrollNotice(Board b, String uploadedFiles, HttpSession session) {
 		 User user = (User)session.getAttribute("loginUser");
 	        b.setUserNo(user.getUserNo());
 
 	        // 게시글 저장 → boardId 생성
-	        mapper.enrollCouponNotice(b);
+	        mapper.enrollNotice(b);
 	        int boardId = b.getBoardId();
 
 	        if (uploadedFiles != null && !uploadedFiles.isEmpty()) {
@@ -207,6 +207,11 @@ public class InhoService {
 
 	public ArrayList<Product> selectRankingList(HashMap<String, String> map) {
 		return mapper.selectRankingList(map);
+	}
+
+	public Point selectPoint(int pNo) {
+		Point p = mapper.selectPoint(pNo);
+		return p;
 	}
 
 }

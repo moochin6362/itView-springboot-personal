@@ -1,6 +1,8 @@
 package itView.springboot.vo;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,10 @@ public class Point {
 	private String pointName;
 	private String pointDescription;
 	private int pointValue;
-	private Date pointCreatedate;
-	private Date pointEnddate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate pointCreatedate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate pointEnddate;
 	private int userNo;
 	
 	private String userName;

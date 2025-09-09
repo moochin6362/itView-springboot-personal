@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>포인트 상세</title>
+        <title>공지사항 상세 페이지</title>
         <!-- CSS 파일 -->
 	    <link href="/css/inhoCss/commonDetail.css" rel="stylesheet" />
 	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
@@ -23,34 +23,34 @@
 	            <div th:replace="~{common/header2 :: header2}"></div>
 	            
                 <div class="main-content">
-                    <h2 class="page-title">포인트 상세 정보</h2>
-                    <form method="get" th:action="@{/inhoAdmin/updatePoint}">
-                    	<input type="hidden" name="pointNo" th:value="${p.pointNo}">
+                    <h2 class="page-title">공지사항 상세 페이지</h2>
+                    <form method="get" th:action="@{/inhoAdmin/updateNotice}">
+                    	<input type="hidden" name="boardId" th:value="${n.boardId}">
                     	<input type="hidden" name="page" th:value="${page}">
                     	<table class="detail-table">
                         <tr>
-                            <th>포인트 번호</th>
-                            <td>[[${p.pointNo}]]</td>
+                            <th>공지사항번호</th>
+                            <td>[[${n.boardId}]]</td>
                         </tr>
                         <tr>
-                            <th>포인트 이름</th>
-                            <td>[[${p.pointName}]]</td>
+                            <th>제목</th>
+                            <td>[[${n.boardTitle}]]</td>
                         </tr>
                         <tr>
-                            <th>상세설명</th>
-                            <td>[[${p.pointDescription}]]</td>
+                            <th>내용</th>
+                            <td>[[${n.boardContent}]]</td>
                         </tr>
                         <tr>
-                            <th>포인트 크기</th>
-                            <td>[[${p.pointValue}]]</td>
+                            <th>작성자</th>
+                            <td>[[${n.userNo}]]</td>
                         </tr>
                         <tr>
-                            <th>포인트 등록일</th>
-                            <td>[[${p.pointCreatedate}]]</td>
+                            <th>작성일</th>
+                            <td>[[${n.boardDate}]]</td>
                         </tr>
                         <tr>
-                            <th>포인트 소멸일</th>
-                            <td>[[${p.pointEnddate}]]</td>
+                            <th>수정일</th>
+                            <td>[[${n.boardModifiedDate}]]</td>
                         </tr>
                     </table>
                     <div class="form-actions">

@@ -62,13 +62,13 @@
 		where user_id = #{userId}
 	</select>
 	
-	<insert id="enrollCouponNotice">
+	<insert id="enrollNotice">
 		<selectKey keyProperty="boardId" resultType="int" order="BEFORE">
 			select seq_board.nextval from dual
 		</selectKey>
 		insert into board
 		values(#{boardId}, #{boardTitle}, sysdate, #{boardModifiedDate}, 
-				'4', 'Y', #{userNo}, #{boardContent}, default)
+				#{boardType}, 'Y', #{userNo}, #{boardContent}, #{boardReplyStatus})
 	</insert>
 	
 	<!-- 첨부파일 등록 -->
@@ -158,10 +158,11 @@
 		select *
 		from board
 			join "USER" using(user_no)
+		where board_type = 4
 		<if test="value != null">
 			<choose>
 				<when test="condition == 'title'">
-					where board_title like '%${value}%'
+					and board_title like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -203,6 +204,7 @@
 		update point
 		set point_name = #{pointName}, point_description = #{pointDescription}, point_value = #{pointValue},
 			point_enddate = #{pointEnddate}
+		where point_no = #{pointNo}
 	</update>
 	
 	<select id="getPointCount">
@@ -273,5 +275,25 @@
 		order by product_no desc
 	</select>
 	
+	<select id="selectPoint">
+		select *
+		from point
+		where point_no = #{pointNo}
+	</select>
+	
+	<delete id="deleteNotice">
+		delete from board
+		where board_id = #{boardId}
+	</delete>
+	
+	<delete id="deleteCoupon">
+		delete from coupon
+		where coupon_no = #{couponNo}
+	</delete>
+	
+	<delete id="deletePoint">
+		delete from point
+		where point_no = #{pointNo}
+	</delete>
 	
 </mapper>

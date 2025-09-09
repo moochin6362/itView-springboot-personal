@@ -28,6 +28,8 @@
                 <main class="main-content">
                     <h2>포인트 수정</h2>
 		            <form action="/inhoAdmin/updatePoint" method="post" class="coupon-form">
+		                <input type="hidden" name="pointNo" th:value="${p.pointNo}"/>
+		            	
 		                <label for="pointName">포인트명</label>
 		                <input type="text" id="pointName" name="pointName" placeholder="포인트명을 입력하세요" th:value="${p.pointName}" required />
 		
@@ -35,7 +37,7 @@
                         <textarea id="pointDescription" name="pointDescription" placeholder="포인트 설명을 입력하세요" th:text="${p.pointDescription}" rows="5" required></textarea>
                         
 		                <label for="pointValue">포인트 크기</label>
-		                <input type="number" id="pointValue" name="pointValue" min="0" placeholder="예: 10" th:value="${p.pointValue}" required />
+		                <input type="number" id="pointValue" name="pointValue" min="0" placeholder="예: 100" th:value="${p.pointValue}" required />
 		
 		                <label for="pointCreatedate">포인트 생성일</label>
 		                <input type="date" id="pointCreatedate" name="pointCreatedate" th:value="${#temporals.format(p.pointCreatedate, 'yyyy-MM-dd')}" readonly />

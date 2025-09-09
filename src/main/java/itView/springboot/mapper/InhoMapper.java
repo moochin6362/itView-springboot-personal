@@ -23,7 +23,7 @@ public interface InhoMapper {
 
 	 int checkId(String userId);
 
-	 int enrollCouponNotice(Board b);
+	 int enrollNotice(Board b);
 
 	 int enrollCoupon(Coupon c);
 
@@ -64,6 +64,8 @@ public interface InhoMapper {
 	 int getRankingCount(HashMap<String, String> map);
 
 	 ArrayList<Product> selectRankingList(HashMap<String, String> map);
+
+	 Point selectPoint(int pNo);
 
 
 }
