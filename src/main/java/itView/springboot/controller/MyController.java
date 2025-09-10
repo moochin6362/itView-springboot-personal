@@ -38,7 +38,7 @@ public class MyController {
     private static final String LOGIN_URL = "/";
 
     /** 마이페이지(프로필/연령대/등급 표시) */
-    @GetMapping("/myPage") // ✅ 대문자 P로 통일
+    @GetMapping("/myPage")
     public String myPage(HttpSession session, Model model) {
         Long userNo = getUserNo(session);
         if (userNo == null) return "redirect:/";
@@ -47,21 +47,12 @@ public class MyController {
         if (u != null) {
             model.addAttribute("profileName", u.getUserName());
 
-            // ✅ VO의 타입이 LocalDate이든 java.util.Date이든 모두 처리 가능한 오버로드 제공
-            String ageRange = null;
-            try {
-                Object birth = u.getUserAge(); // 생년을 저장하는 컬럼 (DATE/LocalDate 가정)
-                if (birth instanceof java.util.Date d) {
-                    ageRange = toAgeRange(d);
-                } else if (birth instanceof LocalDate ld) {
-                    ageRange = toAgeRange(ld);
-                } else if (birth instanceof Integer band) {
-                    ageRange = toAgeRange(band);
-                }
-            } catch (Throwable ignore) {}
-            if (ageRange == null) ageRange = "연령대 미상";
+            String ageRange = "연령대 미상";
+            LocalDate birth = u.getUserAge(); // LocalDate
+            if (birth != null) {
+                ageRange = toAgeRange(birth);
+            }
             model.addAttribute("profileAge", ageRange);
-
             model.addAttribute("profileGrade", toGradeName(u.getUserGrade()));
         } else {
             model.addAttribute("profileName", "로그인 사용자");
@@ -72,7 +63,6 @@ public class MyController {
         String url = myService.getProfileImageUrl(userNo);
         model.addAttribute("profileImageUrl", withCacheBuster(url));
 
-        // ✅ 최근 찜 3개
         var wish3 = myService.getRecentWishlistMap(userNo);
         model.addAttribute("wish3", wish3);
 
@@ -115,13 +105,8 @@ public class MyController {
 
         // 3) 화면 라디오 체크용 "연령대 밴드"(10/20/30…)
         Integer ageBand = null;
-        if (u != null) {
-            Object birth = u.getUserAge();
-            if (birth instanceof java.util.Date d) {
-                ageBand = toAgeBand(d);
-            } else if (birth instanceof LocalDate ld) {
-                ageBand = toAgeBand(ld);
-            }
+        if (u != null && u.getUserAge() != null) {
+            ageBand = toAgeBand(u.getUserAge());
         }
         model.addAttribute("ageBand", ageBand);
 
@@ -143,11 +128,14 @@ public class MyController {
     public String saveInfo(@RequestParam(name = "email",         required = false) String email,
                            @RequestParam(name = "nickname",      required = false) String userName,
                            @RequestParam(name = "gender",        required = false) String userGender,
-                           @RequestParam(name = "ageRange",      required = false) Integer ageRange, // 표시용
+                           @RequestParam(name = "ageRange",      required = false) Integer ageRange, // 표시용(저장X)
                            @RequestParam(name = "skinType",      required = false) String skinType,
                            @RequestParam(name = "personalColor", required = false) String personalColor,
                            @RequestParam(name = "concerns",      required = false) String[] concerns,
                            @RequestParam(name = "headSkin",      required = false) String headSkin,
+                           @RequestParam(name = "hopePrice",     required = false) String hopePrice,
+                           @RequestParam(name = "ingredient",    required = false) String ingredient,
+                           @RequestParam(name = "ecoFriendly",   required = false) String ecoFriendly,
                            @RequestParam(name = "birthDate",     required = false)
                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate birthDate,
                            HttpSession session,
@@ -159,29 +147,38 @@ public class MyController {
             return "redirect:/go/login";
         }
 
+        // 1) 모든 필드 세팅
         User u = new User();
         u.setUserNo(Math.toIntExact(userNo));
         u.setEmail(emptyToNull(email));
         u.setUserName(emptyToNull(userName));
         u.setUserGender(emptyToNull(userGender));
 
-        // ✅ DB가 DATE 컬럼이므로, 생년을 저장한다.
+        // 생년(실제 DB USER_AGE: DATE)
         if (birthDate != null) {
-        	 u.setUserAge(birthDate);   // ✅ LocalDate
+            u.setUserAge(birthDate);
         }
-        // ageRange는 표시용이므로 저장하지 않음
 
+        // 피부/선호
         u.setSkinType(emptyToNull(skinType));
         u.setPersonalColor(emptyToNull(personalColor));
         u.setSkinTrouble((concerns != null && concerns.length > 0) ? String.join(",", concerns) : null);
         u.setHeadSkin(emptyToNull(headSkin));
 
+        // 신규 추가 필드
+        u.setHopePrice(emptyToNull(hopePrice));     // priceRange1~4
+        u.setIngredient(emptyToNull(ingredient));   // natural/vitamin/peptide/moisture/cleansing
+        u.setEcoFriendly(emptyToNull(ecoFriendly)); // 'Y' / 'N'
+
+        // 2) 딱 한 번 업데이트
         int rows = myService.updateUserBasicAndSkin(u);
+
         ra.addFlashAttribute("msg", rows > 0 ? "내 정보가 저장되었습니다." : "저장할 변경 사항이 없습니다.");
         return "redirect:/my/myPage";
     }
 
-    // ================== userNo 획득(폴백 없음) ==================
+
+    // ================== userNo 획득 ==================
     private Long getUserNo(HttpSession session) {
         Object o = session.getAttribute("userNo");
         if (o instanceof Number) return ((Number) o).longValue();
@@ -226,8 +223,7 @@ public class MyController {
         return null;
     }
 
-    // ================== helper ==================
-    /** 생년(java.util.Date) → 10/20/30대 밴드 정수 */
+    // =============== helper ===============
     private Integer toAgeBand(java.util.Date birth) {
         if (birth == null) return null;
         LocalDate b = (birth instanceof java.sql.Date sd)
@@ -235,10 +231,9 @@ public class MyController {
                 : birth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int age = Period.between(b, LocalDate.now()).getYears();
         if (age < 10) return null;
-        return (age / 10) * 10; // 23->20, 37->30 ...
+        return (age / 10) * 10;
     }
 
-    /** 생년(LocalDate) → 10/20/30대 밴드 정수 (오버로드 추가) */
     private Integer toAgeBand(LocalDate birth) {
         if (birth == null) return null;
         int age = Period.between(birth, LocalDate.now()).getYears();
@@ -251,31 +246,6 @@ public class MyController {
         return url + (url.contains("?") ? "&" : "?") + "v=" + System.currentTimeMillis();
     }
 
-    /** 정수형 연령대 -> "10대/20대/..." (참고용) */
-    private String toAgeRange(Integer ageBand) {
-        if (ageBand == null) return "미상";
-        int a = ageBand;
-        if (a < 20) return "10대";
-        if (a < 30) return "20대";
-        if (a < 40) return "30대";
-        if (a < 50) return "40대";
-        return "50대 이상";
-    }
-
-    /** DATE(생년) -> "10대/20대/..." */
-    private String toAgeRange(java.util.Date birth) {
-        if (birth == null) return "미상";
-        LocalDate b = (birth instanceof java.sql.Date sd)
-                ? sd.toLocalDate()
-                : birth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        int age = Period.between(b, LocalDate.now()).getYears();
-        if (age < 10) return "미상";
-        int band = (age / 10) * 10;
-        if (band >= 50) return "50대 이상";
-        return band + "대";
-    }
-
-    /** LocalDate(생년) -> "10대/20대/..." (오버로드 추가) */
     private String toAgeRange(LocalDate birth) {
         if (birth == null) return "미상";
         int age = Period.between(birth, LocalDate.now()).getYears();
@@ -307,30 +277,25 @@ public class MyController {
 
         var coupons = myService.getMyCoupons(userNo);
         model.addAttribute("coupons", coupons != null ? coupons : java.util.Collections.emptyList());
-        model.addAttribute("__debugUserNo", userNo);
-
         return "my/myCoupon";
     }
 
     //서연
     @GetMapping("/myReview")
-    public String myReview(@RequestParam(value = "orderNo", required = false) Integer oNo,@RequestParam(value = "productNo", required = false) Integer pNo,Model model, HttpSession session) { 
-    	
-    	User loginUser = (User) session.getAttribute("loginUser");
+    public String myReview(@RequestParam(value = "orderNo", required = false) Integer oNo,
+                           @RequestParam(value = "productNo", required = false) Integer pNo,
+                           Model model, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) return "redirect:/login";
 
-		if (loginUser == null) {
-			return "redirect:/login";
-		}
-		
-		int uNo = loginUser.getUserNo();
-    	if(pNo != null) {
-    		Order order =myService.selectproductbyOrder(pNo,uNo);
-    		Attachment attachment=myService.selectThumbByOrder(pNo);
-    		model.addAttribute("order", order);
-    		model.addAttribute("attachment",attachment);
-    	}
-    	
-    	return "my/myReview"; 
+        int uNo = loginUser.getUserNo();
+        if (pNo != null) {
+            Order order = myService.selectproductbyOrder(pNo, uNo);
+            Attachment attachment = myService.selectThumbByOrder(pNo);
+            model.addAttribute("order", order);
+            model.addAttribute("attachment", attachment);
+        }
+        return "my/myReview";
     }
 
     @GetMapping("/myInquiry")
@@ -343,9 +308,7 @@ public class MyController {
     public String cart() { return "Shopping/cart"; }
 
     @GetMapping("/WishList")
-    public String wishList() {
-        return "Shopping/WishList";
-    }
+    public String wishList() { return "Shopping/WishList"; }
 
     // 내가 쓴 리뷰
     @GetMapping("/myWriteReview")
@@ -381,36 +344,6 @@ public class MyController {
         return "redirect:/my/myReview";
     }
 
-    // 닉네임 중복 체크
-    @GetMapping("/check-nickname")
-    @ResponseBody
-    public java.util.Map<String, Object> checkNickname(@RequestParam("nickname") String nickname,
-                                                       HttpSession session) {
-        String trimmed = nickname == null ? "" : nickname.trim();
-        Long me = getUserNo(session);
-        boolean sameAsMine = false;
-        boolean available;
-
-        if (trimmed.isBlank()) {
-            available = false;
-        } else {
-            if (me != null) {
-                User u = myService.getUser(me);
-                if (u != null && trimmed.equals(u.getUserName())) {
-                    sameAsMine = true;
-                }
-            }
-            int cnt = myService.countNickname(trimmed, me);
-            available = (cnt == 0) || sameAsMine;
-        }
-
-        return java.util.Map.of(
-            "available", available,
-            "duplicate", !available && !sameAsMine,
-            "sameAsMine", sameAsMine
-        );
-    }
-
     @GetMapping("/experienceApplication")
     public String experienceApplication(HttpSession session) {
         return "my/experienceApplication";
@@ -431,12 +364,12 @@ public class MyController {
         Long userNo = getUserNo(session);
         if (userNo == null) return "redirect:/";
 
-        int balance = myService.getPointBalance(userNo);
-        java.util.List<itView.springboot.vo.Point> list = myService.getPointHistory(userNo);
+        int balance = myService.getPointBalance(userNo); // ← USER.USER_POINT 사용
+        java.util.List<itView.springboot.vo.Point> list = myService.getPointHistory(userNo); // 내역은 POINT
 
         model.addAttribute("pointBalance", balance);
         model.addAttribute("expireSoonText", "각 적립건의 만료일을 확인해주세요.");
-        model.addAttribute("histories", (list != null ? list : java.util.Collections.emptyList())); // ✅ 널가드
+        model.addAttribute("histories", (list != null ? list : java.util.Collections.emptyList()));
 
         return "my/myPoint";
     }
@@ -459,7 +392,6 @@ public class MyController {
             return java.util.Map.of("ok", false, "message", "로그인이 필요합니다.");
         }
 
-        // 중복 신청 방지
         int already = myService.countMyExperienceApply(userNo, expNo);
         if (already > 0) {
             return java.util.Map.of("ok", false, "message", "이미 신청한 모집글입니다.");
