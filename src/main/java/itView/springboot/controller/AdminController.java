@@ -145,16 +145,6 @@ public class AdminController {
 	}
 		
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//관리자 판매자 문의게시판 이동
 	@GetMapping("/pBoard")
 	public String pBoardPage(
