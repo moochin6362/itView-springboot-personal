@@ -17,4 +17,8 @@ public class experienceGroup {
 	private Date expEnd;
 	private String expStatus;
 	private int userNo;
+
+    // 판매자 이름
+    private String userName;
+
 }
