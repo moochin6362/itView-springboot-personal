@@ -2,40 +2,51 @@
 # Spring Boot / Java
 # ==========================
 
-# 빌드 결과물
+# Build outputs
+/bin/
+/build/
+/out/
 /target/
+/.gradle/
+
+# Compiled classes
 *.class
 
-# 로그 파일
+# Logs
 *.log
 
-# 환경 변수 파일
+# Env files / local overrides (keep app configs in resources)
+.env
 *.env
-*.properties
+*.env.*
+# DO NOT ignore Spring Boot configs in resources
+!src/main/resources/**/*.properties
+!src/main/resources/**/*.yml
+# (optional) ignore only local/secret props by naming convention
+*local.properties
+*secret.properties
 
-# IDE 설정
+# IDE settings
 /.idea/
 /*.iml
 /.vscode/
+/.project
+/.classpath
+/.settings/
 
 # Maven / Gradle
 /.mvn/
 !/.mvn/wrapper/maven-wrapper.jar
-.gradle/
-build/
 
-# OS 관련
+# OS junk
 .DS_Store
 Thumbs.db
 
-# Eclipse
-.settings/
+# Eclipse / STS extras
 *.launch
-
-# STS
 *.tmp
 .apt_generated/
-.classpath
-.project
 .metadata/
-bin/
+
+# Runtime uploads (project-specific)
+uploadFilesFinal/
