@@ -49,7 +49,12 @@
 		               		  th:each="pBoard : ${pBoardList}">
 		                   <tr>
 		                        <td th:text="${pBoard.boardId}"></td>
-		                        <td th:text="${pBoard.boardTitle}"></td>
+		                        <td>
+		                        	<a
+	                        		th:text="${pBoard.boardTitle}"
+	                        		th:href="@{/admin/pBoardDetail(boardId=${pBoard.boardId})}">
+                        			</a>
+		                        </td>
 		                        <td th:text="${pBoard.brandName}"></td>
 		                        <td th:text="${pBoard.boardDate}"></td>
 		                        <td th:text="${pBoard.boardReplyStatus == 'Y' ? '답변완료' : '답변대기'}"></td>

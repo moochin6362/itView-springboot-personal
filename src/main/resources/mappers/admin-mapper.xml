@@ -181,7 +181,7 @@ order by board_date desc, board_id DESC
 <!-- 일반문의게시판 답변등록 -->
 <insert id="saveGreply">
 	insert into admin_reply
-	values (ㅡ
+	values (
 		seq_admin_reply.nextval,
 		#{replyContent},
 		sysdate,
@@ -226,6 +226,63 @@ order by board_date desc, board_id DESC
 	where board_type='7' and board_status ='Y'
 	order by board_date desc, board_id DESC
 </select>
+<!-- 판매자 문의 상세페이지 -->
+<select id="pBoardDetail" parameterType="int" resultType="itView.springboot.dto.GboardDetail">
+	select 
+		b.board_id,
+		b.board_title,
+		b.board_content,
+		b.board_date,
+		b.board_modified_date,
+		b.board_type,
+		b.board_status,
+		b.user_no,
+		b.board_reply_status,
+		u.brand_name
+from board b
+join "USER" u 
+ 	  on b.user_no = u.user_no
+where board_id = #{boardId} and board_status='Y' and board_type='7'
+order by board_date desc, board_id DESC
+</select>
+
+<!-- 판매자 문의 댓글조회-->
+<select id="getPartnerReplyList" parameterType="int" resultType="AdminReply">
+	select * from admin_reply 
+	where board_type='7' 
+		and reply_status ='Y' 
+		and board_id = #{boardId}
+	order by reply_date desc
+</select>
+
+<!-- 판매자 문의게시판 답변등록 -->
+<insert id="savePreply">
+	insert into admin_reply
+	values (
+		seq_admin_reply.nextval,
+		#{replyContent},
+		sysdate,
+		sysdate,
+		'Y',
+		#{boardId},
+		'7',
+		#{userNo}
+		)
+</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- 판매금지 제품 조회 -->
 <select id="getproListCount" parameterType="int" resultType="java.lang.Integer">

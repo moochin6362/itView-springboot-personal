@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자용 문의 게시판 상세페이지 (판매자)</title>
-    <link rel="stylesheet" href="/css/admin/admin_partner_board_detail.css">
+    <link rel="stylesheet" href="/css/adminCss/admin_partner_board_detail.css">
     <script src="/js/admin/admin_partner_board_detail.js"defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     
     <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
     <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
     <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
-    <script th:src="@{/js/inhoAdmin/sidebar.js}" defer></script>
+    <script src="/js/inhoAdmin/sidebar.js" defer></script>
 
     <!-- 아이콘 & 폰트 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
-    
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 </head>
 <body>
 
@@ -31,31 +31,25 @@
 	
 		    <div class="admin-partBoard-detail-wrapper">
 		        <div class="admin-partBoard-detail-container"> <!--게시판-->
+		         <input type="hidden" th:value="${pBoard.boardId}" id="pBoardDetail"/>
 		            <table class="admin-partBoard-detail-table">  <!--게시판 헤더-->
 		                <tr>
 		                    <th>작성자</th>
-		                    <td>COSRX</td>
+		                    <td th:text="${pBoard.brandName}"></td>
 		                </tr>
 		                <tr>
 		                    <th>문의 제목</th>
-		                    <td>파트너에게 가혹한 사이트</td>
+		                    <td th:text="${pBoard.boardTitle}"></td>
 		                </tr>
 		                <tr>
 		                    <th>작성일</th>
-		                    <td>2025-09-01</td>
+		                    <td th:text="${pBoard.boardDate}"></td>
 		                </tr>
 		            </table>
 		
 		            <div class="admin-partBoard-detail-content">
-		                <div class="detail-content">
-		                    수수료좀 떼지마 수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마
-		                    수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마
-		                    수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마
-		                    수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마
-		                    수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마 
-		                    수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마
-		                    수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마수수료좀 떼지마
-		                    50%는 좀아니잖아 50%는 좀아니잖아50%는 좀아니잖아 50%는 좀아니잖아 50%는 좀아니잖아 50%는 좀아니잖아  
+		                <div class="detail-content"
+		                	th:text="${pBoard.boardContent}">
 		                </div>
 		            </div>
 		         </div>
@@ -63,15 +57,11 @@
 		            <!--관리자 답변 : 댓글형식 / 시간 "오름차순!!"-->
 		            <div class="admin-partBoard-detail-reply">
 		                <div class="partBoard-reply-list" id="part-replyList">
-		                    <!--js에서 동적 추가-->
-		                    <div class="partBoard-reply-admin">관리자</div>
-		                    <div class="partBoard-reply-date">2025-08-14 10:23</div>
-		                    <div class="partBoard-reply-text">차단이요</div>
-		
-		                    <div class="partBoard-reply-admin">관리자</div>
-		                    <div class="partBoard-reply-date">2025-08-14 10:26</div>
-		                    <div class="partBoard-reply-text">안돼 돌아가~</div>
-		                    
+		                    <div th:each ="reply: ${replyList}">
+			                    <div class="partBoard-reply-admin">관리자</div>
+			                    <div class="partBoard-reply-date" th:text="${#dates.format(reply.replyDate,'yyyy-MM-dd')}"></div>
+			                    <div class="partBoard-reply-text" th:text="${reply.replyContent}"></div>
+		                    </div>
 		                </div>
 		            
 		                <!--답변 입력-->
@@ -85,12 +75,6 @@
 		         </div>
 		      </div>
 
-
-       
-
-
-
-
-    </div>
+    
 </body>
 </html>

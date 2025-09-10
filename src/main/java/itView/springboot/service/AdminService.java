@@ -84,7 +84,10 @@ public class AdminService {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectpBoardList(rowBounds);
 	}
-
+	//판매자문의 상세조회
+	public GboardDetail pBoardDetail(int boardId) {
+		return mapper.pBoardDetail(boardId);
+	}
 	
 	//판매금지 게시판(검색,조회)
 	public Integer getproListCount(int boardType, String value, String condition) {
@@ -160,6 +163,18 @@ public class AdminService {
 	public ArrayList<AdminReply> getGeneralReplyList(int boardId) {
 		return mapper.getGeneralReplyList(boardId);
 	}
+
+	//판매자문의 - 댓글조회
+	public ArrayList<AdminReply> getPartnerReplyList(int boardId) {
+		return mapper.getPartnerReplyList(boardId);
+	}
+
+	//판매자 문의 - 댓글 등록
+	public int savePreply(AdminReply adminReply) {
+		return mapper.savePreply(adminReply);
+	}
+
+	
 
 
 

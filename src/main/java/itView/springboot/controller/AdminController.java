@@ -205,6 +205,39 @@ public class AdminController {
 	
 		 return "admin/admin_prohibit_board_write";
 	}
+	//판매자 문의 상세
+		@GetMapping("pBoardDetail")
+		public String pBoardDetailPage(
+				@RequestParam("boardId") int boardId,
+				@RequestParam(value="page", defaultValue="1") int page,
+				Model model) {
+			GboardDetail pBoard = adService.pBoardDetail(boardId);
+			model.addAttribute("pBoard", pBoard);
+			model.addAttribute("page",page);
+			
+			return "admin/admin_partner_board_detail";
+		}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	//금지제품 등록하기

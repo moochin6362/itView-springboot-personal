@@ -61,6 +61,9 @@ public interface AdminMapper {
 		(@Param("boardType") int boardType);
 	ArrayList<Board> selectpBoardList(
 		@Param("rowBounds") RowBounds rowBounds);
+	//판매자문의 상세
+	GboardDetail pBoardDetail(int boardId);
+
 
 	
 	//판매금지 게시판 조회
@@ -86,6 +89,13 @@ public interface AdminMapper {
 	//일반문의 - 댓글조회
 	ArrayList<AdminReply> getGeneralReplyList(int boardId);
 
+	//판매자문의 - 댓글조회
+	ArrayList<AdminReply> getPartnerReplyList(int boardId);
+
+	//판매자문의 -댓글 등록
+	int savePreply(AdminReply adminReply);
+
+	
 	
 
 
