@@ -11,23 +11,25 @@ import itView.springboot.common.config.interceptor.FlashMessageInterceptor;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/uploadFilesFinal/**")
-                .addResourceLocations("file:///c:/uploadFilesFinal/notice/");
+    	// product
+        registry.addResourceHandler("/uploadFilesFinal/product/**")
+                .addResourceLocations("file:///C:/uploadFilesFinal/product/");
 
-        // temp 폴더
-        registry.addResourceHandler("/uploadFilesFinal/temp/**")
-                .addResourceLocations("file:///c:/uploadFilesFinal/temp/");
-
-        // notice 폴더
+        // notice
         registry.addResourceHandler("/uploadFilesFinal/notice/**")
-                .addResourceLocations("file:///c:/uploadFilesFinal/notice/");
+                .addResourceLocations("file:///C:/uploadFilesFinal/notice/");
 
-        // community 폴더
+        // community
         registry.addResourceHandler("/uploadFilesFinal/community/**")
-                .addResourceLocations("file:///c:/uploadFilesFinal/community/");
-        // 판매자 관련
+                .addResourceLocations("file:///C:/uploadFilesFinal/community/");
+
+        // temp
+        registry.addResourceHandler("/uploadFilesFinal/temp/**")
+                .addResourceLocations("file:///C:/uploadFilesFinal/temp/");
+
+        // 기본 정적 리소스
         registry.addResourceHandler("/**")
-				.addResourceLocations("file:///c:/uploadFilesFinal/product/", "classpath:/static");
+                .addResourceLocations("classpath:/static/");
     }
     
     @Override
