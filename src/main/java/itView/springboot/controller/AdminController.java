@@ -220,26 +220,6 @@ public class AdminController {
 	
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//금지제품 등록하기
 	@PostMapping("/proEnroll")
 	public String proEnroll(

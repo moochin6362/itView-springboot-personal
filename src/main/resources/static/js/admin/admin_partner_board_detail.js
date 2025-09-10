@@ -63,7 +63,7 @@ async function loadReplies(boardId) {
     if (!res.ok) return;
     const replyList = await res.json();
 
-    const list = document.getElementById('replyList');
+    const list = document.getElementById('part-replyList');
     list.innerHTML = ""; 
 
     replyList.forEach(reply => addReply(reply));
