@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>쇼핑몰 예제</title>
+  <style>
+    .board-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #333;
+      border-left: 6px solid #6ec1e4;
+      padding-left: 10px;
+      margin-bottom: 20px;
+    }
+
+    .notice-table {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .notice-table thead {
+      background-color: #6ec1e4;
+      color: #fff;
+    }
+
+    .notice-table th,
+    .notice-table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 15px;
+    }
+
+    .notice-table tbody tr:hover {
+      background-color: #f2faff;
+      cursor: pointer;
+    }
+
+    /* 검색창 & 버튼 */
+    .search-form input.form-control {
+        height: 36px;          /* 높이 조정 */
+        font-size: 0.9rem;     /* 폰트 크기 작게 */
+        padding: 0 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .search-form select.form-select {
+        height: 36px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .search-form .btn-search {
+        height: 36px;
+        padding: 0 15px;
+        font-size: 0.7rem;
+        background-color: #6ec1e4;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+    }
+
+    .search-form .btn-search:hover {
+        background-color: #5ab0d8;
+    }
+
+  </style>
+</head>
+<body>
+
+<div th:replace="~{common/header :: header}"></div>
+
+<main class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="board-title">📢 체험단</h2>
+    <form th:action="@{/experience/list}" method="get" class="d-flex align-items-center search-form">
+      <input type="text" name="keyword" class="form-control me-2" placeholder="검색어를 입력하세요" th:value="${keyword}">
+      <select name="type" class="form-select me-2">
+        <option value="title" th:selected="${type=='title'}">제목</option>
+        <option value="content" th:selected="${type=='content'}">내용</option>
+        <option value="all" th:selected="${type=='all'}">제목+내용</option>
+      </select>
+      <button type="submit" class="btn btn-search">검색</button>
+    </form>
+  </div>
+
+
+
+  <!-- 공지사항 리스트 -->
+  <div class="notice-table">
+    <table class="table table-hover mb-0">
+      <thead>
+      <tr>
+        <th style="width: 10%">번호</th>
+        <th style="width: 50%">제목</th>
+        <th style="width: 20%">작성자</th>
+        <th style="width: 20%">시작날짜</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="experience : ${experiences}"
+          th:onclick="|location.href='/experience/detail?expNo=${experience.expNo}&page=${pi.currentPage}'|"
+          style="cursor:pointer;">
+        <td>[[${experience.expNo}]]</td>
+          <td class="text-start">
+              [[${experience.expTitle}]]
+          </td>
+        <td>[[${experience.userName}]]</td>
+        <td>[[${experience.expStart}]]</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <br/>
+
+  <!-- 페이지네이션 -->
+  <nav aria-label="Standard pagination example" class="d-flex justify-content-end">
+    <ul class="pagination">
+
+      <!-- 이전 버튼 -->
+      <li class="page-item" th:classappend="${pi.currentPage == 1} ? 'disabled'">
+        <a class="page-link"
+           th:if="${pi.currentPage > 1}"
+           th:href="@{${loc}(page=${pi.currentPage-1})}"
+           aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+        <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>
+      </li>
+
+      <!-- 페이지 번호 -->
+      <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+          th:classappend="${p == pi.currentPage} ? 'active'">
+        <a class="page-link" th:href="@{${loc}(page=${p})}">[[${p}]]</a>
+      </li>
+
+      <!-- 다음 버튼 -->
+      <li class="page-item" th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+        <a class="page-link"
+           th:if="${pi.currentPage < pi.maxPage}"
+           th:href="@{${loc}(page=${pi.currentPage+1})}"
+           aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+        <span class="page-link" th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
+      </li>
+
+    </ul>
+  </nav>
+
+</main>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+</body>
+</html>

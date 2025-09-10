@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>쇼핑몰 예제</title>
+
+    <style>
+
+
+        /* 본문 */
+        .notice-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+
+        .notice-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .notice-meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .notice-content {
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #444;
+            white-space: pre-line;
+        }
+
+        /* 버튼 */
+        .btn-wrap {
+            margin-top: 30px;
+        }
+
+        .notice-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div th:replace="~{common/header :: header}"></div>
+
+<!-- experience 상세 -->
+<main class="container my-5">
+    <div class="notice-card">
+        <h2 class="notice-title">
+            [[${experience.expTitle}]]
+        </h2>
+        <div class="notice-meta">
+            작성자: [[${experience.userName}]] | 작성일: [[${experience.expStart}]]
+        </div>
+        <div class="notice-content">
+            [[${experience.expContent}]]
+        </div>
+
+
+
+    </div>
+</main>
+
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+</body>
+</html>
+
+

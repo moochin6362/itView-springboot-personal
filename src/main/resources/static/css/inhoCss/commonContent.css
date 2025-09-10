@@ -1,0 +1,140 @@
+/* 전체 레이아웃 */
+body {
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    background-color: #eefbfb; /* 민트 배경 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+}
+
+/* 최상위 컨테이너 */
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* 사이드바 */
+#sidebar {
+    width: 300px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 콘텐츠 영역 */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f9f9f9;
+    overflow-y: auto;
+}
+
+a {
+  text-decoration: none;  /* 밑줄 제거 */
+  color: inherit;         /* 부모 요소 색상 상속 */
+}
+
+/* 헤더 */
+#header {
+    flex: 0 0 auto;
+}
+
+/* 폼 영역 */
+.coupon-form {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* 폼 그룹 */
+.coupon-form .form-group {
+    margin-bottom: 18px;
+}
+
+/* 제목 */
+.main-content h2 {
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+}
+
+/* 라벨 */
+.main-content label {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 6px;
+    color: #333;
+}
+
+/* 입력 요소 */
+.main-content input,
+.main-content select,
+.main-content textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border: 1px solid #cceaea; /* 민트 느낌 */
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.main-content input:focus,
+.main-content select:focus,
+.main-content textarea:focus {
+    border-color: #34e5eb;
+    box-shadow: 0 0 6px rgba(52, 229, 235, 0.4);
+}
+
+/* 버튼 그룹 */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* 버튼 공통 스타일 */
+.btn-submit,
+.btn-cancel {
+    flex: 1;
+    background-color: #99e6e6; /* 선명 민트 */
+    border: 1px solid #99e6e6;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* hover 효과 */
+.btn-submit:hover,
+.btn-cancel:hover {
+    background-color: #34e5eb;
+    border-color: #34e5eb;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+/* 라디오 그룹 */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.radio-group label {
+    font-weight: 500;
+}

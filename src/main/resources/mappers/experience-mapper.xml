@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itView.springboot.mapper.ExperienceMapper">
+
+    <!-- 검색 포함 게시글 수 -->
+    <select id="getListCountWithSearch" resultType="int">
+        SELECT COUNT(*) FROM experience_group
+        WHERE EXP_STATUS='Y'
+        <if test="keyword != null and keyword != ''">
+            <choose>
+                <when test="type == 'title'">
+                    AND EXP_TITLE LIKE '%' || #{keyword} || '%'
+                </when>
+                <when test="type == 'content'">
+                    AND EXP_CONTENT LIKE '%' || #{keyword} || '%'
+                </when>
+                <otherwise>
+                    AND (EXP_TITLE LIKE '%' || #{keyword} || '%' OR EXP_CONTENT LIKE '%' || #{keyword} || '%')
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 검색 포함 게시글 목록 -->
+    <select id="selectBoardListWithSearch" resultType="experienceGroup">
+        SELECT
+        EG.*,
+        U.USER_NAME
+        FROM
+        experience_group EG
+        JOIN
+        "USER" U ON EG.USER_NO = U.USER_NO
+        WHERE
+        EG.EXP_STATUS = 'Y'
+        <if test="keyword != null and keyword != ''">
+            <choose>
+                <when test="type == 'title'">
+                    AND EG.EXP_TITLE LIKE '%' || #{keyword} || '%'
+                </when>
+                <when test="type == 'content'">
+                    AND EG.EXP_CONTENT LIKE '%' || #{keyword} || '%'
+                </when>
+                <otherwise>
+                    AND (EG.EXP_TITLE LIKE '%' || #{keyword} || '%'
+                    OR EG.EXP_CONTENT LIKE '%' || #{keyword} || '%')
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY EG.EXP_NO DESC
+    </select>
+
+    <!--  게시글 상세 조회  -->
+    <select id="selectBoard" parameterType="int" resultType="experienceGroup">
+        SELECT *
+        FROM experience_group
+        WHERE exp_no = #{boardId} and exp_STATUS = 'Y'
+        ORDER BY exp_no DESC
+    </select>
+
+
+</mapper>
