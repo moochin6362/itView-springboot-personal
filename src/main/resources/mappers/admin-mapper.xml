@@ -156,6 +156,7 @@ select count(*)
 		"USER" u 
 		 on b.user_no = u.user_no
 	where board_type='3' and board_status ='Y'
+	order by board_date desc, board_id DESC
 </select>
 
 <select id="gBoardDetail" parameterType="int" resultType="itView.springboot.dto.GboardDetail">
@@ -174,6 +175,31 @@ from board b
 join "USER" u 
  	  on b.user_no = u.user_no
 where board_id = #{boardId} and board_status='Y' and board_type='3'
+order by board_date desc, board_id DESC
+</select>
+
+<!-- 일반문의게시판 답변등록 -->
+<insert id="saveGreply">
+	insert into admin_reply
+	values (ㅡ
+		seq_admin_reply.nextval,
+		#{replyContent},
+		sysdate,
+		sysdate,
+		'Y',
+		#{boardId},
+		'3',
+		#{userNo}
+		)
+</insert>
+
+<!-- 일반문의 댓글조회-->
+<select id="getGeneralReplyList" parameterType="int" resultType="AdminReply">
+	select * from admin_reply 
+	where board_type='3' 
+		and reply_status ='Y' 
+		and board_id = #{boardId}
+	order by reply_date desc
 </select>
 
 
@@ -198,6 +224,7 @@ where board_id = #{boardId} and board_status='Y' and board_type='3'
 		"USER" u 
 		 on b.user_no = u.user_no
 	where board_type='7' and board_status ='Y'
+	order by board_date desc, board_id DESC
 </select>
 
 <!-- 판매금지 제품 조회 -->
@@ -248,7 +275,7 @@ SELECT *
             </choose>
         </if>
     </where>
-     ORDER BY BOARD_DATE DESC  <!-- 최신순 -->
+     ORDER BY BOARD_DATE DESC, BOARD_ID DESC  <!-- 최신순 -->
 </select>
 
 <!-- 판매금지 제품 공지사항 등록 -->
