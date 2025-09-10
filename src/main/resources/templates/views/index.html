@@ -114,16 +114,17 @@
 
 <section class="container py-5">
     <h2 class="mb-4">등록된 상품</h2>
+    <h2 class="mb-4">최신 상품</h2>
     <div class="row g-4">
         <div class="col-md-3" th:each="product : ${products}">
             <!-- 제품 카드 전체를 링크로 -->
             <a th:href="@{'/product/detail/' + ${product.productNo}}" class="text-decoration-none text-dark">
-            <div class="product-card position-relative p-2">
+                <div class="product-card position-relative p-2">
 
                     <!-- 이미지 -->
                     <div class="product-image mb-2">
                         <img th:if="${product.attmRename != null}"
-                             th:src="@{'/uploadFilesFinal/' + ${product.attmRename}}"
+                             th:src="@{'/' + ${product.attmRename}}"
                              alt="썸네일"/>
                         <img th:if="${product.attmRename == null}"
                              src="/images/default.png"
@@ -138,11 +139,6 @@
                         <span class="fw-bold text-danger" th:text="${product.productPrice} + '원'"></span>
                     </div>
 
-                    <!-- 버튼 -->
-                    <div class="d-flex justify-content-center">
-                        <button class="btn btn-sm btn-outline-primary me-1">찜하기</button>
-                        <button class="btn btn-sm btn-primary">구매하기</button>
-                    </div>
                 </div>
             </a>
         </div>
@@ -154,5 +150,3 @@
 
 </body>
 </html>
-
-
