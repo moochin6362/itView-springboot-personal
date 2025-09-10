@@ -32,6 +32,11 @@ body {
     overflow-y: auto;
 }
 
+a {
+  text-decoration: none;  /* 밑줄 제거 */
+  color: inherit;         /* 부모 요소 색상 상속 */
+}
+
 /* 헤더 */
 #header {
     flex: 0 0 auto;

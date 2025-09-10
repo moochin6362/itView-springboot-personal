@@ -100,7 +100,6 @@ public class ajaxController {
 	public ResponseEntity<String>deleteProBoard(
 			@PathVariable("boardId") int boardId){
 		int result = adService.deleteProBoard(boardId);
-		
 		if(result > 0 ) {
 			return ResponseEntity.ok("공지사항을 삭제하였습니다.");
 		} else {

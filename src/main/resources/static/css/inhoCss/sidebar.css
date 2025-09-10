@@ -14,6 +14,10 @@
 .sidebar.hidden {
     transform: translateX(-100%);
 }
+a {
+  text-decoration: none;  /* 밑줄 제거 */
+  color: inherit;         /* 부모 요소 색상 상속 */
+}
 
 /* 왼쪽 아이콘바 */
 .icon-bar {

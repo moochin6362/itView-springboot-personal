@@ -24,27 +24,21 @@
 		            <table class="admin-genBoard-detail-table">  <!--게시판 헤더-->
 		                <tr>
 		                    <th>작성자</th>
-		                    <td>배민vip</td>
+		                    <td th:text="${gBoard.userId}"></td>
 		                </tr>
 		                <tr>
 		                    <th>문의 제목</th>
-		                    <td>쿠폰 많이 주세요. 더주세요.</td>
+		                    <td th:text="${gBoard.boardTitle}"></td>
 		                </tr>
 		                <tr>
 		                    <th>작성일</th>
-		                    <td>2025-09-01</td>
+		                    <td th:text="${gBoard.boardDate}"></td>
 		                </tr>
 		            </table>
 		
 		            <div class="admin-genBoard-detail-content">
-		                <div class="detail-content">
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
+		                <div class="detail-content"
+		                	th:text="${gBoard.boardContent}">
 		                </div>
 		            </div>
 		         </div>

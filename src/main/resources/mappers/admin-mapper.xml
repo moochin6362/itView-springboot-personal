@@ -139,7 +139,7 @@ select count(*)
 <select id="gBoardListCount" parameterType="int" resultType="java.lang.Integer">
 	select count(*) from board where board_type = '3' and board_status = 'Y'
 </select>
-<select id="selectBoardList" resultType="Board">
+<select id="selectBoardList" resultType="itView.springboot.dto.GboardDetail">
 	select 
 		b.board_id,
 		b.board_title,
@@ -158,7 +158,23 @@ select count(*)
 	where board_type='3' and board_status ='Y'
 </select>
 
-
+<select id="gBoardDetail" parameterType="int" resultType="itView.springboot.dto.GboardDetail">
+select 
+		b.board_id,
+		b.board_title,
+		b.board_content,
+		b.board_date,
+		b.board_modified_date,
+		b.board_type,
+		b.board_status,
+		b.user_no,
+		b.board_reply_status,
+		u.user_id
+from board b
+join "USER" u 
+ 	  on b.user_no = u.user_no
+where board_id = #{boardId} and board_status='Y' and board_type='3'
+</select>
 
 
 <!-- 판매자 문의게시판 조회하기 -->

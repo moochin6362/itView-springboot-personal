@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
+import itView.springboot.dto.GboardDetail;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.mapper.AdminMapper;
@@ -59,10 +60,13 @@ public class AdminService {
 	public Integer gBoardListCount(int boardType) {
 		return mapper.gBoardListCount(boardType);
 	}
-	public ArrayList<Board> selectgBoardList(PageInfo pi) {
+	public ArrayList<GboardDetail> selectgBoardList(PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectBoardList(rowBounds);
+	}
+	public GboardDetail gBoardDetail(int boardId) {
+		return mapper.gBoardDetail(boardId);
 	}
 
 	
@@ -146,6 +150,8 @@ public class AdminService {
 	public int deleteProBoard(int id) {
 		return mapper.proBoardDelete(id);
 	}
+
+	
 		
 		
 		
