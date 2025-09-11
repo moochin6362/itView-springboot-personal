@@ -73,33 +73,52 @@ body {
 .content {
   flex: 1;
   padding: 40px;
+  padding-left: 200px;
+  padding-right: 200px;
 }
 
 .content h2 {
   margin-bottom: 30px;
-  color: var(--main-color);
 }
 
 .form-group {
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
 }
 
 .form-group label {
-  width: 120px;
+  display: block;
+  margin-bottom: 8px;
   font-weight: bold;
 }
 
-.form-group input,
-.form-group select {
-  padding: 8px;
-  width: 250px;
-  border: 2px solid var(--main-color);
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group textarea {
+  width: 98.5%;
+  padding: 10px;
+  border: 1px solid #8ad8f0;
   border-radius: var(--border-radius);
   font-size: 14px;
+}
+
+.form-group textarea {
+  resize: none;
+  height: 150px;
+}
+
+.form-group input[type="radio"]{
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	border: 1px solid black;
+	display: inline-block;
+}
+
+.form-group input[type="radio"]:checked{
+	background-color: #8ad8f0;
+	border-color: #c2e4e4;
 }
 
 .form-buttons {
@@ -110,9 +129,9 @@ body {
 }
 
 .form-buttons button {
-  background-color: var(--main-color);
-  color: white;
-  border: none;
+  background-color: #eefbfb;
+  color: black;
+  border: 1px solid #c2e4e4;
   border-radius: var(--border-radius);
   padding: 10px 20px;
   cursor: pointer;
@@ -120,7 +139,69 @@ body {
 }
 
 .form-buttons button:hover {
-  background-color: #1ea8a8;
+  background-color: #8ad8f0;
+  color: white;
+}
+
+.stateLabel{
+	display: inline-block;
+}
+
+.option-group {
+  margin-top: 20px;
+}
+
+.option-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option-button {
+  padding: 8px 16px;
+  background-color: var(--bg-color);
+  border: 1px solid #c2e4e4;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.option-button:hover,
+.option-button.active {
+  background-color: #8ad8f0;
+  color: white;
+}
+
+.option-row input[type="radio"] {
+    display: none;
+  }
+
+.option-row label {
+  background-color: #eefbfb;
+  color: black;
+  border: 1px solid #c2e4e4;
+  border-radius: var(--border-radius, 4px);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-right: 8px;
+  display: inline-block;
+  user-select: none;
+}
+
+.option-row input[type="radio"]:checked + label {
+  background-color: #c2e4e4;
+  border-color: #7acccc;
+}
+
+.option-row label:hover {
+  background-color: #d6f0f0;
 }
 
 @media (max-width: 768px) {
@@ -138,19 +219,6 @@ body {
 
   .content {
     padding: 20px;
-  }
-
-  .form-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .form-group label {
-    width: auto;
-  }
-
-  .form-buttons {
-    justify-content: center;
   }
 }
 

@@ -16,7 +16,7 @@ import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
-import itView.springboot.vo.experienceGroup;
+import itView.springboot.vo.ExperienceGroup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -130,7 +130,7 @@ public class MyService {
     }
 
     /** 모집글 검색 */
-    public java.util.List<experienceGroup> searchExperienceGroups(String keyword) {
+    public java.util.List<ExperienceGroup> searchExperienceGroups(String keyword) {
         String kw = (keyword == null) ? "" : keyword.trim();
         return myMapper.searchExperienceGroups(kw);
     }

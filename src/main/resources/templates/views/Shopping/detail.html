@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>상품 상세페이지</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 body {
 	font-family: 'Apple SD Gothic Neo', sans-serif;
@@ -75,6 +73,12 @@ body {
 	color: black;
 }
 
+.btn-outline-danger{
+	background-color: #fff;
+	border: 2px solid #8ad8f0;
+	color: #8ad8f0;
+}
+
 .thumbnail-list img {
 	width: 60px;
 	height: 60px;
@@ -91,6 +95,110 @@ body {
 .tabs-section {
 	margin-top: 50px;
 }
+
+/* 기본 배경 색상 설정 */
+#review {
+    background-color: rgba(138, 216, 240, 0.4);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* 각 리뷰 카드 스타일 */
+.review-card {
+    background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 리뷰 헤더 (사용자 이름과 평점) */
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.ratingStar {
+    font-size: 1.5em;
+    color: #ff9800;
+}
+
+/* 리뷰 본문 스타일 */
+.review-content {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* 답변 영역 스타일 */
+.response {
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+
+.response-header {
+    font-weight: bold;
+    color: black;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.response-content {
+    font-size: 1em;
+    color: #333;
+    margin-top: 5px;
+    text-align: left;
+}
+
+#QnA{
+	background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.questionUser{
+	text-align: left;
+	font-size: 1.2em;
+    font-weight: bolder;
+    color: #333;
+    margin-right: 10px;
+}
+
+.questionTitle{
+	font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.questionContent{
+	font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.answerArea{
+	background-color: #f1f1f1;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    text-align: left;
+}
+
 </style>
 </head>
 <body>
@@ -98,44 +206,45 @@ body {
 	<div th:replace="~{common/header :: header}"></div>
 
 	<div class="container product-container">
+		<input type="hidden" id="productNo" th:value="${p.productNo}"/>
 		<div class="row">
 			<!-- 좌측: 이미지 및 썸네일 -->
 			<div class="col-md-6">
-				<img src="https://image.oliveyoung.co.kr/cfimages/cf-goods/uploads/images/thumbnails/550/10/0000/0021/A00000021326715ko.jpg?l=ko"
-					class="product-image mb-3" alt="상품 이미지">
+				<img th:src="@{/} + ${attm.attmRename}" class="product-image mb-3" alt="상품 이미지">
 			</div>
-
 			<!-- 우측: 상품 정보 -->
 			<div class="col-md-6">
-				<p class="brand-name">스킨앤랩</p>
-				<h1 class="product-title">베리어덤 링거 앰플 70ml + 70ml 더블기획</h1>
-				<p class="product-price">
-					28,000원
-					<del style="font-size: 14px; color: #999;">46,000원</del>
+				<p class="brand-name">[[${p.brandName}]]</p>
+				<h1 class="product-title">[[${p.productName}]]</h1>
+				<p class="product-price" th:text="${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + '원'}"/>
+				<p>[[${p.ingredient}]]</p>
+				<p>[[${p.ecoFriendly}]]</p>
+				<p class="text-danger">
+					<select th:if="${cList.size() != 0}">
+						<option th:each="c : ${cList}">[[${c.couponName}]]</option>
+					</select>
 				</p>
-				<p class="text-danger">🌟 277명이 보고 있어요</p>
+			    <button class="btn flex-fill">🚨신고</button>
+			    <button class="btn flex-fill" onClick="">❔문의하기</button>
 
 				<hr>
-
-				<div class="delivery-info mb-3">
-					<strong>배송정보</strong><br> 일반배송: 2,500원 (20,000원 이상 무료배송)<br>
-					오늘드림: 2,500원 또는 5,000원
-				</div>
 
 				<div class="payment-info mb-3">
 					<strong>결제혜택</strong><br> CJ카드 추가 10% 할인<br> 포인트 최대 1% 적립
 				</div>
 
 				<div class="mb-3 quantity-box">
-					<label>수량</label> <input type="number" class="form-control w-25"
-						value="1" min="1">
+					<label>수량</label> 
+					<input type="number" class="form-control w-25" id="stock" value="1" min="1" th:max="${p.productStock}">
 				</div>
 
-				<div class="total-price mb-3">총 상품금액: 28,000원</div>
-
+				<input type="hidden" id="productPrice" th:value="${p.productPrice}"/>
+				<div class="total-price mb-3" id="totalPrice" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
 				<div class="d-flex gap-2">
-					<button class="btn btn-cart flex-fill">🛒 장바구니</button>
-					<button class="btn btn-buy flex-fill">💳 바로구매</button>
+				    <button class="btn btn-outline-danger flex-fill" onClick="location.href='Shopping/WhisiListInsert'"> 찜하기</button>
+				    <button class="btn btn-cart flex-fill" onClick="location.href='Shopping/cartInsert'">🛒 장바구니</button>
+				    <button class="btn btn-buy flex-fill">💳 바로구매</button>
+				    
 				</div>
 			</div>
 		</div>
@@ -144,32 +253,86 @@ body {
 		<div class="tabs-section">
 			<ul class="nav nav-tabs mt-5" id="productTab" role="tablist">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="detail-tab"
-						data-bs-toggle="tab" data-bs-target="#detail" type="button"
-						role="tab">상세정보</button>
+					<button class="nav-link active" id="detail-tab" data-bs-toggle="tab" data-bs-target="#detail" type="button" role="tab">상세정보</button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="review-tab" data-bs-toggle="tab"
-						data-bs-target="#review" type="button" role="tab">후기</button>
+					<button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">후기 ([[${reviewCount}]])</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="QnA-tab" data-bs-toggle="tab" data-bs-target="#QnA" type="button" role="tab">상품 Q&A</button>
 				</li>
 			</ul>
-			<div class="tab-content" id="productTabContent">
-				<div class="tab-pane fade show active p-3" id="detail"
-					role="tabpanel">
-					<p>이곳에는 상품의 상세 정보, 성분, 사용 방법 등을 포함할 수 있습니다.</p>
-					<img src="https://via.placeholder.com/800x400" class="img-fluid"
-						alt="상세 이미지">
+			<div class="tab-content" id="productTabContent" style="text-align: center;">
+				<div class="tab-pane fade show active p-3" id="detail" role="tabpanel" th:utext="${p.productDetail}">
 				</div>
 				<div class="tab-pane fade p-3" id="review" role="tabpanel">
-					<h5 class="rating">고객 리뷰 ⭐ 5.0 (9,913건)</h5>
-					<p>💬 "정말 좋아요! 피부가 맑아졌어요!"</p>
-					<p>💬 "촉촉하고 산뜻해서 재구매했어요."</p>
+					<div th:if="${rList.size() == 0}">
+						후기가 등록되지 않았습니다.
+						<br/>
+						후기를 등록해주세요!
+					</div>
+				    <div th:if="${rList.size() != 0}" th:each="r : ${rList}">
+				        <div class="review-card">
+				            <!-- 리뷰 내용 -->
+				            <div class="review-header">
+				            	<input type="hidden" class="reviewId" th:value="${r.reviewNo}"/>
+				                <span class="user-name">[[${r.userName}]]</span>
+				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
+				            </div>
+				            <div class="review-content">[[${r.reviewContent}]]</div>
+				        </div>
+				    </div>
+				</div>
+				<div class="tab-pane fade p-3" id="QnA" role="tabpanel">
+					<th:block th:each="q : ${qList}">
+						<div class="questionUser">[[${q.userName}]]</div>
+						<div class="questionContent">문의 내용 : [[${q.questionContent}]]</div>
+						
+						<th:block th:each="a : ${aList}">
+							<div th:if="${q.questionNo == a.questionNo}">
+								<div class="answerArea">
+									<strong>[[${a.productCompany}]]</strong>
+									<br/>
+									<div>[[${a.answerContent}]]</div>
+								</div>
+							</div>
+						</th:block>
+						<br/><br/>
+					</th:block>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<div th:replace="~{common/footer :: footer}"></div>
+	
+	<script>
+		window.onload = () => {
+			const ratingStars = document.querySelectorAll('.ratingStar');
+			//console.log(ratingStar)
+			for(ratingStar of ratingStars){
+				const rating = ratingStar.innerText;
+				//console.log(rating)
+				const filledStar = '\u2605';
+				const starString = filledStar.repeat(rating);
+				//console.log(starString)
+				ratingStar.innerText = starString;
+				
+			}
+			const productStock = document.querySelector('#stock');
+			const productPrice = document.querySelector('#productPrice');
+			const totalPrice = document.querySelector('#totalPrice');
+			
+			//console.log(productStock)
+			//console.log(productPrice.value)
+			
+			productStock.addEventListener('change', () => {
+				const productTotalPrice = (productStock.value*productPrice.value).toLocaleString();
+				//console.log(productTotalPrice)
+				totalPrice.innerText = '총 상품 금액 : ' + productTotalPrice + ' 원';
+			})
+		}
+	</script>
 
 </body>
 </html>

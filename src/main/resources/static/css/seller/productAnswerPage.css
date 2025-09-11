@@ -1,0 +1,143 @@
+:root {
+	--main-color: #27c7c7;
+	--bg-color: #eefbfb;
+	--text-color: #333;
+	--border-radius: 8px;
+	--font-family: 'Arial', sans-serif;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-family);
+	background-color: #fff;
+	color: var(--text-color);
+}
+
+.header {
+	height: 60px;
+	background-color: white;
+	border-bottom: 2px solid var(--main-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.layout {
+	display: flex;
+	min-height: calc(100vh - 60px);
+}
+
+/* 전체 사이드바 */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background-color: #eefbfb; /* 관리자 스타일에 맞게 밝은 배경 */
+  border-right: 1px solid #ddd; /* 너무 진하지 않은 선 */
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1); /* 오른쪽 그림자 효과 */
+  border-radius: 0 15px 15px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 사이드바 개별 항목 */
+.sidebar-item {
+  margin: 10px 0;
+  padding: 12px 20px;
+  width: 80%;
+  text-align: left;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* 호버 효과 */
+.sidebar-item:hover {
+  background-color: #d9f3f7; /* 관리자 느낌 나는 연한 블루 */
+  color: #1aa1a8;
+  transform: translateX(4px); /* 오른쪽으로 살짝 이동하는 애니메이션 */
+}
+
+/* 선택된 상태 (선택된 메뉴에 클래스 추가할 경우) */
+.sidebar-item.active {
+  background-color: #1aa1a8;
+  color: white;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.content {
+	flex: 1;
+	position: relative;
+	padding: 40px;
+}
+
+.page-title {
+	text-align: left; /* h2 왼쪽 정렬 */
+	margin-bottom: 30px;
+	color: var(--main-color);
+}
+
+/* qna-wrapper 중앙 정렬 */
+.qna-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* qna 박스 스타일 */
+.qna-box {
+	background-color: var(--bg-color);
+	padding: 15px;
+	border-radius: var(--border-radius);
+	margin-bottom: 20px;
+	border: 1px solid var(--main-color);
+	min-height: 100px;
+	width: 100%;
+	max-width: 600px;
+}
+
+.questionTitle {
+	cursor: pointer;
+}
+
+button {
+	background-color: var(--main-color);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-family: var(--font-family);
+	font-size: 16px;
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* 호버 효과 */
+button:hover {
+	background-color: #1bb1b1; /* 살짝 진한 민트 */
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media ( max-width : 768px) {
+	.layout {
+		flex-direction: column;
+	}
+	.sidebar {
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-around;
+		border-right: none;
+		border-bottom: 1px solid var(--main-color);
+	}
+	.content {
+		padding: 20px;
+	}
+	table, th, td {
+		font-size: 14px;
+	}
+}

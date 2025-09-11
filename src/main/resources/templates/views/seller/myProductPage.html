@@ -15,17 +15,21 @@
 			<div class="product-header">
 				<div>상품 번호</div>
 				<div class="product-head">상품 명</div>
-				<div class="product-head">재고량</div>
+				<div class="product-head" id="product-stockHead">재고량</div>
+				<div class="product-head" id="review-countHead">리뷰 개수</div>
+				<div class="product-head" id="answer-head">답변 대기</div>
 			</div>
 
 			<!-- 상품 리스트 -->
 			<div class="product-list">
 				<div class="product-card" th:each="p : ${list}">
-					<div class="product-item">[[${p.productNo}]]</div>
-					<div class="product-item">[[${p.productName}]]</div>
-					<div class="product-item">[[${p.productStock}]] 개</div>
+					<div class="product-item product-no">[[${p.productNo}]]</div>
+					<div class="product-item product-name">[[${p.productName}]]</div>
+					<div class="product-item product-stock">[[${p.productStock}]] 개</div>
+					<div class="product-item review-count">5 개</div>
+					<div class="product-item answer">3 개</div>
 					<button class="editButton">수정</button>
-					<button class="editButton">삭제</button>
+					<button class="editButton deleteButton">삭제</button>
 				</div>
 			</div>
 		</div>

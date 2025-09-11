@@ -24,7 +24,7 @@
     </select>
 
     <!-- 검색 포함 게시글 목록 -->
-    <select id="selectBoardListWithSearch" resultType="experienceGroup">
+    <select id="selectBoardListWithSearch" resultType="ExperienceGroup">
         SELECT
         EG.*,
         U.USER_NAME
@@ -52,7 +52,7 @@
     </select>
 
     <!--  게시글 상세 조회  -->
-    <select id="selectBoard" parameterType="int" resultType="experienceGroup">
+    <select id="selectBoard" parameterType="int" resultType="ExperienceGroup">
         SELECT *
         FROM experience_group
         WHERE exp_no = #{boardId} and exp_STATUS = 'Y'

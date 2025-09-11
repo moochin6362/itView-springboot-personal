@@ -1,7 +1,7 @@
 package itView.springboot.mapper;
 
 import itView.springboot.vo.Board;
-import itView.springboot.vo.experienceGroup;
+import itView.springboot.vo.ExperienceGroup;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -14,9 +14,9 @@ public interface ExperienceMapper {
     int getListCountWithSearch(@Param("keyword") String keyword,
                                @Param("type") String type);
 
-    List<experienceGroup> selectBoardListWithSearch(@Param("rowBounds") RowBounds rowBounds,
+    List<ExperienceGroup> selectBoardListWithSearch(@Param("rowBounds") RowBounds rowBounds,
                                                     @Param("keyword") String keyword,
                                                     @Param("type") String type);
 
-    experienceGroup selectBoard(int boardId);
+    ExperienceGroup selectBoard(int boardId);
 }

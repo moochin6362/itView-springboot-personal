@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>체험단 신청글 작성 페이지</title>
+<link href="/css/seller/expWritePage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+
+	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2>체험단 신청글 작성</h2>
+			<form action="/seller/writeExp" method="POST" encType="multipart/form-data">
+				<input type="hidden" name="userNo" th:value="${userNo}"/>
+				
+				<div class="form-group">
+					<label>제목</label> 
+					<input type="text" name="expTitle"/>
+				</div>
+
+				<div class="form-group">
+					<label>내용</label>
+					<textarea name="expContent"></textarea>
+				</div>
+				
+				<div class="form-group">
+					<label>체험단 신청 마감 날짜</label> 
+					<input type="date" name="expEnd" class="styled-date"/>
+				</div>
+
+				<div class="form-buttons">
+					<button type="submit">완료</button>
+					<button type="button" onclick="location.href='javascript:history.back()'">취소</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+	</script>
+</body>
+</html>

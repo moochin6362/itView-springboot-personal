@@ -187,5 +187,73 @@
 		from review
 		where product_no = #{product_no}
 	</select>
+	
+	<insert id="writeExp">
+		insert into experience_group
+		values(seq_exp_group, #{expTitle}, #{expContent}, sysdate, #{expEnd}, default, #{userNo})
+	</insert>
+	
+	<select id="selectProductDetail">
+		select *
+		from product
+		where product_no = #{productNo}
+	</select>
+	
+	<select id="selectQuestion">
+		select *
+		from question
+			 join "USER" using(user_no)
+			 join product using(product_no)
+		where product_no = #{productNo}
+	</select>
+	
+	<select id="selectAnswer" resultType="Answer">
+		select *
+		from answer
+			 left join question using(question_no)
+			 left join product using(product_no)
+		where question_no = #{questionNo}
+	</select>
+	
+	<select id="selectAnswerDetail">
+		select *
+		from answer
+		where question_no = #{questionNo}
+	</select>
+	
+	<select id="selectQuestionDetail">
+		select *
+		from question
+		where question_no = #{questionNo}
+	</select>
+	
+	<insert id="insertAnswer">
+		insert into answer
+		values(seq_answer.nextVal, #{answerContent}, default, #{questionNo})
+	</insert>
+	
+	<select id="selectBeforeAnswerCount">
+		select count(*)
+		from question
+		where question_status = 'N'
+	</select>
+	
+	<select id="selectAfterAnswerCount">
+		select count(*)
+		from question
+		where question_status = 'Y'
+	</select>
+	
+	<delete id="deleteAnswer">
+		delete
+		from answer
+		where answer_no = #{answerNo}
+	</delete>
+	
+	<update id="editAnswer">
+		update answer
+		set answer_content = #{answerContent}
+		where answer_no = #{answerNo}
+	</update>
 
 </mapper>

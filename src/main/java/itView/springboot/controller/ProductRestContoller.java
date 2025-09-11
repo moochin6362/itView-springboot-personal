@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import itView.springboot.service.ProductService;
+import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
@@ -135,5 +136,11 @@ public class ProductRestContoller {
 	@PostMapping("reviewAnswer")
 	public int insertReviewAnswer(@RequestBody ReviewAnswer reviewAnswer) {
 		return pService.insertReviewAnswer(reviewAnswer);
+	}
+	
+	// 상품 문의 답변 수정
+	@PutMapping("answer")
+	public int editAnswer(@RequestBody Answer answer) {
+		return pService.editAnswer(answer);
 	}
 }

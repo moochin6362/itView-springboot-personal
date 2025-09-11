@@ -117,4 +117,48 @@ public class ProductService {
 		return mapper.insertReviewAnswer(reviewAnswer);
 	}
 
+	public int writeExp(ExperienceGroup expGroup) {
+		return mapper.writeExp(expGroup);
+	}
+
+	public Product selectProductDetail(Product product) {
+		return mapper.selectProductDetail(product);
+	}
+
+	public ArrayList<Question> selectQuestion(int productNo) {
+		return mapper.selectQuestion(productNo);
+	}
+
+	public ArrayList<Answer> selectAnswer(int questionNo) {
+		return mapper.selectAnswer(questionNo);
+	}
+
+	public Answer selectAnswerDetail(int questionNo) {
+		return mapper.selectAnswerDetail(questionNo);
+	}
+
+	public Question selectQuestionDetail(int questionNo) {
+		return mapper.selectQuestionDetail(questionNo);
+	}
+
+	public int insertAnswer(Answer answer) {
+		return mapper.insertAnswer(answer);
+	}
+
+	public int selectBeforeAnswerCount() {
+		return mapper.selectBeforeAnswerCount();
+	}
+
+	public int selectAfterAnswerCount() {
+		return mapper.selectAfterAnswerCount();
+	}
+
+	public int deleteAnswer(int answerNo) {
+		return mapper.deleteAnswer(answerNo);
+	}
+
+	public int editAnswer(Answer answer) {
+		return mapper.editAnswer(answer);
+	}
+
 }

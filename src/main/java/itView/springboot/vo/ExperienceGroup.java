@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class experienceGroup {
+public class ExperienceGroup {
 	private int expNo;
 	private String expTitle;
 	private String expContent;

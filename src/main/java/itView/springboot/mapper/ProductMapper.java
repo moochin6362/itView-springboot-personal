@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
+import itView.springboot.vo.ExperienceGroup;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Question;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.ReviewAnswer;
 import itView.springboot.vo.User;
@@ -66,5 +69,27 @@ public interface ProductMapper {
 	int selectReviewCount(int productNo);
 
 	int insertReviewAnswer(ReviewAnswer reviewAnswer);
+
+	int writeExp(ExperienceGroup expGroup);
+
+	Product selectProductDetail(Product product);
+
+	ArrayList<Question> selectQuestion(int productNo);
+
+	ArrayList<Answer> selectAnswer(int questionNo);
+
+	Answer selectAnswerDetail(int questionNo);
+
+	Question selectQuestionDetail(int questionNo);
+
+	int insertAnswer(Answer answer);
+
+	int selectBeforeAnswerCount();
+
+	int selectAfterAnswerCount();
+
+	int deleteAnswer(int answerNo);
+
+	int editAnswer(Answer answer);
 }
 

@@ -19,9 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import itView.springboot.exception.ProductException;
 import itView.springboot.service.ProductService;
+import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
+import itView.springboot.vo.ExperienceGroup;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Question;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
@@ -89,8 +92,44 @@ public class ProductController {
 	
 	// 상품 Q&A 페이지 이동
 	@GetMapping("productQnAPage")
-	public String productQnAPage() {
+	public String productQnAPage(Model model, HttpSession session) {
+		
+		User loginUser = (User)session.getAttribute("loginUser");
+		
+		Product product = new Product();
+		product.setUserNo(loginUser.getUserNo());
+		
+		ArrayList<Product> pList = pService.selectMyProduct(product);
+		
+		ArrayList<Question> qList = new ArrayList<Question>();
+		
+		int beforeAnswer = pService.selectBeforeAnswerCount();
+		int afterAnswer = pService.selectAfterAnswerCount();
+		
+		for(int i = 0; i < pList.size(); i++) {
+			int productNo = pList.get(i).getProductNo();
+			qList.addAll(pService.selectQuestion(productNo));
+			
+		}
+		
+		model.addAttribute("qList", qList);
+		model.addAttribute("ba", beforeAnswer);
+		model.addAttribute("aa", afterAnswer);
+		
 		return "seller/productQnAPage";
+	}
+	
+	// 상품 문의 답변 페이지 이동
+	@GetMapping("answer/{questionNo}")
+	public String answerPage(@PathVariable("questionNo") int questionNo, Model model) {
+		
+		Question question = pService.selectQuestionDetail(questionNo);
+		Answer answer = pService.selectAnswerDetail(questionNo);
+		
+		model.addAttribute("answer", answer);
+		model.addAttribute("question", question);
+		
+		return "seller/productAnswerPage";
 	}
 	
 	// 내 상품 보기 페이지 이동
@@ -131,7 +170,9 @@ public class ProductController {
 	// 판매 내역 페이지 이동
 	@GetMapping("mySellingPage")
 	public String mySellingPage() {
-		return "seller/mySelling";
+		
+		
+		return "seller/mySellingPage";
 	}
 	
 	// 내 상품 상세 페이지 이동
@@ -150,6 +191,19 @@ public class ProductController {
 		Attachment attm = pService.selectMyAttm(productNo);
 		ArrayList<Review> rList = pService.selectReview(productNo);
 		int reviewCount = pService.selectReviewCount(productNo);
+		
+		ArrayList<Question> question = pService.selectQuestion(productNo);
+		
+		int questionNo = 0;
+		
+		ArrayList<Answer> answer = new ArrayList<Answer>();
+		
+		for(int i = 0; i < question.size(); i++) {
+			questionNo = question.get(i).getQuestionNo();
+			answer.addAll( pService.selectAnswer(questionNo));
+		}
+		
+		//System.out.println(rList.size());
 		
 		
 		//System.out.println(reviewCount);
@@ -182,8 +236,88 @@ public class ProductController {
 		model.addAttribute("attm", attm);
 		model.addAttribute("rList", rList);
 		model.addAttribute("reviewCount", reviewCount);
+		model.addAttribute("qList", question);
+		model.addAttribute("aList", answer);
 		
 		return "seller/myProductDetail";
+	}
+	
+	// 상품 상세페이지 이동
+	@GetMapping("/detail/{productNo}")
+	public String productdetail(@PathVariable("productNo") int productNo, Model model) {
+		
+		
+		Product product = new Product();
+		product.setProductNo(productNo);
+		Product p = pService.selectProductDetail(product);
+		product.setUserNo(p.getUserNo());
+		
+		int userNo = product.getUserNo();
+		
+		ArrayList<Coupon> cList = pService.selectMyCoupon(userNo);
+		Attachment attm = pService.selectMyAttm(productNo);
+		ArrayList<Review> rList = pService.selectReview(productNo);
+		int reviewCount = pService.selectReviewCount(productNo);
+		ArrayList<Question> question = pService.selectQuestion(productNo);
+		
+		int questionNo = 0;
+		
+		ArrayList<Answer> answer = new ArrayList<Answer>();
+		
+		for(int i = 0; i < question.size(); i++) {
+			questionNo = question.get(i).getQuestionNo();
+			answer.addAll( pService.selectAnswer(questionNo));
+		}
+		
+		//System.out.println(questionNo);
+		
+		//System.out.println(answer);
+		
+		//System.out.println(question);
+		
+		if(p.getIngredient().equals("natural")) {
+			p.setIngredient("천연 & 식물 유래 성분");
+		} else if(p.getIngredient().equals("vitamin")) {
+			p.setIngredient("비타민 & 항산화 성분");
+		} else if(p.getIngredient().equals("peptide")) {
+			p.setIngredient("기능성 펩타이드 & 단백질 성분");
+		} else if(p.getIngredient().equals("moisture")) {
+			p.setIngredient("보습 & 피부장벽 특화 성분");
+		} else if(p.getIngredient().equals("cleansing")) {
+			p.setIngredient("피부 정화 & 각질 케어 성분");
+		}
+		
+		if(p.getEcoFriendly().equals("Y")) {
+			p.setEcoFriendly("친환경 제품");
+		} else {
+			p.setEcoFriendly("일반 제품");
+		}
+		
+		model.addAttribute("p", p);
+		model.addAttribute("cList", cList);
+		model.addAttribute("attm", attm);
+		model.addAttribute("rList", rList);
+		model.addAttribute("reviewCount", reviewCount);
+		model.addAttribute("qList", question);
+		model.addAttribute("aList", answer);
+		
+		return "Shopping/detail";
+	}
+	
+	// 체험단 신청글 작성 페이지 이동
+	@GetMapping("expWrite")
+	public String expWritePage(Model model, HttpSession session) {
+		User user = (User)session.getAttribute("loginUser");
+		int userNo = user.getUserNo();
+		
+		model.addAttribute("userNo", userNo);
+		return "seller/expWritePage";
+	}
+	
+	// 체험단 관리 페이지 이동
+	@GetMapping("experienceManagePage")
+	public String experienceManagePage() {
+		return "seller/experienceManagePage";
 	}
 	
 	// 상품 등록
@@ -334,11 +468,38 @@ public class ProductController {
 		}
 	}
 
-	// 상품 상세페이지
-	@GetMapping("/detail/{productNo}")
-	public String productdetail(@PathVariable int productNo, Model model) {
-
-		return "Shopping/detail";
+	// 체험단 신청글 작성
+	@PostMapping("/writeExp")
+	public String writeExp(@ModelAttribute ExperienceGroup expGroup) {
+		int result = pService.writeExp(expGroup);
+		if(result > 0) {
+			return "redirect:/seller/experienceManagePage";
+		} else {
+			throw new ProductException("체험단 신청글 작성을 실패하였습니다.");
+		}
+	}
+	
+	// 상품 문의 답변 입력
+	@PostMapping("insertAnswer")
+	public String insertAnswer(@ModelAttribute Answer answer) {
+		//System.out.println(answer);
+		int result = pService.insertAnswer(answer);
+		if(result > 0) {
+			return "redirect:/seller/productQnAPage";
+		} else {
+			throw new ProductException("상품 문의에 대한 답변 작성을 실패하였습니다.");
+		}
+	}
+	
+	// 상품 문의 답변 삭제
+	@GetMapping("deleteAnswer/{answerNo}")
+	public String deleteAnswer(@PathVariable("answerNo") int answerNo) {
+		int result = pService.deleteAnswer(answerNo);
+		if(result > 0) {
+			return "redirect:/seller/productQnAPage";
+		} else {
+			throw new ProductException("상품 문의에 대한 답변 삭제를 실패하였습니다.");
+		}
 	}
 
 

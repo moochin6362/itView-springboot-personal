@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>상품 문의 답변 페이지</title>
+<link href="/css/seller/productAnswerPage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+
+	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2 class="page-title">상품 문의 답변 페이지</h2>
+			
+			<form method="POST" action="/seller/insertAnswer">
+			<input type="hidden" name="questionNo" th:value="${question.questionNo}"/>
+			<input type="hidden" th:if="${answer != null}" id="answerNo" name="answerNo" th:value="${answer.answerNo}"/>
+				<div class="qna-wrapper">
+					<div class="qna-box">
+						<strong>문의 내용</strong>
+						<br/> 
+						[[${question.questionContent}]]
+					</div>
+	
+					<div class="qna-box" th:if="${answer != null}">
+						<strong>답변 내용</strong>
+						<br/> 
+						<p>[[${answer.answerContent}]]</p>
+						<br/>
+						<button type="button" id="editButton">수정</button>
+						<button type="button" id="deleteButton">삭제</button>
+					</div>
+	
+					<div class="qna-box" th:if="${answer == null}">
+						<strong>답변 내용</strong>
+						<br/><br/>
+						<textarea id="answerContent" name="answerContent" style="resize: none; border-radius: 10px" cols="60" rows="4"></textarea>
+						<button id="commitButton">완료</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script>
+		window.onload = () => {
+			const answerNo = document.querySelector('#answerNo').value;
+			document.querySelector('#editButton').addEventListener('click', e => {
+				const answerBox = e.target.parentElement;
+				//console.log(answerBox.children[2])
+				answerBox.innerHTML = '<strong>답변 내용</strong> <br/><br/>' + 
+				'<textarea id="answerContent" name="answerContent" style="resize: none; border-radius: 10px" cols="60" rows="4">' +
+				answerBox.children[2].innerText +
+				'</textarea> <button id="editCommitButton" type="button">완료</button> <button id="cancelButton" type="button">취소</button>';
+				
+				document.querySelector('#editCommitButton').addEventListener('click', () => {
+					const answerContent = document.querySelector('#answerContent').value;
+					//console.log(answerContent)
+					fetch('/seller/answer', {
+						method: 'put',
+						headers: {'content-type':'application/json; charset=UTF-8'},
+						body: JSON.stringify({
+							answerNo: answerNo,
+							answerContent: answerContent
+						})
+					})
+					.then(res => res.json())
+					.then(data => {
+						//console.log(data)
+						if(data > 0){
+							answerBox.innerHTML = '<strong>답변 내용</strong> <br/>' +
+							'<p>' + answerContent + '</P> <br/>' +
+							'<button type="button" id="editButton">수정</button> <button type="button" id="deleteButton">삭제</button>';
+						} else {
+							alert('답변 수정을 실패하였습니다.');
+						}
+					})
+					.catch(err => console.log(err))
+				});
+				
+				document.querySelector('#cancelButton').addEventListener('click', () => {
+					location.reload();
+				});
+				
+			});
+			
+			document.querySelector('#deleteButton').addEventListener('click', () => {
+				if(confirm("답변을 삭제하시겠습니까?")){
+					alert('답변이 삭제됩니다.');
+					location.href = "/seller/deleteAnswer/" + answerNo;
+				} else {
+					alert('답변 삭제가 취소되었습니다.');
+				}
+			})
+		}
+	</script>
+
+</body>
+</html>

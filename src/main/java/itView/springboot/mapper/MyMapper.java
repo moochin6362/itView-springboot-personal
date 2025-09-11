@@ -11,7 +11,7 @@ import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
-import itView.springboot.vo.experienceGroup;
+import itView.springboot.vo.ExperienceGroup;
 
 @Mapper
 public interface MyMapper {
@@ -49,7 +49,7 @@ public interface MyMapper {
     // 최근 찜 3개
     java.util.List<java.util.Map<String, Object>> selectTop3WishlistMap(@Param("userNo") long userNo);
 
-    List<experienceGroup> searchExperienceGroups(@Param("keyword") String keyword);
+    List<ExperienceGroup> searchExperienceGroups(@Param("keyword") String keyword);
 
     // 중복 신청 체크 / 저장
     int countMyExperienceApply(@Param("userNo") Long userNo, @Param("expNo") int expNo);

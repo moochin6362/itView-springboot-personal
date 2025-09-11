@@ -29,32 +29,47 @@ body {
   min-height: calc(100vh - 60px);
 }
 
+/* 전체 사이드바 */
 .sidebar {
   width: 220px;
-  background-color: var(--bg-color);
-  border-right: 1px solid var(--main-color);
-  padding-top: 30px;
+  height: 100vh;
+  background-color: #eefbfb; /* 관리자 스타일에 맞게 밝은 배경 */
+  border-right: 1px solid #ddd; /* 너무 진하지 않은 선 */
+  padding: 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1); /* 오른쪽 그림자 효과 */
+  border-radius: 0 15px 15px 0;
+  font-family: 'Poppins', sans-serif;
 }
 
+/* 사이드바 개별 항목 */
 .sidebar-item {
-  margin: 15px 0;
-  padding: 10px 20px;
+  margin: 10px 0;
+  padding: 12px 20px;
   width: 80%;
-  text-align: center;
-  border-radius: var(--border-radius);
+  text-align: left;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 16px;
+  color: #333;
+  transition: all 0.3s ease;
 }
 
-.sidebar-item.active,
+/* 호버 효과 */
 .sidebar-item:hover {
-  background-color: #8ad8f0;
-  color: white;
+  background-color: #d9f3f7; /* 관리자 느낌 나는 연한 블루 */
+  color: #1aa1a8;
+  transform: translateX(4px); /* 오른쪽으로 살짝 이동하는 애니메이션 */
 }
 
+/* 선택된 상태 (선택된 메뉴에 클래스 추가할 경우) */
+.sidebar-item.active {
+  background-color: #1aa1a8;
+  color: white;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
 .layout {
   display: flex;
   height: 100vh; /* 필요 시 */
@@ -70,7 +85,6 @@ body {
   display: flex;
   gap: 20px;
   padding: 10px 20px;
-  align-items: center;
 }
 
 .product-header {
@@ -87,12 +101,51 @@ body {
 }
 
 .product-item {
-  flex: 1;
   cursor: pointer;
 }
 
 .product-head {
-	margin-left: 26%;
+	margin-left: 17%;
+}
+
+.product-no {
+	margin-top: 13px;
+	width: 20px;
+}
+
+.product-name {
+	width: 500px;
+	margin-top: 10px;
+	margin-left: 10%;
+}
+
+.product-stock {
+	width: 100px;
+	margin-top: 10px;
+	margin-left: 1.5%;
+}
+
+.review-count {
+	margin-top: 12px;
+	margin-left: 5%;
+}
+
+.answer {
+	margin-top: 12px;
+	margin-left: 9%;
+	margin-right: 15%;
+}
+
+#product-stockHead {
+	margin-left: 20%;
+}
+
+#review-countHead { 
+	margin-left: 7%;
+}
+
+#answer-head {
+	margin-left: 7%;
 }
 
 .editButton {

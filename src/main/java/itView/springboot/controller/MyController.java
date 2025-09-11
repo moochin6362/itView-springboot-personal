@@ -23,7 +23,7 @@ import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
-import itView.springboot.vo.experienceGroup;
+import itView.springboot.vo.ExperienceGroup;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -376,7 +376,7 @@ public class MyController {
 
     @GetMapping("/experience/search")
     @ResponseBody
-    public java.util.List<experienceGroup> searchExperience(@RequestParam(name = "q", required = false) String q) {
+    public java.util.List<ExperienceGroup> searchExperience(@RequestParam(name = "q", required = false) String q) {
         String keyword = (q == null) ? "" : q.trim();
         return myService.searchExperienceGroups(keyword);
     }

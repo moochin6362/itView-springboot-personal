@@ -4,7 +4,7 @@ import itView.springboot.common.Pagination;
 import itView.springboot.service.ExperienceService;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
-import itView.springboot.vo.experienceGroup;
+import itView.springboot.vo.ExperienceGroup;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,7 +34,7 @@ public class ExperienceController {
 
         PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 
-        List<experienceGroup> experiences = experienceService.selectBoardListWithSearch(pi, keyword, type);
+        List<ExperienceGroup> experiences = experienceService.selectBoardListWithSearch(pi, keyword, type);
 
         model.addAttribute("experiences", experiences);
         model.addAttribute("pi", pi);
@@ -51,7 +51,7 @@ public class ExperienceController {
                             @RequestParam(value = "page", defaultValue = "1") int page,
                             Model model) {
 
-        experienceGroup experience = experienceService.selectBoard(expNo);
+        ExperienceGroup experience = experienceService.selectBoard(expNo);
         model.addAttribute("experience", experience);
         model.addAttribute("page", page);
 

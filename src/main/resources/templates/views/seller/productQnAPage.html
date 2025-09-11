@@ -15,42 +15,42 @@
 
 		<div class="content">
 			<h2>상품 Q&A 페이지</h2>
-
+			<div>답변 대기 : [[${ba}]] 개</div>
+			<div>답변 완료 : [[${aa}]] 개</div>
 			<table>
 				<thead>
 					<tr>
+						<th>문의 번호</th>
 						<th>상품 명</th>
 						<th>문의 제목</th>
 						<th>작성자</th>
-						<th>작성 날짜</th>
+						<th>답변 상태</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>세럼 A</td>
-						<td>이거 지성도 써도 되나요?</td>
-						<td>user01</td>
-						<td>2025-08-19</td>
-					</tr>
-					<tr>
-						<td>크림 B</td>
-						<td>유통기한이 어떻게 되나요?</td>
-						<td>beauty22</td>
-						<td>2025-08-17</td>
+					<tr th:each="q : ${qList}">
+						<td>[[${q.questionNo}]]</td>
+						<td>[[${q.productName}]]</td>
+						<td class="questionTitle">[[${q.questionTitle}]]</td>
+						<td>[[${q.userName}]]</td>
+						<td>[[${q.questionStatus}]]</td>
 					</tr>
 				</tbody>
 			</table>
-
-			<div class="qna-box">
-				<strong>문의 내용</strong><br /> 피부가 예민한 편인데 사용해도 될까요?
-			</div>
-
-			<div class="qna-box">
-				<strong>답변 내용</strong><br /> 네, 본 제품은 무향/무알콜 성분으로 민감성 피부에도 사용 가능합니다.
-				다만 피부 테스트 후 사용 권장드립니다.
-			</div>
 		</div>
 	</div>
+	
+	<script>
+		window.onload = () => {
+			const questionTitles = document.querySelectorAll('.questionTitle');
+			for(questionTitle of questionTitles){
+				questionTitle.addEventListener('click', e => {
+					const questionNo = e.target.previousElementSibling.previousElementSibling.innerText;
+					location.href = '/product/answer/' + questionNo;
+				});
+			}
+		}
+	</script>
 
 </body>
 </html>

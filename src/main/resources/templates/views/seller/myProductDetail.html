@@ -189,10 +189,10 @@ body {
 
 				<div class="mb-3 quantity-box">
 					<label>수량</label> 
-					<input type="number" class="form-control w-25" value="1" min="1" th:max="${p.productStock}">
+					<input type="number" class="form-control w-25" id="stock" value="1" min="1" th:max="${p.productStock}">
 				</div>
-
-				<div class="total-price mb-3" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
+				<input type="hidden" id="productPrice" th:value="${p.productPrice}"/>
+				<div class="total-price mb-3" id="totalPrice" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
 
 			</div>
 		</div>
@@ -247,27 +247,18 @@ body {
 	
 	<script>
 		window.onload = () => {
-/* 			document.querySelector('#review-tab').addEventListener('click', () => {
-// 				const rating = 4;
-// 				const filledStar = '\u2605';
-// 				const starString = filledStar.repeat(rating);
-				
-// 				document.querySelector('#review').textContent = starString;
-// 			});
-
-// 			document.querySelector('#review-tab').addEventListener('click', () => {
-// 				const productNo = document.querySelector('#productNo').value;
-// 				//console.log(productNo)
-// 				fetch('/product/productReview/' + productNo)
-// 				.then(res => res.json())
-// 				.then(data => {
-// 					//console.log(data[0].reviewContent)
-					
-// 					const filledStar = '\u2605';}
-// 				})
-// 				.catch(err => console.log(err))
-			});
-			*/ 
+			const productStock = document.querySelector('#stock');
+			const productPrice = document.querySelector('#productPrice');
+			const totalPrice = document.querySelector('#totalPrice');
+			
+			//console.log(productStock)
+			//console.log(productPrice.value)
+			
+			productStock.addEventListener('change', () => {
+				const productTotalPrice = (productStock.value*productPrice.value).toLocaleString();
+				//console.log(productTotalPrice)
+				totalPrice.innerText = '총 상품 금액 : ' + productTotalPrice + ' 원';
+			})
 
 			const ratingStars = document.querySelectorAll('.ratingStar');
 			//console.log(ratingStar)

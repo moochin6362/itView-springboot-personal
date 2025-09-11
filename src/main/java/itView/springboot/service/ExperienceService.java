@@ -4,7 +4,7 @@ import itView.springboot.mapper.AdminMapper;
 import itView.springboot.mapper.ExperienceMapper;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
-import itView.springboot.vo.experienceGroup;
+import itView.springboot.vo.ExperienceGroup;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ public class ExperienceService {
         return mapper.getListCountWithSearch(keyword, type);
     }
 
-    public List<experienceGroup> selectBoardListWithSearch(PageInfo pi, String keyword, String type) {
+    public List<ExperienceGroup> selectBoardListWithSearch(PageInfo pi, String keyword, String type) {
         int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
         return mapper.selectBoardListWithSearch(rowBounds, keyword, type);
     }
 
-    public experienceGroup selectBoard(int boardId) {
+    public ExperienceGroup selectBoard(int boardId) {
         return mapper.selectBoard(boardId);
     }
 }
