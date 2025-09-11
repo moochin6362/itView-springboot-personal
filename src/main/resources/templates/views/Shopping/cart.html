@@ -351,23 +351,23 @@ select[name="coupon-option"] {
    			<p>장바구니가 비어 있습니다.</p>
 		</div>
 		<div class="cartitem" th:if="${!#lists.isEmpty(clist)}"
-			th:each="c:${clist}">
+			th:each="gc:${cartGroup}">
 			
 			
 			
 			<div class="cart-header">
 				<label><input type="checkbox" class="checkcompany"
-					th:value="${c.cartNo}" th:data-company="${c.productCompany}" >[[${c.productCompany}]]</label>
+					 th:data-company="${gc.key}" >[[${gc.key}]]</label>
 
 			</div>
 			
-			<div  class="cart-body">
-				<label><input type="checkbox" class="checkItem"
+			<div  class="cart-body" th:each="c : ${gc.value}">
+				<label><input type="checkbox" class="checkItem" th:data-price="${c.productPrice}"
 					th:value="${c.cartNo}" th:data-company="${c.productCompany}" th:disabled="${c.productStock == 0 or c.productState == 'N'}"></label>
 				<div class="item-image">
-					<a th:href="@{#}">
+					<a th:href="@{/Shopping/detail(productNo=${c.productNo})}">
 						<img th:each="a:${alist}" th:if="${a.positionNo==c.productNo}"
-						th:src="@{/uploadFilesFinal/product/{file}(file=${a.attmRename})}"
+						th:src="@{/} + ${a.attmRename}"
 						width="100%" height="100%" style="border-radius: 8px;" />
 					</a>
 					<div th:if="${c.productStock == 0 && c.productState =='Y'}" class="soldout">
@@ -382,7 +382,7 @@ select[name="coupon-option"] {
 					<div class="item-price" th:data-price="${c.productPrice}"
 						th:text="${#numbers.formatInteger(c.productPrice * c.amount,3,'COMMA')}+'원'">가격</div>
 					<div class="item-name">
-						<a th:href="@{#}">
+						<a th:href="@{/Shopping/detail(productNo=${c.productNo})}">
 							<span th:text="${c.productName}">이름</span>
 						</a>
 					</div>
@@ -446,121 +446,89 @@ select[name="coupon-option"] {
 		const qtySpan=document.querySelectorAll('.qty');
 		
 		const itemPrice=document.querySelectorAll('.item-price');
+		const cartBodies = document.querySelectorAll('.cart-body');
 		const cartItem=document.querySelectorAll('.cartitem');
 		const totalProduct = document.querySelector('.total-product');
 		
 
-		
-		checkCompany.forEach(chkbrd => {
-			  chkbrd.addEventListener('change', () => {
-			    const company = chkbrd.dataset.company;
+		const updateTotal = () => {
+	        let sum = 0;
+	        items.forEach(check => {
+	            if (check.checked) {
+	                const productBox = check.closest('.cart-body');   // 체크박스가 속한 상품
+	                const productPriceBox = productBox.querySelector('.item-price');
+	                const productQty = productBox.querySelector('.qty');
 
-			    
-			    items.forEach(item => {
-			      if (item.dataset.company === company && !item.disabled) {
-			        item.checked = chkbrd.checked;
-			      }
-			    });
+	                const unit = parseInt(productPriceBox.dataset.price); 
+	                const qty  = parseInt(productQty.textContent);
 
-			  
-			    const total = items.length;
-			    const checked = [...items].filter(c => c.checked).length;
-
-			    
-			    all.checked = (checked === total);
-			    all.indeterminate = (checked > 0 && checked < total);
-			    
-			    let sum=0;
-				cartItem.forEach(product=>{
-					if(product.querySelector('.checkItem').checked){
-						const unit = parseInt(product.querySelector('.item-price').dataset.price);
-						const qty=parseInt(product.querySelector('.qty').textContent);
-						sum+=unit*qty;
-					}
-				});
-				
-				totalProduct.textContent=sum.toLocaleString()+'원';
-			  });
-			});
-
-	
-		
-		if(all != null){
-			all.addEventListener('change',()=>{
-				for(let i =0; i<items.length; i++){
-					if(!items[i].disabled){
-						items[i].checked=all.checked;
-					}
-				}
-				
-				checkCompany.forEach(chkbrd=>{
-					chkbrd.checked=all.checked;
-					chkbrd.indeterminate=false;
-					});
-				
-				
-				all.indeterminate = false;
-				
-				let sum=0;
-				cartItem.forEach(product=>{
-					if(product.querySelector('.checkItem').checked){
-						const unit = parseInt(product.querySelector('.item-price').dataset.price);
-						const qty=parseInt(product.querySelector('.qty').textContent);
-						sum+=unit*qty;
-					}
-				});
-				
-				totalProduct.textContent=sum.toLocaleString()+'원';
-			});
+	                sum += unit * qty;
+	            }
+	        });
+	        totalProduct.textContent = sum.toLocaleString() + '원';
+	    };
 		
 		
-				
-				
-			
-			
-			items.forEach(check =>{
-				check.addEventListener('change',()=>{
-					const total = items.length;
-					//item에 들어잇는 개별 체크박스들 중에서 체크된 것만 골라서 그 개수를 셈
-					// [...]->이게 nodelist를 배열로 변환하는것 
-					//filer-> 배열을 훑으면서 조건을 통과하는 요소만 모아서 새 배열을 반환 
-					//즉 체크된 박스들만 걸러서 배열로 만든다
-					const checked = [...items].filter(c=>c.checked).length;
-					const company=check.dataset.company;
-					const companyCheckbox = [...checkCompany].find(cb => cb.dataset.company === company);
-					const companyItems = [...items].filter(i => i.dataset.company === company);
-					const checkedCount = companyItems.filter(i => i.checked).length;
-					
-					
-					
-					companyCheckbox.checked = (checkedCount === companyItems.length);
-					companyCheckbox.indeterminate = (checkedCount > 0 && checkedCount < companyItems.length);
-					
-					    
-					all.checked=(checked===total);
-					
-					//일부만 선택된 상태면 '전체선책'체크박스를 회색 상태로 만든다
-					//indeterminate는 js에만 잇는 요소
-					//체크된개수 > 0(적어도 하나는 체크됨), 체크된 개수<total(일부만)->일부만 체크되면 true
-					all.indeterminate=(checked>0 && checked < total);
-					
-					let sum=0;
-					cartItem.forEach(product=>{
-						if(product.querySelector('.checkItem').checked){
-							const unit = parseInt(product.querySelector('.item-price').dataset.price);
-							const qty=parseInt(product.querySelector('.qty').textContent);
-							sum+=unit*qty;
-						}
-					});
-					
-					totalProduct.textContent=sum.toLocaleString()+'원';
-					
-					
-				});
-				
-			})
-			
-		}
+		
+	    checkCompany.forEach(chkbrd => {
+	        chkbrd.addEventListener('change', () => {
+	            const company = chkbrd.dataset.company;
+	            items.forEach(item => {
+	                if (item.dataset.company === company && !item.disabled) {
+	                    item.checked = chkbrd.checked;
+	                }
+	            });
+
+	            const total = items.length;
+	            const checked = [...items].filter(c => c.checked).length;
+
+	            all.checked = (checked === total);
+	            all.indeterminate = (checked > 0 && checked < total);
+
+	            updateTotal();
+	        });
+	    });
+
+	    if(all != null){
+	        all.addEventListener('change',()=>{
+	            items.forEach(item=>{
+	                if(!item.disabled){
+	                    item.checked = all.checked;
+	                }
+	            });
+
+	            checkCompany.forEach(chkbrd=>{
+	                chkbrd.checked = all.checked;
+	                chkbrd.indeterminate = false;
+	            });
+
+	            all.indeterminate = false;
+
+	            updateTotal();
+	        });
+
+	        // 개별 체크박스 이벤트
+	        items.forEach(check =>{
+	            check.addEventListener('change',()=>{
+	                const total = items.length;
+	                const checked = [...items].filter(c=>c.checked).length;
+	                const company = check.dataset.company;
+	                const companyCheckbox = [...checkCompany].find(cb => cb.dataset.company === company);
+	                const companyItems = [...items].filter(i => i.dataset.company === company);
+	                const checkedCount = companyItems.filter(i => i.checked).length;
+
+	                companyCheckbox.checked = (checkedCount === companyItems.length);
+	                companyCheckbox.indeterminate = (checkedCount > 0 && checkedCount < companyItems.length);
+
+	                all.checked = (checked === total);
+	                all.indeterminate = (checked > 0 && checked < total);
+
+	                updateTotal();
+	            });
+	        });
+	    }
+		
+		
 		
 		if(checkdelete != null){
 			checkdelete.addEventListener('click',()=>{
@@ -650,83 +618,67 @@ select[name="coupon-option"] {
 			}
 		});
 		
+		 minusBtn.forEach((btn,i)=>{
+		        btn.addEventListener('click',()=>{
+		            const productBox = cartBodies[i];
+		            const productQty = productBox.querySelector('.qty');
+		            const productPriceBox = productBox.querySelector('.item-price');
+
+		            let qty = parseInt(productQty.textContent);
+		            const stock = parseInt(productQty.dataset.stock);
+
+		            if(qty > 1){
+		                qty--;
+		                productQty.textContent = qty;
+		            }
+
+		            btn.disabled = (qty === 1);
+		            if(qty < stock) plusBtn[i].disabled = false;
+
+		            const unit = parseInt(productPriceBox.dataset.price); 
+		            const total = unit * qty;
+		            productPriceBox.textContent = total.toLocaleString()+'원';
+
+		            updateTotal();
+		        });
+		    });
+		
+		 plusBtn.forEach((btn,i)=>{
+		        btn.addEventListener('click',()=>{
+		            const productBox = cartBodies[i];
+		            const productQty = productBox.querySelector('.qty');
+		            const productPriceBox = productBox.querySelector('.item-price');
+
+		            let qty = parseInt(productQty.textContent);
+		            const stock = parseInt(productQty.dataset.stock);
+
+		            if(qty < stock){
+		                qty++;
+		                productQty.textContent = qty;
+
+		                if(qty === 1){
+		                    minusBtn[i].disabled = true;
+		                } else {
+		                    minusBtn[i].disabled = false;
+		                }
+
+		                const unit = parseInt(productPriceBox.dataset.price); 
+		                const total = unit * qty;
+		                productPriceBox.textContent = total.toLocaleString()+'원';
+		            } else {
+		                alert('상품이 더 이상 존재하지 않습니다. 😅');
+		            }
+
+		            if(qty === stock){
+		                alert('마지막 상품입니다.');
+		                btn.disabled = true;
+		            }
+
+		            updateTotal();
+		        });
+		    });
 		
 		
-		minusBtn.forEach((btn,i)=>{
-			btn.addEventListener('click',()=>{
-				let qty=parseInt(qtySpan[i].textContent);
-				const stock=parseInt(qtySpan[i].dataset.stock);
-				if(qty>1){
-					qty=qty-1;
-					qtySpan[i].textContent=qty;
-				}
-				
-				if(qty===1){
-					btn.disabled=true;
-				}else{
-					btn.disabled=false;
-				}
-				
-				if(qty<stock){
-					plusBtn[i].disabled=false;
-				}
-				
-				const item=parseInt(itemPrice[i].dataset.price);
-				const total=item * qty;
-				itemPrice[i].textContent=total.toLocaleString()+'원'
-				
-				let sum=0;
-				cartItem.forEach(product=>{
-					if(product.querySelector('.checkItem').checked){
-						const unit = parseInt(product.querySelector('.item-price').dataset.price);
-						const qty=parseInt(product.querySelector('.qty').textContent);
-						sum+=unit*qty;
-					}
-				});
-				
-				totalProduct.textContent=sum.toLocaleString()+'원';
-				
-			});
-		});
-		
-		plusBtn.forEach((btn,i)=>{
-			btn.addEventListener('click',()=>{
-				let qty=parseInt(qtySpan[i].textContent);
-				const stock=parseInt(qtySpan[i].dataset.stock);
-				
-				if(qty<stock){
-					qty=qty+1;
-					qtySpan[i].textContent=qty;
-					
-					if(qty===1){
-						minusBtn[i].disabled=true;
-					}else{
-						minusBtn[i].disabled=false;
-					}
-					const item=parseInt(itemPrice[i].dataset.price);
-					const total=item * qty;
-					itemPrice[i].textContent=total.toLocaleString()+'원'
-				}else{
-					alert('상품이 더 이상 존재하지 않습니다. 😅');
-				}
-				
-				if(qty===stock){
-					alert('마지막 상품입니다.');
-					btn.disabled=true;
-				}
-				let sum=0;
-				cartItem.forEach(product=>{
-					if(product.querySelector('.checkItem').checked){
-						const unit = parseInt(product.querySelector('.item-price').dataset.price);
-						const qty=parseInt(product.querySelector('.qty').textContent);
-						sum+=unit*qty;
-					}
-				});
-				
-				totalProduct.textContent=sum.toLocaleString()+'원';
-			});
-			
-		});	
 		
 		
 		
