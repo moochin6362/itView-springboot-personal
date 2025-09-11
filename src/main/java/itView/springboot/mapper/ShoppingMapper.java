@@ -44,7 +44,7 @@ public interface ShoppingMapper {
 
 	ArrayList<Attachment> selectThumbListByOrderNo(int oNo);
 
-	ArrayList<Integer> selectProductNoForOrder(int oNo);
+	ArrayList<Integer> selectProductNoForOrder(int uNo);
 
 	 int checkCart(@Param("userNo") int uNo, @Param("productNo") int pNo);
 	

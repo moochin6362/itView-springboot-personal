@@ -32,6 +32,8 @@
 				#{no}
 			</foreach>
 	</select>
+ 	
+	
 	
 	<select id="selectCouponList" resultType="CouponBox">
 		select * 
@@ -255,7 +257,7 @@
 	<select id="selectProductNoForOrder" resultType="int">
 		select o.order_target_no AS product_no
   		from "ORDER" o
-  		where o.order_no = #{orderNo}
+  		where o.user_no = #{userNo}
     	and o.order_type = 1
 
   		UNION ALL
@@ -263,7 +265,7 @@
   		select c.product_no
   		from "ORDER" o
   		join cart c on c.cart_no = o.order_target_no
-  		where o.order_no = #{orderNo}
+  		where o.user_no = #{userNo}
     	and o.order_type = 2
 	</select>
 	<select id="checkCart" resultType="int">

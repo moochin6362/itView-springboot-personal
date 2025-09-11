@@ -47,8 +47,8 @@ public class ShoppingService {
 	}
 	
 	
-	public ArrayList<Attachment> selectThumbListByOrderNo(int oNo) {
-		 ArrayList<Integer> pNo = mapper.selectProductNoForOrder(oNo); 
+	public ArrayList<Attachment> selectThumbListByOrderNo(int uNo) {
+		 ArrayList<Integer> pNo = mapper.selectProductNoForOrder(uNo); 
 		    if (pNo == null || pNo.isEmpty()) return new ArrayList<>();            
 		    return mapper.selectThumbList(pNo); 
 	}

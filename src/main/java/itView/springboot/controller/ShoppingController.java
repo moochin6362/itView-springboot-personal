@@ -3,6 +3,7 @@ package itView.springboot.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,12 @@ public class ShoppingController {
 		
 		return "Shopping/cancelReason";
 	}
+	@GetMapping("detail")
+	public String detail() {
+		
+		
+		return "Shopping/detail";
+	}
 
 	@GetMapping("cart")
 	public String cart(Model model, HttpSession session) {
@@ -78,9 +85,12 @@ public class ShoppingController {
 		    alist = sService.selectThumbList(pNo);
 		}
 		ArrayList<CouponBox> couponlist = sService.selectCouponList(uNo);
+		
+		Map<String,List<Cart>> cartGroup= clist.stream().collect(Collectors.groupingBy(c->c.getProductCompany()));
 		model.addAttribute("clist", clist);
 		model.addAttribute("alist", alist);
 		model.addAttribute("couponlist", couponlist);
+		model.addAttribute("cartGroup",cartGroup);
 		return "Shopping/cart";
 	}
 
@@ -111,7 +121,7 @@ public class ShoppingController {
 		}
 		int uNo = loginUser.getUserNo();
 		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
-		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(oNo);
+		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(uNo);
 		
 		model.addAttribute("olist", olist);
 		model.addAttribute("alist", alist);
@@ -121,7 +131,7 @@ public class ShoppingController {
 
 	
 	@GetMapping("order")
-	public String order(Model model, @RequestParam(value = "orderNo", required = false,defaultValue="0") Integer oNo,HttpSession session) {
+	public String order(Model model,HttpSession session) {
 		
 		User loginUser = (User) session.getAttribute("loginUser");
 
@@ -133,10 +143,14 @@ public class ShoppingController {
 		int uNo = loginUser.getUserNo();
 		
 		ArrayList<Order>olist = sService.selectOrder(uNo);
-	
+		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(uNo);
+		
+		
+		
 		Map<String, Object> count = sService.orderStatusCount(uNo);
 		model.addAttribute("olist", olist);
 		model.addAttribute("count",count);
+		model.addAttribute("alist",alist);
 		return "Shopping/order";
 	}
 
@@ -153,7 +167,7 @@ public class ShoppingController {
 		
 		
 		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
-		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(oNo);
+		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(uNo);
 		
 		
 		model.addAttribute("olist", olist);

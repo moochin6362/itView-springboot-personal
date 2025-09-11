@@ -69,7 +69,6 @@ body {
 .order-image {
 	width: 130px;
 	height: 130px;
-	background-color: #ccc;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -154,9 +153,11 @@ body {
 			<div class="order-box">
 				<div class="order-body">
 					<div class="order-image">
-						<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
-							th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
-							width="100%" height="100%" style="border-radius: 8px;" />
+						<a th:href="@{/Shopping/detail(productNo=${o.productNo})}">
+							<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
+							th:src="@{/} + ${a.attmRename}"
+							width="100%" height="100%" style="border-radius: 8px; object-fit:contain;" />
+						</a> 
 					</div>
 					<div class="order-info">
 						<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>

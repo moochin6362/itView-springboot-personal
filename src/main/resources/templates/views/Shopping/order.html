@@ -15,7 +15,11 @@
 body {
 	background: #f7f8f9;
 }
-
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  border: none;
+  color: inherit; 
+}
 .all {
 	margin-right: 5%;
 	margin-left: 7%;
@@ -96,13 +100,20 @@ body {
 .order-image {
 	width: 130px;
 	height: 130px;
-	background-color: #ccc;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin-right: 15px;
 	margin-top: 1%;
 	border-radius: 6px;
+}
+
+
+.order-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cotain;  
+  border-radius: 6px;
 }
 
 .order-info {
@@ -124,6 +135,9 @@ body {
 
 .order-info .name {
 	color: gray;
+	
+	
+	
 }
 .company {
 	font-size: 18px;
@@ -200,9 +214,11 @@ button:hover {
 			</div>
 			<div class="order-body">
 				<div class="order-image">
-					<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
-						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
-						width="100%" height="100%" style="border-radius: 8px;" />
+					<a th:href="@{/Shopping/detail(productNo=${o.productNo})}">
+						<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
+						th:src="@{/} + ${a.attmRename}"
+						width="100%" height="100%" style="border-radius: 8px; object-fit:contain;" />
+					</a>
 				</div>
 				<div class="order-info">
 					
@@ -218,7 +234,11 @@ button:hover {
 					</p>
 					<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
 					<p class="company">[[${o.productCompany}]]</p>
-					<p class="name">[[${o.productName}]]</p>
+					<div class="item-name">
+						<a th:href="@{/Shopping/detail(productNo=${o.productNo})}">
+							<span class="name" th:text="${o.productName}"></span>
+						</a>
+					</div>
 				</div>
 				
 			</div>
