@@ -107,7 +107,6 @@ input[type="checkbox"]:indeterminate {
 .item-image {
 	width: 130px;
 	height: 130px;
-	background: #ccc;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -368,11 +367,7 @@ select[name="coupon-option"] {
 				<div class="item-image">
 					<a th:href="@{/Shopping/detail(productNo=${c.productNo})}">
 						<img th:each="a:${alist}" th:if="${a.positionNo==c.productNo}"
-<<<<<<< HEAD
 						th:src="@{/} + ${a.attmRename}"
-=======
-						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
->>>>>>> 0f1041f826bc7a789246b5733eb6adf5ee283d4e
 						width="100%" height="100%" style="border-radius: 8px;" />
 					</a>
 					<div th:if="${c.productStock == 0 && c.productState =='Y'}" class="soldout">
