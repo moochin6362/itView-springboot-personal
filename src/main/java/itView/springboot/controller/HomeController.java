@@ -1,30 +1,26 @@
 package itView.springboot.controller;
 
 import itView.springboot.common.Pagination;
+import itView.springboot.service.InquiryService;
 import itView.springboot.service.ProductService;
-import itView.springboot.vo.Board;
-import itView.springboot.vo.PageInfo;
-import itView.springboot.vo.Product;
+import itView.springboot.vo.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class HomeController {
 
-    private final ProductService productService;
 
-    public HomeController(ProductService productService) {
-        this.productService = productService;
-    }
+    private final ProductService productService;
 
     @GetMapping
     public String home(Model model) {
