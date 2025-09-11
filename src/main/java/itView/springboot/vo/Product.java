@@ -37,7 +37,13 @@ public class Product {
 	private String attmRename;
 	
 	// DB 저장 X, 화면에만 쓰는 값
-	private transient Double matchRate;  
+	private transient Double matchRate;
+	
+	// 썸네일 경로
+	private String firstImage; 
+	private String reportType;
+	private int reportCount;
+	private int rowNum;
 
 
 }

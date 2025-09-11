@@ -12,6 +12,7 @@ import itView.springboot.vo.Board;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Point;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Report;
 import itView.springboot.vo.User;
 
 @Mapper
@@ -77,5 +78,24 @@ public interface InhoMapper {
 
 	 int deletePoint(int pNo);
 
+	 int updateNotice(Board b);
+
+	 Board selectNotice(int bId);
+
+	 String selectThumbnail(int productNo);
+
+	 Product selectProduct(int pNo);
+
+	 int getReportProductCount(HashMap<String, String> map);
+
+	 ArrayList<Product> selectReportProductList(HashMap<String, String> map, RowBounds rowBounds);
+
+	 Product selectReportProduct(int pNo);
+
+	 int getReportCount(int pNo);
+
+	 ArrayList<Report> selectReportList(int pNo, RowBounds rowBounds);
+
+//	 Report selectReport(int pNo);
 
 }

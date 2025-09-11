@@ -16,6 +16,7 @@ import itView.springboot.vo.Coupon;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.Point;
 import itView.springboot.vo.Product;
+import itView.springboot.vo.Report;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -133,7 +134,6 @@ public class InhoService {
 	}
 
 	public int updateCouponBoard(Board b) {
-		System.out.println(b.getBoardContent());
 		return mapper.updateCouponBoard(b);
 	}
 
@@ -206,7 +206,15 @@ public class InhoService {
 	}
 
 	public ArrayList<Product> selectRankingList(HashMap<String, String> map) {
-		return mapper.selectRankingList(map);
+		ArrayList<Product> list = mapper.selectRankingList(map);
+
+        // 썸네일 세팅
+        for (Product p : list) {
+            String thumbnail = mapper.selectThumbnail(p.getProductNo());
+            p.setFirstImage(thumbnail);
+        }
+
+        return list;
 	}
 
 	public Point selectPoint(int pNo) {
@@ -235,5 +243,52 @@ public class InhoService {
 	public int deletePoint(int pNo) {
 		return mapper.deletePoint(pNo);
 	}
+
+	public int updateNotice(Board b) {
+		return mapper.updateNotice(b);
+	}
+
+	public Board selectNotice(int bId) {
+		Board b = mapper.selectNotice(bId);
+		return b;
+	}
+
+	public Product selectProduct(int pNo) {
+		Product p = mapper.selectProduct(pNo);
+		return p;
+		
+	}
+
+	public int getReportProductCount(HashMap<String, String> map) {
+		return mapper.getReportProductCount(map);
+	}
+
+	public ArrayList<Product> selectReportProductList(PageInfo pi, HashMap<String, String> map) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportProductList(map, rowBounds);
+	}
+
+	public Product selectReportProduct(int pNo) {
+		Product p = mapper.selectReportProduct(pNo);
+		return p;
+	}
+
+//	public Report selectReport(int pNo) {
+//		Report r = mapper.selectReport(pNo);
+//		return r;
+//	}
+
+	public int getReportCount(int pNo) {
+		return mapper.getReportCount(pNo);
+	}
+
+	public ArrayList<Report> selectReportList(PageInfo pi, int pNo) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportList(pNo, rowBounds);
+	}
+	
+	
 
 }

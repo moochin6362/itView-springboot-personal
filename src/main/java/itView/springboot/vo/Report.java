@@ -23,4 +23,8 @@ public class Report {
 	private int reporterUserId;
 	private int reportTargetNo;
 	private String reportReplyStatus;
+	
+	private int productNo;
+	private String productName;
+	private String userName;
 }
