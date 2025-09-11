@@ -259,5 +259,35 @@
 		set answer_content = #{answerContent}
 		where answer_no = #{answerNo}
 	</update>
+	
+	<select id="countReview">
+		select p.product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count
+		from product p
+			 left join (
+			 			select product_no, count(*) AS review_count
+			 			from review
+			 			group by product_no) r on p.product_no = r.product_no
+		where p.user_no = #{userNo}
+		order by p.product_no
+	</select>
+	
+	<select id="selectExpGroup">
+		select *
+		from experience_group
+		where user_no = #{userNo}
+	</select>
+	
+	<select id="selectExpApp">
+		select *
+		from experience_application
+		where exp_group_no = #{expNo}
+	</select>
+	
+	<select id="selectMyOrderList">
+		select *
+		from "ORDER"
+			  join product on (order_target_no = product_no)
+		where product.user_no = #{userNo}
+	</select>
 
 </mapper>

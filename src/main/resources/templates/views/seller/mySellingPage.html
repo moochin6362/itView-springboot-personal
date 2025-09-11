@@ -1,10 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>판매 내역 페이지</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="/css/seller/mySellingPage.css" rel="stylesheet" type="text/css" />
+<title>상품 판매 내역</title>
 </head>
 <body>
-	
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+	<div class="layout">
+		<div class="sidebar" th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<div class="sales-container">
+				<div class="sales-title">상품 판매 내역</div>
+
+				<table class="sales-table">
+					<thead>
+						<tr>
+							<th>주문번호</th>
+							<th>상품명</th>
+							<th>수량</th>
+							<th>판매일</th>
+							<th>금액</th>
+							<th>배송 상태</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="o : ${oList}">
+							<td>[[${o.orderNo}]]</td>
+							<td>[[${o.productName}]]</td>
+							<td>[[${o.orderCount}]]</td>
+							<td>[[${o.orderDate}]]</td>
+							<td>[[${o.payPrice}]]</td>
+							<td>[[${o.deliveryStatus}]]</td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

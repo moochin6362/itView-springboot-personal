@@ -1,6 +1,7 @@
 package itView.springboot.mapper;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
+import itView.springboot.vo.ExperienceApplication;
 import itView.springboot.vo.ExperienceGroup;
+import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Question;
 import itView.springboot.vo.Review;
@@ -91,5 +94,13 @@ public interface ProductMapper {
 	int deleteAnswer(int answerNo);
 
 	int editAnswer(Answer answer);
+
+	ArrayList<Product> countReview(int userNo);
+
+	ArrayList<ExperienceGroup> selectExpGroup(int userNo);
+
+	ExperienceApplication selectExpApp(int expNo);
+
+	ArrayList<Order> selectMyOrderList(int userNo);
 }
 

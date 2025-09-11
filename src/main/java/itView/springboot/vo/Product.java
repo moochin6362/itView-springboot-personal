@@ -30,6 +30,8 @@ public class Product {
 	private String ingredient;
 	private String ecoFriendly;
 	
+	private int reviewCount;
+	
 	// join시 가져올 이름
 	private String brandName;
 

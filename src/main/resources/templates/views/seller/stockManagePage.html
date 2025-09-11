@@ -23,6 +23,7 @@
 					<input type="hidden" name="userNo" th:value="${p.userNo}"/>
 					<div class="stock-name">상품 번호 [[${p.productNo}]] [[${p.productName}]]</div>
 					<div class="stock-controls">
+						<p>현재 재고량 : </p>
 						<input type="number" min="0" name="productStock" th:value="${p.productStock}"/>
 						<button type="button" class="editButtons">수정</button>
 					</div>
@@ -36,13 +37,6 @@
 			const buttons = document.querySelectorAll('.editButtons');
 			for(button of buttons){
 				button.addEventListener('click', e => {
-					//const productStock = e.target.previousElementSibling.value;
-					//const productNo = e.target.parentElement.parentElement.children[0].value;
-					//const userNo = e.target.parentElement.parentElement.children[1].value;
-					//console.log(productStock)
-					//console.log(productNo)
-					//console.log(userNo)
-					
 					const product = {
 						'productStock' : e.target.previousElementSibling.value,
 						'productNo' : e.target.parentElement.parentElement.children[0].value,

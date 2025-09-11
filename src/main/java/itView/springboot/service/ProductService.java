@@ -1,6 +1,7 @@
 package itView.springboot.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -159,6 +160,22 @@ public class ProductService {
 
 	public int editAnswer(Answer answer) {
 		return mapper.editAnswer(answer);
+	}
+
+	public ArrayList<Product> countReview(int userNo) {
+		return mapper.countReview(userNo);
+	}
+
+	public ArrayList<ExperienceGroup> selectExpGroup(int userNo) {
+		return mapper.selectExpGroup(userNo);
+	}
+
+	public ExperienceApplication selectExpApp(int expNo) {
+		return mapper.selectExpApp(expNo);
+	}
+
+	public ArrayList<Order> selectMyOrderList(int userNo) {
+		return mapper.selectMyOrderList(userNo);
 	}
 
 }

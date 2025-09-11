@@ -22,7 +22,9 @@ import itView.springboot.service.ProductService;
 import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
+import itView.springboot.vo.ExperienceApplication;
 import itView.springboot.vo.ExperienceGroup;
+import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Question;
 import itView.springboot.vo.Review;
@@ -142,13 +144,16 @@ public class ProductController {
 		Product product = new Product();
 		product.setUserNo(userNo);
 		
-		ArrayList<Product> list = pService.selectMyProduct(product);
+		ArrayList<Product> rList = pService.countReview(userNo);
 		
-		//System.out.println(product);
+		for(int i = 0; i < rList.size(); i++) {
+			// rList에서 UserNo 추출
+			// UserNo 이용해서 DB에 있는 쿼리문 갖고와서 review_answer count해오기
+			// rList에 있는 review_count랑 review_answer_count랑 연산
+			// 그 결과를 화면에 고고
+		}
 		
-		//System.out.println(list);
-		
-		model.addAttribute("list", list);
+		model.addAttribute("rCount", rList);
 		return "seller/myProductPage";
 	}
 	
@@ -161,16 +166,30 @@ public class ProductController {
 		
 		ArrayList<Coupon> list = pService.selectMyCoupon(userNo);
 		
-		//System.out.println(list);
-		
 		model.addAttribute("list", list);
 		return "seller/myCouponPage";
 	}
 	
 	// 판매 내역 페이지 이동
 	@GetMapping("mySellingPage")
-	public String mySellingPage() {
+	public String mySellingPage(Model model, HttpSession session) {
 		
+		User loginUser =(User)session.getAttribute("loginUser");
+		int userNo = loginUser.getUserNo();
+		
+		ArrayList<Order> oList = pService.selectMyOrderList(userNo);
+		
+		for(int i = 0; i < oList.size(); i++) {
+			if(oList.get(i).getDeliveryStatus().equals("before")) {
+				oList.get(i).setDeliveryStatus("배송전");
+			} else if(oList.get(i).getDeliveryStatus().equals("shipping")) {
+				oList.get(i).setDeliveryStatus("배송중");
+			} else if(oList.get(i).getDeliveryStatus().equals("after")) {
+				oList.get(i).setDeliveryStatus("배송완료");
+			}
+		}
+		
+		model.addAttribute("oList", oList);
 		
 		return "seller/mySellingPage";
 	}
@@ -203,13 +222,6 @@ public class ProductController {
 			answer.addAll( pService.selectAnswer(questionNo));
 		}
 		
-		//System.out.println(rList.size());
-		
-		
-		//System.out.println(reviewCount);
-		
-		//System.out.println(attm.getAttmRename());
-		
 		if(p.getIngredient().equals("natural")) {
 			p.setIngredient("천연 & 식물 유래 성분");
 		} else if(p.getIngredient().equals("vitamin")) {
@@ -228,9 +240,6 @@ public class ProductController {
 			p.setEcoFriendly("일반 제품");
 		}
 		
-//		System.out.println(cList);
-//		System.out.println(rList);
-		
 		model.addAttribute("p", p);
 		model.addAttribute("cList", cList);
 		model.addAttribute("attm", attm);
@@ -245,7 +254,6 @@ public class ProductController {
 	// 상품 상세페이지 이동
 	@GetMapping("/detail/{productNo}")
 	public String productdetail(@PathVariable("productNo") int productNo, Model model) {
-		
 		
 		Product product = new Product();
 		product.setProductNo(productNo);
@@ -268,12 +276,6 @@ public class ProductController {
 			questionNo = question.get(i).getQuestionNo();
 			answer.addAll( pService.selectAnswer(questionNo));
 		}
-		
-		//System.out.println(questionNo);
-		
-		//System.out.println(answer);
-		
-		//System.out.println(question);
 		
 		if(p.getIngredient().equals("natural")) {
 			p.setIngredient("천연 & 식물 유래 성분");
@@ -316,7 +318,22 @@ public class ProductController {
 	
 	// 체험단 관리 페이지 이동
 	@GetMapping("experienceManagePage")
-	public String experienceManagePage() {
+	public String experienceManagePage(HttpSession session) {
+		
+		User user = (User)session.getAttribute("loginUser");
+		int userNo = user.getUserNo();
+		
+		ArrayList<ExperienceGroup> eList = pService.selectExpGroup(userNo);
+		ArrayList<ExperienceApplication> eaList = new ArrayList<ExperienceApplication>();
+
+		int expNo = 0;
+		
+		for(int i = 0; i < eList.size(); i++) {
+			expNo = eList.get(i).getExpNo();
+			//eaList.addAll(pService.selectExpApp(expNo));
+		}
+		
+		
 		return "seller/experienceManagePage";
 	}
 	
@@ -328,16 +345,10 @@ public class ProductController {
 		
 		User loginUser = (User)session.getAttribute("loginUser");
 		
-		//System.out.println(productDetail);
-		
 		product.setProductDetail(productDetail);
 		product.setUserNo(loginUser.getUserNo());
 		product.setBrandName(loginUser.getBrandName());
 		product.setProductCategory(categoryName);
-//		System.out.println(product);
-//		System.out.println(file.getOriginalFilename());
-//		System.out.println(categoryParent);
-		
 		
 		// 상품 대표 이미지 저장
 		Attachment attm = new Attachment();
@@ -394,12 +405,6 @@ public class ProductController {
 	@PostMapping("insertCoupon")
 	public String insertCoupon(@ModelAttribute Coupon coupon) {
 		
-		//System.out.println(coupon.getCouponDescription());
-		//System.out.println(coupon.getCouponMinprice());
-		//System.out.println(coupon.getCouponName());
-		
-		//System.out.println(coupon.getCouponEndDate());
-		
 		int result = pService.insertCoupon(coupon);
 		if(result > 0) {
 			return "redirect:/seller/myCouponPage";
@@ -411,19 +416,15 @@ public class ProductController {
 	// 상품 수정
 	@PostMapping("editProduct")
 	public String editProduct(@ModelAttribute Product product, @RequestParam("productImage") MultipartFile file) {
-		//System.out.println(product);
 		
 		int result1 = pService.editProduct(product);
 		int result2 = 1;
 		Attachment attm = new Attachment();
 		attm.setPositionNo(product.getProductNo());
 		
-		//System.out.println(file);
-		
 		if(!file.getOriginalFilename().equals("")) {
 			attm = pService.selectMyAttm(product.getProductNo());
 			int deleteAttmResult = pService.deleteMyAttm(attm.getAttmNo());
-			//System.out.println(attm);
 			if(deleteAttmResult > 0) {
 				deleteFile(attm.getAttmRename());
 				if(!file.getOriginalFilename().equals("")) {
@@ -482,7 +483,6 @@ public class ProductController {
 	// 상품 문의 답변 입력
 	@PostMapping("insertAnswer")
 	public String insertAnswer(@ModelAttribute Answer answer) {
-		//System.out.println(answer);
 		int result = pService.insertAnswer(answer);
 		if(result > 0) {
 			return "redirect:/seller/productQnAPage";
@@ -501,6 +501,5 @@ public class ProductController {
 			throw new ProductException("상품 문의에 대한 답변 삭제를 실패하였습니다.");
 		}
 	}
-
 
 }
