@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,19 +32,20 @@
 	<div th:replace="~{common/header :: header}"></div>
 	<div class="container">
 		<div class="product-list">
-			<div class="product-card" th:each="p: ${list}">
+			<div class="product-card" th:each="p: ${list}"
+				th:onclick="'location.href=\'/detail/' + ${p.productNo} + '\';'" 
+     			style="cursor: pointer;">
+				<input type="hidden" name="productNo" th:value="${p.productNo}">
 			    <div class="section-id">
 			        <div class="product-id">[[${p.productNo}]]</div>
-			        <input type="checkbox" name="productNo" th:value="${p.productNo}"/>
 			    </div>
 		        <div class="section-image">
-					<img width="100%" height="225" />
+					<img th:src="@{/}+${p.firstImage}" width="100%" height="225" />
 		        </div>
 		        <div class="section-info">
 		           	<p>[[${p.productName}]]</p>
-		           	<p th:text="${p.matchRate != null ? #numbers.formatDecimal(p.matchRate, 0, 1) + '%': '-'}"></p>
+		           	<p th:text="${p.matchRate != null ? '나의 매칭률 : ' + #numbers.formatDecimal(p.matchRate, 0, 1) + '%': '-'}"></p>
 		           	<p>[[${p.productPrice}]] 원</p>
-		           	<p>[[${p.productDetail}]]</p>
 		           	<p>[[${p.productCompany}]]</p>
 		        </div>
 			</div>

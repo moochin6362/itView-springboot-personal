@@ -1,4 +1,4 @@
-/* 전체 기본 여백 제거 */
+/* ===== 기본 설정 ===== */
 body,
 html {
     margin: 0;
@@ -12,14 +12,14 @@ html {
     height: 100vh;
 }
 
-/* 오른쪽 콘텐츠 영역 (sidebar 제외) */
+/* 오른쪽 콘텐츠 영역 */
 .content-area {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* 메인 콘텐츠 */
+/* ===== 메인 콘텐츠 박스 ===== */
 .main-content {
     padding: 40px;
     max-width: 1200px;
@@ -27,9 +27,24 @@ html {
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+
+    /* 두 개 섹션을 나란히 배치 */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-/* 페이지 제목 */
+/* 각 섹션 공통 박스 */
+.main-content .main-section {
+    flex: 1;
+    min-width: 320px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* ===== 제목 ===== */
 .page-title {
     font-size: 24px;
     font-weight: 600;
@@ -39,7 +54,7 @@ html {
     padding-left: 12px;
 }
 
-/* 상세 테이블 */
+/* ===== 상세 테이블 ===== */
 .detail-table {
     width: 100%;
     border-collapse: separate;
@@ -70,22 +85,66 @@ html {
 .detail-table td {
     background-color: #fff;
     color: #333;
-    width: 300px;
+    width: 200px;
 }
 
 .detail-table tr:last-child th,
 .detail-table tr:last-child td {
-    border-bottom: none; /* 마지막 줄은 선 제거 */
+    border-bottom: none;
 }
 
 .detail-table td img {
-    max-width: 400px; /* 이미지 고정 */
+    max-width: 400px;
     height: auto;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* 버튼 영역 */
+/* ===== 신고 히스토리 테이블 ===== */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.history-table th,
+.history-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.history-table thead {
+    background-color: #dddddd; /* commonList.css 테이블 헤더 색상 */
+    font-weight: bold;
+    color: #333;
+}
+
+.history-table tbody tr {
+    cursor: default;
+    transition: background-color 0.25s;
+}
+
+.history-table tbody tr:hover {
+    background-color: #f0f8ff;
+}
+
+/* 상태 뱃지 */
+.history-table .status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+}
+
+
+/* ===== 버튼 ===== */
 .form-actions {
     text-align: center;
     margin-top: 25px;

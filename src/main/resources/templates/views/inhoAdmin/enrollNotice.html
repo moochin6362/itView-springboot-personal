@@ -6,7 +6,7 @@
         <title>공지사항 등록</title>
 
         <!-- CSS 파일 -->
-        <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+        <link href="/css/inhoCss/commonContent.css" rel="stylesheet" />
         <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
         <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
 
@@ -30,7 +30,7 @@
 
                 <!-- 메인 컨텐츠 -->
                 <main class="main-content">
-                    <h2>공지사항 등록</h2>
+                    <h2 class="page-title">공지사항 등록</h2>
                     <form action="/inhoAdmin/enrollNotice" method="post" class="coupon-form" id="noticeForm">
                         <label for="boardType">공지사항 분류</label>
                         <select id="boardType" name="boardType" required>
@@ -38,6 +38,7 @@
                             <option value="1">공지사항</option>
                             <option value="2">이벤트</option>
                             <option value="4">쿠폰</option>
+                            <option value="5">커뮤니티</option>
                             <option value="8">판매금지제품</option>
                         </select>
 
@@ -51,7 +52,7 @@
 						<!-- 업로드된 이미지 파일명 저장용 -->
    						<input type="hidden" name="uploadedFiles" id="uploadedFiles">
 						
-                        <label>공지 노출기간</label>
+                        <label>공지등록날짜</label>
                         <input type="date" id="boardDate" name="boardDate" />
 <!--                         <input type="date" id="endDate" name="endDate" /> -->
 

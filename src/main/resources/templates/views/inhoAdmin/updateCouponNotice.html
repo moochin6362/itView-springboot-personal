@@ -6,7 +6,7 @@
         <title>쿠폰 공지사항 수정</title>
 
         <!-- CSS 파일 -->
-        <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
+        <link href="/css/inhoCss/commonContent.css" rel="stylesheet" />
         <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
         <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
 
@@ -30,7 +30,7 @@
 
                 <!-- 메인 컨텐츠 -->
                 <main class="main-content">
-                    <h2>쿠폰 공지사항 수정</h2>
+                    <h2 class="page-title">쿠폰 공지사항 수정</h2>
                     <form action="/inhoAdmin/updateCouponBoard" method="post" class="coupon-form" id="noticeForm">
                         <input type="hidden" id="boardId" name="boardId" th:value="${b.boardId}" />
 <!--                         <label for="coupon">쿠폰 선택</label> -->

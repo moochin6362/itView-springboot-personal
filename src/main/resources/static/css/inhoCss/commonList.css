@@ -3,6 +3,8 @@ body,
 html {
     margin: 0;
     padding: 0;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    background-color: #fff; /* 단순 배경 */
 }
 
 .container {
@@ -24,100 +26,92 @@ html {
     background-color: #fff;
 }
 
+/* 상단 컨트롤 영역 */
 .top-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px;
+    padding: 15px 20px;
     margin-bottom: 20px;
     background-color: #f9f9f9;
-    border-radius: 8px;
-    height: 20px; /* 높이를 크게 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px; /* 둥글게 유지 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 그림자 추가 */
 }
 
+/* 좌측 버튼 */
 .left-control button {
-    padding: 10px 24px;
-    margin: 0 8px;
+    padding: 10px 22px;
+    margin: 0 6px;
     font-size: 14px;
     font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px; /* 둥글게 유지 */
     cursor: pointer;
+    transition: transform 0.25s ease; /* 움직임만 유지 */
 }
 
 .btn-add {
     background-color: #4caf50;
     color: white;
 }
-
 .btn-add:hover {
-    background-color: #43a047; /* 약간 더 진한 초록 */
+    background-color: #43a047;
+    transform: translateY(-2px); /* 움직임 */
 }
 
-.search-box select {
-    padding: 10px 20px 10px 10px; /* 오른쪽 여백 확보 */
-    font-size: 14px;
-    margin-right: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: white;
-    color: #333;
-    cursor: pointer;
-
-}
-
+/* 검색 영역 */
 .search-box {
     display: flex;
     align-items: center;
+    gap: 8px;
 }
 
+.search-box select,
 .search-box input {
-    padding: 10px;
+    padding: 10px 14px;
     font-size: 14px;
-    width: 200px;
-    margin-right: 8px;
-    border: 1px solid #ccc; /* ✨ 추가 */
-    border-radius: 4px;       /* ✨ 추가 */
+    border: 1px solid #ccc;
+    border-radius: 6px; /* 둥글게 유지 */
+    background-color: white;
+    color: #333;
+    transition: border-color 0.2s; /* 검색 효과 */
+}
+
+.search-box input:focus,
+.search-box select:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
 .search-box input::placeholder {
     color: #888;
-    font-style: italic;       /* ✨ 추가 */
+    font-style: italic;
 }
 
 .search-box button {
-    padding: 10px 24px;        /* ✨ 변경 */
+    padding: 10px 20px;
     font-size: 14px;
-    font-weight: bold;         /* ✨ 추가 */
-    border: none;              /* ✨ 변경 */
-    border-radius: 4px;        /* ✨ 추가 */
+    font-weight: bold;
+    border: none;
+    border-radius: 6px; /* 둥글게 유지 */
     cursor: pointer;
-    background-color: #dddddd; /* ✨ 변경 */
-    transition: background-color 0.2s;
+    background-color: #ddd;
+    transition: transform 0.25s ease;
 }
-
 .search-box button:hover {
-    background-color: #bbb; /* ✨ hover 개선 */
+    background-color: #bbb;
+    transform: translateY(-2px); /* 움직임 */
 }
 
+/* 리스트 테이블 */
 .csList-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 10px;
+    border-radius: 8px; /* 둥글게 유지 */
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     font-size: 14px;
-}
-
-.type {
-	padding: 4px 8px;
-    border-radius: 12px;
-    font-weight: bold;
-    color: #fff;
-    font-size: 0.9rem;
-    background-color: #f39c12; /* 약간 진한 노랑 */
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 그림자 추가 */
 }
 
 .csList-table th,
@@ -134,31 +128,58 @@ html {
 
 .csList-table tbody tr {
     cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.25s; /* 움직임 */
 }
-
-/* ✨ row hover 효과 추가 */
 .csList-table tbody tr:hover {
     background-color: #f0f8ff;
-    transition: background-color 0.2s ease-in-out;
 }
 
+/* 카테고리 태그 */
+.type {
+    padding: 5px 12px;
+    border-radius: 14px; /* 둥글게 유지 */
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.85rem;
+    background-color: #f39c12;
+}
+
+/* 공지사항 - 파랑 */
+.type-notice {
+    background-color: #3498db; /* 연한 파랑 */
+}
+
+/* 이벤트 - 초록 */
+.type-event {
+    background-color: #2ecc71; /* 연한 초록 */
+}
+
+/* 판매금지제품 - 빨강 */
+.type-prohibit {
+    background-color: #e74c3c; /* 연한 빨강 */
+}
+
+.type-community {
+    background-color: #9b59b6; /* 연한 보라 */
+}
+
+/* 상태 뱃지 */
 .status {
     display: inline-block;
-    padding: 4px 10px;
-    border-radius: 12px;
+    padding: 5px 12px;
+    border-radius: 14px; /* 둥글게 유지 */
     font-weight: 600;
     font-size: 12px;
     color: white;
 }
 
-/* 페이징 영역 전체 감싸는 div */
+/* 페이징 */
 .listpage {
     display: flex;
     justify-content: center;
     margin: 30px 0 10px;
 }
 
-/* 페이징 숫자 리스트 */
 .pagination {
     list-style: none;
     display: flex;
@@ -167,33 +188,26 @@ html {
     margin: 0;
 }
 
-/* 페이징 리스트 항목 */
-.pagination .list {
-    display: inline-block;
-}
-
-/* 각 숫자 또는 화살표 버튼 */
 .pagination .page {
     display: block;
-    padding: 8px 14px;
+    padding: 9px 15px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px; /* 둥글게 유지 */
     text-decoration: none;
     color: #333;
     font-size: 14px;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, transform 0.2s; /* 움직임 */
 }
 
-/* 마우스 오버 시 */
 .pagination .page:hover {
     background-color: #007bff;
     color: white;
+    transform: translateY(-2px); /* 움직임 */
 }
 
-/* 현재 선택된 페이지 (active) */
 .pagination .page.active {
     background-color: #007bff;
     color: white;
     font-weight: bold;
-    border: 1px solid #4caf50;
+    border: 1px solid #007bff;
 }

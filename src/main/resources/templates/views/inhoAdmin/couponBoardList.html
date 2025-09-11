@@ -34,6 +34,7 @@
                         <div class="search-box">
                         	<select style="display: inline; width: auto;">
                         		<option value="title" th:selected="${map['condition'] != null && map['condition'] == 'title'}">제목</option>
+                        		<option value="name" th:selected="${map['condition'] != null && map['condition'] == 'name'}">작성자</option>
                         	</select>
                             <input type="text" placeholder="공지검색" th:value="${map['value'] != null ? map['value'] : ''}"/>
                             <button type="button" id="couponBoardSearch">검색</button>
