@@ -51,12 +51,7 @@
                 	th:each="gBoard : ${gBoardList}">
                     <tr>
                         <td th:text="${gBoard.boardId}"></td>
-                        <td>
-                        	<a
-                        		th:text="${gBoard.boardTitle}"
-                        		th:href="@{/admin/gBoardDetail(boardId=${gBoard.boardId})}">
-                        	</a>
-                        </td>
+                        <td th:text="${gBoard.boardTitle}"></td>
                         <td th:text="${gBoard.userId}"></td>
                         <td th:text="${gBoard.boardDate}"></td>
                         <td th:text="${gBoard.boardReplyStatus == 'Y' ? '답변완료' : '답변대기'}"></td>

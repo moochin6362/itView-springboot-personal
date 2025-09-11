@@ -18,7 +18,6 @@ public class experienceGroup {
 	private String expStatus;
 	private int userNo;
 
-    // 판매자 이름
-    private String userName;
-
+	// 닉네임
+	private String userName;
 }

@@ -2,16 +2,18 @@ package itView.springboot.controller;
 
 import java.util.ArrayList;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import itView.springboot.common.Pagination;
-import itView.springboot.dto.GboardDetail;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.service.AdminService;
@@ -56,7 +58,7 @@ public class AdminController {
         return "admin/admin_searchUser";
     }
 	
-	//회원조회 상세 : 관리자만 볼 수 있는 게시판
+	//게시판 상세조회 : 관리자만 볼 수 있는 게시판
 	@GetMapping("/userDetail")
 	public String userDetailPage(
 			@RequestParam("userNo")int userNo,
@@ -113,7 +115,7 @@ public class AdminController {
 		
 	}
 	
-	//관리자 일반문의게시판 이동 (dto: gBoardDetail쓸 것)
+	//관리자 일반문의게시판 이동
 	@GetMapping("/gBoard")
 	public String gBoardPage(
 			@RequestParam(value = "page", defaultValue = "1") int currentPage,
@@ -122,7 +124,7 @@ public class AdminController {
 			) {
 	 	int gBoardListCount = adService.gBoardListCount(1);
         PageInfo pi = Pagination.getPageInfo(currentPage, gBoardListCount, 10);
-        ArrayList<GboardDetail> gBoardList = adService.selectgBoardList(pi);
+        ArrayList<Board> gBoardList = adService.selectgBoardList(pi);
 
         model.addAttribute("gBoardList", gBoardList);
         model.addAttribute("pi", pi);
@@ -130,20 +132,6 @@ public class AdminController {
 
 		return"admin/admin_general_board";
 	}
-	
-	//일반문의 상세
-	@GetMapping("gBoardDetail")
-	public String gBoardDetailPage(
-			@RequestParam("boardId") int boardId,
-			@RequestParam(value="page", defaultValue="1") int page,
-			Model model) {
-		GboardDetail gBoard = adService.gBoardDetail(boardId);
-		model.addAttribute("gBoard", gBoard);
-		model.addAttribute("page",page);
-		
-		return "admin/admin_general_board_detail";
-	}
-		
 	
 	//관리자 판매자 문의게시판 이동
 	@GetMapping("/pBoard")

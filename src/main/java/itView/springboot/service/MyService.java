@@ -108,13 +108,15 @@ public class MyService {
     public List<Map<String,Object>> getMyReviewsMap(long userNo) {
         return myMapper.selectMyReviews(userNo);
     }
-    
-    //포인트
+
+    // ===== 포인트 =====
+    /** 보유 포인트: USER.USER_POINT */
     public int getPointBalance(long userNo) {
-        Integer v = myMapper.selectPointBalance(userNo);
+        Integer v = myMapper.selectPointBalance(userNo); // XML에서 USER_POINT를 반환
         return v == null ? 0 : v;
     }
-    
+
+    /** 포인트 내역: POINT 테이블 */
     public java.util.List<itView.springboot.vo.Point> getPointHistory(long userNo) {
         return myMapper.selectPointHistory(userNo);
     }
@@ -126,15 +128,14 @@ public class MyService {
     public java.util.List<java.util.Map<String,Object>> getRecentWishlistMap(long userNo) {
         return myMapper.selectTop3WishlistMap(userNo);
     }
-    
+
     /** 모집글 검색 */
     public java.util.List<experienceGroup> searchExperienceGroups(String keyword) {
         String kw = (keyword == null) ? "" : keyword.trim();
         return myMapper.searchExperienceGroups(kw);
-        
     }
 
- // 중복 신청 여부
+    // 중복 신청 여부
     public int countMyExperienceApply(Long userNo, int expNo) {
         return myMapper.countMyExperienceApply(userNo, expNo);
     }
@@ -149,20 +150,12 @@ public class MyService {
     }
 
     //서연
-	public Order selectproductbyOrder(Integer pNo, int uNo) {
-		// TODO Auto-generated method stub
-		return myMapper.selectproductbyOrder(pNo,uNo);
-	}
+    public Order selectproductbyOrder(Integer pNo, int uNo) {
+        return myMapper.selectproductbyOrder(pNo, uNo);
+    }
 
-	//서연
-	public Attachment selectThumbByOrder(Integer pNo) {
-		// TODO Auto-generated method stub
-		return myMapper.selectThumbByOrder(pNo);
-	}
-
-	
-
-
-	
- 
+    //서연
+    public itView.springboot.vo.Attachment selectThumbByOrder(Integer pNo) {
+        return myMapper.selectThumbByOrder(pNo);
+    }
 }

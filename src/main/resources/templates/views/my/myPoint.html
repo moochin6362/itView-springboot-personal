@@ -17,7 +17,7 @@
 </head>
 <body>
 
-  <!-- ✅ 공통 헤더/사이드바 include -->
+  <!-- 공통 헤더/사이드바 include -->
   <div th:replace="~{common/myHeader}"></div>
   <div th:replace="~{common/mySidebar}"></div>
 
@@ -36,7 +36,6 @@
           소멸 예정 포인트는 각 적립건의 만료일을 확인하세요.
         </p>
       </div>
-     
     </section>
 
     <!-- 필터 탭 -->
@@ -47,14 +46,14 @@
       <button class="tab" type="button" data-filter="expire">소멸</button>
     </nav>
 
-    <!-- 포인트 내역 (널/빈 리스트 안전) -->
+    <!-- 포인트 내역 -->
     <section class="history" aria-live="polite"
              th:if="${histories != null and !#lists.isEmpty(histories)}">
       <div th:each="h, stat : ${histories}"
            th:with="
-              curr=${#dates.format(h.pointCreatedate,'yyyy년 MM월')},
-              prev=${stat.index > 0 ? #dates.format(histories[stat.index-1].pointCreatedate,'yyyy년 MM월') : ''},
-              type=${h.pointValue > 0} ? 'save' : ((h.pointDescription != null and #strings.contains(h.pointDescription,'소멸')) ? 'expire' : 'use')
+              curr=${h.pointCreatedate != null ? #temporals.format(h.pointCreatedate,'yyyy년 MM월') : ''},
+              prev=${stat.index > 0 and histories[stat.index-1].pointCreatedate != null ? #temporals.format(histories[stat.index-1].pointCreatedate,'yyyy년 MM월') : ''},
+              type=${h.pointValue > 0 ? 'save' : ((h.pointDescription != null and #strings.contains(h.pointDescription,'소멸')) ? 'expire' : 'use')}
            ">
 
         <!-- 월 헤더 -->
@@ -69,18 +68,18 @@
               포인트 항목
             </p>
             <div class="date"
-                 th:text="${h.pointCreatedate != null ? #dates.format(h.pointCreatedate,'yyyy-MM-dd HH:mm') : ''}">
-              2025-08-20 14:21
+                 th:text="${h.pointCreatedate != null ? #temporals.format(h.pointCreatedate,'yyyy-MM-dd') : ''}">
+              2025-08-20
             </div>
           </div>
           <div class="right">
             <div class="amount"
-                 th:classappend="${h.pointValue > 0} ? ' plus' : ''"
-                 th:text="${(h.pointValue > 0 ? '+' : '') + h.pointValue} + 'P'">
+                 th:classappend="${h.pointValue > 0 ? ' plus' : ''}"
+                 th:text="${(h.pointValue > 0 ? '+' : '') + h.pointValue + 'P'}">
               +0P
             </div>
             <div class="expire" th:if="${h.pointEnddate != null}"
-                 th:text="'소멸 예정일: ' + ${#dates.format(h.pointEnddate,'yyyy-MM-dd')}">
+                 th:text="${'소멸 예정일: ' + #temporals.format(h.pointEnddate,'yyyy-MM-dd')}">
               소멸 예정일: 2026-08-20
             </div>
           </div>

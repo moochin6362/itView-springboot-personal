@@ -1,7 +1,5 @@
 package itView.springboot.controller;
 
-import java.util.ArrayList;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,22 +7,16 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import itView.springboot.exception.AdminException;
 import itView.springboot.service.AdminService;
 import itView.springboot.service.UserService;
-import itView.springboot.vo.AdminReply;
-import itView.springboot.vo.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -108,6 +100,7 @@ public class ajaxController {
 	public ResponseEntity<String>deleteProBoard(
 			@PathVariable("boardId") int boardId){
 		int result = adService.deleteProBoard(boardId);
+		
 		if(result > 0 ) {
 			return ResponseEntity.ok("공지사항을 삭제하였습니다.");
 		} else {
@@ -115,50 +108,7 @@ public class ajaxController {
 		}
 	}
     
-    //관리자 일반게시판 문의댓글 달기
-	@PostMapping("gReply/{boardId}")
-	@ResponseBody
-	public ResponseEntity<AdminReply> addReply(
-			@PathVariable("boardId") int boardId,
-			@RequestBody AdminReply adminReply,
-			HttpSession session){
-		
-		User loginUser = (User) session.getAttribute("loginUser");
-		if(adminReply.getReplyContent() == null || adminReply.getReplyContent().trim().isEmpty()) {
-			throw new AdminException("댓글 내용을 입력하세요.");
-		}
-		
-		//권한체크
-		if(loginUser != null && "A".equals(loginUser.getUserType())) {
-			adminReply.setUserNo(loginUser.getUserNo());
-			adminReply.setBoardType(3);
-			adminReply.setBoardId(boardId);
-			
-			int result = adService.saveGreply(adminReply);
-			if(result > 0) {
-				return ResponseEntity.ok(adminReply);
-			} else {
-				throw new AdminException("댓글 등록에 실패하였습니다.");
-			} 
-		} else {
-			 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                     .body(null);
-		}
-		
-	}
-	
-	//일반게시판 문의댓글 리스트 뽑아오기
-	@GetMapping("gReplyList")
-	@ResponseBody
-	public ArrayList<AdminReply> getReplyList(
-			@RequestParam("boardId") int boardId){
-		ArrayList<AdminReply> replyList = adService.getGeneralReplyList(boardId);
-		return replyList;
-	}
-	
-	
-	
-	
+    
     
     
     

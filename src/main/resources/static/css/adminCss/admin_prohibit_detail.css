@@ -23,8 +23,9 @@ body {
 	overflow-y: auto;
 }
 .admin-proBoard-detail-wrapper{
-    width:100%;
+   min-width: 94.5%;
     margin: 0 auto;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
     align-items: center;

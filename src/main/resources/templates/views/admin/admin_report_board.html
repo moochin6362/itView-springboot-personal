@@ -47,7 +47,8 @@
 			        <!--게시글 선택옵션 넣고 삭제(상태 N)하기 버튼 : 토글로 넣어야겠다 / 검색창기능 추가 / -->
 			    <div class="admin-report-board-table">
 			        <table id="admin-report-board-table-header" 
-			        	   class="admin-report-board-table-header">
+			        	   class="admin-report-board-table-header"
+			        	   th:each="report : ${reportList}">
 			            <thead>
 			                <tr>
 			                    <th>신고 유형</th>
@@ -56,10 +57,8 @@
 			                    <th>작성일</th>
 			                    <th>신고글 상태</th>
 			                </tr>
-			            </thead>
-			            <tbody id="admin-report-board-table-body" 
-			            	   class="admin-report-board-table-body"
-			            	   th:each="report : ${reportList}">
+			            </thead>s
+			            <tbody id="admin-report-board-table-body" class="admin-report-board-table-body">
 			                <tr>
 			                    <td th:text="${report.reportType}"></td>
 			                    <td th:text="${report.reportTitle}"></td>
@@ -101,8 +100,11 @@
 			
 			    </div>
 
-			</div>
-		</div>
+</div>
+</div>
+
+
+        
     </div>
 
 

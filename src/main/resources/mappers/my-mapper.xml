@@ -5,244 +5,185 @@
 
 <mapper namespace="itView.springboot.mapper.MyMapper">
 
-	<!-- 사용자 조회 (USER_AGE: DATE 그대로 매핑) -->
-	<select id="selectUserByNo" parameterType="long"
-		resultType="itView.springboot.vo.User">
-		SELECT
-			u."USER_NO" AS userNo,
-			u."USER_NAME" AS userName,
-			u."USER_GENDER" AS userGender,
-			u."USER_AGE" AS userAge, -- DATE(생년)
-			u."USER_PHONE" AS userPhone,
-			u."USER_TYPE" AS userType,
-			u."USER_ID" AS
-			userId,
-			u."USER_PASSWORD" AS userPassword,
-			u."USER_STATUS" AS
-			userStatus,
-			u."USER_POINT" AS userPoint,
-			u."USER_ADDRESS" AS
-			userAddress,
-			u."USER_GRADE" AS userGrade,
-			u."EMAIL" AS email,
-			u."BRAND_NAME" AS brandName,
-			u."SKIN_TYPE" AS skinType,
-			u."PERSONAL_COLOR" AS personalColor,
-			u."SKIN_TROUBLE" AS skinTrouble,
-			u."HEAD_SKIN" AS headSkin
-		FROM "USER" u
-		WHERE u."USER_NO" = #{userNo}
-	</select>
+  <!-- 사용자 조회 -->
+  <select id="selectUserByNo" parameterType="long" resultType="itView.springboot.vo.User">
+    SELECT
+      u."USER_NO"        AS userNo,
+      u."USER_NAME"      AS userName,
+      u."USER_GENDER"    AS userGender,
+      u."USER_AGE"       AS userAge,
+      u."USER_PHONE"     AS userPhone,
+      u."USER_TYPE"      AS userType,
+      u."USER_ID"        AS userId,
+      u."USER_PASSWORD"  AS userPassword,
+      u."USER_STATUS"    AS userStatus,
+      u."USER_POINT"     AS userPoint,
+      u."USER_ADDRESS"   AS userAddress,
+      u."USER_GRADE"     AS userGrade,
+      u."EMAIL"          AS email,
+      u."BRAND_NAME"     AS brandName,
+      u."SKIN_TYPE"      AS skinType,
+      u."PERSONAL_COLOR" AS personalColor,
+      u."SKIN_TROUBLE"   AS skinTrouble,
+      u."HEAD_SKIN"      AS headSkin,
+      u."INGREDIENT"     AS ingredient,   
+ 		 u."ECO_FRIENDLY"   AS ecoFriendly,  
+ 		 u."HOPE_PRICE"     AS hopePrice     
+    FROM "USER" u
+    WHERE u."USER_NO" = #{userNo}
+  </select>
 
-	<!-- 최신 대표 프로필 1장 -->
-	<select id="selectProfileImageByUser" parameterType="long"
-		resultType="itView.springboot.vo.Attachment">
-		SELECT
-			a."ATTM_NO" AS attmNo,
-			a."ATTM_NAME" AS attmName,
-			a."ATTM_RENAME" AS attmRename,
-			a."ATTM_PATH" AS attmPath,
-			a."ATTM_STATUS" AS attmStatus,
-			a."ATTM_DATE" AS attmDate,
-			a."ATTM_LEVEL" AS attmLevel,
-			a."ATTM_POSITION" AS attmPosition,
-			a."POSITION_NO" AS positionNo
-		FROM "ATTACHMENT" a
-		WHERE
-			a."ATTM_STATUS"='Y'
-			AND a."ATTM_POSITION"=7
-			AND
-			a."POSITION_NO"=#{userNo}
-			AND a."ATTM_LEVEL"=0
-		ORDER BY a."ATTM_DATE"
-		DESC
-		FETCH FIRST 1 ROW ONLY
-	</select>
+  <!-- 최신 대표 프로필 1장 -->
+  <select id="selectProfileImageByUser" parameterType="long" resultType="itView.springboot.vo.Attachment">
+    SELECT
+      a."ATTM_NO"       AS attmNo,
+      a."ATTM_NAME"     AS attmName,
+      a."ATTM_RENAME"   AS attmRename,
+      a."ATTM_PATH"     AS attmPath,
+      a."ATTM_STATUS"   AS attmStatus,
+      a."ATTM_DATE"     AS attmDate,
+      a."ATTM_LEVEL"    AS attmLevel,
+      a."ATTM_POSITION" AS attmPosition,
+      a."POSITION_NO"   AS positionNo
+    FROM "ATTACHMENT" a
+    WHERE a."ATTM_STATUS"='Y'
+      AND a."ATTM_POSITION"=7
+      AND a."POSITION_NO"=#{userNo}
+      AND a."ATTM_LEVEL"=0
+    ORDER BY a."ATTM_DATE" DESC
+    FETCH FIRST 1 ROW ONLY
+  </select>
 
-	<!-- 이전 프로필 비활성화 -->
-	<update id="disableOldProfileImages" parameterType="long">
-		UPDATE
-			"ATTACHMENT"
-			SET "ATTM_STATUS"='N'
-		WHERE "ATTM_POSITION"=7
-		AND
-		"POSITION_NO"=#{userNo}
-	</update>
+  <!-- 이전 프로필 비활성화 -->
+  <update id="disableOldProfileImages" parameterType="long">
+    UPDATE "ATTACHMENT"
+       SET "ATTM_STATUS"='N'
+     WHERE "ATTM_POSITION"=7
+       AND "POSITION_NO"=#{userNo}
+  </update>
 
-	<!-- 새 프로필 저장 -->
-	<insert id="insertProfileImage"
-		parameterType="itView.springboot.vo.Attachment">
-		INSERT INTO "ATTACHMENT"(
-			"ATTM_NO","ATTM_NAME","ATTM_RENAME","ATTM_PATH",
-			"ATTM_STATUS","ATTM_DATE","ATTM_LEVEL","ATTM_POSITION","POSITION_NO")
-			VALUES (
-			SEQ_ATTM.NEXTVAL,#{attmName}, #{attmRename}, #{attmPath},'Y',
-			SYSDATE, 0, 7, #{positionNo}
-			)
-	</insert>
+  <!-- 새 프로필 저장 -->
+  <insert id="insertProfileImage" parameterType="itView.springboot.vo.Attachment">
+    INSERT INTO "ATTACHMENT"(
+      "ATTM_NO","ATTM_NAME","ATTM_RENAME","ATTM_PATH",
+      "ATTM_STATUS","ATTM_DATE","ATTM_LEVEL","ATTM_POSITION","POSITION_NO")
+    VALUES (
+      SEQ_ATTM.NEXTVAL, #{attmName}, #{attmRename}, #{attmPath},
+      'Y', SYSDATE, 0, 7, #{positionNo}
+    )
+  </insert>
 
-	<!-- userId -> userNo -->
-	<select id="selectUserNoByUserId" parameterType="string"
-		resultType="long">
-		SELECT u."USER_NO"
-		FROM "USER" u
-		WHERE u."USER_ID" =
-		#{userId}
-	</select>
+  <!-- userId -> userNo -->
+  <select id="selectUserNoByUserId" parameterType="string" resultType="long">
+    SELECT u."USER_NO"
+      FROM "USER" u
+     WHERE u."USER_ID" = #{userId}
+  </select>
 
-	<!-- userNo 존재 여부 -->
-	<select id="existsUser" parameterType="long" resultType="int">
-		SELECT
-		COUNT(*) FROM "USER" WHERE "USER_NO" = #{userNo}
-	</select>
+  <!-- 기본/피부 정보 저장 -->
+  <update id="updateUserBasicAndSkin" parameterType="itView.springboot.vo.User">
+    UPDATE "USER"
+    <set>
+      "USER_NO" = "USER_NO",
+      <if test="userName != null and userName != ''">"USER_NAME" = #{userName},</if>
+      <if test="email != null and email != ''">"EMAIL" = #{email},</if>
+      <if test="userGender != null and userGender != ''">"USER_GENDER" = #{userGender},</if>
+      <if test="userAge != null">"USER_AGE" = #{userAge},</if>
+      <if test="skinType != null and skinType != ''">"SKIN_TYPE" = #{skinType},</if>
+      <if test="personalColor != null and personalColor != ''">"PERSONAL_COLOR" = #{personalColor},</if>
+      <if test="skinTrouble != null and skinTrouble != ''">"SKIN_TROUBLE" = #{skinTrouble},</if>
+      <if test="headSkin != null and headSkin != ''">"HEAD_SKIN" = #{headSkin},</if>
+      <if test="ingredient   != null and ingredient   != ''">"INGREDIENT"   = #{ingredient},</if>   
+      <if test="ecoFriendly  != null and ecoFriendly  != ''">"ECO_FRIENDLY" = #{ecoFriendly},</if> 
+      <if test="hopePrice    != null and hopePrice    != ''">"HOPE_PRICE"   = #{hopePrice},</if> 
+    </set>
+    WHERE "USER_NO" = #{userNo}
+  </update>
 
-	<!-- 첫 사용자 번호 -->
-	<select id="selectFirstUserNo" resultType="long">
-		SELECT
-		MIN(u."USER_NO") AS userNo
-		FROM "USER" u
-	</select>
+  <!-- 상품 검색 -->
+  <select id="searchProducts" parameterType="string" resultType="itView.springboot.vo.Product">
+    SELECT
+      p."PRODUCT_NO"     AS productNo,
+      p."PRODUCT_NAME"   AS productName,
+      p."PRODUCT_DETAIL" AS productDetail,
+      p."PRODUCT_PRICE"  AS productPrice,
+      p."PRODUCT_COMPANY"AS productCompany
+    FROM "PRODUCT" p
+    WHERE LOWER(p."PRODUCT_NAME")  LIKE '%' || LOWER(#{keyword}) || '%'
+       OR LOWER(p."PRODUCT_DETAIL") LIKE '%' || LOWER(#{keyword}) || '%'
+  </select>
 
-	<!-- 기본/피부 정보 저장 (USER_AGE: DATE) -->
-	<update id="updateUserBasicAndSkin"
-		parameterType="itView.springboot.vo.User">
-		UPDATE "USER"
-		<set>
-			"USER_NO" = "USER_NO",
-			<if test="userName != null and userName != ''">"USER_NAME" = #{userName},</if>
-			<if test="email != null and email != ''">"EMAIL" = #{email},</if>
-			<if test="userGender != null and userGender != ''">"USER_GENDER" = #{userGender},</if>
-			<if test="userAge != null">"USER_AGE" = #{userAge},</if>  <!-- ✅ DATE -->
-			<if test="skinType != null and skinType != ''">"SKIN_TYPE" = #{skinType},</if>
-			<if test="personalColor != null and personalColor != ''">"PERSONAL_COLOR" = #{personalColor},</if>
-			<if test="skinTrouble != null and skinTrouble != ''">"SKIN_TROUBLE" = #{skinTrouble},</if>
-			<if test="headSkin != null and headSkin != ''">"HEAD_SKIN" = #{headSkin},</if>
-		</set>
-		WHERE "USER_NO" = #{userNo}
-	</update>
+  <!-- 리뷰 등록 -->
+  <insert id="insertReview" parameterType="itView.springboot.vo.Review">
+    INSERT INTO "REVIEW"(
+      "REVIEW_NO","REVIEW_CONTENT","REVIEW_RATE","REVIEW_DATE","PRODUCT_NO","USER_NO")
+    VALUES(
+      SEQ_REVIEW.NEXTVAL, #{reviewContent}, #{reviewRate}, SYSDATE, #{productNo}, #{userNo}
+    )
+  </insert>
 
-	<!-- 상품 검색 -->
-	<select id="searchProducts" parameterType="string"
-		resultType="itView.springboot.vo.Product">
-		SELECT
-			p."PRODUCT_NO" AS productNo,
-			p."PRODUCT_NAME" AS
-			productName,
-			p."PRODUCT_DETAIL" AS productDetail,
-			p."PRODUCT_PRICE" AS
-			productPrice,
-			p."PRODUCT_COMPANY" AS productCompany
-		FROM "PRODUCT" p
-		WHERE LOWER(p."PRODUCT_NAME") LIKE '%' || LOWER(#{keyword}) || '%'
-		OR
-		LOWER(p."PRODUCT_DETAIL") LIKE '%' || LOWER(#{keyword}) || '%'
-	</select>
+  <!-- 닉네임 중복 -->
+  <select id="countByUserName" resultType="int">
+    SELECT COUNT(*)
+      FROM "USER"
+     WHERE "USER_NAME" = #{userName}
+    <if test="excludeUserNo != null">
+      AND "USER_NO" &lt;&gt; #{excludeUserNo}
+    </if>
+  </select>
 
-	<!-- 리뷰 등록 -->
-	<insert id="insertReview"
-		parameterType="itView.springboot.vo.Review">
-		INSERT INTO "REVIEW"(
-			"REVIEW_NO", "REVIEW_CONTENT",
-			"REVIEW_RATE",
-			"REVIEW_DATE", "PRODUCT_NO", "USER_NO")
-			 VALUES (
-				SEQ_REVIEW.NEXTVAL,
-				#{reviewContent},
-				#{reviewRate},
-				SYSDATE,
-				#{productNo},
-				#{userNo})
-	</insert>
+  <!-- 내가 쓴 리뷰 + 상품 썸네일 -->
+  <select id="selectMyReviews" parameterType="long" resultType="map">
+    SELECT
+      r."REVIEW_NO"      AS "reviewNo",
+      r."REVIEW_CONTENT" AS "reviewContent",
+      r."REVIEW_RATE"    AS "reviewRate",
+      r."REVIEW_DATE"    AS "reviewDate",
+      r."PRODUCT_NO"     AS "productNo",
+      p."PRODUCT_NAME"   AS "productName",
+      CASE WHEN a."ATTM_RENAME" IS NOT NULL
+           THEN NVL(a."ATTM_PATH", '/uploadFilesFinal/') || a."ATTM_RENAME"
+           ELSE '/uploadFilesFinal/default-product.png'
+      END AS "productImageUrl"
+    FROM "REVIEW" r
+    LEFT JOIN "PRODUCT" p ON p."PRODUCT_NO" = r."PRODUCT_NO"
+    LEFT JOIN (
+      SELECT x."POSITION_NO", x."ATTM_PATH", x."ATTM_RENAME",
+             ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
+                                ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC) AS rn
+        FROM "ATTACHMENT" x
+       WHERE x."ATTM_POSITION" = 0
+         AND x."ATTM_LEVEL"    = 0
+         AND x."ATTM_STATUS"   = 'Y'
+    ) a ON a."POSITION_NO" = r."PRODUCT_NO" AND a.rn = 1
+    WHERE r."USER_NO" = #{userNo}
+    ORDER BY r."REVIEW_DATE" DESC
+  </select>
 
-	<!-- 닉네임 중복 -->
-	<select id="countByUserName" resultType="int">
-		SELECT COUNT(*)
-		FROM "USER"
-		WHERE "USER_NAME" = #{userName}
-		<if test="excludeUserNo != null">
-			AND "USER_NO" &lt;&gt; #{excludeUserNo}
-		</if>
-	</select>
+  <!-- 보유 포인트: USER.USER_POINT -->
+  <select id="selectPointBalance" parameterType="long" resultType="int">
+    SELECT NVL(u."USER_POINT", 0) AS balance
+      FROM "USER" u
+     WHERE u."USER_NO" = #{userNo}
+  </select>
 
-	<!-- 내가 쓴 리뷰 + 상품 썸네일 -->
-	<select id="selectMyReviews" parameterType="long"
-		resultType="map">
-		SELECT
-			r."REVIEW_NO" AS "reviewNo",
-			r."REVIEW_CONTENT" AS
-			"reviewContent",
-			r."REVIEW_RATE" AS "reviewRate",
-			r."REVIEW_DATE" AS
-			"reviewDate",
-			r."PRODUCT_NO" AS "productNo",
-			p."PRODUCT_NAME" AS
-			"productName",
-		CASE
-		WHEN a."ATTM_RENAME" IS NOT NULL
-		THEN
-		NVL(a."ATTM_PATH", '/uploadFilesFinal/') || a."ATTM_RENAME"
-		ELSE
-		'/uploadFilesFinal/default-product.png'
-		END AS "productImageUrl"
-		FROM
-		"REVIEW" r
-		LEFT JOIN "PRODUCT" p
-		ON p."PRODUCT_NO" = r."PRODUCT_NO"
-		LEFT
-		JOIN (
-		SELECT x."POSITION_NO",
-		x."ATTM_PATH", x."ATTM_RENAME",
-		ROW_NUMBER() OVER (
-		PARTITION BY x."POSITION_NO"
-		ORDER BY x."ATTM_DATE"
-		DESC, x."ATTM_NO" DESC
-		) AS rn
-		FROM "ATTACHMENT" x
-		WHERE
-		x."ATTM_POSITION" = 0 -- 상품
-		AND x."ATTM_LEVEL" = 0 -- 대표
-		AND
-		x."ATTM_STATUS" = 'Y'
-		) a
-		ON a."POSITION_NO" = r."PRODUCT_NO"
-		AND a.rn =
-		1
-		WHERE r."USER_NO" = #{userNo}
-		ORDER BY r."REVIEW_DATE" DESC
-	</select>
+  <!-- 포인트 이력: POINT 테이블 -->
+  <select id="selectPointHistory" parameterType="long" resultType="itView.springboot.vo.Point">
+    SELECT
+      p."POINT_NO"        AS pointNo,
+      p."POINT_NAME"      AS pointName,
+      p."POINT_DESCRIPTION" AS pointDescription,
+      p."POINT_VALUE"     AS pointValue,
+      p."POINT_CREATEDATE"AS pointCreatedate,
+      p."POINT_ENDDATE"   AS pointEnddate,
+      p."USER_NO"         AS userNo
+    FROM "POINT" p
+    WHERE p."USER_NO" = #{userNo}
+    ORDER BY p."POINT_CREATEDATE" DESC, p."POINT_NO" DESC
+  </select>
 
-	<!-- 포인트 잔액: POINT_VALUE 합계 -->
-	<select id="selectPointBalance" parameterType="long"
-		resultType="int">
-		SELECT NVL(SUM(p."POINT_VALUE"), 0) AS balance
-		FROM "POINT"
-		p
-		WHERE p."USER_NO" = #{userNo}
-	</select>
-
-	<!-- 포인트 이력: 기존 Point VO에 매핑 -->
-	<select id="selectPointHistory" parameterType="long"
-		resultType="itView.springboot.vo.Point">
-		SELECT
-		p."POINT_NO" AS pointNo,
-		p."POINT_NAME" AS pointName,
-		p."POINT_DESCRIPTION" AS pointDescription,
-		p."POINT_VALUE" AS
-		pointValue,
-		p."POINT_CREATEDATE" AS pointCreatedate,
-		p."POINT_ENDDATE"
-		AS pointEnddate,
-		p."USER_NO" AS userNo
-		FROM "POINT" p
-		WHERE p."USER_NO" =
-		#{userNo}
-		ORDER BY p."POINT_CREATEDATE" DESC, p."POINT_NO" DESC
-	</select>
-
-	<!-- 보유 쿠폰: 본인 소유 + 사용 가능 -->
-	<select id="selectMyCoupons" parameterType="long"
-		resultType="itView.springboot.vo.Coupon">
-    <![CDATA[
+  <!-- 보유 쿠폰: 본인 소유 + 사용 가능 -->
+  <select id="selectMyCoupons" parameterType="long" resultType="itView.springboot.vo.Coupon"><![CDATA[
     SELECT
       c."COUPON_NO"         AS couponNo,
       c."COUPON_NAME"       AS couponName,
@@ -263,250 +204,94 @@
     ORDER BY c."COUPON_ENDDATE" NULLS LAST,
              c."COUPON_CREATEDATE" DESC,
              c."COUPON_NO" DESC
-    ]]>
-	</select>
+  ]]></select>
 
-	<!-- 최근 찜 3개: WISHLIST + PRODUCT + 대표 썸네일(ATTACHMENT) -->
-	<select id="selectTop3WishlistMap" parameterType="long"
-		resultType="map">
-		SELECT
-		w."WISHLIST_NO" AS "wishlistNo",
-		w."WISH_DATE" AS
-		"wishDate",
-		w."PRODUCT_NO" AS "productNo",
-		w."USER_NO" AS "userNo",
-		p."PRODUCT_NAME" AS "productName",
-		p."PRODUCT_PRICE" AS "productPrice",
-		p."PRODUCT_COMPANY" AS "productCompany",
-		/* 대표 썸네일(없으면 기본 이미지) */
-		CASE
-		WHEN a."ATTM_RENAME" IS NOT NULL
-		THEN NVL(a."ATTM_PATH",
-		'/uploadFilesFinal/') || a."ATTM_RENAME"
-		ELSE
-		'/uploadFilesFinal/default-product.png'
-		END AS "productImageUrl"
-		FROM
-		"WISHLIST" w
-		JOIN "PRODUCT" p ON p."PRODUCT_NO" = w."PRODUCT_NO"
-		LEFT
-		JOIN (
-		SELECT x."POSITION_NO", x."ATTM_PATH", x."ATTM_RENAME",
-		ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
-		ORDER BY x."ATTM_DATE"
-		DESC, x."ATTM_NO" DESC) AS rn
-		FROM "ATTACHMENT" x
-		WHERE
-		x."ATTM_POSITION" = 0 -- 상품
-		AND x."ATTM_LEVEL" = 0 -- 대표
-		AND
-		x."ATTM_STATUS" = 'Y'
-		) a ON a."POSITION_NO" = w."PRODUCT_NO" AND a.rn
-		= 1
-		WHERE w."USER_NO" = #{userNo}
-		ORDER BY w."WISH_DATE" DESC,
-		w."WISHLIST_NO" DESC
-		FETCH FIRST 3 ROWS ONLY
-	</select>
+  <!-- 최근 찜 3개 -->
+  <select id="selectTop3WishlistMap" parameterType="long" resultType="map">
+    SELECT
+      w."WISHLIST_NO" AS "wishlistNo",
+      w."WISH_DATE"   AS "wishDate",
+      w."PRODUCT_NO"  AS "productNo",
+      w."USER_NO"     AS "userNo",
+      p."PRODUCT_NAME"AS "productName",
+      p."PRODUCT_PRICE"AS "productPrice",
+      p."PRODUCT_COMPANY" AS "productCompany",
+      CASE WHEN a."ATTM_RENAME" IS NOT NULL
+           THEN NVL(a."ATTM_PATH", '/uploadFilesFinal/') || a."ATTM_RENAME"
+           ELSE '/uploadFilesFinal/default-product.png'
+      END AS "productImageUrl"
+    FROM "WISHLIST" w
+    JOIN "PRODUCT" p ON p."PRODUCT_NO" = w."PRODUCT_NO"
+    LEFT JOIN (
+      SELECT x."POSITION_NO", x."ATTM_PATH", x."ATTM_RENAME",
+             ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
+                                ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC) AS rn
+        FROM "ATTACHMENT" x
+       WHERE x."ATTM_POSITION" = 0
+         AND x."ATTM_LEVEL"    = 0
+         AND x."ATTM_STATUS"   = 'Y'
+    ) a ON a."POSITION_NO" = w."PRODUCT_NO" AND a.rn = 1
+    WHERE w."USER_NO" = #{userNo}
+    ORDER BY w."WISH_DATE" DESC, w."WISHLIST_NO" DESC
+    FETCH FIRST 3 ROWS ONLY
+  </select>
 
-	<select id="searchExperienceGroups" parameterType="string"
-		resultType="itView.springboot.vo.experienceGroup">
-		SELECT
-		eg.exp_no AS expNo,
-		eg.exp_title AS expTitle,
-		eg.exp_content AS
-		expContent,
-		eg.exp_start AS expStart,
-		eg.exp_end AS expEnd,
-		eg.exp_status AS expStatus,
-		eg.user_no AS userNo
-		FROM EXPERIENCE_GROUP
-		eg
-		WHERE (eg.exp_status = 'Y')                                   <!-- 활성만 보기면 유지, 모두 보려면 주석 처리 -->
-		AND (
-		#{keyword} IS NULL OR #{keyword} = '' OR
-		LOWER(eg.exp_title) LIKE
-		'%' || LOWER(#{keyword}) || '%' OR
-		LOWER(eg.exp_content) LIKE '%' ||
-		LOWER(#{keyword}) || '%'
-		)
-		ORDER BY NVL(eg.exp_end, DATE '2999-12-31')
-		ASC,
-		eg.exp_start DESC,
-		eg.exp_no DESC
-	</select>
+  <!-- (서연) 주문/썸네일 -->
+  <select id="selectproductbyOrder" resultType="Order">
+    SELECT *
+    FROM(
+      SELECT 
+        o.order_no         AS orderNo,
+        o.order_target_no  AS orderTargetNo,
+        o.order_date       AS orderDate,
+        o.order_count      AS orderCount,
+        o.order_status     AS orderStatus,
+        o.payment_method   AS paymentMethod,
+        o.pay_price        AS payPrice,
+        o.delivery_company AS deliveryCompany,
+        o.delivery_no      AS deliveryNo,
+        o.delivery_status  AS deliveryStatus,
+        o.order_type       AS orderType,
+        o.user_no          AS userNo,
+        o.personal_coupon_no AS personalCouponNo,
+        o.user_name        AS userName,
+        o.user_phone       AS userPhone,
+        o.user_address     AS userAddress,
+        p.product_no       AS productNo,
+        p.product_name     AS productName,
+        p.product_price    AS productPrice,
+        p.product_stock    AS productStock,
+        p.product_state    AS productState,
+        p.product_company  AS productCompany,
+        a.attm_rename      AS attmRename
+      FROM "ORDER" o
+      LEFT JOIN product p ON p.product_no = o.order_target_no
+      LEFT JOIN attachment a ON a.position_no = p.product_no AND a.attm_level=0
+      WHERE o.user_no = #{userNo} AND p.product_no = #{productNo} AND o.order_type = 1
 
-	<!-- 내 중복 신청 여부 -->
-	<select id="countMyExperienceApply" parameterType="map"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM EXPERIENCE_APPLICATION
-		WHERE user_no =
-		#{userNo}
-		AND exp_group_no = #{expNo}
-	</select>
+      UNION ALL
 
-	<!-- 신청 저장 -->
-	<insert id="insertExperienceApply" parameterType="map">
-		INSERT INTO EXPERIENCE_APPLICATION
-		(apply_no, exp_group_no, user_no,
-		is_choice, apply_content)
-		VALUES
-		(SEQ_EXPERIENCE_APP.NEXTVAL,  <!-- ✅ 실제 시퀀스명으로 
-			교체 -->
-		#{expNo},
-		#{userNo},
-		'N',
-		#{applyContent})
-	</insert>
+      SELECT 
+        o.order_no, o.order_target_no, o.order_date, o.order_count, o.order_status,
+        o.payment_method, o.pay_price, o.delivery_company, o.delivery_no, o.delivery_status,
+        o.order_type, o.user_no, o.personal_coupon_no, o.user_name, o.user_phone, o.user_address,
+        p.product_no, p.product_name, p.product_price, p.product_stock, p.product_state, p.product_company,
+        a.attm_rename
+      FROM "ORDER" o
+      JOIN cart c ON c.cart_no = o.order_target_no
+      LEFT JOIN product p ON p.product_no = c.product_no
+      LEFT JOIN attachment a ON a.position_no = p.product_no AND a.attm_level=0
+      WHERE o.user_no = #{userNo} AND p.product_no = #{productNo} AND o.order_type = 2
+    )
+    ORDER BY orderNo DESC
+  </select>
 
-	<!-- 체험단 '당첨만' 목록: 모집글 제목/대표이미지 사용 -->
-<select id="selectExperienceWins" parameterType="long" resultType="map">
-  SELECT
-    ea.apply_no     AS "applyNo",
-    ea.exp_group_no AS "expNo",
-    eg.exp_title    AS "productName",
-    CASE
-      WHEN ae."ATTM_RENAME" IS NOT NULL
-        THEN NVL(ae."ATTM_PATH", '/uploadFilesFinal/') || ae."ATTM_RENAME"
-      ELSE '/uploadFilesFinal/default-product.png'
-    END AS "productImageUrl",
-    '당첨' AS "winStatusName"
-  FROM EXPERIENCE_APPLICATION ea
-  JOIN EXPERIENCE_GROUP eg
-    ON eg.exp_no = ea.exp_group_no
-  LEFT JOIN (
-    SELECT x."POSITION_NO", x."ATTM_PATH", x."ATTM_RENAME",
-           ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
-             ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC) rn
-    FROM "ATTACHMENT" x
-    WHERE x."ATTM_POSITION" = 8   /* 약속값: 모집글 대표 이미지 */
-      AND x."ATTM_LEVEL"   = 0
-      AND x."ATTM_STATUS"  = 'Y'
-  ) ae
-    ON ae."POSITION_NO" = eg.exp_no AND ae.rn = 1
-  WHERE ea.user_no = #{userNo}
-    AND NVL(TRIM(ea.is_choice), 'N') = 'Y'
-  ORDER BY ea.apply_no DESC
-</select>
-
-<!-- (옵션) 당첨/미당첨 '전체' 목록: 상태코드 포함 -->
-<select id="selectExperienceResults" parameterType="long" resultType="map">
-  SELECT
-    ea.apply_no     AS "applyNo",
-    ea.exp_group_no AS "expNo",
-    eg.exp_title    AS "productName",
-    CASE
-      WHEN ae."ATTM_RENAME" IS NOT NULL
-        THEN NVL(ae."ATTM_PATH", '/uploadFilesFinal/') || ae."ATTM_RENAME"
-      ELSE '/uploadFilesFinal/default-product.png'
-    END AS "productImageUrl",
-    NVL(TRIM(ea.is_choice), 'N') AS "statusCode",
-    CASE WHEN NVL(TRIM(ea.is_choice),'N')='Y' THEN '당첨' ELSE '미당첨' END AS "winStatusName"
-  FROM EXPERIENCE_APPLICATION ea
-  JOIN EXPERIENCE_GROUP eg
-    ON eg.exp_no = ea.exp_group_no
-  LEFT JOIN (
-    SELECT x."POSITION_NO", x."ATTM_PATH", x."ATTM_RENAME",
-           ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
-             ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC) rn
-    FROM "ATTACHMENT" x
-    WHERE x."ATTM_POSITION" = 8
-      AND x."ATTM_LEVEL"   = 0
-      AND x."ATTM_STATUS"  = 'Y'
-  ) ae
-    ON ae."POSITION_NO" = eg.exp_no AND ae.rn = 1
-  WHERE ea.user_no = #{userNo}
-  ORDER BY CASE WHEN NVL(TRIM(ea.is_choice),'N')='Y' THEN 0 ELSE 1 END,
-           ea.apply_no DESC
-</select>
-	<!-- 서연 -->
-	<select id="selectproductbyOrder" resultType="Order">
-		select *
-		from(
-			select 
-				o.order_no as orderNo,
-				o.order_target_no as orderTargetNo,
-				o.order_date as orderDate,
-				o.order_count as orderCount,
-				o.order_status as orderStatus,
-				o.payment_method as paymentMethod,
-				o.pay_price as payPrice,
-				o.delivery_company as deliveryCompany,
-				o.delivery_no as deliveryNo,
-				o.delivery_status as deliveryStatus,
-				o.order_type as orderType,
-				o.user_no as userNo,
-				o.personal_coupon_no as personalCouponNo,
-				o.user_name as userName,
-				o.user_phone as userPhone,
-				o.user_address as userAddress,
-				p.product_no as productNo,
-       			p.product_name as productName,
-        		p.product_price as productPrice,
-        		p.product_stock as productStock,
-        		p.product_state as productState,
-        		p.product_company as productCompany,
-        		a.attm_rename as attmRename
-			from "ORDER" o
-			left join product p 
-				on p.product_no=o.order_target_no
-			left join attachment a
-				on a.position_no=p.product_no
-			and a.attm_level=0
-			where o.user_no=#{userNo} and p.product_no=#{productNo}
-			and o.order_type=1
-		
-			union all
-		
-			select 
-				o.order_no as orderNo,
-				o.order_target_no as orderTargetNo,
-				o.order_date as orderDate,
-				o.order_count as orderCount,
-				o.order_status as orderStatus,
-				o.payment_method as paymentMethod,
-				o.pay_price as payPrice,
-				o.delivery_company as deliveryCompany,
-				o.delivery_no as deliveryNo,
-				o.delivery_status as deliveryStatus,
-				o.order_type as orderType,
-				o.user_no as userNo,
-				o.personal_coupon_no as personalCouponNo,
-				o.user_name as userName,
-				o.user_phone as userPhone,
-				o.user_address as userAddress,
-				p.product_no as productNo,
-       			p.product_name as productName,
-        		p.product_price as productPrice,
-        		p.product_stock as productStock,
-        		p.product_state as productState,
-        		p.product_company as productCompany,
-        		a.attm_rename as attmRename
-			from "ORDER" o
-			join cart c 
-				on c.cart_no=o.order_target_no
-			left join product p 
-				on p.product_no=c.product_no
-			left join attachment a
-				on a.position_no=p.product_no
-			and a.attm_level=0
-			where o.user_no=#{userNo} and p.product_no=#{productNo}
-			and o.order_type=2
-		)
-		order by orderNo desc
-		
-	</select>
-	
-	<!-- 서연 -->
-	<select id="selectThumbByOrder" resultType="Attachment">
-		select * 
-		from attachment
-		where attm_position=0
-			and attm_level=0
-			and position_no=#{productNo}
-	</select>
-
-	
+  <select id="selectThumbByOrder" resultType="Attachment">
+    SELECT *
+      FROM attachment
+     WHERE attm_position=0
+       AND attm_level=0
+       AND position_no=#{productNo}
+  </select>
 
 </mapper>

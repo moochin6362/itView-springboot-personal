@@ -290,33 +290,14 @@ body {
 					const reviewNo = e.target.parentElement.children[0].value;
 					//console.log(reviewNo)
 					//console.log(responseDiv)
-					
-					const beforeCheckArr = document.getElementsByTagName('textarea');
-					console.log(beforeCheckArr[0])
-					//console.log(beforeCheckArr[0].innerHTML)
-					//console.log(beforeCheckArr)
-					//console.log(responseDiv.children[1].children[0])
-					
-					if(beforeCheckArr.length > 0){
-						beforeCheckArr[0] = responseDiv.children[1];
-					}
-					
-					responseDiv.children[1].innerHTML = '<textarea rows="10" cols="50" style="resize: none;">';
-					const commitButton = document.createElement('button');
-					commitButton.innerText = '완료'
-					//console.log(commitButton)
-					responseDiv.append(commitButton);
-					
-					
-					
-// 					fetch('/product/reviewAnswer', {
-// 						method: 'POST',
-// 						headers: {'content-type':'application/json; charset=UTF-8'},
-// 						body: JSON.stringify(reviewNo)
-// 					})
-// 					.then(res => res.json())
-// 					.then(data => console.log(data))
-// 					.catch(err => console.log(err))
+					fetch('/product/reviewAnswer', {
+						method: 'POST',
+						headers: {'content-type':'application/json; charset=UTF-8'},
+						body: JSON.stringify(reviewNo)
+					})
+					.then(res => res.json())
+					.then(data => console.log(data))
+					.catch(err => console.log(err))
 				})
 			}
  		}

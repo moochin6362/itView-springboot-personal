@@ -131,9 +131,7 @@ public class ProductController {
 	// 판매 내역 페이지 이동
 	@GetMapping("mySellingPage")
 	public String mySellingPage() {
-		
-		
-		return "seller/mySellingPage";
+		return "seller/mySelling";
 	}
 	
 	// 내 상품 상세 페이지 이동
@@ -186,12 +184,6 @@ public class ProductController {
 		model.addAttribute("reviewCount", reviewCount);
 		
 		return "seller/myProductDetail";
-	}
-	
-	// 체험단 관리 
-	@GetMapping("experienceManagePage")
-	public String experienceManagePage() {
-		return "seller/experienceManagePage";
 	}
 	
 	// 상품 등록
@@ -344,7 +336,7 @@ public class ProductController {
 
 	// 상품 상세페이지
 	@GetMapping("/detail/{productNo}")
-	public String productdetail(@PathVariable("productNo") int productNo, Model model) {
+	public String productdetail(@PathVariable int productNo, Model model) {
 
 		return "Shopping/detail";
 	}

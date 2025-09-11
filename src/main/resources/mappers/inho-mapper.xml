@@ -119,14 +119,10 @@
 	<select id="getCouponCount">
 		select count(*)
 		from coupon
-			join "USER" using(user_no)
 		<if test="value != null">
 			<choose>
-				<when test="condition == 'title'">
-					where coupon_name like '%${value}%'
-				</when>
 				<when test="condition == 'name'">
-					where user_name like '%${value}%'
+					where coupon_name like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -138,11 +134,8 @@
 			join "USER" using(user_no)
 		<if test="value != null">
 			<choose>
-				<when test="condition == 'title'">
-					where coupon_name like '%${value}%'
-				</when>
 				<when test="condition == 'name'">
-					where user_name like '%${value}%'
+					where coupon_name like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -152,15 +145,10 @@
 	<select id="getCouponBoardCount">
 		select count(*)
 		from board
-			join "USER" using(user_no)
-		where board_type = 4
 		<if test="value != null">
 			<choose>
 				<when test="condition == 'title'">
-					and board_title like '%${value}%'
-				</when>
-				<when test="condition == 'name'">
-					and user_name like '%${value}%'
+					where board_title like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -175,9 +163,6 @@
 			<choose>
 				<when test="condition == 'title'">
 					and board_title like '%${value}%'
-				</when>
-				<when test="condition == 'name'">
-					and user_name like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -206,7 +191,7 @@
 
 	<update id="updateCouponBoard">
 		update board
-		set board_title = #{boardTitle}, board_content = #{boardContent}, board_type = 4, board_modified_date = sysdate
+		set board_title = #{boardTitle}, board_content = #{boardContent}, board_type = '4', board_modified_date = sysdate
 		where board_id = #{boardId}
 	</update>
 	
@@ -225,14 +210,10 @@
 	<select id="getPointCount">
 		select count(*)
 		from point
-			join "USER" using(user_no)
 		<if test="value != null">
 			<choose>
 				<when test="condition == 'name'">
 					where point_name like '%${value}%'
-				</when>
-				<when test="condition == 'name'">
-					where user_name like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -244,11 +225,8 @@
 			join "USER" using(user_no)
 		<if test="value != null">
 			<choose>
-				<when test="condition == 'title'">
-					where point_name like '%${value}%'
-				</when>
 				<when test="condition == 'name'">
-					where user_name like '%${value}%'
+					where point_name like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -321,14 +299,10 @@
 	<select id="getNoticeCount">
 		select count(*)
 		from board
-			join "USER" using(user_no)
 		<if test="value != null">
 			<choose>
-				<when test="condition == 'title'">
-					where board_title like '%${value}%'
-				</when>
 				<when test="condition == 'name'">
-					where user_name like '%${value}%'
+					where board_title like '%${value}%'
 				</when>
 			</choose>
 		</if>
@@ -340,27 +314,12 @@
 			join "USER" using(user_no)
 		<if test="value != null">
 			<choose>
-				<when test="condition == 'title'">
-					where board_title like '%${value}%'
-				</when>
 				<when test="condition == 'name'">
-					where user_name like '%${value}%'
+					where board_title like '%${value}%'
 				</when>
 			</choose>
 		</if>
 		order by board_id desc
-	</select>
-	
-	<update id="updateNotice">
-		update board
-		set board_title = #{boardTitle}, board_content = #{boardContent}, board_type = #{boardType}, board_modified_date = sysdate
-		where board_id = #{boardId}
-	</update>
-	
-	<select id="selectNotice">
-		select *
-		from board
-		where board_id = #{boardId}
 	</select>
 	
 </mapper>

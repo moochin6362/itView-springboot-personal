@@ -3,8 +3,6 @@ body,
 html {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
-    background-color: #f4f6f9; /* 전체 배경 톤 다운 */
 }
 
 .container {
@@ -21,105 +19,69 @@ html {
 
 /* 메인 콘텐츠 */
 .main-content {
-    padding: 40px;
-    max-width: 1200px;
-    margin: 30px auto;
+    padding: 30px;
+    max-width: 1500px;
+    margin: 0 auto;
     background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* 페이지 제목 */
 .page-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 25px;
-    color: #333;
-    border-left: 6px solid #4caf50;
-    padding-left: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-/* 상세 테이블 */
 .detail-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-bottom: 25px;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
 .detail-table th,
 .detail-table td {
-    padding: 14px 18px;
+    border: 1px solid #ccc;
+    padding: 12px 16px;
     text-align: left;
     vertical-align: middle;
-    border-bottom: 1px solid #eaeaea;
-    font-size: 15px;
 }
 
 .detail-table th {
-    background-color: #f1f5f9;
-    color: #555;
-    font-weight: 600;
-    width: 120px;
-    text-align: center;  
+    background-color: #f9f9f9;
+    width: 180px;
 }
 
-.detail-table td {
-    background-color: #fff;
-    color: #333;
-    width: 300px;
+.status.paid {
+    color: green;
+    font-weight: bold;
 }
 
-.detail-table tr:last-child th,
-.detail-table tr:last-child td {
-    border-bottom: none; /* 마지막 줄은 선 제거 */
+.delivery-status label {
+    margin-right: 20px;
+    font-weight: 500;
 }
 
-.detail-table td img {
-    max-width: 400px; /* 이미지 고정 */
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-/* 버튼 영역 */
 .form-actions {
     text-align: center;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .btn-submit,
 .btn-reset {
-    padding: 12px 28px;
-    margin: 0 10px;
-    font-size: 15px;
-    font-weight: 600;
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* 수정 버튼 */
 .btn-submit {
-    background: linear-gradient(135deg, #4caf50, #43a047);
+    background-color: #4caf50;
     color: white;
-}
-.btn-submit:hover {
-    background: linear-gradient(135deg, #43a047, #388e3c);
-    transform: translateY(-2px);
 }
 
-/* 삭제/취소 버튼 */
 .btn-reset {
-    background: linear-gradient(135deg, #f44336, #e53935);
+    background-color: #f44336;
     color: white;
-}
-.btn-reset:hover {
-    background: linear-gradient(135deg, #e53935, #c62828);
-    transform: translateY(-2px);
 }

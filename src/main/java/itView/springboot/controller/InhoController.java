@@ -228,25 +228,16 @@ public class InhoController {
     }
     
     // 쿠폰 공지사항 상세 페이지
-    @GetMapping("/couponBoard/{id}/{page}")
+    @GetMapping({"/couponBoard/{id}/{page}", "/notice/{id}/{page}"})
     public String selectCouponBoard(@PathVariable("id") int bId, @PathVariable("page") int page, Model model) {
     	Board b = uService.selectCouponBoard(bId);
     	if(b != null) {
     		model.addAttribute("b", b);
     		model.addAttribute("page", page);
-    		return "inhoAdmin/noticeDetail";
+    		return "inhoAdmin/updateCouponNotice";
     	} else {
-    		throw new AdminException("쿠폰 공지 상세보기를 실패하였습니다.");
+    		throw new AdminException("공지 상세보기를 실패하였습니다.");
     	}
-    }
-    
-    // 공지사항 수정 페이지 이동
-    @GetMapping("/updateCouponBoard")
-    public String updateCouponBoard(@RequestParam("boardId") int bId, @RequestParam("page") int page, Model model) {
-    	Board b = uService.selectCouponBoard(bId);
-    	model.addAttribute("b", b);
-    	model.addAttribute("page", page);
-        return "inhoAdmin/updateCouponNotice";
     }
     
     // 쿠폰 공지사항 수정
@@ -272,53 +263,6 @@ public class InhoController {
         uService.updateAttachment(b.getBoardId(), uploadedFiles != null ? uploadedFiles.split(",") : new String[0]);
 
         return "redirect:/inhoAdmin/couponBoardList";
-    }
-    
-    // 공지사항 상세 페이지
-    @GetMapping("/notice/{id}/{page}")
-    public String selectNotice(@PathVariable("id") int bId, @PathVariable("page") int page, Model model) {
-    	Board b = uService.selectNotice(bId);
-    	if(b != null) {
-    		model.addAttribute("b", b);
-    		model.addAttribute("page", page);
-    		return "inhoAdmin/noticeDetail";
-    	} else {
-    		throw new AdminException("공지 상세보기를 실패하였습니다.");
-    	}
-    }
-    
-    // 공지사항 수정 페이지 이동
-    @GetMapping("/updateNotice")
-    public String updateNotice(@RequestParam("boardId") int bId, @RequestParam("page") int page, Model model) {
-    	Board b = uService.selectNotice(bId);
-    	model.addAttribute("b", b);
-    	model.addAttribute("page", page);
-        return "inhoAdmin/updateNotice";
-    }
-    
-    // 공지사항 수정
-    @PostMapping("updateNotice")
-    public String updateNotice(Board b, @RequestParam(value="uploadedFiles", required=false) String uploadedFiles,
-           							HttpSession session) {
-    	
-    	// 에디터 HTML 내 temp → notice 경로 변경
-        if(uploadedFiles != null && !uploadedFiles.isEmpty()){
-            String[] files = uploadedFiles.split(",");
-            String content = b.getBoardContent();
-            for(String fileName : files){
-                content = content.replace("/uploadFilesFinal/temp/" + fileName,
-                        "/uploadFilesFinal/notice/" + fileName);
-            }
-            b.setBoardContent(content);
-        }
-
-        // 게시글 업데이트
-        uService.updateNotice(b);
-
-        // 이미지 temp → notice 이동 및 DB 저장
-        uService.updateAttachment(b.getBoardId(), uploadedFiles != null ? uploadedFiles.split(",") : new String[0]);
-
-        return "redirect:/inhoAdmin/noticeList";
     }
     
     // 포인트 리스트 페이지
@@ -458,11 +402,12 @@ public class InhoController {
     
     // 공지사항 삭제
     @PostMapping("deleteNotice")
-    public String deleteNotice(@RequestParam("boardId") int bId) {
+    public String deleteNotice(@RequestParam("boardId") int bId, RedirectAttributes redirectAttributes) {
     	int result = uService.deleteNotice(bId);
     	
 	    	if(result > 0) {
-	    		return "redirect:/inhoAdmin/noticeList";
+	    		redirectAttributes.addFlashAttribute("msg", "공지사항이 삭제되었습니다");
+	    		return "redirect:/inhoAdmin/NoticeList";
 	    	} else {
 	    		throw new AdminException("공지사항 삭제를 실패했습니다.");
 	    	}
@@ -470,9 +415,10 @@ public class InhoController {
     
     // 쿠폰 삭제
     @PostMapping("deleteCoupon")
-    public String deleteCoupon(@RequestParam("couponNo") int cNo) {
+    public String deleteCoupon(@RequestParam("couponNo") int cNo, RedirectAttributes redirectAttributes) {
     	int result = uService.deleteCoupon(cNo);
 	    	if(result > 0) {
+	    		redirectAttributes.addFlashAttribute("msg", "쿠폰이 삭제되었습니다");
 	    		return "redirect:/inhoAdmin/couponList";
 	    	} else {
 	    		throw new AdminException("상품 삭제를 실패했습니다.");

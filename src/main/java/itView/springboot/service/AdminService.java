@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
-import itView.springboot.dto.GboardDetail;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.mapper.AdminMapper;
 import itView.springboot.mapper.InhoMapper;
-import itView.springboot.vo.AdminReply;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
@@ -57,23 +55,16 @@ public class AdminService {
 	public ReportDetail selectReportDetail(int userNo) {
 		return mapper.selectReportDetail(userNo);
 	}
-	//일반 문의게시판조회 , 상세, 답변등록
+	//일반 문의게시판
 	public Integer gBoardListCount(int boardType) {
 		return mapper.gBoardListCount(boardType);
 	}
-	public ArrayList<GboardDetail> selectgBoardList(PageInfo pi) {
+	public ArrayList<Board> selectgBoardList(PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectBoardList(rowBounds);
 	}
-	public GboardDetail gBoardDetail(int boardId) {
-		return mapper.gBoardDetail(boardId);
-	}
-	//일반 문의게시판 답변등록
-	public int saveGreply(AdminReply adminReply) {
-		return mapper.saveGreply(adminReply);
-	}
-	
+
 	
 	//판매자 문의게시판
 	public Integer pBoardListCount(int boardType) {
@@ -155,15 +146,6 @@ public class AdminService {
 	public int deleteProBoard(int id) {
 		return mapper.proBoardDelete(id);
 	}
-
-	//일반문의 - 댓글조회
-	public ArrayList<AdminReply> getGeneralReplyList(int boardId) {
-		return mapper.getGeneralReplyList(boardId);
-	}
-
-
-
-	
 		
 		
 		

@@ -83,8 +83,6 @@
                    th:checked="${user?.userGender == 'F'}"/><label for="g-f" class="chip">여성</label>
             <input id="g-m" name="gender" type="radio" value="M"
                    th:checked="${user?.userGender == 'M'}"/><label for="g-m" class="chip">남성</label>
-            <input id="g-n" name="gender" type="radio" value="N"
-                   th:checked="${user?.userGender == 'N'}"/><label for="g-n" class="chip">선택안함</label>
           </div>
         </div>
       </div>
@@ -181,6 +179,56 @@
           </div>
         </div>
       </div>
+      
+		      <!-- 희망 가격 -->
+		<div class="form-row">
+		  <label class="form-label">희망 가격</label>
+		  <div class="form-field">
+		    <div class="chip-group single" id="hopePrice">
+		      <input type="radio" id="priceRange1" name="hopePrice" value="priceRange1"
+		             th:checked="${user?.hopePrice=='priceRange1'}"/><label for="priceRange1" class="chip">10000원 미만</label>
+		      <input type="radio" id="priceRange2" name="hopePrice" value="priceRange2"
+		             th:checked="${user?.hopePrice=='priceRange2'}"/><label for="priceRange2" class="chip">10000원 이상 ~ 30000원 미만</label>
+		      <input type="radio" id="priceRange3" name="hopePrice" value="priceRange3"
+		             th:checked="${user?.hopePrice=='priceRange3'}"/><label for="priceRange3" class="chip">30000원 이상 ~ 50000원 미만</label>
+		      <input type="radio" id="priceRange4" name="hopePrice" value="priceRange4"
+		             th:checked="${user?.hopePrice=='priceRange4'}"/><label for="priceRange4" class="chip">50000원 이상</label>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- 성분 -->
+		<div class="form-row">
+		  <label class="form-label">성분</label>
+		  <div class="form-field">
+		    <div class="chip-group single" id="ingredient">
+		      <input type="radio" id="natural"  name="ingredient" value="natural"
+		             th:checked="${user?.ingredient=='natural'}"/><label for="natural"  class="chip">천연 & 식물 유래 성분</label>
+		      <input type="radio" id="vitamin"  name="ingredient" value="vitamin"
+		             th:checked="${user?.ingredient=='vitamin'}"/><label for="vitamin"  class="chip">비타민 & 항산화 성분</label>
+		      <input type="radio" id="peptide"  name="ingredient" value="peptide"
+		             th:checked="${user?.ingredient=='peptide'}"/><label for="peptide"  class="chip">기능성 펩타이드 & 단백질 성분</label>
+		      <input type="radio" id="moisture" name="ingredient" value="moisture"
+		             th:checked="${user?.ingredient=='moisture'}"/><label for="moisture" class="chip">보습 & 피부장벽 특화 성분</label>
+		      <input type="radio" id="cleansing" name="ingredient" value="cleansing"
+		             th:checked="${user?.ingredient=='cleansing'}"/><label for="cleansing" class="chip">피부 정화 & 각질 케어 성분</label>
+		    </div>
+		  </div>
+		</div>
+		
+		<!-- 친환경 여부 -->
+		<div class="form-row">
+		  <label class="form-label">친환경 제품</label>
+		  <div class="form-field">
+		    <div class="chip-group single" id="eco">
+		      <input type="radio" id="ecoY" name="ecoFriendly" value="Y"
+		             th:checked="${user?.ecoFriendly=='Y'}"/><label for="ecoY" class="chip">친환경 제품 원해요</label>
+		      <input type="radio" id="ecoN" name="ecoFriendly" value="N"
+		             th:checked="${user?.ecoFriendly=='N'}"/><label for="ecoN" class="chip">모든 제품 보기</label>
+		    </div>
+		  </div>
+		</div>
+      
 
       <section class="notice card">
         <ul>
