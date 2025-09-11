@@ -1,5 +1,6 @@
 package itView.springboot.vo;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,4 +36,11 @@ public class User {
 	private String ingredient;
 	private String ecoFriendly;
 	private String hopePrice;
+	
+    //신고용(DB에는 없음)
+	private String reportType;
+	private int reportCount;
+	private int rowNum;
+	private String reportStatus;
+	private Date reportDate;
 }

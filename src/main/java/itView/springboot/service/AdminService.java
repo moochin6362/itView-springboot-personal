@@ -151,11 +151,22 @@ public class AdminService {
 	}
 
 	
-	//신고게시판 조회
-	public int getReportListCount(int boardType, String value, String condition) {
-		return mapper.getReportListCount(boardType, value, condition);
+	//신고게시판 조회(페이징처리)
+	public int getReportListCount1(int boardType, String value, String condition) {
+		return mapper.getReportListCount1(boardType, value, condition);
+	}
+	public int getReportListCount2(int boardType, String value, String condition) {
+		return mapper.getReportListCount2(boardType, value, condition);
+	}
+	public int getReportListCount3(int boardType, String value, String condition) {
+		return mapper.getReportListCount3(boardType, value, condition);
 	}
 	
+	public int getReportListCount4(int boardType, String value, String condition) {
+		return mapper.getReportListCount4(boardType, value, condition);
+	}
+
+	//신고게시판 전체 리스트 조회
 	public ArrayList<User> selectReportUserList(PageInfo pi, String value, String condition) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
@@ -173,16 +184,34 @@ public class AdminService {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectReportReviewList(rowBounds, value, condition);
 	}
+
 	public ArrayList<Reply> selectReportReplyList(PageInfo pi, String value, String condition) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectReportReplyList(rowBounds, value, condition);
 	}
+	
+	
+	//신고 상세페이지이동
 
-	//신고게시판 상세보기
-	public ReportDetail selectReportDetail(int userNo) {
-		return mapper.selectReportDetail(userNo);
+	public User rUserDetail(int reportNo) {
+		return mapper.rUserDetail(reportNo);
 	}
+
+	public Board rBoardDetail(int reportNo) {
+		return mapper.rBoardDetail(reportNo);
+	}
+
+	public Review rReviewDetail(int reportNo) {
+		return mapper.rReviewDetail(reportNo);
+	}
+
+	public Reply rReplyDetail(int reportNo) {
+		return mapper.rReplyDetail(reportNo);
+	}
+	
+	
+	
 
 
 

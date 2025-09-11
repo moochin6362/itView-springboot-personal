@@ -34,10 +34,25 @@ public interface AdminMapper {
 
 	
 	//신고게시판 조회
-	int getReportListCount(
+	int getReportListCount1(
 			@Param("boardType") int boardType, 
 			@Param("value") String value, 
 			@Param("condition")String condition);
+	
+	int getReportListCount2(
+			@Param("boardType") int boardType, 
+			@Param("value") String value, 
+			@Param("condition")String condition);
+	int getReportListCount3(
+			@Param("boardType") int boardType, 
+			@Param("value") String value, 
+			@Param("condition")String condition);
+	int getReportListCount4(
+			@Param("boardType") int boardType, 
+			@Param("value") String value, 
+			@Param("condition")String condition);
+	
+	
 	
 	ArrayList<User> selectReportUserList(
 			@Param("rowBounds") RowBounds rowBounds,
@@ -48,7 +63,7 @@ public interface AdminMapper {
 			@Param("rowBounds") RowBounds rowBounds,
 			@Param("value") String value, 
 			@Param("condition")String condition);
-
+	
 	ArrayList<Review> selectReportReviewList(
 			@Param("rowBounds") RowBounds rowBounds,
 			@Param("value") String value, 
@@ -108,6 +123,17 @@ public interface AdminMapper {
 	//일반문의 - 댓글조회
 	ArrayList<AdminReply> getGeneralReplyList(int boardId);
 
+	
+	//신고 상세조회
+	User rUserDetail(int reportNo);
+
+	Board rBoardDetail(int reportNo);
+
+	Reply rReplyDetail(int reportNo);
+
+	Review rReviewDetail(int reportNo);
+
+	
 
 		
 		

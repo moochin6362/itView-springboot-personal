@@ -21,4 +21,12 @@ public class Reply {
 
 	// 댓글 작성자 이름 추가
 	private String userName;
+	
+    //신고용(DB에는 없음)
+	private String reportType;
+	private Date reportDate;
+	private String reportTitle;
+	private int reportCount;
+	private int rowNum;
+	private String reportStatus;
 }

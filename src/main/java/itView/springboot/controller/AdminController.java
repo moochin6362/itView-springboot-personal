@@ -235,57 +235,153 @@ public class AdminController {
 	}
 	
 	
-	//관리자 신고게시판 조회 (회원U, 게시판B, 댓글V, 리뷰R)
-	@GetMapping("/report")
-	public String reportList(
+	//신고게시판 회원용(회원U, 게시판B, 댓글V, 리뷰R)
+	@GetMapping("/rUser")
+	public String rUserList(
 		@RequestParam(value = "page", defaultValue = "1") int currentPage,
         @RequestParam(value = "value", required = false) String value,
         @RequestParam(value = "condition", defaultValue = "all") String condition,
         Model model,
         HttpServletRequest request
         ) {
-	
-		int listCount = adService.getReportListCount(1, value, condition);
-
+		int listCount = adService.getReportListCount1(1, value, condition);
         PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 
-    
         ArrayList<User> userList = adService.selectReportUserList(pi, value, condition);
-        ArrayList<Board> boardList = adService.selectReportBoardList(pi, value, condition);
-        ArrayList<Review> reviewList = adService.selectReportReviewList(pi, value, condition);
-        ArrayList<Reply> replyList = adService.selectReportReplyList(pi, value, condition);
-
-        
+ 
+        model.addAttribute("userList", userList);
         model.addAttribute("pi", pi);
         model.addAttribute("loc", request.getRequestURL());
         model.addAttribute("value", value);
         model.addAttribute("condition", condition);
         
-        ArrayList<Object> reportList = new ArrayList<>();
-        reportList.addAll(userList);
-        reportList.addAll(boardList);
-        reportList.addAll(reviewList);
-        reportList.addAll(replyList);
-
-        model.addAttribute("reportList", reportList);
-
-	
-        return "admin/admin_report_board";
+        //System.out.println(userList);
+        return "admin/admin_rUser_board";
 	}
 	
+	//신고 게시판(커뮤니티 글)
+	@GetMapping("/rBoard")
+	public String rBoardList(
+			@RequestParam(value = "page", defaultValue = "1") int currentPage,
+	        @RequestParam(value = "value", required = false) String value,
+	        @RequestParam(value = "condition", defaultValue = "all") String condition,
+	        Model model,
+	        HttpServletRequest request
+	        ) {
+		int listCount = adService.getReportListCount2(1, value, condition);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
 
-	//신고 게시판 상세조회(reportNo로 조회하기)
-	@GetMapping("/reportDetail")
-	public String reportDetailPage(
+    
+		 ArrayList<Board> boardList = adService.selectReportBoardList(pi, value, condition);
+		
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
+        model.addAttribute("value", value);
+        model.addAttribute("condition", condition);
+		return "admin/admin_rBoard_board";
+	}
+	
+	//신고게시판 (리뷰)
+	@GetMapping("/rReview")
+	public String rReviewList(
+			@RequestParam(value = "page", defaultValue = "1") int currentPage,
+	        @RequestParam(value = "value", required = false) String value,
+	        @RequestParam(value = "condition", defaultValue = "all") String condition,
+	        Model model,
+	        HttpServletRequest request
+	        ) {
+		int listCount = adService.getReportListCount3(1, value, condition);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+
+		ArrayList<Review> reviewList = adService.selectReportReviewList(pi, value, condition);
+		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
+        model.addAttribute("value", value);
+        model.addAttribute("condition", condition);
+		
+		return "admin/admin_rReview_board";
+	}
+	
+	//신고게시판 (댓글)
+	@GetMapping("/rReply")
+	public String rReplyList(
+			@RequestParam(value = "page", defaultValue = "1") int currentPage,
+	        @RequestParam(value = "value", required = false) String value,
+	        @RequestParam(value = "condition", defaultValue = "all") String condition,
+	        Model model,
+	        HttpServletRequest request
+	        ) {
+		int listCount = adService.getReportListCount4(1, value, condition);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+
+        
+		ArrayList<Reply> replyList = adService.selectReportReplyList(pi, value, condition);
+		model.addAttribute("replyList", replyList);
+		model.addAttribute("pi", pi);
+        model.addAttribute("loc", request.getRequestURL());
+        model.addAttribute("value", value);
+        model.addAttribute("condition", condition);
+		
+        
+		return "admin/admin_rReply_board";
+	}
+	
+	
+	
+	//신고 게시판 상세조회
+	@GetMapping("/rUserDetail")
+	public String rUserDetail(
 			@RequestParam("reportNo")int reportNo,
 			@RequestParam(value="page", defaultValue="1") int page,
 			Model model
 			) {
-		ReportDetail reportDetail = adService.selectReportDetail(reportNo);
-		model.addAttribute("reportDetail", reportDetail);
+		User rUserDetail = adService.rUserDetail(reportNo);
+		model.addAttribute("rUserDetail", rUserDetail);
 		model.addAttribute("page",page);
 		
-		return "admin/admin_report_detail";
+		return "admin/admin_rUser_detail";
+		
+	}
+	@GetMapping("/rBoardDetail")
+	public String rBoardDetail(
+			@RequestParam("reportNo")int reportNo,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model
+			) {
+		Board rBoardDetail = adService.rBoardDetail(reportNo);
+		model.addAttribute("rBoardDetail", rBoardDetail);
+		model.addAttribute("page",page);
+		
+		return "admin/admin_rBoard_detail";
+		
+	}
+	@GetMapping("/rReviewDetail")
+	public String rReviewDetail(
+			@RequestParam("reportNo")int reportNo,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model
+			) {
+		Review rReviewDetail = adService.rReviewDetail(reportNo);
+		model.addAttribute("rReviewDetail", rReviewDetail);
+		model.addAttribute("page",page);
+		
+		return "admin/admin_rReview_detail";
+		
+	}
+	@GetMapping("/rReplyDetail")
+	public String rReplyDetail(
+			@RequestParam("reportNo")int reportNo,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model
+			) {
+		Reply rReplyDetail = adService.rReplyDetail(reportNo);
+		
+		model.addAttribute("rReplyDetail", rReplyDetail);
+		model.addAttribute("page",page);
+		
+		return "admin/admin_rReply_detail";
 		
 	}
 	

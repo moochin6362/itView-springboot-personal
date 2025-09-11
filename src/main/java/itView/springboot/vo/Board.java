@@ -24,4 +24,12 @@ public class Board {
     private String thumbnailPath;
     private String userName;
     private String brandName;
+    
+    //신고용(DB에는 없음)
+	private String reportType;
+	private Date reportDate;
+	private String reportTitle;
+	private int reportCount;
+	private int rowNum;
+	private String reportStatus;
 }

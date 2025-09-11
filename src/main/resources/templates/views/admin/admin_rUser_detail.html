@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>회원신고 상세</title>
+        <!-- CSS 파일 -->
+	    <link href="/css/inhoCss/reportProductDetail.css" rel="stylesheet" />
+	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+	    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+	
+	    <!-- 아이콘 & 폰트 -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+	    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- sidebar 조각 삽입 -->
+	        <div th:replace="~{common/sidebar :: sidebar}"></div>
+	
+	        <div class="content-area">
+	            <!-- header 조각 삽입 -->
+	            <div th:replace="~{common/header2 :: header2}"></div>
+	            
+                <div class="main-content">
+	                <div class="main-section">
+	                    <h2 class="page-title">신고회원 상세정보</h2>
+	                    <form id="detailForm" method="get" th:action="@{/admin/updateReportUser}">
+	                    	<input type="hidden" name="userNo" th:value="${user.userNo}">
+	                    	<input type="hidden" name="page" th:value="${page}">
+	                    	<table class="detail-table">
+	                        <tr>
+	                            <th>신고회원 번호</th>
+	                            <td>[[${user.userNo}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>신고회원 이름</th>
+	                            <td>[[${user.userName}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>회원 유형</th>
+	                            <td th:text="${user.userType == 'P' ? '판매자' : '일반회원'}"></td>
+	                        </tr>
+	                        <tr>
+	                            <th>신고 날짜</th>
+	                            <td th:text="${user.reportDate}"></td>
+	                        </tr>
+	                        <tr>
+	                            <th>누적 신고횟수</th>
+	                            <td>[[${user.reportCount}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>회원 상태</th>
+	                            <td th:text="${user.userState == 'Y'?'활동중' : '정지'}"></td>
+	                        </tr>
+	                    </table>
+	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
+						<div class="stop-period-section" style="margin-bottom: 10px;">
+						    <label class="page-title">회원 활동정지 기간선택</label>
+						    <div style="margin-top: 10px;">
+						        <label>
+						            <input type="radio" name="stopPeriod" value="1" /> 1일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="3" /> 3일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="7" /> 7일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="30" /> 30일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="permanent" /> 영구정지
+						        </label>
+						    </div>
+						</div>
+	                    
+	                    <div class="form-actions">
+	                        <button class="btn-submit">수정</button>
+	                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
+	                        <button type="button" class="btn-reset" onclick="history.back()">취소</button>
+	                    </div>
+	                    </form>
+	                </div>
+	                
+	                <!-- 신고 히스토리 -->
+				    <div class="main-section">
+				    	<h2 class="page-title">신고 히스토리</h2>
+				        <table class="history-table">
+				        	<thead>
+					        	<tr>
+					        		<th>신고번호</th>
+						            <th>신고제목</th>
+<!-- 						            <th>신고내용</th> -->
+						            <th>신고 작성자</th>
+						            <th>신고일</th>
+					          	</tr>
+				          	</thead>
+				          	<tbody>
+					        	<tr th:each="Ruser : ${userList}">
+					            	<td>[[${r.reportNo}]]</td>
+					            	<td>[[${r.reportTitle}]]</td>
+<!-- 					            	<td>[[${r.reportContent}]]</td> -->
+					            	<td>[[${r.userName}]]</td>
+					            	<td>[[${r.reportDate}]]</td>
+					        	</tr>
+<!-- 				          		<tr th:if="${#lists.isEmpty(reportHistoryList)}"> -->
+<!-- 				            		<td colspan="3" style="text-align:center;">신고 이력이 없습니다.</td> -->
+<!-- 				          		</tr> -->
+				        	</tbody>
+				    	</table>
+					</div>
+                </div>
+            </div>
+        </div>
+		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+		<script>
+			window.onload = () => {
+			    const delBtn = document.getElementById('deleteBtn');
+			    const form = document.getElementById('detailForm');
+	
+			    if (delBtn) {
+			        delBtn.addEventListener('click', () => {
+			            if (confirm("정말 상품을 삭제하시겠습니까?")) {
+			            	form.method = "post";
+			                form.action = '/inhoAdmin/deleteCoupon';
+			                form.submit();
+			            }
+			        });
+			    }
+			}
+		</script>
+    </body>
+</html>
