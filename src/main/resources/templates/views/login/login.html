@@ -50,15 +50,12 @@
                     	<a href="/login/findPwd">비밀번호를 잊어버렸어요</a>
                     </div>
                 </div>
-                
+                <input type="hidden" name="beforeURL" value="${beforeURL}">
                 
                 <div class="login-button-box">
                     <button type="submit">로그인</button> <!--홈화면 이동-->
                     <button type="button" onclick="location.href='/login/signUp'">회원가입</button> <!--회원정보 없을 경우 회원가입 페이지 이동-->
                 </div>
-                <div id="kakao-login-btn"></div>
-                
-                <input type="hidden" name="beforeURL"/>
                 
             </form>
         </div>    

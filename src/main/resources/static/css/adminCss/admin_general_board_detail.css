@@ -1,20 +1,46 @@
+/* 전체 레이아웃 */
+body {
+	font-family: 'Malgun Gothic', Arial, sans-serif;
+	background-color: #eefbfb; /* 민트 배경 */
+	margin: 0;
+	padding: 0;
+	display: flex;
+	height: 100vh;
+}
+
+/* 최상위 컨테이너 */
+.container {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+/* 콘텐츠 영역 */
+.content-area {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background: #f9f9f9;
+	overflow-y: auto;
+}
 .admin-genBoard-detail-wrapper{
-    width: 55%;
-    height: 100%;
-    margin: auto;
+    min-width: 94.5%;
+    margin: 0 auto;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color:white;
+    padding: 40px;
 }
 
 .admin-genBoard-detail-container{
-    width: 100%;
+	width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin:10px 0;
+     margin:10px 0;
 }
 
 /*테이블 부분 verticle table*/
@@ -90,7 +116,15 @@
     flex-direction:column;
     width: 100%;
     font-size: 14px;
+    max-height: 500px; /* 필요에 따라 조절 */
+    overflow-y: auto;
+    overflow-x: hidden; /* 가로 스크롤 제거 */
+    padding: 0;
+    border:none;
+    border-radius: 12px;
+    background-color:transparent; 
 }
+
 /*달린 댓글 포맷*/
 .admin-genBoard-detail-reply
 .genBoard-reply-list{
@@ -141,6 +175,21 @@
   display: flex;
   justify-content: flex-end;
 }
+
+
+/*답변입력 칸*/
+.genBoard-reply-content #replyInput {
+	border: 1px solid #ddd;
+	user-select: none;
+	border-radius: 8px;
+	height: 50px;
+	font-family: 'Malgun Gothic', Arial, sans-serif;
+	
+}
+.genBoard-reply-content #replyInput:focus{
+	outline: none;
+    border: 2px solid #34e5eb;
+}
 .genBoard-reply-content 
 .genBoard-reply-btn{
     right:10px;
@@ -155,6 +204,10 @@
     user-select: none;
 
 }
+textarea {
+  resize: none; 
+}
+
 
 .genBoard-reply-content 
 .genBoard-reply-btn:hover{

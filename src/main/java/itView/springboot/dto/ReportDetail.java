@@ -14,6 +14,7 @@ import lombok.Setter;
 public class ReportDetail {
 	private int reportNo;
 	private String reportTitle;
+	private String reportContent;
 	private Date reportDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date reportModifyDate;
@@ -21,7 +22,8 @@ public class ReportDetail {
 	private String reportType;
 	private int reporterUserId;
 	 private int reportTargetNo;
-	
+	 
+	//내가 추가한것
 	private int userNo;
     private String userId;
     private String userName;

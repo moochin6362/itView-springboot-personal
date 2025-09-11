@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>신고상품 상세</title>
+        <!-- CSS 파일 -->
+	    <link href="/css/inhoCss/reportProductDetail.css" rel="stylesheet" />
+	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+	    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+	
+	    <!-- 아이콘 & 폰트 -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+	    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- sidebar 조각 삽입 -->
+	        <div th:replace="~{common/sidebar :: sidebar}"></div>
+	
+	        <div class="content-area">
+	            <!-- header 조각 삽입 -->
+	            <div th:replace="~{common/header2 :: header2}"></div>
+	            
+                <div class="main-content">
+	                <div class="main-section">
+	                    <h2 class="page-title">신고상품 상세정보</h2>
+	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
+	                    	<input type="hidden" name="productNo" th:value="${p.productNo}">
+	                    	<input type="hidden" name="page" th:value="${page}">
+	                    	<table class="detail-table">
+	                        <tr>
+	                            <th>상품번호</th>
+	                            <td>[[${p.productNo}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>상품명</th>
+	                            <td>[[${p.productName}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>상품 종류</th>
+	                            <td>[[${p.productCategory}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>상품설명</th>
+	                            <td th:utext="${p.productDetail}"></td>
+	                        </tr>
+	                        <tr>
+	                            <th>판매자</th>
+	                            <td>[[${p.userNo}]]</td> 
+	<!--                             유저랑 조인 -->
+	                        </tr>
+	                        <tr>
+	                            <th>브랜드명</th>
+	                            <td>[[${p.productCompany}]]</td>
+	                        </tr>
+	                        <tr>
+	                            <th>상품 상태</th>
+	                            <td>[[${p.productState}]]</td>
+<!-- 	                            상품 상태 정지중 이런걸로 수정 -->
+	                        </tr>
+	                    </table>
+	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
+						<div class="stop-period-section" style="margin-bottom: 10px;">
+						    <label class="page-title">상품 정지기간 선택</label>
+						    <div style="margin-top: 10px;">
+						        <label>
+						            <input type="radio" name="stopPeriod" value="1" /> 1일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="3" /> 3일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="7" /> 7일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="30" /> 30일
+						        </label>
+						        <label>
+						            <input type="radio" name="stopPeriod" value="permanent" /> 영구정지
+						        </label>
+						    </div>
+						</div>
+	                    
+	                    <div class="form-actions">
+	                        <button class="btn-submit">수정</button>
+	                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
+	                        <button type="button" class="btn-reset" onclick="history.back()">취소</button>
+	                    </div>
+	                    </form>
+	                </div>
+	                
+	                <!-- 신고 히스토리 -->
+				    <div class="main-section">
+				    	<h2 class="page-title">신고 히스토리</h2>
+				        <table class="history-table">
+				        	<thead>
+					        	<tr>
+					        		<th>신고번호</th>
+						            <th>신고제목</th>
+<!-- 						            <th>신고내용</th> -->
+						            <th>신고 작성자</th>
+						            <th>신고일</th>
+					          	</tr>
+				          	</thead>
+				          	<tbody>
+					        	<tr th:each="r : ${rlist}">
+					            	<td>[[${r.reportNo}]]</td>
+					            	<td>[[${r.reportTitle}]]</td>
+<!-- 					            	<td>[[${r.reportContent}]]</td> -->
+					            	<td>[[${r.userName}]]</td>
+					            	<td>[[${r.reportDate}]]</td>
+					        	</tr>
+<!-- 				          		<tr th:if="${#lists.isEmpty(reportHistoryList)}"> -->
+<!-- 				            		<td colspan="3" style="text-align:center;">신고 이력이 없습니다.</td> -->
+<!-- 				          		</tr> -->
+				        	</tbody>
+				    	</table>
+					</div>
+                </div>
+            </div>
+        </div>
+		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+		<script>
+			window.onload = () => {
+			    const delBtn = document.getElementById('deleteBtn');
+			    const form = document.getElementById('detailForm');
+	
+			    if (delBtn) {
+			        delBtn.addEventListener('click', () => {
+			            if (confirm("정말 상품을 삭제하시겠습니까?")) {
+			            	form.method = "post";
+			                form.action = '/inhoAdmin/deleteCoupon';
+			                form.submit();
+			            }
+			        });
+			    }
+			}
+		</script>
+    </body>
+</html>

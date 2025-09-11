@@ -16,4 +16,6 @@ public class UserReport {
     private String userType;
     private String userStatus;
     private int reportCount;
+    private int reportTargetNo;
+    private String reportType;
 }

@@ -8,7 +8,7 @@
    	<link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
     <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
     <script src="/js/admin/admin_report_board.js" defer></script>
-    <script th:src="@{/js/inhoAdmin/sidebar.js}" defer></script>
+    <script src="/js/inhoAdmin/sidebar.js" defer></script>
      <!-- 아이콘 & 폰트 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
@@ -32,7 +32,7 @@
 			                <select name="condition" class="form-select">
 			               		<option value="reportType" th:selected="${condition == 'reportType'}">신고 유형</option>
 			                    <option value="reportTitle"  th:selected="${condition == 'reportTitle'}">제목</option>
-			                    <option value="writer" th:selected="${condition == 'writer'}">작성자</option>
+			                    <option value="reporterUserId" th:selected="${condition == 'reporterUserId'}">작성자</option>
 			                    <option value="reportStatus" th:selected="${condition == 'reportStatus'}">신고글 상태</option>
 			                </select>
 			                <input type="search" name="value" class="form-control" style="width:250px; display:inline;">
@@ -48,21 +48,27 @@
 			    <div class="admin-report-board-table">
 			        <table id="admin-report-board-table-header" 
 			        	   class="admin-report-board-table-header"
-			        	   th:each="report : ${reportList}">
+			        	   >
 			            <thead>
 			                <tr>
-			                    <th>신고 유형</th>
-			                    <th>제목</th>
-			                    <th>작성자</th>
-			                    <th>작성일</th>
-			                    <th>신고글 상태</th>
+			                    <th>No</th>
+			                    <th>신고 대상 유형</th>
+			                    <th>신고 대상 번호</th>
+			                    <th>누적 신고 횟수</th>
 			                </tr>
-			            </thead>s
-			            <tbody id="admin-report-board-table-body" class="admin-report-board-table-body">
-			                <tr>
-			                    <td th:text="${report.reportType}"></td>
-			                    <td th:text="${report.reportTitle}"></td>
-			                    <td th:text="${report.writer}"></td>
+			            </thead>
+			            <tbody id="admin-report-board-table-body" 
+			            	   class="admin-report-board-table-body">
+			                <tr th:each="report : ${reportList}">
+			                	<td>[[${report.rowNum}]]</td>
+			                    <td th:switch="${report.reportType}">
+				          			<span th:case="'R'">리뷰</span>
+								    <span th:case="'B'">게시판</span>
+								    <span th:case="'U'">회원</span>
+								    <span th:case="'V'">댓글</span>
+								</td>
+			                    <td></td>
+			                    <td></td>
 			                    <td th:text="${report.reportDate}"></td>
 			                    <td th:text="${report.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
 			                </tr>

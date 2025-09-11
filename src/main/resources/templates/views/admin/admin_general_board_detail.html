@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자용 문의 게시판 상세페이지 (일반)</title>
-    <link rel="stylesheet" href="./admin_general_board_detail.css">
-    <script src="./admin_general_board_detail.js"></script>
+    <link rel="stylesheet" href="/css/adminCss/admin_general_board_detail.css">
+    <script src="/js/admin/admin_general_board_detail.js" defer></script>
+    
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+     <script src="/js/inhoAdmin/sidebar.js" defer></script>
+     <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 </head>
 <body>
-
 
 	<div class="container">
 		<!-- 사이드바 -->
@@ -21,64 +28,50 @@
 	
 		    <div class="admin-genBoard-detail-wrapper">
 		        <div class="admin-genBoard-detail-container"> <!--게시판-->
+		        <input type="hidden" th:value="${gBoard.boardId}" id="gBoardDetail"/>
 		            <table class="admin-genBoard-detail-table">  <!--게시판 헤더-->
 		                <tr>
 		                    <th>작성자</th>
-		                    <td>배민vip</td>
+		                    <td th:text="${gBoard.userId}"></td>
 		                </tr>
 		                <tr>
 		                    <th>문의 제목</th>
-		                    <td>쿠폰 많이 주세요. 더주세요.</td>
+		                    <td th:text="${gBoard.boardTitle}"></td>
 		                </tr>
 		                <tr>
 		                    <th>작성일</th>
-		                    <td>2025-09-01</td>
+		                    <td th:text="${gBoard.boardDate}"></td>
 		                </tr>
 		            </table>
 		
 		            <div class="admin-genBoard-detail-content">
-		                <div class="detail-content">
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
-		                    쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.쿠폰 좀 많이줘요.
+		                <div class="detail-content"
+		                	th:text="${gBoard.boardContent}">
 		                </div>
 		            </div>
 		         </div>
 		            
 		            <!--관리자 답변 : 댓글형식 / 시간 "오름차순!!"-->
-		            <div class="admin-genBoard-detail-reply">
-		                <div class="genBoard-reply-list" id="replyList">
-		                    <!--js에서 동적 추가-->
+	            <div class="admin-genBoard-detail-reply">
+	                <div class="genBoard-reply-list" id="replyList">
+	                    <div th:each ="reply: ${replyList}">
 		                    <div class="genBoard-reply-admin">관리자</div>
-		                    <div class="genBoard-reply-date">2025-08-14 10:23</div>
-		                    <div class="genBoard-reply-text">?</div>
-		
-		                    <div class="genBoard-reply-admin">관리자</div>
-		                    <div class="genBoard-reply-date">2025-08-14 10:26</div>
-		                    <div class="genBoard-reply-text">ㄹㅈㄷ</div>
-		                    
-		                </div>
+		                    <div class="genBoard-reply-date" th:text="${#dates.format(reply.replyDate,'yyyy-MM-dd')}"></div>
+		                    <div class="genBoard-reply-text" th:text="${reply.replyContent}"></div>
+	                    </div>
+	             </div>
 		            
 		                <!--답변 입력-->
-		                <div class="genBoard-reply-content">
-		                    <textarea id="replyInput" class="genBoard-reply-textarea" placeholder="답변 작성" ></textarea>
-		                    <div class="genBoard-reply-btn-wrapper">
-		                        <button id="replySubmit" class="genBoard-reply-btn">등록</button>
-		                    </div>
-		                </div>
-		            </div>
-				</div>
-			</div>
+                <div class="genBoard-reply-content">
+                    <textarea id="replyInput" class="genBoard-reply-textarea" placeholder="답변 작성" ></textarea>
+                    <div class="genBoard-reply-btn-wrapper">
+                        <button id="replySubmit" class="genBoard-reply-btn">등록</button>
+                    </div>
+                </div>
+                
+            </div> <!-- wrapper-->
+		</div>
+	</div>
 
-       
-
-
-
-
-    </div>
 </body>
 </html>

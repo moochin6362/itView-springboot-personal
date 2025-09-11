@@ -6,13 +6,17 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
+import itView.springboot.dto.GboardDetail;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
 import itView.springboot.mapper.AdminMapper;
 import itView.springboot.mapper.InhoMapper;
+import itView.springboot.vo.AdminReply;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
+import itView.springboot.vo.Reply;
+import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -39,31 +43,30 @@ public class AdminService {
 		return mapper.selectUser(userNo);
 	}
 
-	
-	//신고당한 회원 리스트
-	public int getReportListCount(int boardType, String value, String condition) {
-		return mapper.getReportListCount(boardType, value, condition);
-	}
-	
-	public ArrayList<User> selecReportList(PageInfo pi, String value, String condition) {
-		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectReportList(rowBounds, value, condition);
-	}
-	
-	//신고게시판 상세보기
-	public ReportDetail selectReportDetail(int userNo) {
-		return mapper.selectReportDetail(userNo);
-	}
-	//일반 문의게시판
-	public Integer gBoardListCount(int boardType) {
-		return mapper.gBoardListCount(boardType);
-	}
-	public ArrayList<Board> selectgBoardList(PageInfo pi) {
-		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return mapper.selectBoardList(rowBounds);
-	}
+
+	//일반 문의게시판조회 , 상세, 답변등록
+		public Integer gBoardListCount(int boardType) {
+			return mapper.gBoardListCount(boardType);
+		}
+		public ArrayList<GboardDetail> selectgBoardList(PageInfo pi) {
+			int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+			RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			return mapper.selectBoardList(rowBounds);
+		}
+		public GboardDetail gBoardDetail(int boardId) {
+			return mapper.gBoardDetail(boardId);
+		}
+		//일반 문의게시판 답변등록
+		public int saveGreply(AdminReply adminReply) {
+			return mapper.saveGreply(adminReply);
+		}
+		
+
+		//일반문의 - 댓글조회
+		public ArrayList<AdminReply> getGeneralReplyList(int boardId) {
+			return mapper.getGeneralReplyList(boardId);
+		}
+
 
 	
 	//판매자 문의게시판
@@ -146,7 +149,45 @@ public class AdminService {
 	public int deleteProBoard(int id) {
 		return mapper.proBoardDelete(id);
 	}
-		
+
+	
+	//신고게시판 조회
+	public int getReportListCount(int boardType, String value, String condition) {
+		return mapper.getReportListCount(boardType, value, condition);
+	}
+	
+	public ArrayList<User> selectReportUserList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportUserList(rowBounds, value, condition);
+	}
+
+	public ArrayList<Board> selectReportBoardList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportBoardList(rowBounds, value, condition);
+	}
+
+	public ArrayList<Review> selectReportReviewList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportReviewList(rowBounds, value, condition);
+	}
+	public ArrayList<Reply> selectReportReplyList(PageInfo pi, String value, String condition) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.selectReportReplyList(rowBounds, value, condition);
+	}
+
+	//신고게시판 상세보기
+	public ReportDetail selectReportDetail(int userNo) {
+		return mapper.selectReportDetail(userNo);
+	}
+
+
+
+
+
 		
 		
 		

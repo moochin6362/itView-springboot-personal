@@ -1,5 +1,5 @@
 
-const titleCells = document.querySelectorAll("#admin-genBoard-table-body td:nth-child(2)");
+const titleCells = document.querySelectorAll("#admin-genBoard-table-body td:nth-child(2) a");
 titleCells.forEach(cell => {
   const maxLength = 30; 
   if(cell.textContent.length > maxLength){
