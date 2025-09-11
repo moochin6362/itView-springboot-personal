@@ -274,32 +274,61 @@
 
         <!-- 이전 버튼 -->
         <li class="page-item" th:classappend="${pi.currentPage == 1} ? 'disabled'">
+            <!-- 카테고리 있음 -->
             <a class="page-link"
-               th:if="${pi.currentPage > 1}"
-               th:href="@{${loc}(q=${param.q}, category=${param.category}, page=${pi.currentPage-1})}"
+               th:if="${pi.currentPage > 1 and param.category != null and !#strings.isEmpty(param.category)}"
+               th:href="@{${loc}(q=${param.q}, category=${param.category}, page=${pi.currentPage - 1})}"
                aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span> <!-- 내용 추가 -->
+                <span aria-hidden="true">&laquo;</span>
             </a>
+            <!-- 카테고리 없음 -->
+            <a class="page-link"
+               th:if="${pi.currentPage > 1 and (param.category == null or #strings.isEmpty(param.category))}"
+               th:href="@{${loc}(q=${param.q}, page=${pi.currentPage - 1})}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+            <!-- 첫 페이지 -->
             <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>
         </li>
 
         <!-- 페이지 번호 -->
-        <li class="page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+        <li class="page-item"
+            th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
             th:classappend="${p == pi.currentPage} ? 'active'">
+
+            <!-- 카테고리 있음 -->
             <a class="page-link"
+               th:if="${param.category != null and !#strings.isEmpty(param.category)}"
                th:href="@{${loc}(q=${param.q}, category=${param.category}, page=${p})}">
+                [[${p}]]
+            </a>
+
+            <!-- 카테고리 없음 -->
+            <a class="page-link"
+               th:unless="${param.category != null and !#strings.isEmpty(param.category)}"
+               th:href="@{${loc}(q=${param.q}, page=${p})}">
                 [[${p}]]
             </a>
         </li>
 
         <!-- 다음 버튼 -->
         <li class="page-item" th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+            <!-- 카테고리 있음 -->
             <a class="page-link"
-               th:if="${pi.currentPage < pi.maxPage}"
-               th:href="@{${loc}(q=${param.q}, category=${param.category}, page=${pi.currentPage+1})}"
+               th:if="${pi.currentPage < pi.maxPage and param.category != null and !#strings.isEmpty(param.category)}"
+               th:href="@{${loc}(q=${param.q}, category=${param.category}, page=${pi.currentPage + 1})}"
                aria-label="Next">
-                <span aria-hidden="true">&raquo;</span> <!-- 내용 추가 -->
+                <span aria-hidden="true">&raquo;</span>
             </a>
+            <!-- 카테고리 없음 -->
+            <a class="page-link"
+               th:if="${pi.currentPage < pi.maxPage and (param.category == null or #strings.isEmpty(param.category))}"
+               th:href="@{${loc}(q=${param.q}, page=${pi.currentPage + 1})}"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+            <!-- 마지막 페이지 -->
             <span class="page-link" th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
         </li>
 

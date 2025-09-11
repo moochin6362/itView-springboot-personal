@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,40 +42,6 @@
             font-weight: 700;
         }
 
-        .search-box {
-            margin: 30px auto 10px;
-            text-align: center;
-        }
-
-        .search-box input {
-            max-width: 600px;
-            border-radius: 30px;
-            padding: 10px 20px;
-            border: 1px solid #000;
-        }
-
-        .keyword-tags {
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .keyword-tags .badge {
-            margin: 5px;
-            background: #000;
-            color: #fff;
-            font-weight: 400;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .keyword-tags .badge:hover {
-            background: #fff;
-            color: #000;
-            border: 1px solid #000;
-        }
-
         .accordion-button {
             background: #fff;
             color: #000;
@@ -95,12 +61,14 @@
 
         .form-section {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 0 auto 30px;
         }
 
-        .form-control, .form-select, textarea {
+        .form-control, textarea, input[type="text"] {
             border-radius: 0;
             border: 1px solid #000;
+            width: 100%;
+            padding: 10px;
         }
 
         .btn-submit {
@@ -118,6 +86,41 @@
             color: #000;
             border: 1px solid #000;
         }
+
+        /* 1:1문의 카드 스타일 */
+        .qna-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            background: #fafafa;
+            transition: box-shadow 0.2s;
+        }
+
+        .qna-card:hover {
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .qna-card h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .qna-card .qna-content {
+            margin-bottom: 15px;
+            color: #333;
+            white-space: pre-line;
+        }
+
+        .qna-card .qna-answer {
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
     </style>
 </head>
 <body>
@@ -126,7 +129,7 @@
 
 <!-- 상단 고객센터 타이틀 -->
 <div class="cs-header">
-    <h2>문의사항</h2>
+    <h2>고객센터</h2>
     <p>무엇을 도와드릴까요?</p>
 </div>
 
@@ -134,13 +137,13 @@
     <!-- 탭 -->
     <ul class="nav nav-tabs justify-content-center" id="csTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq" type="button"
-                    role="tab">FAQ
+            <button class="nav-link active" id="qna-tab" data-bs-toggle="tab" data-bs-target="#qna" type="button" role="tab">
+                1:1 문의
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="qna-tab" data-bs-toggle="tab" data-bs-target="#qna" type="button" role="tab">
-                1:1문의
+            <button class="nav-link" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq" type="button" role="tab">
+                FAQ
             </button>
         </li>
     </ul>
@@ -149,8 +152,45 @@
     <!-- 탭 컨텐츠 -->
     <div class="tab-content mt-4">
 
-        <!-- FAQ -->
-        <div class="tab-pane fade show active" id="faq" role="tabpanel">
+        <!-- 1:1문의 (기본 활성화) -->
+        <div class="tab-pane fade show active" id="qna" role="tabpanel">
+
+            <!-- 문의내역 카드 리스트 -->
+            <div th:each="inq : ${inquirys}" class="qna-card">
+                <h5 th:text="${inq.questionTitle}">문의 제목</h5>
+                <div class="qna-content" th:text="${inq.questionContent}">
+                    문의 내용
+                </div>
+                <div class="qna-answer"
+                     th:text="${inq.answerContent != null ? '[답변] ' + inq.answerContent : '아직 답변이 등록되지 않았습니다.'}">
+                    답변 내용
+                </div>
+            </div>
+
+
+            <hr />
+
+            <!-- 문의 등록 폼 -->
+            <div class="form-section mt-4">
+                <h3 class="mb-3 text-center">1:1 문의 등록</h3>
+                <form th:action="@{/inquiry/insertinquiry}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">문의 제목</label>
+                        <input name="questionTitle" type="text" placeholder="문의 제목을 입력해주세요.">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">문의 내용</label>
+                        <textarea name="questionContent" class="form-control" rows="5" placeholder="문의 내용을 작성해주세요."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-submit">등록하기</button>
+                </form>
+            </div>
+
+        </div>
+
+
+        <!-- FAQ (비활성화) -->
+        <div class="tab-pane fade" id="faq" role="tabpanel">
             <div class="accordion" id="faqAccordion">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="faq1">
@@ -196,31 +236,6 @@
             </div>
         </div>
 
-        <!-- 1:1문의 -->
-        <div class="tab-pane fade" id="qna" role="tabpanel">
-            <div class="form-section mt-4">
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label">이름</label>
-                        <input type="text" class="form-control" placeholder="이름을 입력하세요">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">문의 유형</label>
-                        <select class="form-select">
-                            <option>주문/배송</option>
-                            <option>결제/환불</option>
-                            <option>회원정보</option>
-                            <option>기타</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">문의 내용</label>
-                        <textarea class="form-control" rows="5" placeholder="문의 내용을 작성해주세요."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-submit">문의하기</button>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
 

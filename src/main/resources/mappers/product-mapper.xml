@@ -107,6 +107,7 @@
 		p.PRODUCT_NAME,
 		p.PRODUCT_DETAIL,
 		p.PRODUCT_PRICE,
+		p.PRODUCT_COMPANY,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -116,7 +117,8 @@
 		WHERE 1=1
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
 		</if>
 		ORDER BY p.PRODUCT_NO DESC
 	</select>
@@ -128,6 +130,7 @@
 		p.PRODUCT_DETAIL,
 		p.PRODUCT_PRICE,
 		p.PRODUCT_CATEGORY,
+		p.PRODUCT_COMPANY,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -137,7 +140,8 @@
 		WHERE 1=1
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
 		</if>
 		<if test="categories != null and categories.size() > 0">
 			AND p.PRODUCT_CATEGORY IN

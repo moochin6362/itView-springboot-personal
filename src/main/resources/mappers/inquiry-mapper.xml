@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itView.springboot.mapper.InquiryMapper">
+
+	<insert id="insertinquiry" parameterType="Inquiry">
+		INSERT INTO inquiry (
+		QUESTION_NO,
+		QUESTION_TITLE,
+		QUESTION_CONTENT,
+		USER_NO
+		) VALUES (
+		SEQ_inquiry_question_no.NEXTVAL,
+		#{questionTitle},
+		#{questionContent},
+		#{userNo}
+		)
+	</insert>
+
+	<select id="getInquirylist" resultType="Inquiry">
+		select *
+		from inquiry
+		where user_no = #{userNo}
+	</select>
+
+</mapper>
