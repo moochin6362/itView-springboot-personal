@@ -65,7 +65,7 @@
                         
                         <label>공지 수정일</label>
                         <input type="date" id="boardModifiedDate" name="boardModifiedDate" th:value="${#temporals.format(b.boardModifiedDate, 'yyyy-MM-dd')}"/>
-
+																								
                         <div class="btn-group">
                             <button type="submit" class="btn-submit">공지 수정</button>
                             <button type="button" class="btn-cancel" onclick="history.back()">취소</button>

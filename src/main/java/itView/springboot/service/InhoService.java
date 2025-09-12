@@ -272,6 +272,8 @@ public class InhoService {
 
 	public Product selectReportProduct(int pNo) {
 		Product p = mapper.selectReportProduct(pNo);
+		String thumbnail = mapper.selectThumbnail(p.getProductNo());
+        p.setFirstImage(thumbnail);
 		return p;
 	}
 

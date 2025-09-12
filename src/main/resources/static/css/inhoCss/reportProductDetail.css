@@ -26,7 +26,7 @@ html {
     margin: 30px auto;
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 
     /* 두 개 섹션을 나란히 배치 */
     display: flex;
@@ -38,12 +38,16 @@ html {
 /* 각 섹션 공통 박스 */
 .main-content .main-section {
     flex: 1;
-    min-width: 320px;
+    min-width: 250px;
     background-color: #fff;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-left: 30px;
+    margin-right: 30px;
+    
 }
+
 
 /* ===== 제목 ===== */
 .page-title {
@@ -57,13 +61,14 @@ html {
 
 /* ===== 상세 테이블 ===== */
 .detail-table {
-    width: 100%;
+    width: 80%;
+    margin: 0 auto;   /* 가운데 정렬 */
     border-collapse: separate;
     border-spacing: 0;
     margin-bottom: 25px;
     overflow: hidden;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .detail-table th,
@@ -79,14 +84,14 @@ html {
     background-color: #f1f5f9;
     color: #555;
     font-weight: 600;
-    width: 120px;
+    width: 50px;
     text-align: center;  
 }
 
 .detail-table td {
     background-color: #fff;
     color: #333;
-    width: 200px;
+    width: 150px;
 }
 
 .detail-table tr:last-child th,
