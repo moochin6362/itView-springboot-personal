@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>쇼핑몰 예제</title>
 
     <style>
-
-
         /* 본문 */
         .notice-card {
             background: #fff;
@@ -127,6 +125,7 @@
 
 
     </style>
+    <link rel="stylesheet" th:href="@{/css/inhoCss/reportModal.css}">
 </head>
 <body>
 
@@ -160,24 +159,18 @@
                     삭제
                 </button>
 
-                <!-- 게시글 신고 버튼 -->
+                게시글 신고 버튼
                 <div th:if="${session.loginUser != null and session.loginUser.userNo != community.userNo}">
-                    <form th:action="@{/community/report}" method="post" style="display:inline;">
-                        <input type="hidden" name="boardId" th:value="${community.boardId}"/>
-                        <button
-                                type="submit"
-                                title="게시글 신고"
-                                style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 5px 10px; font-size: 0.9rem; border-radius: 5px; transition: 0.2s; cursor: pointer;">
-                            ⚠️ 게시글 신고
-                        </button>
-                    </form>
-                </div>
-
+				    <button
+				        type="button"
+				        th:onclick="'openReportModal(\'B\', ' + ${community.boardId} + ')'"
+				        title="게시글 신고"
+				        style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 5px 10px; font-size: 0.9rem; border-radius: 5px; transition: 0.2s; cursor: pointer;">
+				        ⚠️ 게시글 신고
+				    </button>
+				</div>
             </div>
-
         </div>
-
-
     </div>
 </main>
 
@@ -229,17 +222,16 @@
             </div>
 
             <div class="comment-actions mt-2"
-                 th:if="${session.loginUser != null and session.loginUser.userNo != reply.userNo}">
-                <form th:action="@{/community/reply/report}" method="post" style="display:inline;">
-                    <input type="hidden" name="replyNo" th:value="${reply.replyNo}"/>
-                    <button
-                            type="submit"
-                            title="댓글 신고"
-                            style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; transition: 0.2s; cursor: pointer; margin-top: 5px;">
-                        ⚠️ 신고
-                    </button>
-                </form>
-            </div>
+			     th:if="${session.loginUser != null and session.loginUser.userNo != reply.userNo}">
+			     <input type="hidden" name="replyNo" th:value="${reply.replyNo}"/>
+			    <button
+			        type="button"
+			        th:onclick="'openReportModal(\'V\', ' + ${reply.replyNo} + ')'"
+			        title="댓글 신고"
+			        style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; transition: 0.2s; cursor: pointer; margin-top: 5px;">
+			        ⚠️ 신고
+			    </button>
+			</div>
 
             <!-- 대댓글 입력 -->
             <form th:action="@{/community/reply/insert}" method="post" class="reply-input d-none">
@@ -268,19 +260,15 @@
                     </div>
 
                     <div class="comment-actions mt-2"
-                         th:if="${session.loginUser != null and session.loginUser.userNo != subReply.userNo}">
-                        <form th:action="@{/community/reply/report}" method="post" style="display:inline;">
-                            <input type="hidden" name="replyNo" th:value="${subReply.replyNo}"/>
-                            <button
-                                    type="submit"
-                                    title="댓글 신고"
-                                    style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; transition: 0.2s; cursor: pointer; margin-top: 5px;">
-                                ⚠️ 신고
-                            </button>
-                        </form>
-                    </div>
-
-
+					     th:if="${session.loginUser != null and session.loginUser.userNo != subReply.userNo}">
+					    <button
+					        type="button"
+					        th:onclick="'openReportModal(\'V\', ' + ${reply.replyNo} + ')'"
+					        title="댓글 신고"
+					        style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; transition: 0.2s; cursor: pointer; margin-top: 5px;">
+					        ⚠️ 신고
+					    </button>
+					</div>
 
                     <!-- 대댓글 답글 입력 -->
                     <form th:action="@{/community/reply/insert}" method="post" class="reply-input d-none">
@@ -318,10 +306,35 @@
     </div>
 </div>
 
+<div id="reportModal" style="display: none;">
+    <div class="modal-content">
+      <h3>신고하기</h3>
+      <form action="/inhoAdmin/enrollReport" id="reportForm" method="post">
+        <input type="hidden" name="reportType" id="reportType">
+        <input type="hidden" name="reportTargetNo" id="reportTargetNo">
+        <input type="hidden" name="boardId" th:value="${community.boardId}" />
 
+        <label for="reportTitle">신고 제목</label>
+        <input type="text" name="reportTitle" id="reportTitle">
+
+        <label for="reportContent">신고 사유</label>
+        <textarea id="reportContent" name="reportContent" required></textarea>
+
+        <button type="submit">등록</button>
+        <button type="button" onclick="closeReportModal()">취소</button>
+      </form>
+    </div>
+  </div>
 <div th:replace="~{common/footer :: footer}"></div>
-
-<script>
+<!-- <div th:replace="~{common/reportModal :: reportModal}"></div> -->
+<!-- <script th:src="@{/js/inhoAdmin/reportModal.js}"></script> -->
+<script th:src="@{/js/inhoAdmin/alert.js}"></script>
+<script th:inline="javascript">
+	const msg = /*[[${msg}]]*/ null;
+	if (msg) {
+	    alert(msg);
+	}
+	
     function editComment(el) {
         const commentBox = el.closest('.comment-box, .reply-box');
         const commentContent = commentBox.querySelector('.comment-content');
@@ -351,8 +364,6 @@
         }
     }
 
-
-
     function deleteComment(el) {
         const container = el.closest('.comment-box, .reply-box');
         const commentId = container.dataset.commentId;
@@ -373,6 +384,22 @@
             form.submit();
         }
     }
+    
+    
+    
+    
+    window.openReportModal = function(type, id) {
+    	  const modal = document.getElementById('reportModal');
+    	  if (!modal) return console.error('reportModal element not found');
+    	  document.getElementById('reportType').value = type;
+    	  document.getElementById('reportTargetNo').value = id;
+    	  document.getElementById('reportModal').style.display = 'flex';
+    	};
+
+    	window.closeReportModal = function() {
+    	  const modal = document.getElementById('reportModal');
+    	  if (modal) modal.style.display = 'none';
+    	};
 </script>
 
 </body>

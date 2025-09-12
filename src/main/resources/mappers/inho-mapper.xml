@@ -460,7 +460,7 @@
  		<selectKey keyProperty="reportNo" resultType="int" order="BEFORE">
 			select seq_report.nextval from dual
 		</selectKey>
-		insert into board
+		insert into report
 		values(#{reportNo}, #{reportTitle}, #{reportContent}, default, default,
 				default, #{reportType}, #{reporterUserId}, #{reportTargetNo})
  	</insert>
