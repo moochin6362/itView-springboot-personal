@@ -33,7 +33,7 @@
 	
 	<insert id="insertCoupon">
 		insert into coupon
-		values(seq_coupon.nextval, #{couponName}, #{couponDescription}, 'All', #{couponDiscount}, sysdate, sysdate, sysdate, #{couponMinprice}, #{userNo}, default)
+		values(seq_coupon.nextval, #{couponName}, #{couponDescription}, 'all', #{couponDiscount}, sysdate, sysdate, sysdate, #{couponMinprice}, #{userNo}, default)
 	</insert>
 	
 	<select id="selectMyCoupon" resultType="Coupon">
@@ -280,7 +280,9 @@
 	<select id="selectExpApp">
 		select *
 		from experience_application
-		where exp_group_no = #{expNo}
+			 join "USER" using(user_no)
+			 join expereince_group on (exp_no = exp_group_no)
+		where exp_group_no = #{expNo} and is_choice = 'N'
 	</select>
 	
 	<select id="selectMyOrderList">
@@ -289,5 +291,30 @@
 			  join product on (order_target_no = product_no)
 		where product.user_no = #{userNo}
 	</select>
-
+	
+	<select id="countReviewAnswer">
+		select count(*)
+		from review_answer
+			 join review using(review_no)
+			 join product using(product_no)
+		where product.user_no = #{userNo}
+	</select>
+	
+	<insert id="insertReviewAnswer">
+		insert into review_answer
+		values(seq_review_answer.nextval, #{reviewAnswerContent}, default, #{reviewNo})
+	</insert>
+	
+	<select id="selectReviewAnswer">
+		select *
+		from review_answer
+			 join review using(review_no)
+		where product_no = #{productNo}
+	</select>
+	
+	<delete id="deleteReviewAnswer">
+		delete
+		from review_answer
+		where review_answer_id = #{reviewAnswerId}
+	</delete>	
 </mapper>
