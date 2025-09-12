@@ -1,6 +1,9 @@
 package itView.springboot.vo;
 
 import java.sql.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +16,10 @@ public class Board {
 	private int boardId;
 	private String boardTitle;
 	private String boardContent;
-	private Date boardDate;
-	private Date boardModifiedDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate boardDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate boardModifiedDate;
 	private String boardType;
 	private String boardStatus;
 	private int userNo;

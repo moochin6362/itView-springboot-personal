@@ -95,28 +95,5 @@ public class InhoRestController {
 		return random;
  	}
  	
- 	@PostMapping("/enrollReport")
-    public String enrollReport(@RequestParam String reportType, @RequestParam String reportTitle, 
-    							@RequestParam int reportTargetNo, @RequestParam String reportContent, HttpSession session) {
-        // 세션에서 로그인 사용자 정보 추출
-        User loginUser = (User) session.getAttribute("loginUser");
-//        if (loginUser == null) {
-//            return "fail"; // 또는 예외 처리/에러 코드 반환
-//        }
-
-        int reporterUserId = loginUser.getUserNo();
-
-        Report r = new Report();
-        r.setReportType(reportType);
-        r.setReportTitle(reportTitle);
-        r.setReportContent(reportContent);
-        r.setReportTargetNo(reportTargetNo);
-        r.setReporterUserId(reporterUserId);
-        
-        
-        int result = uService.enrollReport(r);
-        return result > 0 ? "success" : "fail";
-    }
- 	
 
 }
