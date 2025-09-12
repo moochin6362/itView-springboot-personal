@@ -108,7 +108,7 @@
 	<select id="selectTargetUser">
 		select *
 		from "USER"
-		where user_grade = #{couponTarget}
+		where user_grade = #{couponTarget} and user_type = 'U'
 	</select>
 
 	<insert id="insertCouponBox">
@@ -402,7 +402,6 @@
 		WHERE report_type = 'P'
 		GROUP BY product_no, product_name, report_type
 		ORDER BY report_count DESC
-
 	</select>
 	
 	<select id="selectReportProduct">
@@ -430,5 +429,40 @@
 		where report_target_no = #{productNo}
 		order by report_date desc
  	</select>
+ 	
+ 	<update id="updateReportModifyDate">
+ 		update report
+ 		set report_modify_date = #{modifyDate}
+ 		where report_target_no = #{productNo}
+ 	</update>
+ 	
+ 	<update id="updateProductState">
+ 		update product
+ 		set product_state = 'N'
+ 		where product_no = #{productNo}
+ 	</update>
+ 	
+ 	<update id="activateProducts">
+ 		<![CDATA[
+ 		update product
+ 		set product_state ='Y'
+ 		where product_state = 'N'
+ 			and exists (
+ 				select 1 from report
+ 				where report_target_no = product_no
+ 					and report_modify_date <= #{today}
+ 			)
+ 		]]>
+ 			
+ 	</update>
+ 	
+ 	<insert id="enrollReport">
+ 		<selectKey keyProperty="reportNo" resultType="int" order="BEFORE">
+			select seq_report.nextval from dual
+		</selectKey>
+		insert into board
+		values(#{reportNo}, #{reportTitle}, #{reportContent}, default, default,
+				default, #{reportType}, #{reporterUserId}, #{reportTargetNo})
+ 	</insert>
 	
 </mapper>
