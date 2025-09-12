@@ -321,7 +321,7 @@
   <!-- 모집글 검색 -->
   <select id="searchExperienceGroups"
           parameterType="string"
-          resultType="itView.springboot.vo.experienceGroup">
+          resultType="itView.springboot.vo.ExperienceGroup">
     SELECT
       eg."EXP_NO"      AS expNo,
       eg."EXP_TITLE"   AS expTitle,
