@@ -55,74 +55,75 @@
     }
 
     .comment-section {
-  max-width: 100%;
-  margin: 60px auto;
-  padding: 0 20px;
-}
+      max-width: 100%;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
 
-.comment-box,
-.reply-box {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  margin-bottom: 20px;
-}
+    .comment-box,
+    .reply-box {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
 
-.reply-box {
-  margin-left: 40px;
-  background-color: #f1f1f1;
-}
+    .reply-box {
+      margin-left: 40px;
+      background-color: #f1f1f1;
+    }
 
-.comment-header {
-  font-weight: bold;
-  font-size: 1.05rem;
-  color: #333;
-}
+    .comment-header {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #333;
+    }
 
-.comment-meta {
-  font-size: 0.85rem;
-  color: #888;
-  margin-top: 5px;
-}
+    .comment-meta {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 5px;
+    }
 
-.comment-actions {
-  margin-top: 10px;
-}
+    .comment-actions {
+      margin-top: 10px;
+    }
 
-.comment-actions span {
-  margin-right: 15px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #007bff;
-  user-select: none;
-}
+    .comment-actions span {
+      margin-right: 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #007bff;
+      user-select: none;
+    }
 
-.comment-actions span:hover {
-  text-decoration: underline;
-}
+    .comment-actions span:hover {
+      text-decoration: underline;
+    }
 
-textarea.form-control {
-  resize: none;
-  font-size: 0.95rem;
-  min-height: 80px;
-  border-radius: 8px;
-}
+    textarea.form-control {
+      resize: none;
+      font-size: 0.95rem;
+      min-height: 80px;
+      border-radius: 8px;
+    }
 
-.main-comment-input textarea.form-control {
-  width: 100%;
-  max-width: 100%;
-}
+    .main-comment-input textarea.form-control {
+      width: 100%;
+      max-width: 100%;
+    }
 
-.btn-custom {
-  background-color: #000;
-  color: #fff;
-  border: none;
-}
+    .btn-custom {
+      background-color: #000;
+      color: #fff;
+      border: none;
+    }
 
-.btn-custom:hover {
-  background-color: #333;
-}
+    .btn-custom:hover {
+      background-color: #333;
+    }
+
 
 
     </style>
@@ -158,7 +159,22 @@ textarea.form-control {
                         data-bs-target="#deleteModal">
                     삭제
                 </button>
+
+                <!-- 게시글 신고 버튼 -->
+                <div th:if="${session.loginUser != null and session.loginUser.userNo != community.userNo}">
+                    <form th:action="@{/community/report}" method="post" style="display:inline;">
+                        <input type="hidden" name="boardId" th:value="${community.boardId}"/>
+                        <button
+                                type="submit"
+                                title="게시글 신고"
+                                style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 5px 10px; font-size: 0.9rem; border-radius: 5px; transition: 0.2s; cursor: pointer;">
+                            ⚠️ 게시글 신고
+                        </button>
+                    </form>
+                </div>
+
             </div>
+
         </div>
 
 
@@ -212,6 +228,19 @@ textarea.form-control {
                 </form>
             </div>
 
+            <div class="comment-actions mt-2"
+                 th:if="${session.loginUser != null and session.loginUser.userNo != reply.userNo}">
+                <form th:action="@{/community/reply/report}" method="post" style="display:inline;">
+                    <input type="hidden" name="replyNo" th:value="${reply.replyNo}"/>
+                    <button
+                            type="submit"
+                            title="댓글 신고"
+                            style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; transition: 0.2s; cursor: pointer; margin-top: 5px;">
+                        ⚠️ 신고
+                    </button>
+                </form>
+            </div>
+
             <!-- 대댓글 입력 -->
             <form th:action="@{/community/reply/insert}" method="post" class="reply-input d-none">
                 <textarea name="replyContent" class="form-control my-2" placeholder="답글을 입력하세요" required></textarea>
@@ -237,6 +266,21 @@ textarea.form-control {
                             <button type="submit" class="btn btn-link p-0">삭제</button>
                         </form>
                     </div>
+
+                    <div class="comment-actions mt-2"
+                         th:if="${session.loginUser != null and session.loginUser.userNo != subReply.userNo}">
+                        <form th:action="@{/community/reply/report}" method="post" style="display:inline;">
+                            <input type="hidden" name="replyNo" th:value="${subReply.replyNo}"/>
+                            <button
+                                    type="submit"
+                                    title="댓글 신고"
+                                    style="background-color: transparent; color: #dc3545; border: 1px solid #dc3545; padding: 3px 8px; font-size: 0.8rem; border-radius: 5px; transition: 0.2s; cursor: pointer; margin-top: 5px;">
+                                ⚠️ 신고
+                            </button>
+                        </form>
+                    </div>
+
+
 
                     <!-- 대댓글 답글 입력 -->
                     <form th:action="@{/community/reply/insert}" method="post" class="reply-input d-none">
