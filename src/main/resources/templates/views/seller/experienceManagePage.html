@@ -9,27 +9,18 @@
 <body>
 	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
 	<div class="layout">
-		<div class="sidebar"
-			th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+		<div class="sidebar" th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
 			<h2>체험단 신청 관리</h2>
 			
 			<div class="application-list">
-			    <div class="application-card">
+			    <div class="application-card" th:each="ea : ${eaList}">
+			    	<input type="hidden" class="applyNo" th:value="${ea.applyNo}"/>
 			        <div class="application-info">
-			            <p><strong>회원 이름:</strong> 홍길동</p>
-			            <p><strong>신청 내용:</strong> 제품을 체험해보고 싶습니다.</p>
-			        </div>
-			        <div class="application-actions">
-			            <button class="approve-btn">수락</button>
-			            <button class="reject-btn">거절</button>
-			        </div>
-			    </div>
-			    <div class="application-card">
-			        <div class="application-info">
-			            <p><strong>회원 이름:</strong> 홍길동</p>
-			            <p><strong>신청 내용:</strong> 제품을 체험해보고 싶습니다.</p>
+			            <p><strong>회원 이름 : </strong>[[${ea.userName}]]</p>
+			            <p><strong>모집글 제목 : </strong>[[${ea.expTitle}]]</p>
+			            <p><strong>신청 내용 : </strong>[[${ea.applyContent}]]</p>
 			        </div>
 			        <div class="application-actions">
 			            <button class="approve-btn">수락</button>
@@ -37,34 +28,31 @@
 			        </div>
 			    </div>
 			</div>
-			
-
-<!-- 			<div class="application-list"> -->
-<!-- 				<div class="application-card" th:each="application : ${applications}"> -->
-<!-- 					<div class="application-info"> -->
-<!-- 						<p> -->
-<!-- 							<strong>회원 이름:</strong>  -->
-<!-- 							<span th:text="${application.userName}">홍길동</span> -->
-<!-- 						</p> -->
-<!-- 						<p> -->
-<!-- 							<strong>신청 내용:</strong>  -->
-<!-- 							<span th:text="${application.applicationContent}"> -->
-<!-- 							신청 사유가 여기에 표시됩니다.</span> -->
-<!-- 						</p> -->
-<!-- 					</div> -->
-<!-- 					<div class="application-actions"> -->
-<!-- 						<form th:action="@{/seller/experience/approve}" method="post" style="display: inline;"> -->
-<!-- 							<input type="hidden" th:name="applicationId" th:value="${application.id}" /> -->
-<!-- 							<button type="submit" class="approve-btn">수락</button> -->
-<!-- 						</form> -->
-<!-- 						<form th:action="@{/seller/experience/reject}" method="post" style="display: inline;"> -->
-<!-- 							<input type="hidden" th:name="applicationId" th:value="${application.id}" /> -->
-<!-- 							<button type="submit" class="reject-btn">거절</button> -->
-<!-- 						</form> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
 		</div>
 	</div>
+	
+	<script>
+		window.onload = () => {
+			const approveBtns = document.querySelectorAll('.approve-btn');
+			for(approveBtn of approveBtns){
+				approveBtn.addEventListener('click', e => {
+					const applyNo = e.target.parentElement.parentElement.children[0].value;
+					if(confirm("이 회원의 체험단 신청을 수락하시겠습니까?")){
+						location.href = '/seller/expApply/' + applyNo;
+					}
+				});
+			}
+			
+			const rejectBtns = document.querySelectorAll('.reject-btn');
+			for(rejectBtn of rejectBtns){
+				rejectBtn.addEventListener('click', e => {
+					const applyNo = e.target.parentElement.parentElement.children[0].value;
+					if(confirm("이 회원의 체험단 신청을 거절하시겠습니까?")){
+						location.href = '/seller/expReject/' + applyNo;
+					}
+				});
+			}
+		}
+	</script>
 </body>
 </html>

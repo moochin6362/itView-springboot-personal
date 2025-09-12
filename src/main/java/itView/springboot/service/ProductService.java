@@ -170,12 +170,37 @@ public class ProductService {
 		return mapper.selectExpGroup(userNo);
 	}
 
-	public ExperienceApplication selectExpApp(int expNo) {
+	public ArrayList<ExperienceApplication> selectExpApp(int expNo) {
 		return mapper.selectExpApp(expNo);
 	}
 
 	public ArrayList<Order> selectMyOrderList(int userNo) {
 		return mapper.selectMyOrderList(userNo);
 	}
+
+	public ArrayList<ReviewAnswer> countReviewAnswer(int userNo) {
+		return mapper.countReviewAnswer(userNo);
+	}
+
+	public ArrayList<ReviewAnswer> selectReviewAnswer(int productNo) {
+		return mapper.selectReviewAnswer(productNo);
+	}
+
+	public int deleteReviewAnswer(int reviewAnswerId) {
+		return mapper.deleteReviewAnswer(reviewAnswerId);
+	}
+
+	public int updateExpApply(int applyNo) {
+		return mapper.updateExpApply(applyNo);
+	}
+
+	public int rejectExpApply(int applyNo) {
+		return mapper.rejectExpApply(applyNo);
+	}
+
+	public int downCoupon(HashMap<String, Integer> map) {
+		return mapper.downCoupon(map);
+	}
+
 
 }

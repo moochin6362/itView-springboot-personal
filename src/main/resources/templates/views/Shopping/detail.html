@@ -199,6 +199,10 @@ body {
     text-align: left;
 }
 
+#downCoupon {
+	cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -207,6 +211,7 @@ body {
 
 	<div class="container product-container">
 		<input type="hidden" id="productNo" th:value="${p.productNo}"/>
+		<input type="hidden" id="userNo" th:if="${session.loginUser != null}" th:value="${session.loginUser.userNo}"/>
 		<div class="row">
 			<!-- 좌측: 이미지 및 썸네일 -->
 			<div class="col-md-6">
@@ -220,10 +225,11 @@ body {
 				<p>[[${p.ingredient}]]</p>
 				<p>[[${p.ecoFriendly}]]</p>
 				<p class="text-danger">
-					<select th:if="${cList.size() != 0}">
-						<option th:each="c : ${cList}">[[${c.couponName}]]</option>
+					<select th:if="${cList.size() != 0}" id="couponSelect">
+						<option th:each="c : ${cList}" th:value="${c.couponNo}">[[${c.couponName}]]</option>
 					</select>
 				</p>
+				<p th:if="${cList.size() != 0}" id="downCoupon">🎫 쿠폰 발급받기</p>
 			    <button class="btn flex-fill">🚨신고</button>
 			    <button class="btn flex-fill" onClick="">❔문의하기</button>
 
@@ -280,6 +286,16 @@ body {
 				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
 				            </div>
 				            <div class="review-content">[[${r.reviewContent}]]</div>
+				            
+				             <!-- 리뷰에 대한 답변 영역 -->
+				            <div class="response" th:if="${r.reviewAnswerId != 0}">
+				            	<input type="hidden" class="productNo" th:value="${r.productNo}"/>
+							    <div class="response-header">[[${p.brandName}]]</div>
+							    <div class="response-content">
+									<input type="hidden" class="reviewAnswerId" th:value="${r.reviewAnswerId}"/>
+							        <p class="reviewAnswerContent" th:text="${r.reviewAnswerContent}"></p>
+							    </div>
+							</div>
 				        </div>
 				    </div>
 				</div>
@@ -331,6 +347,22 @@ body {
 				//console.log(productTotalPrice)
 				totalPrice.innerText = '총 상품 금액 : ' + productTotalPrice + ' 원';
 			})
+			
+			if(document.querySelector('#downCoupon') != null){
+				document.querySelector('#downCoupon').addEventListener('click', () => {
+					const couponNo = document.querySelector('#couponSelect').value
+					const userNo = document.querySelector('#userNo').value
+					const productNo = document.querySelector('#productNo').value
+					const couponName = document.querySelector('#couponSelect').innerText
+					//console.log(couponName)
+					
+					alert('쿠폰이 다운로드 되었습니다.');
+					location.href = '/product/downCoupon/' + userNo + '/' + couponNo + '/' + productNo;
+					
+				});
+				
+				
+			}
 		}
 	</script>
 

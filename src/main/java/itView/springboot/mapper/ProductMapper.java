@@ -2,6 +2,7 @@ package itView.springboot.mapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -99,8 +100,22 @@ public interface ProductMapper {
 
 	ArrayList<ExperienceGroup> selectExpGroup(int userNo);
 
-	ExperienceApplication selectExpApp(int expNo);
+	ArrayList<ExperienceApplication> selectExpApp(int expNo);
 
 	ArrayList<Order> selectMyOrderList(int userNo);
+
+	ArrayList<ReviewAnswer> countReviewAnswer(int userNo);
+
+	ArrayList<ReviewAnswer> selectReviewAnswer(int productNo);
+
+	int deleteReviewAnswer(int reviewAnswerId);
+
+	int updateExpApply(int applyNo);
+
+	int rejectExpApply(int applyNo);
+
+	int downCoupon(HashMap<String, Integer> map);
+
+
 }
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Question;
 import itView.springboot.vo.Review;
+import itView.springboot.vo.ReviewAnswer;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -146,12 +148,16 @@ public class ProductController {
 		
 		ArrayList<Product> rList = pService.countReview(userNo);
 		
-		for(int i = 0; i < rList.size(); i++) {
-			// rList에서 UserNo 추출
+		ArrayList<ReviewAnswer> raCount = pService.countReviewAnswer(userNo);
+		
+		//System.out.println(raCount);
+		
+//		for(int i = 0; i < rList.size(); i++) {
 			// UserNo 이용해서 DB에 있는 쿼리문 갖고와서 review_answer count해오기
 			// rList에 있는 review_count랑 review_answer_count랑 연산
 			// 그 결과를 화면에 고고
-		}
+			// product에 있는 user_n
+//		}
 		
 		model.addAttribute("rCount", rList);
 		return "seller/myProductPage";
@@ -213,12 +219,13 @@ public class ProductController {
 		
 		ArrayList<Question> question = pService.selectQuestion(productNo);
 		
-		int questionNo = 0;
+		//System.out.println(rList);
+		
 		
 		ArrayList<Answer> answer = new ArrayList<Answer>();
 		
 		for(int i = 0; i < question.size(); i++) {
-			questionNo = question.get(i).getQuestionNo();
+			int questionNo = question.get(i).getQuestionNo();
 			answer.addAll( pService.selectAnswer(questionNo));
 		}
 		
@@ -268,12 +275,10 @@ public class ProductController {
 		int reviewCount = pService.selectReviewCount(productNo);
 		ArrayList<Question> question = pService.selectQuestion(productNo);
 		
-		int questionNo = 0;
-		
 		ArrayList<Answer> answer = new ArrayList<Answer>();
 		
 		for(int i = 0; i < question.size(); i++) {
-			questionNo = question.get(i).getQuestionNo();
+			int questionNo = question.get(i).getQuestionNo();
 			answer.addAll( pService.selectAnswer(questionNo));
 		}
 		
@@ -318,7 +323,7 @@ public class ProductController {
 	
 	// 체험단 관리 페이지 이동
 	@GetMapping("experienceManagePage")
-	public String experienceManagePage(HttpSession session) {
+	public String experienceManagePage(Model model, HttpSession session) {
 		
 		User user = (User)session.getAttribute("loginUser");
 		int userNo = user.getUserNo();
@@ -326,13 +331,15 @@ public class ProductController {
 		ArrayList<ExperienceGroup> eList = pService.selectExpGroup(userNo);
 		ArrayList<ExperienceApplication> eaList = new ArrayList<ExperienceApplication>();
 
-		int expNo = 0;
 		
 		for(int i = 0; i < eList.size(); i++) {
-			expNo = eList.get(i).getExpNo();
-			//eaList.addAll(pService.selectExpApp(expNo));
+			int expNo = eList.get(i).getExpNo();
+			eaList.addAll(pService.selectExpApp(expNo));
 		}
 		
+		System.out.println(eaList);
+		
+		model.addAttribute("eaList", eaList);
 		
 		return "seller/experienceManagePage";
 	}
@@ -501,5 +508,51 @@ public class ProductController {
 			throw new ProductException("상품 문의에 대한 답변 삭제를 실패하였습니다.");
 		}
 	}
+	
+	// 상품 리뷰 답변 삭제
+	@GetMapping("/deleteReviewAnswer/{reviewAnswerId}/{productNo}")
+	public String deleteReviewAnswer(@PathVariable("reviewAnswerId") int reviewAnswerId, @PathVariable("productNo") int productNo) {
+		int result = pService.deleteReviewAnswer(reviewAnswerId);
+		if(result > 0) {
+			return "redirect:/product/" + productNo;
+		} else {
+			throw new ProductException("상품 리뷰에 대한 답변 삭제를 실패하였습니다.");
+		}
+	}
+	
+	// 체험단 신청 수락
+	@GetMapping("/expApply/{applyNo}")
+	public String updateExpApply(@PathVariable("applyNo") int applyNo) {
+		int result = pService.updateExpApply(applyNo);
+		if(result > 0) {
+			return "redirect:/seller/experienceManagePage";
+		} else {
+			throw new ProductException("체험단 신청 수락을 실패하였습니다.");
+		}
+	}
+	
+	// 체험단 신청 거절
+	@GetMapping("/expReject/{applyNo}")
+	public String rejectExpApply(@PathVariable("applyNo") int applyNo) {
+		int result = pService.rejectExpApply(applyNo);
+		if(result > 0) {
+			return "redirect:/seller/experienceManagePage";
+		} else {
+			throw new ProductException("체험단 신청 거절을 실패하였습니다.");
+		}
+	}
 
+	// 쿠폰 다운로드
+	@GetMapping("/downCoupon/{userNo}/{couponNo}/{productNo}")
+	public String downCoupon(@PathVariable("userNo") int userNo, @PathVariable("couponNo") int couponNo, @PathVariable("productNo") int productNo) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("userNo", userNo);
+		map.put("couponNo", couponNo);
+		int result = pService.downCoupon(map);
+		if(result > 0) {
+			return "redirect:/product/detail/" + productNo;
+		} else {
+			throw new ProductException("쿠폰 다운로드가 실패하였습니다.");
+		}
+	}
 }

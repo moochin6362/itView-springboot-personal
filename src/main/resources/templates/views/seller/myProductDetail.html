@@ -125,6 +125,7 @@ body {
 .ratingStar {
     font-size: 1.5em;
     color: #ff9800;
+    width: 150px;
 }
 
 /* 리뷰 본문 스타일 */
@@ -155,6 +156,134 @@ body {
     color: #333;
     margin-top: 5px;
     text-align: left;
+}
+
+#QnA{
+	background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.questionUser{
+	text-align: left;
+	font-size: 1.2em;
+    font-weight: bolder;
+    color: #333;
+    margin-right: 10px;
+}
+
+.questionTitle{
+	font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.questionContent{
+	font-size: 1em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.answerArea{
+	background-color: #f1f1f1;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.buttonArea {
+	margin-left: 70%;
+}
+
+.buttonArea2 {
+	margin-left: 90%;
+}
+
+.reviewAnswerButton {
+  background-color: #8ad8f0;
+  color: white;
+  border: 1px solid #c2e4e4;
+  border-radius: 15px;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reviewDeleteButton {
+  background-color: #8ad8f0;
+  color: white;
+  border: 1px solid #c2e4e4;
+  border-radius: 15px;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-left: 10px;
+}
+
+.save-response-button {
+  background-color: #8ad8f0;
+  color: white;
+  border: 1px solid #c2e4e4;
+  border-radius: 15px;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-left: 37%;
+}
+
+.response-form {
+	text-align: left;
+}
+
+.response-textarea {
+	resize: none;
+	border-radius: 10px;
+}
+
+.answerEditButton {
+	background-color: #8ad8f0;
+	color: white;
+	border: 1px solid #c2e4e4;
+	border-radius: 15px;
+	padding: 10px 10px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.answerDeleteButton {
+	background-color: #8ad8f0;
+	color: white;
+	border: 1px solid #c2e4e4;
+	border-radius: 15px;
+	padding: 10px 10px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	margin-left: 10px;
+}
+
+.answerEditCommitButton {
+	background-color: #8ad8f0;
+	color: white;
+	border: 1px solid #c2e4e4;
+	border-radius: 15px;
+	padding: 10px 10px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.answerEditCancelButton {
+	background-color: #8ad8f0;
+	color: white;
+	border: 1px solid #c2e4e4;
+	border-radius: 15px;
+	padding: 10px 10px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
 }
 
 </style>
@@ -189,7 +318,7 @@ body {
 
 				<div class="mb-3 quantity-box">
 					<label>수량</label> 
-					<input type="number" class="form-control w-25" id="stock" value="1" min="1" th:max="${p.productStock}">
+					<input type="number" class="form-control w-25" id="stock" value="1" min="1" th:max="${p.productStock}"/>
 				</div>
 				<input type="hidden" id="productPrice" th:value="${p.productPrice}"/>
 				<div class="total-price mb-3" id="totalPrice" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
@@ -221,24 +350,50 @@ body {
 				            	<input type="hidden" class="reviewId" th:value="${r.reviewNo}"/>
 				                <span class="user-name">[[${r.userName}]]</span>
 				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
-				                <button class="reviewAnswerButton">답변</button>
-				                <button class="reviewDeleteButton">삭제</button>
+				                <div class="buttonArea">
+					                <button class="reviewAnswerButton" onclick="toggleAnswerForm(this)" th:if="${r.reviewAnswerContent == null}">답변</button>
+					                <button class="reviewDeleteButton">삭제</button>
+				                </div>
 				            </div>
 				            <div class="review-content">[[${r.reviewContent}]]</div>
 				            
 				            <!-- 리뷰에 대한 답변 영역 -->
 				            <div class="response">
-				                <div class="response-header">[[${p.brandName}]]</div>
-				                <div class="response-content">
-				                    <p></p>
-				                </div>
-				            </div>
+				            	<input type="hidden" class="productNo" th:value="${r.productNo}"/>
+							    <div class="response-header">[[${p.brandName}]]</div>
+							    <div class="response-form" style="display: none;">
+								    <textarea class="response-textarea" rows="4" cols="60" placeholder="답변을 입력하세요..."></textarea>
+								    <br/>
+								    <button class="save-response-button">저장</button>
+								</div>
+							    <div class="response-content">
+									<input type="hidden" class="reviewAnswerId" th:value="${r.reviewAnswerId}"/>
+							        <p class="reviewAnswerContent" th:text="${r.reviewAnswerContent}"></p>
+							    </div>
+							</div>
+							<div class="buttonArea2" th:if="${r.reviewAnswerContent != null}">
+							    <button class="answerEditButton">수정</button>
+							    <button class="answerDeleteButton">삭제</button>
+							</div>
 				        </div>
 				    </div>
 				</div>
 				<div class="tab-pane fade p-3" id="QnA" role="tabpanel">
-					<h5 class="rating">배송이 안와요</h5>
-					<p>주문한지 2주가 지났는데 배송이 안와요...</p>
+					<th:block th:each="q : ${qList}">
+						<div class="questionUser">[[${q.userName}]]</div>
+						<div class="questionContent">문의 내용 : [[${q.questionContent}]]</div>
+						
+						<th:block th:each="a : ${aList}">
+							<div th:if="${q.questionNo == a.questionNo}">
+								<div class="answerArea">
+									<strong>[[${a.productCompany}]]</strong>
+									<br/>
+									<div>[[${a.answerContent}]]</div>
+								</div>
+							</div>
+						</th:block>
+						<br/><br/>
+					</th:block>
 				</div>
 			</div>
 		</div>
@@ -246,6 +401,12 @@ body {
 
 	
 	<script>
+		function toggleAnswerForm(button){
+			const reviewCard = button.closest('.review-card');
+			const form = reviewCard.querySelector('.response-form');
+			form.style.display = form.style.display === 'none' ? 'block' : 'none';
+		}
+		
 		window.onload = () => {
 			const productStock = document.querySelector('#stock');
 			const productPrice = document.querySelector('#productPrice');
@@ -273,23 +434,73 @@ body {
 			}
 			
 			// 리뷰 답변 등록
-			const answerButtons = document.querySelectorAll('.reviewAnswerButton');
-			for(answerButton of answerButtons){
-				answerButton.addEventListener('click', e => {
-					//console.log(e.target)
-					const responseDiv = e.target.parentElement.nextElementSibling.nextElementSibling;
-					const reviewNo = e.target.parentElement.children[0].value;
-					//console.log(reviewNo)
-					//console.log(responseDiv)
-					fetch('/product/reviewAnswer', {
-						method: 'POST',
+			const saveButtons = document.querySelectorAll('.save-response-button');
+			for(saveButton of saveButtons){
+				saveButton.addEventListener('click', e => {
+					const reviewAnswerContent = e.target.previousElementSibling.previousElementSibling.value;
+					const reviewNo = e.target.parentElement.parentElement.parentElement.children[0].children[0].value;
+					const responseDiv = e.target.parentElement.parentElement;
+					const responseForm = e.target.parentElement;
+					const editBottns = e.target.parentElement.parentElement
+					console.log(e.target.parentElement.parentElement)
+					
+					fetch('/seller/reviewAnswer', {
+						method: 'post',
 						headers: {'content-type':'application/json; charset=UTF-8'},
-						body: JSON.stringify(reviewNo)
+						body : JSON.stringify({
+							reviewAnswerContent : reviewAnswerContent,
+							reviewNo : reviewNo
+						})
 					})
 					.then(res => res.json())
-					.then(data => console.log(data))
+					.then(data => {
+						//console.log(data)
+						const answerContent = document.createElement('div');
+						responseForm.innerHTML = '';
+						answerContent.innerHTML = '<div class="response-content"><p>' + reviewAnswerContent + '</p></div>'
+						responseDiv.append(answerContent);
+					})
 					.catch(err => console.log(err))
-				})
+				});
+			}
+			
+			// 리뷰 답변 수정
+			const answerEditButtons = document.querySelectorAll('.answerEditButton');
+			for(answerEditButton of answerEditButtons){
+				answerEditButton.addEventListener('click', e => {
+					const responseDiv = e.target.parentElement.previousElementSibling;
+					const reviewAnswerId = responseDiv.children[3].children[0].value;
+					const responseContentDiv = responseDiv.querySelector('p');
+					const responseContent = responseContentDiv.innerText;
+					const editButtonArea = responseDiv.nextElementSibling;
+					console.log(editButtonArea)
+					responseContentDiv.innerHTML = '<textarea class="response-textarea" row="4" cols="60">' + responseContent + '</textarea>'
+					editButtonArea.innerHTML = '<button class="answerEditCommitButton">완료</button><button class="answerEditCancelButton">취소</button>'
+					const commitButtons = document.querySelectorAll('.answerEditCommitButton');
+					for(commitButton of commitButtons){
+						commitButton.addEventListener('click', e => {
+							console.log(e.target.parentElement.previousElementSibling.querySelector('p>textarea'));
+						})
+					}
+				});
+			}
+			
+			// 리뷰 답변 삭제
+			const answerDeleteButtons = document.querySelectorAll('.answerDeleteButton');
+			for(answerDeleteButton of answerDeleteButtons){
+				answerDeleteButton.addEventListener('click', e => {
+					const responseDiv = e.target.parentElement.previousElementSibling;
+ 					const reviewAnswerId = responseDiv.children[3].children[0].value;
+					const productNo = responseDiv.children[0].value;
+					console.log(productNo)
+					if(confirm("리뷰 답변을 삭제 하시겠습니까?")){
+						alert("답변이 삭제됩니다.");
+						location.href = '/seller/deleteReviewAnswer/' + reviewAnswerId + '/' + productNo;
+					} else {
+						alert("페이지가 새로고침 됩니다.");
+						location.reload();
+					}
+				});
 			}
  		}
 	</script>

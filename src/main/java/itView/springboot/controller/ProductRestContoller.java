@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -143,4 +144,6 @@ public class ProductRestContoller {
 	public int editAnswer(@RequestBody Answer answer) {
 		return pService.editAnswer(answer);
 	}
+	
+	
 }

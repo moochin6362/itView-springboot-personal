@@ -33,4 +33,8 @@ public class Review {
 	private int reportTargetNo;
 	private String reviewWriter;
 	private String reporterName;
+	
+	// 리뷰 답변
+	private int reviewAnswerId;
+	private String reviewAnswerContent;
 }

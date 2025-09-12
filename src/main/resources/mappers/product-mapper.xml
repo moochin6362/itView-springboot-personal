@@ -83,7 +83,9 @@
 		select *
 		from review
 			 join "USER" using(user_no)
+			 left join review_answer using(review_no)
 		where product_no = #{productNo}
+		order by review_no desc
 	</select>
 
 	<select id="getLatestProducts" resultType="Product">
@@ -200,6 +202,7 @@
 	<select id="selectProductDetail">
 		select *
 		from product
+			 join "USER" using(user_no)
 		where product_no = #{productNo}
 	</select>
 	
@@ -278,11 +281,10 @@
 	</select>
 	
 	<select id="selectExpApp">
-		select *
+		select user_name, apply_content, exp_title, apply_no
 		from experience_application
-			 join "USER" using(user_no)
-			 join expereince_group on (exp_no = exp_group_no)
-		where exp_group_no = #{expNo} and is_choice = 'N'
+		     join experience_group on (exp_no = exp_group_no)
+		where experience_application.exp_group_no = #{expNo} and is_choice = 'N'
 	</select>
 	
 	<select id="selectMyOrderList">
@@ -317,4 +319,21 @@
 		from review_answer
 		where review_answer_id = #{reviewAnswerId}
 	</delete>	
+	
+	<update id="updateExpApply">
+		update experience_application
+		set is_choice = 'Y'
+		where apply_no = #{applyNo} and is_choice = 'N'
+	</update>
+	
+	<update id="rejectExpApply">
+		update experience_application
+		set is_choice = 'R'
+		where apply_no = #{applyNo} and is_choice = 'N'
+	</update>
+	
+	<insert id="downCoupon">
+		insert into coupon_box
+		values(seq_coupon_box.nextval, default, #{userNo}, #{couponNo})
+	</insert>
 </mapper>
