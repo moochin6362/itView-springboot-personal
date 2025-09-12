@@ -14,11 +14,13 @@ import itView.springboot.common.Pagination;
 import itView.springboot.dto.GboardDetail;
 import itView.springboot.dto.ReportDetail;
 import itView.springboot.dto.UserReport;
+import itView.springboot.exception.AdminException;
 import itView.springboot.service.AdminService;
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
 import itView.springboot.vo.Reply;
+import itView.springboot.vo.Report;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -333,56 +335,87 @@ public class AdminController {
 	//신고 게시판 상세조회
 	@GetMapping("/rUserDetail")
 	public String rUserDetail(
-			@RequestParam("reportNo")int reportNo,
+			@RequestParam("userNo")int userNo,
 			@RequestParam(value="page", defaultValue="1") int page,
 			Model model
 			) {
-		User rUserDetail = adService.rUserDetail(reportNo);
-		model.addAttribute("rUserDetail", rUserDetail);
-		model.addAttribute("page",page);
+		//신고 당한 회원 정보 상세
+		User u = adService.selectReportUser(userNo);
+		int listCount = adService.getReportCount(userNo);
+		PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		ArrayList<Report> rllist = adService.getUserReportList(pi, userNo);
 		
-		return "admin/admin_rUser_detail";
-		
+		if(u != null) {
+			model.addAttribute("u", u);
+			model.addAttribute("rllist", rllist);
+			model.addAttribute("page", page);
+			return "admin/admin_rUser_detail";
+		} else {
+			throw new AdminException("신고 회원 상세보기를 실패하였습니다.");
+		}
 	}
 	@GetMapping("/rBoardDetail")
 	public String rBoardDetail(
-			@RequestParam("reportNo")int reportNo,
+			@RequestParam("boardId")int boardId,
 			@RequestParam(value="page", defaultValue="1") int page,
-			Model model
-			) {
-		Board rBoardDetail = adService.rBoardDetail(reportNo);
-		model.addAttribute("rBoardDetail", rBoardDetail);
-		model.addAttribute("page",page);
-		
-		return "admin/admin_rBoard_detail";
-		
+			Model model) {
+			//신고 당한 회원 정보 상세
+			Board b = adService.selectReportBoard(boardId);
+			int blistCount = adService.getBoardReportCount(boardId);
+			PageInfo pi = Pagination.getPageInfo(page, blistCount, 5);
+			ArrayList<Report> blist = adService.getBoardReportList(pi, boardId);
+			
+			if(b != null) {
+				model.addAttribute("b", b);
+				model.addAttribute("blist", blist);
+				model.addAttribute("page", page);
+				return "admin/admin_rBoard_detail";
+			} else {
+				throw new AdminException("신고글 상세보기를 실패하였습니다.");
+			}
 	}
+	
+	
 	@GetMapping("/rReviewDetail")
 	public String rReviewDetail(
-			@RequestParam("reportNo")int reportNo,
+			@RequestParam("reviewNo")int reviewNo,
 			@RequestParam(value="page", defaultValue="1") int page,
 			Model model
 			) {
-		Review rReviewDetail = adService.rReviewDetail(reportNo);
-		model.addAttribute("rReviewDetail", rReviewDetail);
-		model.addAttribute("page",page);
-		
-		return "admin/admin_rReview_detail";
+		Review rv = adService.selectReportReview(reviewNo);
+		int rlistCount = adService.getReviewReportCount(reviewNo);
+		PageInfo pi = Pagination.getPageInfo(page, rlistCount, 5);
+		ArrayList<Report> rlist = adService.getReviewReportList(pi, reviewNo);
+		System.out.println(rv);
+		if(rv != null) {
+			model.addAttribute("rv", rv);
+			model.addAttribute("rlist", rlist);
+			model.addAttribute("page", page);
+			return "admin/admin_rReview_detail";
+		} else {
+			throw new AdminException("신고글 상세보기를 실패하였습니다.");
+		}
 		
 	}
 	@GetMapping("/rReplyDetail")
 	public String rReplyDetail(
-			@RequestParam("reportNo")int reportNo,
+			@RequestParam("replyNo")Integer replyNo,
 			@RequestParam(value="page", defaultValue="1") int page,
 			Model model
 			) {
-		Reply rReplyDetail = adService.rReplyDetail(reportNo);
+		Reply v = adService.selectReportReply(replyNo);
+		int vlistCount = adService.getReplyReportCount(replyNo);
+		PageInfo pi = Pagination.getPageInfo(page, vlistCount, 5);
+		ArrayList<Report> vlist = adService.getReplyReportList(pi, replyNo);
 		
-		model.addAttribute("rReplyDetail", rReplyDetail);
-		model.addAttribute("page",page);
-		
-		return "admin/admin_rReply_detail";
-		
+		if(v != null) {
+			model.addAttribute("v", v);
+			model.addAttribute("vlist", vlist);
+			model.addAttribute("page", page);
+			return "admin/admin_rReply_detail";
+		} else {
+			throw new AdminException("신고글 상세보기를 실패하였습니다.");
+		}
 	}
 	
 	

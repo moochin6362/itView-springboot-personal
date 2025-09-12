@@ -50,7 +50,7 @@
 			            <thead>
 			                <tr>
 			                    <th>No</th>
-			                    <th>신고 회원 유형</th>
+			                    <th>신고 제목</th>
 			                    <th>신고 회원 이름</th>
 			                    <th>누적 신고 횟수</th>
 			                    <th>신고 상태</th>
@@ -60,9 +60,13 @@
 			            	   class="admin-report-board-table-body">
 			                <tr th:each="user : ${userList}">
 			                	<td>[[${user.rowNum}]]</td>
-			                    <td th:text="${user.userType == 'P' ? '판매자' : '일반회원'}"></td>
+			                    <td>
+			                    	<a th:href="@{/admin/rUserDetail(userNo=${user.userNo}, page=${page})}">
+								    [[${user.reportTitle}]]
+								    </a>
+			                    </td>
 			                   <td>
-								  <a th:href="@{/admin/rUserDetail(reportNo=${user.reportNo}, page=${page})}">
+								  <a th:href="@{/admin/rUserDetail(userNo=${user.userNo}, page=${page})}">
 								    [[${user.userName}]]
 								  </a>
 								</td>

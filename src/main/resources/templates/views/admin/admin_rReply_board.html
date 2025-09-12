@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 신고게시판</title>
+    <title>관리자 신고 댓글 게시판</title>
     <link rel="stylesheet" href="/css/adminCss/admin_report_board.css">
    	<link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
     <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
@@ -26,11 +26,10 @@
 	
 			<div class="admin-report-board-wrapper">
 			    <div class="admin-report-board-header">
-			        <div class="admin-report-board-title">신고 게시판</div>
+			        <div class="admin-report-board-title">댓글신고 게시판</div>
 			        <div class="admin-report-board-searchBox">
 			            <form th:action="@{/admin/report}" method="get">
 			                <select name="condition" class="form-select">
-			               		<option value="reportType" th:selected="${condition == 'reportType'}">신고 유형</option>
 			                    <option value="reportTitle"  th:selected="${condition == 'reportTitle'}">제목</option>
 			                    <option value="reporterUserId" th:selected="${condition == 'reporterUserId'}">작성자</option>
 			                    <option value="reportStatus" th:selected="${condition == 'reportStatus'}">신고글 상태</option>
@@ -44,7 +43,6 @@
 			    </div>
 			    <hr class="admin-report-board-divider"/>
 			    
-			        <!--게시글 선택옵션 넣고 삭제(상태 N)하기 버튼 : 토글로 넣어야겠다 / 검색창기능 추가 / -->
 			    <div class="admin-report-board-table">
 			        <table id="admin-report-board-table-header" 
 			        	   class="admin-report-board-table-header"
@@ -52,25 +50,27 @@
 			            <thead>
 			                <tr>
 			                    <th>No</th>
-			                    <th>신고 대상 유형</th>
-			                    <th>신고 대상 번호</th>
+			                    <th>신고 제목</th>
+			                    <th>신고자</th>
 			                    <th>누적 신고 횟수</th>
+			                    <th>신고 날짜</th>
+			                    <th>신고 상태</th>
 			                </tr>
 			            </thead>
 			            <tbody id="admin-report-board-table-body" 
 			            	   class="admin-report-board-table-body">
-			                <tr th:each="report : ${reportList}">
-			                	<td>[[${report.rowNum}]]</td>
-			                    <td th:switch="${report.reportType}">
-				          			<span th:case="'R'">리뷰</span>
-								    <span th:case="'B'">게시판</span>
-								    <span th:case="'U'">회원</span>
-								    <span th:case="'V'">댓글</span>
-								</td>
-			                    <td></td>
-			                    <td></td>
-			                    <td th:text="${report.reportDate}"></td>
-			                    <td th:text="${report.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
+			                <tr th:each="reply : ${replyList}">
+			                	<td>[[${reply.rowNum}]]</td>
+			                    <td>
+			                    	<a
+			                    	 	th:href="@{/admin/rReplyDetail(replyNo=${reply.replyNo}, page=${page})}"
+			                    		th:text="${reply.reportTitle}">
+			                    	</a>
+			                    </td>
+			                    <td>[[${reply.userId}]]</td>
+			                    <td>[[${reply.reportCount}]]</td>
+			                    <td th:text="${reply.reportDate}"></td>
+			                    <td th:text="${reply.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
 			                </tr>
 			            </tbody>
 			        </table>

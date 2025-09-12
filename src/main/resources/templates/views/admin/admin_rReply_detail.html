@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>신고상품 상세</title>
+        <title>신고 댓글 상세</title>
         <!-- CSS 파일 -->
 	    <link href="/css/inhoCss/reportProductDetail.css" rel="stylesheet" />
 	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
@@ -24,67 +24,45 @@
 	            
                 <div class="main-content">
 	                <div class="main-section">
-	                    <h2 class="page-title">신고상품 상세정보</h2>
+	                    <h2 class="page-title">신고댓글 상세정보</h2>
 	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
-	                    	<input type="hidden" name="productNo" th:value="${p.productNo}">
+	                    	<input type="hidden" name="replyNo" th:value="${p.productNo}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
 	                        <tr>
-	                            <th>상품번호</th>
-	                            <td>[[${p.productNo}]]</td>
+	                            <th>댓글 번호</th>
+	                            <td>[[${v.replyNo}]]</td>
 	                        </tr>
 	                        <tr>
-	                            <th>상품명</th>
-	                            <td>[[${p.productName}]]</td>
+	                            <th>댓글 작성자</th>
+	                            <td>[[${v.userId}]]</td>
 	                        </tr>
 	                        <tr>
-	                            <th>상품 종류</th>
-	                            <td>[[${p.productCategory}]]</td>
+	                            <th>댓글 내용</th>
+	                            <td>[[${v.replyContent}]]</td>
 	                        </tr>
 	                        <tr>
-	                            <th>상품설명</th>
-	                            <td th:utext="${p.productDetail}"></td>
+	                            <th>댓글 작성일</th>
+	                            <td>[[${v.replyDate}]]</td>
 	                        </tr>
 	                        <tr>
-	                            <th>판매자</th>
-	                            <td>[[${p.userNo}]]</td> 
-	<!--                             유저랑 조인 -->
+	                            <th>댓글 상태</th>
+	                            <td>[[${v.replyStatus}]]</td> 
 	                        </tr>
 	                        <tr>
-	                            <th>브랜드명</th>
-	                            <td>[[${p.productCompany}]]</td>
-	                        </tr>
-	                        <tr>
-	                            <th>상품 상태</th>
-	                            <td>[[${p.productState}]]</td>
-<!-- 	                            상품 상태 정지중 이런걸로 수정 -->
+	                            <th>누적 신고횟수</th>
+	                            <td>[[${v.reportCount}]]</td> 
 	                        </tr>
 	                    </table>
 	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
 						<div class="stop-period-section" style="margin-bottom: 10px;">
-						    <label class="page-title">상품 정지기간 선택</label>
-						    <div style="margin-top: 10px;">
-						        <label>
-						            <input type="radio" name="stopPeriod" value="1" /> 1일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="3" /> 3일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="7" /> 7일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="30" /> 30일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="permanent" /> 영구정지
-						        </label>
-						    </div>
+						    <label class="page-title">댓글 관리</label>
+						    <div style="margin-top: 10px;"></div>
 						</div>
 	                    
 	                    <div class="form-actions">
-	                        <button class="btn-submit">수정</button>
-	                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
+	                        <button class="btn-submit">댓글 숨기기</button>
+	                        <button type="button" id="deleteBtn" class="btn-reset">댓글 삭제</button>
 	                        <button type="button" class="btn-reset" onclick="history.back()">취소</button>
 	                    </div>
 	                    </form>
@@ -104,7 +82,7 @@
 					          	</tr>
 				          	</thead>
 				          	<tbody>
-					        	<tr th:each="r : ${rlist}">
+					        	<tr th:each="r : ${vlist}">
 					            	<td>[[${r.reportNo}]]</td>
 					            	<td>[[${r.reportTitle}]]</td>
 <!-- 					            	<td>[[${r.reportContent}]]</td> -->

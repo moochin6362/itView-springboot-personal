@@ -124,22 +124,26 @@ input, .report-board-btn:focus{
 .admin-report-board-table td:nth-child(1){ width: 5%; }
 .admin-report-board-table th:nth-child(2),
 .admin-report-board-table td:nth-child(2){ /* 제목 부분*/
-    width: 45%;
+    width: 25%;
     white-space: nowrap;     
     overflow: hidden;         
     text-overflow: ellipsis;
     }
 .admin-report-board-table th:nth-child(3),
 .admin-report-board-table td:nth-child(3){ 
-    width: 25%; 
+    width: 15%; 
     white-space: nowrap;      
     overflow: hidden;         
     text-overflow: ellipsis;
 }
 .admin-report-board-table th:nth-child(4),
-.admin-report-board-table td:nth-child(4){ width: 15%; }
+.admin-report-board-table td:nth-child(4){ 
+    width: 15%; 
+}
 .admin-report-board-table th:nth-child(5),
-.admin-report-board-table td:nth-child(5){ width: 10%; }
+.admin-report-board-table td:nth-child(5){ width: 20%; } 
+.admin-report-board-table th:nth-child(6),
+.admin-report-board-table td:nth-child(6){ width: 20%; }
 
 .admin-report-board-table td:nth-child(2) { /*제목 부분만 클릭 가능 -> 게시글 상세보기 이동*/
     cursor: pointer;

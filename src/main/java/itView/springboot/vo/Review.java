@@ -22,10 +22,15 @@ public class Review {
 	private String userName;
 	
     //신고용(DB에는 없음)
+	private int reportNo;
 	private String reportType;
 	private Date reportDate;
 	private String reportTitle;
 	private int reportCount;
 	private int rowNum;
 	private String reportStatus;
+	private Date reportModifyDate;
+	private int reportTargetNo;
+	private String reviewWriter;
+	private String reporterName;
 }

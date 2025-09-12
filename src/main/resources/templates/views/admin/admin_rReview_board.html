@@ -51,25 +51,24 @@
 			            <thead>
 			                <tr>
 			                    <th>No</th>
-			                    <th>신고 대상 유형</th>
-			                    <th>신고 대상 번호</th>
-			                    <th>누적 신고 횟수</th>
+			                    <th>신고 제목</th>
+			                    <th>신고자</th>
+			                    <th>신고 닐짜</th>
+			                    <th>신고 상태</th>
 			                </tr>
 			            </thead>
 			            <tbody id="admin-report-board-table-body" 
 			            	   class="admin-report-board-table-body">
-			                <tr th:each="report : ${reportList}">
-			                	<td>[[${report.rowNum}]]</td>
-			                    <td th:switch="${report.reportType}">
-				          			<span th:case="'R'">리뷰</span>
-								    <span th:case="'B'">게시판</span>
-								    <span th:case="'U'">회원</span>
-								    <span th:case="'V'">댓글</span>
-								</td>
-			                    <td></td>
-			                    <td></td>
-			                    <td th:text="${report.reportDate}"></td>
-			                    <td th:text="${report.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
+			                <tr th:each="review : ${reviewList}">
+			                	<td>[[${review.rowNum}]]</td>
+			                    <td>
+			                    	<a th:href="@{/admin/rReviewDetail(reviewNo=${review.reviewNo}, page=${page})}">
+								    [[${review.reportTitle}]]
+								    </a>
+			                    </td>
+			                    <td>[[${review.userName}]]</td>
+			                    <td th:text="${review.reportDate}"></td>
+			                    <td th:text="${review.reportStatus == 'Y' ? '처리중' : '처리완료'}"></td>
 			                </tr>
 			            </tbody>
 			        </table>

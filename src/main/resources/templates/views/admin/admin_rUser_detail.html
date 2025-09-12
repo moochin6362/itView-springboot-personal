@@ -26,32 +26,32 @@
 	                <div class="main-section">
 	                    <h2 class="page-title">신고회원 상세정보</h2>
 	                    <form id="detailForm" method="get" th:action="@{/admin/updateReportUser}">
-	                    	<input type="hidden" name="userNo" th:value="${user.userNo}">
+	                    	<input type="hidden" name="userNo" th:value="${u.userNo}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
 	                        <tr>
 	                            <th>신고회원 번호</th>
-	                            <td>[[${user.userNo}]]</td>
+	                            <td>[[${u.userNo}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>신고회원 이름</th>
-	                            <td>[[${user.userName}]]</td>
+	                            <td>[[${u.userName}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>회원 유형</th>
-	                            <td th:text="${user.userType == 'P' ? '판매자' : '일반회원'}"></td>
+	                            <td th:text="${u.userType == 'P' ? '판매자' : '일반회원'}"></td>
 	                        </tr>
 	                        <tr>
 	                            <th>신고 날짜</th>
-	                            <td th:text="${user.reportDate}"></td>
+	                            <td th:text="${u.reportDate}"></td>
 	                        </tr>
 	                        <tr>
 	                            <th>누적 신고횟수</th>
-	                            <td>[[${user.reportCount}]]</td>
+	                            <td>[[${u.reportCount}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>회원 상태</th>
-	                            <td th:text="${user.userState == 'Y'?'활동중' : '정지'}"></td>
+	                            <td th:text="${u.userStatus == 'Y'?'활동중' : '정지'}"></td>
 	                        </tr>
 	                    </table>
 	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
@@ -98,7 +98,7 @@
 					          	</tr>
 				          	</thead>
 				          	<tbody>
-					        	<tr th:each="Ruser : ${userList}">
+					        	<tr th:each="r : ${rllist}">
 					            	<td>[[${r.reportNo}]]</td>
 					            	<td>[[${r.reportTitle}]]</td>
 <!-- 					            	<td>[[${r.reportContent}]]</td> -->

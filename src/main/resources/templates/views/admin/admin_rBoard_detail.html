@@ -26,36 +26,32 @@
 	                <div class="main-section">
 	                    <h2 class="page-title">커뮤니티 신고글 상세정보</h2>
 	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
-	                    	<input type="hidden" name="reportNo" th:value="${r.reportNo}">
+	                    	<input type="hidden" name="boardId" th:value="${b.boardId}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
 	                        <tr>
-	                            <th>신고번호</th>
-	                            <td>[[${rBoard.reportNo}]]</td>
+	                            <th>신고 날짜</th>
+	                            <td>[[${b.reportDate}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>게시글 번호</th>
-	                            <td>[[${rBoard.reportTitle}]]</td>
+	                            <td>[[${b.boardId}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>게시글 제목</th>
-	                            <td>[[${rBoard.boardTitle}]]</td>
+	                            <td>[[${b.boardTitle}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>게시글 내용</th>
-	                            <td th:text="${rBoard.boardContent}"></td>
+	                            <td>[[${b.boardContent}]]</td>
 	                        </tr>
 	                        <tr>
-	                            <th>작성자</th>
-	                            <td>[[${rBoard.userName}]]</td> 
+	                            <th>게시글 작성자</th>
+	                            <td>[[${b.userName}]]</td> 
 	                        </tr>
 	                        <tr>
-	                            <th>누적 신고횟수</th>
-	                            <td>[[${rBoard.reportCount}]]</td>
-	                        </tr>
-	                        <tr>
-	                            <th>글 상태</th>
-	                            <td>[[${rBoard.boardState}]]</td>
+	                            <th>해당 글 신고횟수</th>
+	                            <td>[[${b.reportCount}]]</td>
 	                        </tr>
 	                    </table>
 	                    <!-- 상품 정지기간 선택 영역 // 자동해지 -->
@@ -102,12 +98,12 @@
 					          	</tr>
 				          	</thead>
 				          	<tbody>
-					        	<tr th:each="r : ${rlist}">
-					            	<td>[[${r.reportNo}]]</td>
-					            	<td>[[${r.reportTitle}]]</td>
-<!-- 					            	<td>[[${r.reportContent}]]</td> -->
-					            	<td>[[${r.userName}]]</td>
-					            	<td>[[${r.reportDate}]]</td>
+					        	<tr th:each="b : ${blist}">
+					            	<td>[[${b.reportNo}]]</td>
+					            	<td>[[${b.reportTitle}]]</td>
+<!-- 					            	<td>[[${b.reportContent}]]</td> -->
+					            	<td>[[${b.userName}]]</td>
+					            	<td>[[${b.reportDate}]]</td>
 					        	</tr>
 <!-- 				          		<tr th:if="${#lists.isEmpty(reportHistoryList)}"> -->
 <!-- 				            		<td colspan="3" style="text-align:center;">신고 이력이 없습니다.</td> -->

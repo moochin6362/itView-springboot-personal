@@ -15,7 +15,9 @@ import itView.springboot.vo.AdminReply;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.PageInfo;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.Reply;
+import itView.springboot.vo.Report;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
@@ -192,23 +194,75 @@ public class AdminService {
 	}
 	
 	
-	//신고 상세페이지이동
-
-	public User rUserDetail(int reportNo) {
-		return mapper.rUserDetail(reportNo);
+	//신고 상세페이지이동(해당신고 + 히스토리)
+	//1.회원
+	public User selectReportUser(int userNo) {
+		User u = mapper.selectReportUser(userNo);
+		return u;
+	}
+	public int getReportCount(int userNo) {
+		return mapper.getReportCount(userNo);
 	}
 
-	public Board rBoardDetail(int reportNo) {
-		return mapper.rBoardDetail(reportNo);
+	public ArrayList<Report> getUserReportList(PageInfo pi, int userNo) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.getUserReportList(rowBounds, userNo);
 	}
 
-	public Review rReviewDetail(int reportNo) {
-		return mapper.rReviewDetail(reportNo);
+	//신고 커뮤니티글 상세보기
+	public Board selectReportBoard(int boardId) {
+		Board b = mapper.selectReportBoardList(boardId);
+		return b;
 	}
 
-	public Reply rReplyDetail(int reportNo) {
-		return mapper.rReplyDetail(reportNo);
+	public int getBoardReportCount(int boardId) {
+		 return mapper.getBoardReportCount(boardId);
 	}
+
+	public ArrayList<Report> getBoardReportList(PageInfo pi, int boardId) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.getBoardReportList(rowBounds, boardId);
+	}
+
+	//신고 리뷰 상세보기
+	public Review selectReportReview(int reviewNo) {
+		Review rv = mapper.selectReportReview(reviewNo);
+		return rv;
+	}
+
+	public int getReviewReportCount(int reviewNo) {
+		return mapper.getReviewReportCount(reviewNo);
+	}
+
+	public ArrayList<Report> getReviewReportList(PageInfo pi, int reviewNo) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.getReviewReportList(rowBounds, reviewNo);
+	}
+
+	//신고 댓글 상세보기
+	public Reply selectReportReply(int replyNo) {
+		Reply v = mapper.selectReportReply(replyNo);
+		return v;
+	}
+
+	public int getReplyReportCount(int replyNo) {
+		return mapper.getReplyReportCount(replyNo);
+	}
+
+	public ArrayList<Report> getReplyReportList(PageInfo pi, Integer replyNo) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return mapper.getReplyReportList(rowBounds, replyNo);
+	}
+
+
+	
+	
+
+	
 	
 	
 	

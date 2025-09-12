@@ -134,6 +134,7 @@ select count(*)
         r.report_type,
         r.report_status,
         r.report_date,
+        r.report_title,
         u.user_type,
         u.user_status,
         u.user_no,
@@ -143,7 +144,7 @@ select count(*)
     JOIN report r
       ON r.report_target_no = u.user_no
     WHERE r.report_type = 'U'
-    GROUP BY u.user_no, u.user_name,r.report_date,r.report_status, r.report_type, u.user_type, u.user_status
+    GROUP BY u.user_no, u.user_name,r.report_date,r.report_status, r.report_type, u.user_type, u.user_status,r.report_title
     ORDER BY report_count DESC
 </select>
 <select id="selectReportBoardList" >
@@ -174,76 +175,193 @@ select count(*)
 <select id="selectReportReviewList" >
 	SELECT 
 	    ROW_NUMBER() OVER (ORDER BY COUNT(report_no) DESC) AS row_num,
-	    report_type,
-	    review_no,
-	    COUNT(report_no) AS report_count
-		FROM review
-		JOIN report
-		  ON report_target_no = review_no
+	    r.report_title,
+	    r.report_date,
+	    r.report_status,
+	    u.user_name,
+	    COUNT(r.report_no) AS report_count
+		FROM review e
+		JOIN report r
+		  ON r.report_target_no = e.review_no
+		JOIN "USER" u
+		  ON u.user_no = r.reporter_user_id 
 		WHERE report_type = 'R'
-		GROUP BY review_no, report_type
+		GROUP BY r.report_title, r.report_date,
+				r.report_status, u.user_name
 		ORDER BY report_count DESC
 </select>
 
 <select id="selectReportReplyList">
 	SELECT 
 	    ROW_NUMBER() OVER (ORDER BY COUNT(report_no) DESC) AS row_num,
-	    report_type,
-	    reply_no,
+	    r.report_title,
+	    r.report_date,
+	    r.report_status,
+	    u.user_id,
 	    COUNT(report_no) AS report_count
-		FROM reply
-		JOIN report
-		  ON report_target_no = reply_no
+		FROM reply v
+		JOIN report r
+		  ON r.report_target_no = v.reply_no
+		JOIN "USER" u
+		  ON u.user_no = r.reporter_user_id 
 		WHERE report_type = 'V'
-		GROUP BY reply_no, report_type
+		GROUP BY 
+			 r.report_title,
+			 r.report_date,
+			 r.report_status,
+	         u.user_id
 		ORDER BY report_count DESC
 </select>
 
 
-<!-- 신고 상세조회 -->
-<select id="rUserDetail" parameterType="int" resultType="User">
-	 SELECT 
-        u.user_no,
-        u.user_name,
-        u.user_type,
-        r.report_no,
-        r.report_type,
-        r.report_status,
-        r.report_date
-    FROM "USER" u
-    JOIN REPORT r
-      ON r.report_target_no = u.user_no
-    WHERE r.report_no = #{reportNo} and r.report_type='U'
+<!-- 신고 상세조회 + 히스토리 -->
+<select id="selectReportUser">
+	select 
+		u.user_name,
+		u.user_type,
+		u.user_no,
+		u.user_status,
+		count(r.report_no) as report_count,
+		max(r.report_date) as report_date
+	from "USER" u 
+	join report r on (reporter_user_id = user_no)
+	where user_no = #{userNo}
+	group by u.user_name, u.user_type, u.user_no,u.user_status
 </select>
-<select id="rBoardDetail" parameterType="int" resultType="Board">
+<select id="getReportCount">
+	select count(*) from report 
+	where report_type = 'U' and report_target_no = #{userNo}
+</select>
+<select id="getUserReportList">
+	select * 
+	from report
+	join "USER" on (user_no = reporter_user_id)
+	where report_target_no = #{userNo}
+	order by report_date desc
+</select>
+
+
+<select id="selectReportBoard" parameterType="int" resultType="Board">
 	SELECT 
-	    ROW_NUMBER() OVER (ORDER BY COUNT(report_no) DESC) AS row_num,
-	    r.report_type,
-	    r.report_date,
-	    r.report_title,
 	    r.report_status,
+	    r.report_title,
+	    r.report_no,
 	    b.board_id,
 	    b.board_title,
-	    u.user_name,
+	    b.board_content,
+	    u.user_id,
 	    COUNT(r.report_no) AS report_count
+	    max(r.report_date) as report_date
 		FROM board b
 		JOIN report r 
 		  ON r.report_target_no = b.board_id
 		JOIN "USER" u
 		  ON b.user_no = u.user_no
 		WHERE report_type = 'B' and r.report_no = #{reportNo}
-		
+		 group by b.board_id, b.board_title, b.board_content
 </select>
-<select id="rReviewDetail" parameterType="int" resultType="Review">
+<select id="getBoardReportCount">
+	select count(*) from report 
+	where report_type = 'B' and report_target_no = #{boardId}
+</select>
+<select id="getBoardReportList">
 	select * 
-	from report 
-	where report_no = #{reportNo}
+	from report
+	join board on (user_no = reporter_user_id)
+	where report_target_no = #{boardId}
+	order by report_date desc
 </select>
-<select id="rReplyDetail" parameterType="int" resultType="Reply">
-	select * 
-	from report 
-	where report_no = #{reportNo}
+
+
+<select id="selectReportReview" parameterType="int" resultType="Review">
+SELECT 
+	    r.report_no, 
+	    r.report_status,
+	    r.report_title,
+	    u.user_name,
+	    e.review_date,
+	    e.review_no,
+	    e.review_content,
+	    COUNT(r.report_no) AS report_count,
+	    max(r.report_date) as report_date
+		FROM review e
+		JOIN report r 
+		  ON r.report_target_no = e.review_no
+		JOIN "USER" u 
+		  ON e.user_no = u.user_no
+		WHERE report_type = 'R' and r.report_no = #{reportNo}
+		GROUP BY 
+			r.report_no,
+		    r.report_status,
+		    r.report_title,
+		    u.user_name,
+		    e.review_date,
+		    e.review_no,
+		    e.review_content
 </select>
+
+<select id="getReviewReportCount">
+select count(*) from report 
+where report_type = 'R' and report_target_no = #{reviewNo}
+
+</select>
+<select id="getReviewReportList">
+select * 
+	from report
+	join review on (user_no = reporter_user_id)
+	where report_target_no = #{reviewNo}
+	order by report_date desc
+</select>
+
+
+<select id="selectReportReply" parameterType="Integer" resultType="Reply">
+SELECT 
+	    r.report_no, 
+	    r.report_title,
+	    v.reply_no,
+	    v.reply_date,
+	    v.reply_status,
+	    v.reply_content,
+	    u.user_Id,
+	    u.user_name,
+	    COUNT(r.report_no) AS report_count,
+	    max(r.report_date) as report_date
+		FROM reply v
+		JOIN report r 
+		  ON r.report_target_no = v.reply_no
+		JOIN "USER" u
+		  ON v.user_no = u.user_no
+		WHERE report_type = 'R' and r.report_no = #{reportNo}
+		GROUP BY
+		    r.report_no, 
+		    r.report_title,
+		    v.reply_no,
+		    v.reply_date,
+		    v.reply_status,
+		    v.reply_content,
+		    u.user_Id,
+		    u.user_name
+</select>
+<select id="getReplyReportCount">
+select count(*) from report 
+where report_type = 'V' and report_target_no = #{replyNo}
+</select>
+<select id="getReplyReportList">
+select * 
+	from report r
+	join "USER" u on (u.user_no = r.reporter_user_id)
+	where report_target_no = #{replyNo}
+	order by report_date desc
+</select>
+
+
+
+
+
+
+
+
+
 
 
 <!-- 일반 문의 게시판 조회 -->

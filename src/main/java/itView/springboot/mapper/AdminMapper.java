@@ -12,6 +12,7 @@ import itView.springboot.dto.UserReport;
 import itView.springboot.vo.AdminReply;
 import itView.springboot.vo.Board;
 import itView.springboot.vo.Reply;
+import itView.springboot.vo.Report;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 
@@ -124,15 +125,27 @@ public interface AdminMapper {
 	ArrayList<AdminReply> getGeneralReplyList(int boardId);
 
 	
-	//신고 상세조회
-	User rUserDetail(int reportNo);
+	//신고회원 상세조회(히스토리)
+	User selectReportUser(int userNo);
+	int getReportCount(int userNo);
+	ArrayList<Report> getUserReportList(RowBounds rowBounds,int userNo );
+	
+	//신고 커뮤니티글 상세조회
+	Board selectReportBoardList(int boardId);
+	int getBoardReportCount(int boardId);
+	ArrayList<Report> getBoardReportList(RowBounds rowBounds, int boardId);
+	
+	//신고 리뷰 상세조회
+	Review selectReportReview(int reviewNo);
+	int getReviewReportCount(int reviewNo);
+	ArrayList<Report> getReviewReportList(RowBounds rowBounds, int reviewNo);
 
-	Board rBoardDetail(int reportNo);
+	//신고 댓글 상세조회
+	Reply selectReportReply(Integer replyNo);
+	int getReplyReportCount(Integer replyNo);
+	ArrayList<Report> getReplyReportList(RowBounds rowBounds, Integer replyNo);
 
-	Reply rReplyDetail(int reportNo);
-
-	Review rReviewDetail(int reportNo);
-
+	
 	
 
 		

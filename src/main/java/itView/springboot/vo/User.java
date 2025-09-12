@@ -38,9 +38,13 @@ public class User {
 	private String hopePrice;
 	
     //신고용(DB에는 없음)
+	private int reportNo;
+	private String reportTitle;
 	private String reportType;
 	private int reportCount;
 	private int rowNum;
 	private String reportStatus;
 	private Date reportDate;
+	private Date reportModifyDate;
+	private int reportTargetNo;
 }

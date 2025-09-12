@@ -46,8 +46,7 @@
 			        <!--게시글 선택옵션 넣고 삭제(상태 N)하기 버튼 : 토글로 넣어야겠다 / 검색창기능 추가 / -->
 			    <div class="admin-report-board-table">
 			        <table id="admin-report-board-table-header" 
-			        	   class="admin-report-board-table-header"
-			        	   >
+			        	   class="admin-report-board-table-header">
 			            <thead>
 			                <tr>
 			                    <th>No</th>
@@ -62,7 +61,7 @@
 			                <tr th:each="rBoard : ${boardList}">
 			                	<td>[[${rBoard.rowNum}]]</td>
 			                    <td>
-			                    	<a  th:href="@{/admin/rBoardDetail(reportNo=${rBoard.reportNo}, page=${page})}"
+			                    	<a  th:href="@{/admin/rBoardDetail(boardId=${rBoard.boardId}, page=${page})}"
 			                    		th:text="${rBoard.reportTitle}">
 			                    	</a>
 			                   </td>
