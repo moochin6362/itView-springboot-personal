@@ -34,4 +34,5 @@ public class Coupon {
 	// join시 가져올 이름
 	private String userName;
 	private String brandName;
+	private String userGrade;
 }

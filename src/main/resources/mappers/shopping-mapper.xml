@@ -39,11 +39,11 @@
 		select * 
 		from coupon_box cb
 			join coupon c on c.coupon_no=cb.coupon_no
+			join "USER" u on c.user_no=u.user_no
 		where cb.user_no=#{userNo}
 			and cb.coupon_used ='N'
+			and (c.coupon_target='all' or c.coupon_target=#{userGrade})
 		order by c.coupon_startdate desc
-    		
-			
 	</select>
 	<!-- ========================위시리스트========================== -->
 	
@@ -51,8 +51,29 @@
 		select * 
 		from wishlist w
 			join product p on p.product_no=w.product_no
+			left join(
+				select product_no,count(*) AS review_count
+				from review
+				group by product_no
+			)r on p.product_no = r.product_no
 		where w.user_no=#{userNo}
+		<choose> 
+			<when test="wishSortType=='oldest'">
+				order by w.wish_date asc
+			</when>
+			<when test="wishSortType=='review'">
+				order by NVL(r.review_count,0) desc, w.wish_date desc
+			</when>
+			<otherwise>
+				order by w.wish_date desc
+			</otherwise>
+		</choose>
 	</select>
+	
+	
+	
+	
+	
 	
 	<delete id="wishcheckDelete">
 		delete from wishlist
@@ -305,6 +326,11 @@
 		and user_no=#{userNo}
 	</update>
 	
+	
+	<insert id="insertCancel">
+		INSERT INTO order_cancel (cancel_no, user_no,order_no,cancel_reason,cancel_detail,cancel_date)
+		VALUES (seq_cancel.NEXTVAL,#{userNo},#{orderNo},#{cancelReason},#{cancelDetail},SYSDATE)
+	</insert>
 	
 	
 </mapper>

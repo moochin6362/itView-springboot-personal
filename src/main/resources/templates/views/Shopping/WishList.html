@@ -176,16 +176,17 @@ hr {
   justify-content: center;
   border-radius: 8px;               
 }
+
 </style>
 </head>
 <body>
 <!-- 전역 헤더 (공통) -->
-  <header class="site-header"><a href="index">It:View</a></header>
+  <header class="site-header">It:View</header>
 
   <!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
   <nav class="sidenav" aria-label="Primary">
     <div class="sidenav-top">
-      <a class="nav-item active" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
+      <a class="nav-item active" href="/my/myPage"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
       <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
       <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
       <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
@@ -195,12 +196,11 @@ hr {
     </nav>
     <div class="all">
 	<div class="wish-Top">
-	<form action="wishSort" method="get">
+	<form id="wishsortform" action="wishSort" method="get">
 		<select id="sort" name="wishSortType">
-			<option value="newest" selected>최신순</option>
-			<option value="oldest">담은순</option>
-			<option value="popular">인기순</option>
-			<option value="review">리뷰많은순</option>
+			<option value="newest" th:selected="${ws == 'newest'}">최신순</option>
+			<option value="oldest" th:selected="${ws == 'oldest'}">담은순</option>
+			<option value="review" th:selected="${ws == 'review'}">리뷰많은순</option>
 		</select>
 	</form>
 		<button type="button" id="checkdelete">선택삭제</button>
@@ -208,7 +208,7 @@ hr {
 	
 	<hr>
 
-	<span class="quantity">상품(<span class="total-product">[[${#lists.size(wlist)}]]</span>개)</span>
+	<span class="quantity">상품 (<span class="total-product">[[${#lists.size(wlist)}]]</span>개)</span>
 	<div th:if="${#lists.isEmpty(wlist)}" class="cart-empty">
    		<p>찜이 비어 있습니다.</p>
 	</div>
@@ -249,8 +249,8 @@ hr {
 		const checkdelete = document.getElementById('checkdelete');
 		const deleteBtn = document.querySelectorAll('.delete-btn');
 		const cartInsert=document.getElementById('cart-insert');
-		
-		
+		const sort=document.querySelector('#sort');
+		const wishsortform=document.getElementById('wishsortform');
 		
 		if(checkdelete != null){
 			checkdelete.addEventListener('click',()=>{
@@ -344,6 +344,15 @@ hr {
 				error:data => console.log(data)
 			});
 		});
+		
+		
+		if(sort){
+			sort.addEventListener('change',()=>{
+				wishsortform.submit();
+				
+				
+			});
+		}
 		
 	}
 		

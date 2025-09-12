@@ -60,6 +60,13 @@ body {
 	color: black;
 	font-size: 19px;
 }
+.cancel-product{
+	margin-left: 1%;
+	margin-right: 1%;
+	color: gray;
+	font-weight:bold;
+	font-size: 17px;
+}
 
 #sort {
 	border: 1px solid #34e5eb;
@@ -90,7 +97,13 @@ body {
 	padding-right: 2%;
 	background: #f1f5f9;
 }
+.refund-inform summary{
+	cursor:pointer;
+	display:list-item;
+	margin-bottom:1.5%;
+	margin-top:1%;
 
+}
 .refund-notice {
 	font-size: 20px;
 	font-weight: bold;
@@ -116,11 +129,14 @@ body {
 	margin-right: 1%;
 }
 
-summary {
+.refund-notes summary {
 	margin-bottom: 1%;
 	margin-top: 1%;
 	font-weight: bold;
+	cursor:pointer;
 }
+
+
 
 .refund-notes {
 	padding-left: 2%;
@@ -132,7 +148,7 @@ summary {
 	margin-left: 1.5%;
 }
 
-#cancel-request {
+.cancel-request {
 	margin-top: 1%;
 	width: 96%;
 	margin: 1% auto 1% auto;
@@ -147,7 +163,7 @@ summary {
 	cursor: pointer;
 }
 
-#cancel-request:hover {
+.cancel-request:hover {
 	color: white;
 	background-color: #8ad8f0;
 }
@@ -171,33 +187,43 @@ summary {
 	<p class="title">주문취소</p>
 	<form class="form">
 		<div class="cancel-choose">
-			<p class="cancel-option">취소사유</p>
-			<select id="sort" name="cancelSortType">
-				<option value="notice" selected>사유를 선택해주세요</option>
-				<option value="like">상품이 마음에 들지 않아요</option>
-				<option value="change-address">배송지를 변경하고 싶어요</option>
-				<option value="order-false">주문을 잘못했어요</option>
-				<option value="delivery-delay">배송이 지연되었어요</option>
-				<option value="service">서비스가 불만족스러워요</option>
+			<p class="cancel-option">취소사유 (필수)</p>
+			<select id="sort" name="cancelSortType" required>
+				<option value="notice" disabled selected>사유를 선택해주세요</option>
+				<option th:value="'상품이 마음에 들지 않아요'">상품이 마음에 들지 않아요</option>
+				<option th:value="'배송지를 변경하고 싶어요'">배송지를 변경하고 싶어요</option>
+				<option th:value="'주문을 잘못했어요'">주문을 잘못했어요</option>
+				<option th:value="'배송이 지연되었어요'">배송이 지연되었어요</option>
+				<option th:value="'서비스가 불만족스러워요'">서비스가 불만족스러워요</option>
 			</select>
 		</div>
 
 		<div class="cancel-detail">
-			<p class="cancel-option">상세 사유를 입력해주세요</p>
+			<p class="cancel-option">상세 사유를 입력해주세요 (선택 사항)</p>
 			<textarea name="cancelContent" id="content" placeholder="내용을 입력해주세요"
 				style="resize: none;"></textarea>
 		</div>
 
 		<div class="refund-inform">
 			<p class="refund-notice">취소/환불 정보</p>
+			<div class="cancel-product">
+				<details>
+					<summary>주문취소 할 상품</summary>
+					<div th:each="o:${olist}">
+						-&nbsp;&nbsp;<span class="product" th:text="${o.productName}" style="color:black; font-size:15px;"></span>
+						<span class="product" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'" style="color:black; font-size:15px;"></span>
+					</div>
+				</details>
+			</div>
 			<div class="total-price">
 				<p>총 환불금액</p>
-				<p style="color: black;">(얼마얼마)</p>
+				<p style="color: black;" th:text="${#numbers.formatInteger(olist[0].payPrice,3,'COMMA')}+'원'"></p>
 			</div>
 			<div class="refund-method">
 				<p>환불 수단</p>
-				<p style="color: black;">(결제어떤걸로햇으)</p>
+				<p style="color: black;" th:text="${olist[0].paymentMethod}"></p>
 			</div>
+			
 
 		</div>
 
@@ -220,7 +246,47 @@ summary {
 				</p>
 			</details>
 		</div>
-		<button type="submit" id="cancel-request">취소 접수</button>
+		<button type="button" class="cancel-request" th:attr="data-order-no=${olist[0].orderNo}">취소 접수</button>
 	</form>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+	window.onload=()=>{
+		
+		const cancel=document.querySelector('.cancel-request');
+		
+			  cancel.addEventListener('click', (e) => {
+				    const orderNo = e.currentTarget.dataset.orderNo;
+				    const reason=document.querySelector('#sort').value;
+				    const detail = document.querySelector('#content').value;
+				    
+				    if(!reason || reason =="" ||reason=="notice"){
+				    	alert('취소 사유를 선택해주세요.');
+				    	return;
+				    }
+				    if (confirm('취소가 완료되면 되돌릴 수 없습니다. 진행하시겠습니까?')) {
+				      $.ajax({
+				        url: '/Shopping/insertCancel',
+				        type: 'post',
+				        data: { orderNo: orderNo,
+				        		cancelReason:reason,
+				        		cancelDetail: detail || null
+				        		},
+				        success: data => {
+				          if (data > 0) {
+				            alert('주문취소가 완료되었습니다.');
+				            location.href = "/Shopping/order";
+				          } else {
+				            alert('주문취소 도중 오류가 발생하였습니다.');
+				          }
+				        },
+				        error: data => console.log(data)
+				      });
+				    }
+			  });
+			
+	}
+	
+</script>
 </html>

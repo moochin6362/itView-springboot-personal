@@ -190,15 +190,15 @@ button:hover {
 		<div class="order-status">
 			<div class="status-item">
 				<p class="delivery">배송중</p>
-				<p class="count" th:text="${count['shippingCount'] != null ? count['shippingCount'] : 0}"></p>
+				<p class="count" th:text="${count != null ? (count['shippingCount'] != null ? count['shippingCount'] : 0):0}"></p>
 			</div>
 			<div class="status-item">
 				<p class="delivery">배송완료</p>
-				<p class="count" th:text="${count['deliveredCount'] != null ? count['deliveredCount'] : 0}"></p>
+				<p class="count" th:text="${count != null ? (count['deliveredCount'] != null ? count['deliveredCount'] : 0):0}"></p>
 			</div>
 			<div class="status-item">
 				<p class="delivery">주문취소</p>
-				<p class="count" th:text="${count['cancelCount'] != null ? count['cancelCount'] : 0}"></p>
+				<p class="count" th:text="${count != null ? (count['cancelCount'] != null ? count['cancelCount'] : 0):0}"></p>
 			</div>
 		</div>
 
@@ -244,7 +244,9 @@ button:hover {
 			</div>
 			<button class="cart-btn" th:if="${o.orderStatus=='confirmed'}" th:attr="data-order-no=${o.orderNo},data-product-no=${o.productNo},data-stock=${o.productStock},data-state=${o.productState}">장바구니 다시 담기</button>
 			<button class="purchase-confirmed-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus=='after'}" th:attr="data-order-no=${o.orderNo}">구매확정 하기</button>
-			<button class="order-cancel-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus == 'before'}" th:attr="data-order-no=${o.orderNo}">주문 취소하기</button>
+			<a th:href="@{/Shopping/cancelReason(orderNo=${o.orderNo})}">
+				<button class="order-cancel-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus == 'before'}" th:attr="data-order-no=${o.orderNo}">주문 취소하기</button>
+			</a>
 			
 		</div>
 	</div>

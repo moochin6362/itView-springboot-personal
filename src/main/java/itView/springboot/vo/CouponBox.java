@@ -1,5 +1,9 @@
 package itView.springboot.vo;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,4 +19,13 @@ public class CouponBox {
 	
 	
 	private String couponName;
+	private String couponMinprice;
+	private String couponDiscount;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate couponStartdate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate couponEnddate;
+	private String couponTarget;
+	private String brandName;
+	
 }

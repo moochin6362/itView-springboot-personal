@@ -13,6 +13,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Cart;
 import itView.springboot.vo.CouponBox;
 import itView.springboot.vo.Order;
+import itView.springboot.vo.OrderCancel;
 import itView.springboot.vo.Wishlist;
 
 
@@ -27,9 +28,9 @@ public interface ShoppingMapper {
 
 	ArrayList<Attachment> selectThumbList(@Param("pNo") ArrayList<Integer> pNo);
 
-	ArrayList<CouponBox> selectCouponList(int uNo);
+	ArrayList<CouponBox> selectCouponList(@Param("userNo") int uNo,@Param("userGrade")String userGrade);
 
-	ArrayList<Wishlist> selectWishList(int uNo);
+	ArrayList<Wishlist> selectWishList(@Param("userNo") int uNo,@Param("wishSortType") String wishSortType);
 
 	int wishcheckDelete(@Param("wNo") List<Integer> wNo);
 
@@ -57,6 +58,9 @@ public interface ShoppingMapper {
 	Map<String, Object> orderStatusCount(@Param("userNo") int uNo);
 
 	ArrayList<Order> selectOrderDetail(@Param("orderNo") int oNo,@Param("userNo") int uNo);
+
+
+	int insertCancel(OrderCancel cancel);
 
 
 

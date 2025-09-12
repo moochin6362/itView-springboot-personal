@@ -19,6 +19,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Cart;
 import itView.springboot.vo.CouponBox;
 import itView.springboot.vo.Order;
+import itView.springboot.vo.OrderCancel;
 import itView.springboot.vo.User;
 import itView.springboot.vo.Wishlist;
 import jakarta.servlet.http.HttpSession;
@@ -50,9 +51,18 @@ public class ShoppingController {
 	}
 
 	@GetMapping("cancelReason")
-	public String cancelReason() {
+	public String cancelReason(Model model, HttpSession session,@RequestParam("orderNo") int oNo) {
 		
+		User loginUser = (User) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			return "redirect:/login";
+		}
+		int uNo = loginUser.getUserNo();
 		
+		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
+		
+		model.addAttribute("olist",olist);
 		return "Shopping/cancelReason";
 	}
 	@GetMapping("detail")
@@ -61,6 +71,8 @@ public class ShoppingController {
 		
 		return "Shopping/detail";
 	}
+
+	
 
 	@GetMapping("cart")
 	public String cart(Model model, HttpSession session) {
@@ -71,6 +83,7 @@ public class ShoppingController {
 			return "redirect:/login";
 		}
 		int uNo = loginUser.getUserNo();
+		String userGrade=loginUser.getUserGrade();
 		ArrayList<Cart> clist = sService.selectProduct(uNo);
  
 		ArrayList<Integer> pNo = new ArrayList<>();
@@ -84,9 +97,9 @@ public class ShoppingController {
 		if (!pNo.isEmpty()) {
 		    alist = sService.selectThumbList(pNo);
 		}
-		ArrayList<CouponBox> couponlist = sService.selectCouponList(uNo);
+		ArrayList<CouponBox> couponlist = sService.selectCouponList(uNo,userGrade);
 		
-		Map<String,List<Cart>> cartGroup= clist.stream().collect(Collectors.groupingBy(c->c.getProductCompany()));
+		Map<Object, List<Cart>> cartGroup= clist.stream().collect(Collectors.groupingBy(c->c.getProductCompany()));
 		model.addAttribute("clist", clist);
 		model.addAttribute("alist", alist);
 		model.addAttribute("couponlist", couponlist);
@@ -179,8 +192,8 @@ public class ShoppingController {
 
 	// ===========================================================
 	// 찜
-	@GetMapping({"WishList","wishSort","wishToCart"})
-	public String WishList(Model model, HttpSession session,@RequestParam(value="wishSortType", defaultValue="latest")String csSortType) {
+	@GetMapping({"WishList","wishSort"})
+	public String WishList(Model model, HttpSession session,@RequestParam(value="wishSortType", defaultValue="newest")String wishsort) {
 
 		User loginUser = (User) session.getAttribute("loginUser");
 
@@ -189,7 +202,7 @@ public class ShoppingController {
 		}
 		int uNo = loginUser.getUserNo();
 
-		ArrayList<Wishlist> wlist = sService.selectWishList(uNo);
+		ArrayList<Wishlist> wlist = sService.selectWishList(uNo,wishsort);
 		
 		ArrayList<Integer> pNo = new ArrayList<>();
 		for (Wishlist w : wlist) {
@@ -205,7 +218,7 @@ public class ShoppingController {
 		
 		model.addAttribute("wlist", wlist);
 		model.addAttribute("alist", alist);
-
+		model.addAttribute("ws",wishsort);
 		return "Shopping/WishList";
 	} 
 
@@ -271,6 +284,17 @@ public class ShoppingController {
 	public int orderCancel(@RequestParam("orderNo") int oNo) {
 		int result = sService.orderCancel(oNo);
 		return result;
+	}
+	
+	
+	@PostMapping("insertCancel")
+	@ResponseBody
+	public int insertCancel(OrderCancel cancel, HttpSession session) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		
+		cancel.setUserNo(loginUser.getUserNo());
+		return sService.insertCancel(cancel);
 	}
 	
 	

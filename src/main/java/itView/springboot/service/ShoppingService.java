@@ -11,6 +11,7 @@ import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Cart;
 import itView.springboot.vo.CouponBox;
 import itView.springboot.vo.Order;
+import itView.springboot.vo.OrderCancel;
 import itView.springboot.vo.Wishlist;
 import lombok.RequiredArgsConstructor;
 
@@ -52,14 +53,14 @@ public class ShoppingService {
 		    if (pNo == null || pNo.isEmpty()) return new ArrayList<>();            
 		    return mapper.selectThumbList(pNo); 
 	}
-	public ArrayList<CouponBox> selectCouponList(int uNo) {
+	public ArrayList<CouponBox> selectCouponList(int uNo, String userGrade) {
 		// TODO Auto-generated method stub
-		return mapper.selectCouponList(uNo);
+		return mapper.selectCouponList(uNo,userGrade);
 	}
 
-	public ArrayList<Wishlist> selectWishList(int uNo) {
+	public ArrayList<Wishlist> selectWishList(int uNo, String wishsort) {
 		// TODO Auto-generated method stub
-		return mapper.selectWishList(uNo);
+		return mapper.selectWishList(uNo,wishsort);
 	}
 
 	public int wishcheckDelete(List<Integer> wNo) {
@@ -113,6 +114,13 @@ public class ShoppingService {
 		return mapper.selectOrderDetail(oNo,uNo);
 	}
 
+	public int insertCancel(OrderCancel cancel) {
+		// TODO Auto-generated method stub
+		return mapper.insertCancel(cancel);
+	}
+
+	
+	
 	
 
 	
