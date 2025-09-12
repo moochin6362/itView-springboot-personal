@@ -24,4 +24,39 @@
 		where user_no = #{userNo}
 	</select>
 
+	<!-- 페이징카운트 -->
+	<select id="getListCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM INQUIRY
+		WHERE user_no = #{userNo}
+	</select>
+
+	<!-- 페이징 리스트 -->
+	<select id="selectInquiryList" parameterType="int" resultType="Inquiry">
+		SELECT *
+		FROM INQUIRY
+		WHERE user_no = #{userNo}
+		ORDER BY question_no DESC
+	</select>
+
+	<!-- 전체카운트 -->
+	<select id="getAllListCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM INQUIRY
+	</select>
+
+	<!-- 페이징 전체카운트 -->
+	<select id="selectAllInquiryList" resultType="itView.springboot.vo.Inquiry">
+		SELECT I.*, U.USER_NAME
+		FROM INQUIRY I
+		JOIN "USER" U
+		ON I.USER_NO = U.USER_NO
+		ORDER BY I.QUESTION_NO DESC
+	</select>
+
+	<!-- 관리자가 회원한테 답변 -->
+	<update id="updateanswerContent" parameterType="Inquiry">
+		UPDATE INQUIRY SET
+		answer_content = #{answerContent}
+		WHERE QUESTION_NO = #{questionNo}
+	</update>
+
 </mapper>

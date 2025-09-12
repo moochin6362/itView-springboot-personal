@@ -15,4 +15,6 @@ public class Inquiry {
     private String answerContent;     //답변
     private int userNo;               //유저
 
+    private String userName;
+
 }

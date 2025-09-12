@@ -24,20 +24,28 @@ public class InquiryController {
     private final InquiryService inquiryService;
 
     // 리스트 페이지
+    // 리스트 페이지
     @GetMapping("/getFaqList")
-    public String getInquiryList(Model model, HttpSession session) {
+    public String getInquiryList(@RequestParam(value = "page", defaultValue = "1") int currentPage,
+                                 Model model, HttpSession session,
+                                 HttpServletRequest request) {
         User user = (User) session.getAttribute("loginUser");
 
-        List<Inquiry> inquirys = new ArrayList<>();
-
-        if (user != null) {
-            inquirys = inquiryService.getInquirylist(user.getUserNo());
+        // 로그인 안 된 경우 처리
+        if (user == null) {
+            return "redirect:/login/login";
         }
 
-        model.addAttribute("inquirys", inquirys);
+        int listCount = inquiryService.getListCount(user.getUserNo());
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 3);
+        List<Inquiry> inquirys = inquiryService.selectInquiryList(user.getUserNo(), pi);
 
-        return "inquiry/inquiry";
+        model.addAttribute("inquirys", inquirys);
+        model.addAttribute("pi", pi);
+        return "inquiry/Inquiry";
     }
+
+
 
 
     @PostMapping("/insertinquiry")

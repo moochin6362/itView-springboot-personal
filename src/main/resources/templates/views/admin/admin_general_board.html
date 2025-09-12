@@ -1,103 +1,167 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자용 일반유저 게시판</title>
-    <link rel="stylesheet" href="/css/adminCss/admin_general_board.css">
-    <script src="/js/admin/admin_general_board.js" defer></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 
-	<link href="/css/inhoCss/commonContent.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/adminCss/admin_partner_board.css">
+    <link href="/css/inhoCss/enrollCouponNotice.css" rel="stylesheet" />
     <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
     <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
-    <script src="/js/inhoAdmin/sidebar.js" defer></script>
+    <script th:src="@{/js/inhoAdmin/sidebar.js}" defer></script>
 
     <!-- 아이콘 & 폰트 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
 
+    <style>
+        /* 버튼 */
+        .answer-btn {
+            padding: 4px 8px;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .answer-btn:hover { opacity: 0.9; }
+
+        /* 기본 답변 버튼 - 파란색 */
+        .answer-btn:not(.answer-modify) { background-color: #007bff; }
+
+        /* 수정 버튼 - 주황색 */
+        .answer-btn.answer-modify { background-color: #fd7e14; }
+
+        /* 테이블 */
+        .admin-general-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .admin-general-table th, .admin-general-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+        .admin-general-table th {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+
+        /* 텍스트 처리 */
+        .question-title { font-weight: bold; margin-bottom: 4px; }
+        .question-content, .answer-content {
+            font-size: 13px;
+            color: #555;
+            margin-top: 4px;
+            word-break: break-word;
+            max-width: 300px;    /* 길이 제한 */
+            white-space: pre-wrap; /* 줄바꿈 유지 */
+        }
+
+        /* 답변 폼 */
+        .answer-form-row textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 6px;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .answer-form-row .btn { margin-left: 5px; }
+
+        /* 배지 */
+        .badge { padding: 3px 6px; border-radius: 4px; font-size: 12px; }
+        .bg-success { background-color: #28a745; color: white; }
+        .bg-warning { background-color: #ffc107; color: #212529; }
+    </style>
 </head>
 <body>
-	<div class="container">
-		<!-- 사이드바 -->
-		<div th:replace="~{common/sidebar :: sidebar}"></div>
-		<!-- 컨텐츠 영역 -->
-	    <div class="content-area">
-			<!-- 헤더 -->
-			<div th:replace="~{common/header2 :: header2}"></div>
-	
-    <div class="admin-genBoard-wrapper">
-        <div class="admin-genBoard-header">
-            <div class="admin-genBoard-title">일반 문의게시판</div>
-            <hr class="admin-genBoard-divider"/>
-        </div>
-        
+<div class="container">
+    <div th:replace="~{common/sidebar :: sidebar}"></div>
+    <div class="content-area">
+        <div th:replace="~{common/header2 :: header2}"></div>
 
-        <div class="admin-genBoard-table">
-            <table id="admin-genBoard-table-header" class="admin-genBoard-table-header">
-                <thead>
+        <div class="admin-general-wrapper">
+            <div class="admin-general-header">
+                <div class="admin-general-title">일반 문의게시판</div>
+                <hr class="admin-general-divider"/>
+            </div>
+
+            <div class="admin-general-table-wrapper">
+                <table class="admin-general-table">
+                    <thead>
                     <tr>
                         <th>No</th>
                         <th>제목</th>
+                        <th>문의내용</th>
+                        <th>답변내용</th>
                         <th>작성자</th>
-                        <th>작성일</th>
-                        <th>답변상태</th>
+                        <th>액션</th>
                     </tr>
-                </thead>
-                <tbody id="admin-genBoard-table-body" 
-                	class="admin-genBoard-table-body"
-                	th:each="gBoard : ${gBoardList}">
+                    </thead>
+                    <tbody th:each="inquiry : ${inquiryList}">
                     <tr>
-                        <td th:text="${gBoard.boardId}"></td>
-                        <td th:text="${gBoard.boardTitle}"></td>
-                        <td th:text="${gBoard.userId}"></td>
-                        <td th:text="${gBoard.boardDate}"></td>
-                        <td th:text="${gBoard.boardReplyStatus == 'Y' ? '답변완료' : '답변대기'}"></td>
+                        <td th:text="${inquiry.questionNo}"></td>
+                        <td th:text="${inquiry.questionTitle}"></td>
+                        <td class="question-content" th:text="${inquiry.questionContent}" th:title="${inquiry.questionContent}"></td>
+                        <td class="answer-content" th:text="${inquiry.answerContent != null ? inquiry.answerContent : '-'}" th:title="${inquiry.answerContent != null ? inquiry.answerContent : ''}"></td>
+                        <td th:text="${inquiry.userName}"></td>
+                        <td>
+                            <button type="button" class="answer-btn"
+                                    th:classappend="${inquiry.answerContent != null} ? ' answer-modify' : ''"
+                                    th:attr="data-questionno=${inquiry.questionNo}"
+                                    th:text="${inquiry.answerContent != null} ? '수정' : '답변'">
+                            </button>
+                        </td>
                     </tr>
-                </tbody>
-            </table>
-		     <ul class="admin-board-pagination">
-		               <li class="admin-board-page-item" th:classappend="${pi.currentPage == 1} ? 'disabled'">
-				           <a class="page-link"
-			                   th:if="${pi.currentPage > 1}"
-			                   th:href="@{${loc}(page=${pi.currentPage-1})}"
-			                   aria-label="Previous">
-	                       <span aria-hidden="true">&laquo;</span>
-	                	   </a>
-	                	   <span class="page-link" th:unless="${pi.currentPage > 1}">&laquo;</span>    
-			           </li>
-		              
-		              
-		               <li class="admin-board-page-item" th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
-		               	   th:classappend="${p == pi.currentPage} ? 'active'">
-			               <a class="page-link" th:href="@{${loc}(page=${p})}">[[${p}]]</a>
-            		   </li>
-		               
-		               <li class="admin-board-page-item" th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
-				           	<a class="page-link"
-			                   th:if="${pi.currentPage < pi.maxPage}"
-			                   th:href="@{${loc}(page=${pi.currentPage+1})}"
-			                   aria-label="Next">
-			                   <span aria-hidden="true">&raquo;</span>
-	                		</a> 
-                			<span class="page-link" th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
-            			</li>
-		           </ul>
+                    <tr class="answer-form-row" th:id="'answer-form-' + ${inquiry.questionNo}" style="display:none;">
+                        <td colspan="6">
+                            <form th:action="@{/admin/inquiry/answer}" method="post">
+                                <input type="hidden" name="questionNo" th:value="${inquiry.questionNo}">
+                                <textarea name="answerContent" rows="4" placeholder="답변 내용을 입력하세요...">[[${inquiry.answerContent}]]</textarea>
+                                <div style="text-align:right; margin-top:5px;">
+                                    <button type="submit" class="btn btn-primary btn-sm">저장</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-
-
+            <!-- 페이징 -->
+            <ul class="admin-board-pagination">
+                <li th:classappend="${pi.currentPage == 1} ? 'disabled'">
+                    <a th:if="${pi.currentPage > 1}" th:href="@{${loc}(page=${pi.currentPage-1})}">&laquo;</a>
+                    <span th:unless="${pi.currentPage > 1}">&laquo;</span>
+                </li>
+                <li th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}" th:classappend="${p == pi.currentPage} ? 'active'">
+                    <a th:href="@{${loc}(page=${p})}">[[${p}]]</a>
+                </li>
+                <li th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+                    <a th:if="${pi.currentPage < pi.maxPage}" th:href="@{${loc}(page=${pi.currentPage+1})}">&raquo;</a>
+                    <span th:unless="${pi.currentPage < pi.maxPage}">&raquo;</span>
+                </li>
+            </ul>
         </div>
-
-
-</div>
-</div>
-
-        
     </div>
+</div>
 
+<script>
+    // 답변 버튼 클릭 시 해당 폼 토글
+    document.querySelectorAll('.answer-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const questionNo = this.dataset.questionno;
+            const formRow = document.getElementById('answer-form-' + questionNo);
 
+            if(formRow.style.display === 'table-row') {
+                formRow.style.display = 'none';
+            } else {
+                document.querySelectorAll('.answer-form-row').forEach(row => row.style.display = 'none');
+                formRow.style.display = 'table-row';
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

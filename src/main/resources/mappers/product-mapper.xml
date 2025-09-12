@@ -160,7 +160,8 @@
 		WHERE 1=1
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
 		</if>
 		<if test="categories != null and categories.size() > 0">
 			AND p.PRODUCT_CATEGORY IN
@@ -177,7 +178,8 @@
 		WHERE 1=1
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
 		</if>
 	</select>
 
