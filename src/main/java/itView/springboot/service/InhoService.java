@@ -1,6 +1,7 @@
 package itView.springboot.service;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -287,6 +288,22 @@ public class InhoService {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectReportList(pNo, rowBounds);
+	}
+
+	public int updateReportModifyDate(Map<String, Object> map) {
+		return mapper.updateReportModifyDate(map);
+	}
+
+	public int updateProductState(int productNo) {
+		return mapper.updateProductState(productNo);
+	}
+	
+	public void activateExpiredProducts(LocalDate today) {
+		mapper.activateProducts(today);
+	}
+
+	public int enrollReport(Report r) {
+		return mapper.enrollReport(r);
 	}
 	
 	

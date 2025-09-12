@@ -2,6 +2,7 @@ package itView.springboot.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -476,10 +477,9 @@ public class InhoController {
     
     // 포인트 삭제
     @PostMapping("deletePoint")
-    public String deletePoint(@RequestParam("pointNo") int pNo, RedirectAttributes redirectAttributes) {
+    public String deletePoint(@RequestParam("pointNo") int pNo) {
     	int result = uService.deletePoint(pNo);
 	    	if(result > 0) {
-	    		redirectAttributes.addFlashAttribute("msg", "포인트가 삭제되었습니다");
 	    		return "redirect:/inhoAdmin/pointList";
 	    	} else {
 	    		throw new AdminException("포인트 삭제를 실패했습니다.");
@@ -511,7 +511,7 @@ public class InhoController {
     	int listCount = uService.getReportCount(pNo);
     	PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
     	ArrayList<Report> rlist = uService.selectReportList(pi, pNo);
-    	
+
     	if(p != null) {
     		model.addAttribute("p", p);
     		model.addAttribute("rlist", rlist);
@@ -520,6 +520,38 @@ public class InhoController {
     	} else {
     		throw new AdminException("신고상품 상세보기를 실패하였습니다.");
     	}
+    }
+    
+    @PostMapping("/updateReportProduct")
+    public String updateReportProduct(@RequestParam("productNo") int productNo, 
+    									@RequestParam("stopPeriod") String stopPeriod) {
+    	LocalDate now = LocalDate.now(); 
+        LocalDate modifyDate;
+
+        if("permanent".equals(stopPeriod)) {
+            // 영구정지면 아주 먼 날짜 저장
+            modifyDate = LocalDate.of(9999,12,31);
+        } else {
+        	// 현재날짜 기준 + a
+            int days = Integer.parseInt(stopPeriod);
+            modifyDate = now.plusDays(days);
+        }
+        
+        Map<String, Object> map = new HashMap<>();
+		map.put("productNo", productNo);
+		map.put("modifyDate", modifyDate);
+
+        // report 테이블 수정
+        int result1 = uService.updateReportModifyDate(map);
+
+        // product_state를 'N'으로 변경
+        int result2 = uService.updateProductState(productNo);
+        
+        if(result1 + result2 > 1) {
+        	return "redirect:/inhoAdmin/reportProductList";
+        } else {
+        	throw new AdminException("신고상품이 판매정지 처리되었습니다.");
+        }
     }
     
     

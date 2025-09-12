@@ -3,23 +3,28 @@ package itView.springboot.controller;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import itView.springboot.service.InhoService;
+import itView.springboot.vo.Report;
+import itView.springboot.vo.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping({"/login", "/inhoAdmin"})
 @RequiredArgsConstructor
 public class InhoRestController {
 	
     private final InhoService uService;
     private final JavaMailSender mailSender;
     
+ 
     // 아이디 중복 확인
  	@GetMapping("checkId")
  	public int checkValue(@RequestParam("userId") String userId) {
@@ -89,5 +94,29 @@ public class InhoRestController {
 		
 		return random;
  	}
+ 	
+ 	@PostMapping("/enrollReport")
+    public String enrollReport(@RequestParam String reportType, @RequestParam String reportTitle, 
+    							@RequestParam int reportTargetNo, @RequestParam String reportContent, HttpSession session) {
+        // 세션에서 로그인 사용자 정보 추출
+        User loginUser = (User) session.getAttribute("loginUser");
+//        if (loginUser == null) {
+//            return "fail"; // 또는 예외 처리/에러 코드 반환
+//        }
+
+        int reporterUserId = loginUser.getUserNo();
+
+        Report r = new Report();
+        r.setReportType(reportType);
+        r.setReportTitle(reportTitle);
+        r.setReportContent(reportContent);
+        r.setReportTargetNo(reportTargetNo);
+        r.setReporterUserId(reporterUserId);
+        
+        
+        int result = uService.enrollReport(r);
+        return result > 0 ? "success" : "fail";
+    }
+ 	
 
 }

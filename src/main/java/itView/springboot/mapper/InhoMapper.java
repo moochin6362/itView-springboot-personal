@@ -1,4 +1,5 @@
 package itView.springboot.mapper;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +97,13 @@ public interface InhoMapper {
 
 	 ArrayList<Report> selectReportList(int pNo, RowBounds rowBounds);
 
-//	 Report selectReport(int pNo);
+	 int updateReportModifyDate(Map<String, Object> map);
+	 
+	 int updateProductState(int productNo);
+
+	 void activateProducts(LocalDate today); // @Param("today")
+
+	 int enrollReport(Report r);
+
 
 }
