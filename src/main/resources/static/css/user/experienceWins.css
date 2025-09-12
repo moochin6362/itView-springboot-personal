@@ -1,3 +1,15 @@
+/* =========================================================
+   ExperienceWins.css — 체험단 당첨내역 (통째로 교체본)
+   ========================================================= */
+
+/* 대표색 팔레트 */
+:root{
+  --primary:#34e5eb;          /* 당첨(대표색) */
+  --primary-pressed:#8ad8f0;  /* 선정대기 */
+  --primary-soft:#eefbfb;     /* 연한 배경 */
+  --reject:#ab3900;           /* 미선정 */
+}
+
 /* ===== 공통 레이아웃(이 페이지에서 쓰는 최소치) ===== */
 .page-topbar{display:flex;align-items:center;gap:12px;margin:10px 4px 18px}
 .page-title{font-size:22px;font-weight:700;margin:0}
@@ -18,53 +30,85 @@
 /* ===== 당첨 리스트 ===== */
 .win-list{padding:8px 0}
 
-/* 단일 아이템: [썸네일] [상품명] [상태뱃지] */
+/* 3열: [썸네일] [본문] [오른쪽 상태] */
 .win-item{
   display:grid;
-  grid-template-columns:64px 1fr auto;
-  gap:12px;
+  grid-template-columns:72px 1fr auto;  /* 세 번째 열에 상태 고정 */
+  gap:14px;
   align-items:center;
-  padding:12px 0;
+  padding:14px 12px;
   border-top:1px solid var(--line);
 }
 .win-item:first-child{border-top:none}
 
 /* 썸네일 */
 .thumb{
-  width:64px;height:64px;
-  border-radius:12px;
+  width:72px;height:72px;
+  border-radius:14px;
   object-fit:cover;
   background:#f3f4f6;
   border:1px solid var(--line);
 }
 
-/* 상품명 */
+/* 본문(제목/기간) */
 .meta{min-width:0}
 .pname{
-  font-weight:700;
-  font-size:15px;
+  font-weight:800;
+  font-size:16px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+.sub{display:flex;align-items:center;gap:6px;margin-top:4px}
 
-/* 상태 뱃지(기본) */
-.status{display:flex;align-items:center;justify-content:flex-end}
-.badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  height:28px;padding:0 10px;border-radius:999px;
-  border:1px solid var(--line);
-  background:#f3f4f6;color:#111;font-size:12px;white-space:nowrap;
+/* ▶ 오른쪽 상태 열: 배경/테두리 없이 배치만 담당 */
+.status-col{
+  justify-self:end;                 /* 그리드 오른쪽 정렬 */
+  display:flex;align-items:center;justify-content:flex-end;
+  padding-left:8px;                 /* 본문과 간격 */
 }
 
-/* (선택) 상태별 색상 – 사용하려면 서버에서 클래스 추가해 주세요
-   예: th:classappend="'badge--win'"
-*/
-.badge--win{background:#ecfdf5;border-color:#10b98133;color:#047857}     /* 당첨 */
-.badge--done{background:#eef2ff;border-color:#6366f133;color:#4338ca}    /* 지급완료 등 */
-.badge--cancel{background:#fef2f2;border-color:#ef444433;color:#b91c1c}  /* 취소 */
+/* ===== 상태 뱃지 ===== */
+/* 기본(중립) – 상태 클래스에서 색을 덮어씀 */
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:34px;padding:0 14px;border-radius:999px;
+  font-size:14px;font-weight:700;white-space:nowrap;
+  border:none;
+  background:#f3f4f6;color:#111;    /* 기본 중립색 */
+  box-shadow:0 1px 0 rgba(0,0,0,.04);
+}
+
+/* ─ 상태별 색상 확정 ─ */
+/* 당첨 (Y) */
+.win-list .status-col .badge--primary{
+  background:var(--primary) !important;
+  color:#00323a !important;
+  border-color:transparent !important;
+}
+/* 선정대기 (기본/NULL 등) */
+.win-list .status-col .badge--pending{
+  background:var(--primary-pressed) !important;
+  color:#00323a !important;
+  border-color:transparent !important;
+}
+/* 미선정 (R) */
+.win-list .status-col .badge--reject{
+  background:var(--reject) !important;
+  color:#fff !important;
+  border-color:transparent !important;
+}
 
 /* 데스크톱 살짝 키우기 */
 @media (min-width:1024px){
   .page-title{font-size:24px}
-  .thumb{width:72px;height:72px}
-  .pname{font-size:16px}
+  .thumb{width:80px;height:80px}
+  .pname{font-size:17px}
+  .win-item{grid-template-columns:80px 1fr 128px}
+}
+
+/* 모바일 최적화(아주 좁은 화면) */
+@media (max-width:420px){
+  .win-item{grid-template-columns:64px 1fr 92px;gap:10px}
+  .thumb{width:64px;height:64px;border-radius:12px}
+  .pname{font-size:15px}
+  .status-col{min-width:88px;padding:8px 10px}
 }

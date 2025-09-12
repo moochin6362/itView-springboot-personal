@@ -82,7 +82,8 @@
           </div>
           <div class="line">
             <span>기간</span>
-            <b th:text="${#dates.format(c.couponStartdate,'yyyy-MM-dd')} + ' ~ ' + (${c.couponEnddate} != null ? #dates.format(c.couponEnddate,'yyyy-MM-dd') : '무기한')">
+            <b th:text="|${c.couponStartdate} ~ ${c.couponEnddate != null ? c.couponEnddate : '무기한'}|"></b>
+            
               2025-09-01 ~ 2025-10-11
             </b>
           </div>

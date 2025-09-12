@@ -53,7 +53,7 @@
 
       <!-- ✅ 신청 내용 (고정 높이, 인풋처럼 보이게) -->
       <section class="section">
-        <h2 class="section-title">신청 내용</h2>
+       
         <div class="form-row">
           <label for="applyContent">신청 내용</label>
           <textarea id="applyContent" class="input-like textarea-fixed" rows="4" placeholder="신청 이유나 전달사항을 적어주세요"></textarea>
@@ -90,9 +90,7 @@
         <div class="form-row no-label">
           <input id="addr2" type="text" placeholder="상세주소">
         </div>
-        <div class="form-row no-label">
-          <input id="addrRequest" type="text" placeholder="요청사항 (선택)">
-        </div>
+       
 
         <p class="helper">* 입력된 주소는 이벤트 참여용 기본 배송지로 설정됩니다.</p>
       </section>
@@ -117,70 +115,100 @@
     </main>
   </div>
 
-  <!-- 모집글 검색 -->
-  <script>
-    (function () {
-      const $q = document.getElementById('expSearch');
-      const $list = document.getElementById('expResults');
-      const $picked = document.getElementById('expPicked');
-      const $expNo = document.getElementById('expNo');
+	 <script th:inline="none">
+(function () {
+  const $q = document.getElementById('expSearch');
+  const $list = document.getElementById('expResults');
+  const $picked = document.getElementById('expPicked');
+  const $expNo = document.getElementById('expNo');
 
-      let timer = null;
-      function debounce(fn, delay) {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(fn, delay);
-      }
+  let timer = null;
+  function debounce(fn, delay) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(fn, delay);
+  }
 
-      async function search(keyword) {
-        const url = '/my/experience/search?q=' + encodeURIComponent(keyword || '');
-        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-        if (!res.ok) throw new Error('검색 실패');
-        return res.json();
-      }
+  async function search(keyword) {
+    const url = '/my/experience/search?q=' + encodeURIComponent(keyword || '');
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) throw new Error('검색 실패');
+    return res.json();
+  }
 
-      function render(items) {
-        if (!Array.isArray(items) || items.length === 0) {
-          $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>';
-          return;
-        }
-        $list.innerHTML = items.map(it => `
-          <div class="result-item" data-no="\${it.expNo}">
-            <div class="title">\${escapeHtml(it.expTitle || '(제목 없음)')}</div>
-            <div class="meta">
-              진행: \${escapeHtml(it.expStatus || '미정')}
-              / 시작: \${fmtDate(it.expStart)} ~ 종료: \${fmtDate(it.expEnd)}
-            </div>
-            <div class="excerpt">\${escapeHtml((it.expContent || '').slice(0, 120))}</div>
+  function statusClass(s) {
+    const v = (s||'').toLowerCase();
+    if (v.includes('진행') || v === 'y' || v === 'ing') return 'badge badge--ing';
+    if (v.includes('종료') || v === 'd' || v === 'done') return 'badge badge--done';
+    return 'badge badge--ready';
+  }
+
+  function render(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>';
+      return;
+    }
+    const selected = $expNo.value; // 이미 선택된 번호
+    $list.innerHTML = items.map(it => {
+      const id = escapeHtml(String(it.expNo ?? ''));
+      const title = escapeHtml(it.expTitle || '(제목 없음)');
+      const status = escapeHtml(it.expStatus || '미정');
+      const excerpt = escapeHtml((it.expContent || '').replace(/\s+/g,' ').trim()).slice(0, 120);
+      const start = fmtDate(it.expStart);
+      const end = fmtDate(it.expEnd);
+      const isSel = selected && String(selected) === String(id);
+      return `
+        <div class="result-item ${isSel ? 'is-selected' : ''}" data-no="${id}">
+          <div class="result-check"><i class="fa-solid fa-check"></i></div>
+          <div class="result-head">
+            <span class="result-id">#${id}</span>
+            <span class="${statusClass(status)}">${status}</span>
           </div>
-        `).join('');
+          <div class="result-title">${title}</div>
+          <div class="result-meta">
+            <span><i class="fa-regular fa-calendar"></i> ${start} ~ ${end}</span>
+          </div>
+          <div class="result-excerpt">${excerpt}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+  function fmtDate(d){try{ if(!d) return '-'; const x=new Date(d); if(isNaN(x)) return '-'; return x.toISOString().slice(0,10);}catch{ return '-';}}
+
+  $q.addEventListener('input', () => {
+    const kw = $q.value.trim();
+    debounce(async () => {
+      try {
+        const data = await search(kw);
+        render(data);
+      } catch (e) {
+        console.error(e);
+        $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>';
       }
+    }, 250);
+  });
 
-      function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-      function fmtDate(d){return d ? new Date(d).toISOString().slice(0,10) : '-';}
+  // 선택 처리
+  $list.addEventListener('click', (e) => {
+    const item = e.target.closest('.result-item');
+    if (!item) return;
+    // 선택 표시 토글(단일 선택)
+    [...$list.querySelectorAll('.result-item')].forEach(el => el.classList.remove('is-selected'));
+    item.classList.add('is-selected');
 
-      $q.addEventListener('input', () => {
-        const kw = $q.value.trim();
-        debounce(async () => {
-          try {
-            const data = await search(kw);
-            render(data);
-          } catch (e) {
-            console.error(e);
-            $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>';
-          }
-        }, 250);
-      });
+    const no = item.getAttribute('data-no');
+    const title = item.querySelector('.result-title')?.textContent || '';
+    $expNo.value = no;
+    $picked.textContent = `선택된 모집글: [${no}] ${title}`;
+  });
 
-      $list.addEventListener('click', (e) => {
-        const item = e.target.closest('.result-item');
-        if (!item) return;
-        const no = item.getAttribute('data-no');
-        const title = item.querySelector('.title')?.textContent || '';
-        $expNo.value = no;
-        $picked.textContent = `선택된 모집글: [\${no}] \${title}`;
-      });
-    })();
-  </script>
+  // 초기 렌더(비우고 들어왔을 때도 예쁘게)
+  render([]);
+})();
+</script>
+	 
+  
 
   <!-- ✅ 카카오 우편번호: 버튼 클릭 시 팝업 열기 & 주소 자동 채움 -->
   <script>
@@ -222,43 +250,68 @@
     })();
   </script>
 
-  <!-- 신청하기 (DB 등록 호출) -->
-  <script>
-    (function () {
-      const $applyBtn = document.querySelector('.btn-primary');
-      const $expNo    = document.getElementById('expNo');
-      const $content  = document.getElementById('applyContent');
-
-      async function post(url, data) {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept':'application/json' },
-          body: new URLSearchParams(data).toString()
-        });
-        const json = await res.json().catch(()=> ({}));
-        if (!res.ok || json.ok === false) {
-          const msg = json.message || '신청 처리에 실패했습니다.';
-          throw new Error(msg);
-        }
-        return json;
-      }
-
-      $applyBtn.addEventListener('click', async () => {
-        const expNo = $expNo.value?.trim();
-        if (!expNo) return alert('모집글을 먼저 선택해주세요.');
-
-        try {
-          await post('/my/experience-apply', {
-            expNo,
-            applyContent: $content?.value || ''
-          });
-          alert('신청이 완료되었습니다.');
-          // location.href = '/my/experienceWins';
-        } catch (e) {
-          alert(e.message);
-        }
-      });
-    })();
-  </script>
+	  <script th:inline="none">
+	(function () {
+	  const $applyBtn = document.querySelector('.btn-primary');
+	  const $expNo    = document.getElementById('expNo');
+	  const $content  = document.getElementById('applyContent');
+	
+	  const $receiver = document.getElementById('receiver');
+	  const $tels     = document.querySelectorAll('.phone-wrap input[type="tel"]');
+	  const $addr1    = document.getElementById('addr1');
+	  const $addr2    = document.getElementById('addr2');
+	  const $addrReq  = document.getElementById('addrRequest');
+	  const $agreements = document.querySelectorAll('.agree input[type="checkbox"]');
+	
+	  function getPhone() {
+	    const parts = Array.from($tels).map(i => (i.value||'').trim());
+	    return parts.join('-').replace(/-+/g,'-');
+	  }
+	  function isAgreed() {
+	    return Array.from($agreements).slice(0,2).every(c => c.checked);
+	  }
+	  async function post(url, data) {
+	    const res = await fetch(url, {
+	      method: 'POST',
+	      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+	      body: new URLSearchParams(data).toString()
+	    });
+	    const json = await res.json().catch(()=> ({}));
+	    if (!res.ok || json.ok === false) throw new Error(json.message || '신청 처리에 실패했습니다.');
+	    return json;
+	  }
+	
+	  $applyBtn.addEventListener('click', async () => {
+	    const expNo = ($expNo.value||'').trim();
+	    if (!expNo) return alert('모집글을 먼저 선택해주세요.');
+	    if (!isAgreed()) return alert('필수 동의 항목에 체크해주세요.');
+	    if (!$receiver.value.trim()) return alert('받는분을 입력해주세요.');
+	    if (!$addr1.value.trim()) return alert('주소를 입력/검색해주세요.');
+	
+	    const phone = getPhone();
+	    const address = $addr1.value.trim() + ($addr2.value.trim() ? ' ' + $addr2.value.trim() : '');
+	
+	    try {
+	      await post('/my/experience-apply', {
+	        expNo,
+	        applyContent: $content?.value || '',
+	        receiver: $receiver.value.trim(),
+	        phone,
+	        address,
+	        requestMemo: $addrReq.value.trim()
+	      });
+	      alert('신청이 완료되었습니다.');
+	      // location.href = '/my/experienceWins';
+	    } catch(e) {
+	      alert(e.message);
+	    }
+	  });
+	})();
+	</script>
+  
+  
+  
+  
+  
 </body>
 </html>

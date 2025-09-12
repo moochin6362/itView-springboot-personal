@@ -9,8 +9,11 @@
   <link rel="stylesheet" th:href="@{/css/user/userCommon.css}"/>
 
   <!-- 페이지 전용 CSS -->
-  <link rel="stylesheet" th:href="@{/css/user/ExperienceWins.css}"/>
+  <link rel="stylesheet"
+      th:href="@{/css/user/ExperienceWins.css(v=${#dates.createNow().time})}" />
+  
 
+	
   <!-- 아이콘 -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
@@ -32,27 +35,52 @@
       <p class="muted" style="margin:0">당첨 내역이 없습니다.</p>
     </section>
 
-    <!-- 당첨 리스트 (사진 / 상품명 / 당첨여부) -->
-    <section class="card win-list" th:if="${!#lists.isEmpty(winList)}">
-      <article class="win-item" th:each="w : ${winList}">
-        <!-- 상품 이미지 -->
-        <img class="thumb"
-             th:src="${w['productImageUrl']}"
-             alt="상품 이미지"
-             onerror="this.onerror=null; this.src='/uploadFilesFinal/default-product.png';"/>
+    <!-- 당첨 리스트 (썸네일 / 제목 / 기간 / 상태) -->
+	  <section class="card win-list" th:if="${!#lists.isEmpty(winList)}">
+  <article class="win-item" th:each="w : ${winList}">
+    <!-- 썸네일 -->
+    <img class="thumb"
+         th:src="${w['productImageUrl']}"
+         alt="체험단 썸네일"
+         onerror="this.onerror=null; this.src='/uploadFilesFinal/default-product.png';"/>
 
-        <!-- 상품명 -->
-        <div class="meta">
-          <div class="pname" th:text="${w['productName']}">상품명</div>
-        </div>
+    <!-- 본문(제목/기간/내용/버튼) -->
+    <div class="meta">
+      <div class="pname"
+           th:text="${w['expTitle'] != null && w['expTitle'] != '' ? w['expTitle'] : w['productName']}">
+        모집글 제목
+      </div>
 
-        <!-- 당첨 여부(상태) -->
-        <div class="status">
-          <span class="badge"
-                th:text="${w['winStatusName'] ?: '당첨'}">당첨</span>
-        </div>
-      </article>
-    </section>
+      <div class="sub muted">
+        <i class="fa-regular fa-calendar"></i>
+        <span th:if="${w['expStart'] != null}"
+              th:text="${#dates.format(w['expStart'], 'yyyy.MM.dd')}"></span>
+        <span> ~ </span>
+        <span th:if="${w['expEnd'] != null}"
+              th:text="${#dates.format(w['expEnd'], 'yyyy.MM.dd')}"></span>
+      </div>
+
+      <div class="desc muted" th:if="${w['expContent'] != null}"
+           th:text="${w['expContent']}">모집글 내용 요약</div>
+
+      
+    </div>
+
+    <!-- ▶ 오른쪽 독립 상태 블록 -->
+   
+	    <aside class="status-col">
+	  <span class="badge"
+	        th:classappend="${
+	          w['winStatusCode'] == 'Y' ? ' badge--primary' :
+	          (w['winStatusCode'] == 'R' ? ' badge--reject' : ' badge--pending')
+	        }"
+	        th:text="${w['winStatusName']}">선정대기</span>
+</aside>
+    
+  </article>
+</section>
+	  
+    
   </main>
 </body>
 </html>

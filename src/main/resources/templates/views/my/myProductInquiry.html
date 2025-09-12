@@ -4,141 +4,68 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>상품 문의</title>
-  
+
   <!-- 공통 레이아웃 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
-
   <!-- 페이지 전용 CSS -->
   <link rel="stylesheet" th:href="@{/css/user/myProductInquiry.css}" />
-  <!-- 아이콘(CDN) -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
 </head>
 <body>
 
-  <!-- 전역 헤더 (공통) -->
+  <!-- 공통 헤더/사이드바 -->
   <div th:replace="~{common/myHeader}"></div>
-
-  <!-- 전역 사이드바 (공통) -->
   <div th:replace="~{common/mySidebar}"></div>
 
-
-<main class="page">
-  <!-- 상단 타이틀바 -->
-  <div class="page-topbar">
-    <button class="icon-btn back" aria-label="뒤로">←</button>
-    <h1 class="page-title">판매자 상품문의</h1>
-    <span class="spacer"></span>
-  </div>
-
-  <!-- 상단 안내영역 -->
-  <section class="banner">
-    <div class="banner-illust" aria-hidden="true">💬</div>
-    <div class="banner-text">
-      <b>It:View를 이용하면서 불편한 점<br/>바라는 점을 말씀해주세요</b>
-      <p>It:view는 여러분과 함께 만들어가는 서비스입니다</p>
+  <main class="page">
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <button class="icon-btn back" aria-label="뒤로" onclick="history.back()">←</button>
+      <h1 class="page-title">상품 문의</h1>
+      <span class="spacer"></span>
     </div>
-  </section>
 
-
-  <form class="form" autocomplete="off">
-    <!-- 문의 유형 -->
-    <h2 class="sec-title">문의 유형</h2>
-    <div class="field">
-      <div class="select-wrap">
-        <select>
-          <option value="" selected>카테고리 선택</option>
-          <option>계정/로그인</option>
-          <option>포인트/이벤트</option>
-          <option>구매/주문</option>
-          <option>버그 신고</option>
-          <option>기타 문의</option>
-        </select>
-        <span class="arrow">▾</span>
+    <!-- 선택된 상품 번호 안내(없으면 전송 비활성화) -->
+    <section class="card" th:if="${productNo != null}">
+      <div style="font-size:14px;color:#555">
+        대상 상품번호: <b th:text="${productNo}">-</b>
       </div>
-    </div>
-    <div class="field">
-      <div class="select-wrap">
-        <select>
-          <option value="" selected>서브 카테고리 선택</option>
-          <option>비밀번호 재설정</option>
-          <option>이메일 변경</option>
-          <option>쿠폰 사용</option>
-          <option>배송 문의</option>
-          <option>기타</option>
-        </select>
-        <span class="arrow">▾</span>
+    </section>
+    <section class="card" th:if="${productNo == null}">
+      <div style="font-size:14px;color:#b91c1c">
+        상품 상세 페이지에서 “문의하기”로 진입해주세요. (상품번호가 없습니다)
       </div>
-    </div>
+    </section>
 
-    <!-- 제목 -->
-    <h2 class="sec-title">문의 제목</h2>
-    <div class="field">
-      <input type="text" class="input" placeholder="50자 미만으로 입력해주세요" maxlength="50"/>
-    </div>
+    <!-- 문의 폼 -->
+    <form class="form" th:action="@{/my/product-question}" method="post" autocomplete="off">
+      <!-- 필수 전달값 -->
+      <input type="hidden" name="productNo" th:value="${productNo}" />
+      <!-- CSRF -->
+      <input type="hidden" th:if="${_csrf != null}"
+             th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <!-- 내용 -->
-    <h2 class="sec-title">문의 내용</h2>
-    <div class="field">
-      <textarea class="textarea" rows="6" placeholder="개인정보(이름, 연락처, 주민등록번호 등)가 포함되지 않도록 작성해주세요"></textarea>
-    </div>
-
-    <!-- 답변 이메일 -->
-    <h2 class="sec-title">답변 받을 이메일</h2>
-    <div class="email-row">
-      <input type="text" class="input" placeholder="아이디(예: hello)"/>
-      <span class="at">@</span>
-      <div class="select-wrap">
-        <select id="email-domain">
-          <option value="">직접입력</option>
-          <option value="naver.com">naver.com</option>
-          <option value="gmail.com">gmail.com</option>
-          <option value="daum.net">daum.net</option>
-          <option value="kakao.com">kakao.com</option>
-        </select>
-        <span class="arrow">▾</span>
+      <!-- 제목 -->
+      <h2 class="sec-title">문의 제목</h2>
+      <div class="field">
+        <input type="text" class="input" name="questionTitle"
+               placeholder="50자 미만으로 입력해주세요" maxlength="50" required />
       </div>
-      <input type="text" class="input domain" id="domain-input" placeholder="도메인(예: example.com)"/>
-    </div>
 
-    <!-- 동의 -->
-    <div class="consent">
-      <label class="chk">
-        <input type="checkbox" />
-        <span></span>
-        <em>(필수)</em> 답변 전송을 위한 이메일 정보 수집 및 이용에 동의
-      </label>
-    </div>
+      <!-- 내용 -->
+      <h2 class="sec-title">문의 내용</h2>
+      <div class="field">
+        <textarea class="textarea" name="questionContent" rows="6" required
+                  placeholder="개인정보(이름, 연락처 등)가 포함되지 않도록 작성해주세요"></textarea>
+      </div>
 
-    <!-- 전송 버튼 -->
-    <div class="submit-bar">
-      <button type="submit" class="submit">판매자에게 전송하기</button>
-    </div>
-  </form>
-</main>
-
-<script>
-  // 이메일 도메인 선택: '직접입력'이면 텍스트 입력 활성화, 그 외에는 선택값으로 채움
-  const domainSelect = document.getElementById('email-domain');
-  const domainInput  = document.getElementById('domain-input');
-
-  function syncDomain() {
-    if (domainSelect.value === '') {
-      domainInput.value = '';
-      domainInput.disabled = false;
-      domainInput.placeholder = '도메인(예: example.com)';
-    } else {
-      domainInput.value = domainSelect.value;
-      domainInput.disabled = true;
-      domainInput.placeholder = '';
-    }
-  }
-  domainSelect.addEventListener('change', syncDomain);
-  syncDomain();
-</script>
+      <!-- 전송 -->
+      <div class="submit-bar">
+        <button type="submit" class="submit" th:disabled="${productNo == null}">
+          판매자에게 전송하기
+        </button>
+      </div>
+    </form>
+  </main>
 
 </body>
 </html>
