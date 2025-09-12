@@ -30,7 +30,8 @@ html {
 
     /* 두 개 섹션을 나란히 배치 */
     display: flex;
-    flex-wrap: wrap;
+/*     flex-wrap: wrap; */
+	flex-direction: column; /* ← 가로 대신 세로 방향 */
     gap: 20px;
 }
 
@@ -181,4 +182,66 @@ html {
 .btn-reset:hover {
     background: linear-gradient(135deg, #e53935, #c62828);
     transform: translateY(-2px);
+}
+
+/* ===== 라디오 버튼 스타일 ===== */
+.stop-period-section input[type="radio"] {
+    display: none; /* 기본 라디오 버튼 숨기기 */
+}
+
+/* 인접한 label만 스타일 적용 */
+.stop-period-section input[type="radio"] + label {
+    position: relative;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #444;
+    margin-right: 20px;
+    padding-left: 28px; /* 커스텀 원형 공간 확보 */
+    transition: color 0.3s ease;
+}
+
+/* 커스텀 원형 */
+.stop-period-section input[type="radio"] + label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid #4caf50;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* 선택 시 내부 점 */
+.stop-period-section input[type="radio"]:checked + label::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #4caf50;
+    transition: all 0.3s ease;
+}
+
+/* 선택 시 글자 색상 강조 */
+.stop-period-section input[type="radio"]:checked + label {
+    color: #4caf50;
+    font-weight: 600;
+}
+
+/* 비활성화 상태 */
+.stop-period-section input[type="radio"]:disabled + label {
+    color: #aaa;
+    cursor: not-allowed;
+}
+.stop-period-section input[type="radio"]:disabled + label::before {
+    border-color: #ccc;
+    background-color: #f0f0f0;
 }

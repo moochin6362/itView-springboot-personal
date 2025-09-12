@@ -29,11 +29,11 @@
     </style>
 </head>
 <body>
-	<div th:replace="~{common/header :: header}"></div>
+	<div th:replace="~{common/rankingHeader :: rankingHeader}"></div>
 	<div class="container">
 		<div class="product-list">
 			<div class="product-card" th:each="p: ${list}"
-				th:onclick="'location.href=\'/detail/' + ${p.productNo} + '\';'" 
+				th:onclick="'location.href=\'/product/detail/' + ${p.productNo} + '\';'" 
      			style="cursor: pointer;">
 				<input type="hidden" name="productNo" th:value="${p.productNo}">
 			    <div class="section-id">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +25,7 @@
                 <div class="main-content">
 	                <div class="main-section">
 	                    <h2 class="page-title">신고상품 상세정보</h2>
-	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
+	                    <form id="detailForm" method="post" th:action="@{/inhoAdmin/updateReportProduct}">
 	                    	<input type="hidden" name="productNo" th:value="${p.productNo}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
@@ -42,13 +42,17 @@
 	                            <td>[[${p.productCategory}]]</td>
 	                        </tr>
 	                        <tr>
-	                            <th>상품설명</th>
-	                            <td th:utext="${p.productDetail}"></td>
+	                            <th>상품사진</th>
+	                            <td>
+	                            	<img th:src="@{/}+${p.firstImage}" 
+					                 alt="상품 썸네일" 
+					                 style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);" />
+	                            </td>
 	                        </tr>
 	                        <tr>
 	                            <th>판매자</th>
 	                            <td>[[${p.userNo}]]</td> 
-	<!--                             유저랑 조인 -->
+								<!--  유저랑 조인 -->
 	                        </tr>
 	                        <tr>
 	                            <th>브랜드명</th>
@@ -56,29 +60,31 @@
 	                        </tr>
 	                        <tr>
 	                            <th>상품 상태</th>
-	                            <td>[[${p.productState}]]</td>
-<!-- 	                            상품 상태 정지중 이런걸로 수정 -->
+	                            <td>[[${p.productState == 'Y' ? '판매중' : '판매중지'}]]</td>
 	                        </tr>
 	                    </table>
-	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
+	                    <!-- 상품 정지기간 선택 영역 // 자동해지 -->
 						<div class="stop-period-section" style="margin-bottom: 10px;">
 						    <label class="page-title">상품 정지기간 선택</label>
+						    <!-- 안내 문구: productState가 N일 때만 표시 -->
+						    <p th:if="${p.productState == 'N'}" style="color:red; margin-top:8px;">
+						        상품정지기간입니다. 정지기간 이후에 수정해주세요.
+						    </p>
 						    <div style="margin-top: 10px;">
-						        <label>
-						            <input type="radio" name="stopPeriod" value="1" /> 1일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="3" /> 3일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="7" /> 7일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="30" /> 30일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="permanent" /> 영구정지
-						        </label>
+						        <input type="radio" id="day1" name="stopPeriod" value="1" th:disabled="${p.productState == 'N'}"/>
+						        <label for="day1">1일</label>
+						
+						        <input type="radio" id="day3" name="stopPeriod" value="3" th:disabled="${p.productState == 'N'}"/>
+						        <label for="day3">3일</label>
+						
+						        <input type="radio" id="day7" name="stopPeriod" value="7" th:disabled="${p.productState == 'N'}"/>
+						        <label for="day7">7일</label>
+						
+						        <input type="radio" id="day30" name="stopPeriod" value="30" th:disabled="${p.productState == 'N'}"/>
+						        <label for="day30">30일</label>
+						
+						        <input type="radio" id="permanent" name="stopPeriod" value="permanent" th:disabled="${p.productState == 'N'}"/>
+						        <label for="permanent">영구정지</label>
 						    </div>
 						</div>
 	                    
@@ -98,7 +104,7 @@
 					        	<tr>
 					        		<th>신고번호</th>
 						            <th>신고제목</th>
-<!-- 						            <th>신고내용</th> -->
+						            <th>신고내용</th>
 						            <th>신고 작성자</th>
 						            <th>신고일</th>
 					          	</tr>
@@ -107,13 +113,10 @@
 					        	<tr th:each="r : ${rlist}">
 					            	<td>[[${r.reportNo}]]</td>
 					            	<td>[[${r.reportTitle}]]</td>
-<!-- 					            	<td>[[${r.reportContent}]]</td> -->
+					            	<td>[[${r.reportContent}]]</td>
 					            	<td>[[${r.userName}]]</td>
 					            	<td>[[${r.reportDate}]]</td>
 					        	</tr>
-<!-- 				          		<tr th:if="${#lists.isEmpty(reportHistoryList)}"> -->
-<!-- 				            		<td colspan="3" style="text-align:center;">신고 이력이 없습니다.</td> -->
-<!-- 				          		</tr> -->
 				        	</tbody>
 				    	</table>
 					</div>

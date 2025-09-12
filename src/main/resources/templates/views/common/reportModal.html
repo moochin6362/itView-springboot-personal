@@ -1,0 +1,53 @@
+<!-- 공통 신고 모달 -->
+<div id="reportModal" style="display:none;">
+	<div class="modal-content">
+    	<h3>신고하기</h3>
+    	<form id="reportForm">
+        	<input type="hidden" name="reportType" id="reportType">
+      		<input type="hidden" name="reportTargetNo" id="reportTargetNo">
+
+      		<label for="reportContent">신고 제목</label>
+			<input type="text" name="reportTitle" id="reportTitle">
+						
+      		<label for="reportContent">신고 사유</label>
+      		<textarea id="reportContent" name="reportContent" required></textarea>
+
+      		<button type="submit">등록</button>
+      		<button type="button" onclick="closeReportModal()">취소</button>
+    	</form>
+  	</div>
+</div>
+
+<script>
+  function openReportModal(type, id){
+    document.getElementById('reportType').value = type;
+    document.getElementById('reportTargetNo').value = id;
+    document.getElementById('reportModal').style.display='block';
+  }
+  function closeReportModal(){
+    document.getElementById('reportModal').style.display='none';
+  }
+
+  // AJAX 전송
+  document.getElementById('reportForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch('/inhoAdmin/enrollReport', {
+      method: 'POST',
+      body: new URLSearchParams(formData)
+    })
+    .then(res => res.text())
+    .then(result => {
+      alert(result === 'success' ? '신고가 접수되었습니다.' : '신고 실패');
+      closeReportModal();
+    })
+    .catch(err => console.error(err));
+  });
+</script>
+
+<style>
+  #reportModal { position:fixed; top:0; left:0; width:100%; height:100%;
+                 background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; }
+  .modal-content { background:#fff; padding:20px; border-radius:8px; width:300px; }
+</style>
