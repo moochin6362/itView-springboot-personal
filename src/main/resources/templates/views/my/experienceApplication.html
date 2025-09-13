@@ -298,10 +298,11 @@
 	        receiver: $receiver.value.trim(),
 	        phone,
 	        address,
-	        requestMemo: $addrReq.value.trim()
+	        requestMemo: ($addrReq?.value || '').trim()
 	      });
 	      alert('신청이 완료되었습니다.');
 	      // location.href = '/my/experienceWins';
+	      window.location.replace('/my/myPage');
 	    } catch(e) {
 	      alert(e.message);
 	    }
