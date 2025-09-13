@@ -171,5 +171,32 @@ a:hover, .link:hover{text-decoration:underline}
   .profile-card .avatar{ width:144px; height:144px; }
   .profile-card .nickname{ font-size:20px; }
 }
+#matchingChart { display:block; }
+/* 매칭률 카드 */
+.matching-card {
+  padding: var(--space);
+}
+
+/* 가운데 정렬 컨테이너 */
+.matching-wrap {
+  height: 360px;                 /* 필요 시 조절 */
+  display: flex;
+  justify-content: center;       /* 가로 가운데 */
+  align-items: center;           /* 세로 가운데 */
+  padding: 12px 8px;
+}
+
+/* 차트를 담는 박스(폭 제한 + 가운데 정렬) */
+.chart-box {
+  width: 100%;
+  max-width: 980px;              /* 그래프가 너무 길어지지 않도록 상한 */
+  margin: 0 auto;
+}
+
+/* y축 라벨이 길 때 두 줄로 보이도록 */
+.matching-wrap .chart-box canvas {
+  /* Chart.js는 자동 줄바꿈이 없어 라벨을 콜백에서 개행 처리해줄거야(아래 JS 참고) */
+}
+
 
 

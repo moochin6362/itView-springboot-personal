@@ -436,6 +436,26 @@
   )
 </insert>
 	
+	<!-- MyMapper.xml -->
+		<select id="selectOrderedProductsWithAttributes" parameterType="long" resultType="map">
+		  SELECT
+		      p.PRODUCT_NO      AS productNo,
+		      p.PRODUCT_NAME    AS productName,
+		        NVL(p.SKIN_TYPE,'')       AS SKINTYPE,
+				NVL(p.PERSONAL_COLOR,'')  AS PERSONALCOLOR,
+				NVL(p.SKIN_TROUBLE,'')    AS SKINTROUBLE,
+				NVL(p.USER_AGE,'')        AS TARGETAGE,
+				NVL(p.GENDER,'')          AS TARGETGENDER,
+
+		      MAX(o.ORDER_DATE)         AS LastOrderDate
+		  FROM PRODUCT p
+		  JOIN "ORDER" o ON o.ORDER_TARGET_NO = p.PRODUCT_NO
+		  WHERE o.USER_NO = #{userNo}
+		  GROUP BY p.PRODUCT_NO, p.PRODUCT_NAME, p.SKIN_TYPE, p.PERSONAL_COLOR, 
+		           p.SKIN_TROUBLE, p.USER_AGE, p.GENDER
+		  ORDER BY MAX(o.ORDER_DATE) DESC
+		</select>
+	
   
   
 

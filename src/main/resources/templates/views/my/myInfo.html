@@ -35,12 +35,11 @@
       <div class="form-row">
         <label class="form-label">현재 사진</label>
         <div class="form-field" style="display:flex;align-items:center;gap:12px">
-          <img id="profilePreview"
-               th:src="${profileImageUrl}"
-               src="/uploadFilesFinal/default-avatar.png"
-               onerror="this.src='/uploadFilesFinal/default-avatar.png'"
-               alt="프로필"
-               style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid #e5e7eb" />
+         	<img th:src="${profileImageUrl}"
+     src="/default-avatar.png"
+     onerror="this.src='/default-avatar.png'">
+
+         	
           <form th:action="@{/my/profile-image}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
             <input id="profileFile" type="file" name="file" accept="image/*" required />

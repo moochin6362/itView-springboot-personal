@@ -28,7 +28,7 @@ public interface MyMapper {
     Long selectFirstUserNo();
     Long selectUserNoByUserId(@Param("userId") String userId);
 
-    List<Product> searchProducts(@Param("keyword") String keyword);
+    List<java.util.Map<String,Object>> searchProducts(@Param("keyword") String keyword);
 
     int insertReview(Review review);
 
@@ -53,11 +53,29 @@ public interface MyMapper {
 
     // 중복 신청 체크 / 저장
     int countMyExperienceApply(@Param("userNo") Long userNo, @Param("expNo") int expNo);
-    int insertExperienceApply(@Param("userNo") Long userNo, @Param("expNo") int expNo, @Param("applyContent") String applyContent);
+   
+
+    int insertExperienceApply(@Param("userNo") Long userNo,
+                              @Param("expNo") int expNo,
+                              @Param("applyContent") String applyContent,
+                              @Param("receiver") String receiver,
+                              @Param("phone") String phone,
+                              @Param("address") String address,
+                              @Param("requestMemo") String requestMemo);
+
+    
+    
+    
 
     List<Map<String,Object>> selectExperienceWins(@Param("userNo") long userNo);
 
     // 서연
     Order selectproductbyOrder(@Param("productNo") Integer pNo, @Param("userNo") int uNo);
     itView.springboot.vo.Attachment selectThumbByOrder(Integer pNo);
+    
+    // 문의추가
+    int insertQuestion(itView.springboot.vo.Question q);
+    
+    List<Map<String, Object>> selectOrderedProductsWithAttributes(Long userNo);
+
 }

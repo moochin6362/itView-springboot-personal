@@ -3,7 +3,9 @@ package itView.springboot.controller;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import itView.springboot.service.InhoService;
 import itView.springboot.service.MyService;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Order;
-import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import itView.springboot.vo.ExperienceGroup;
@@ -34,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MyController {
 
+    private final InhoService uService;
     private final MyService myService;
     private static final String LOGIN_URL = "/";
 
@@ -166,9 +169,9 @@ public class MyController {
         u.setHeadSkin(emptyToNull(headSkin));
 
         // 신규 추가 필드
-        u.setHopePrice(emptyToNull(hopePrice));     // priceRange1~4
-        u.setIngredient(emptyToNull(ingredient));   // natural/vitamin/peptide/moisture/cleansing
-        u.setEcoFriendly(emptyToNull(ecoFriendly)); // 'Y' / 'N'
+        u.setHopePrice(emptyToNull(hopePrice));
+        u.setIngredient(emptyToNull(ingredient));
+        u.setEcoFriendly(emptyToNull(ecoFriendly));
 
         // 2) 딱 한 번 업데이트
         int rows = myService.updateUserBasicAndSkin(u);
@@ -177,32 +180,19 @@ public class MyController {
         return "redirect:/my/myPage";
     }
 
-
-    // ================== userNo 획득 ==================
+    /** ✅ 현재 로그인 사용자의 userNo 결정 로직 (우선순서 개선본) */
     private Long getUserNo(HttpSession session) {
-        Object o = session.getAttribute("userNo");
-        if (o instanceof Number) return ((Number) o).longValue();
-
+        // 1) loginUser가 있으면 그걸 신뢰
         try {
             Object loginUser = session.getAttribute("loginUser");
             if (loginUser instanceof User lu && lu.getUserNo() > 0) {
-                Long no = (long) lu.getUserNo();
+                long no = lu.getUserNo();
                 session.setAttribute("userNo", no);
                 return no;
             }
         } catch (Throwable ignore) {}
 
-        for (String key : new String[] { "userId", "loginId" }) {
-            Object idObj = session.getAttribute(key);
-            if (idObj instanceof String s && !s.isBlank()) {
-                Long no = myService.findUserNoByUserId(s);
-                if (no != null) {
-                    session.setAttribute("userNo", no);
-                    return no;
-                }
-            }
-        }
-
+        // 2) Spring Security
         try {
             Class<?> sch = Class.forName("org.springframework.security.core.context.SecurityContextHolder");
             Object ctx = sch.getMethod("getContext").invoke(null);
@@ -220,7 +210,22 @@ public class MyController {
                 }
             }
         } catch (Throwable ignore) {}
-        return null;
+
+        // 3) (구 코드 호환)
+        for (String key : new String[] { "userId", "loginId" }) {
+            Object idObj = session.getAttribute(key);
+            if (idObj instanceof String s && !s.isBlank()) {
+                Long no = myService.findUserNoByUserId(s);
+                if (no != null) {
+                    session.setAttribute("userNo", no);
+                    return no;
+                }
+            }
+        }
+
+        // 4) 마지막에 캐시된 값
+        Object cached = session.getAttribute("userNo");
+        return (cached instanceof Number n) ? n.longValue() : null;
     }
 
     // =============== helper ===============
@@ -242,9 +247,10 @@ public class MyController {
     }
 
     private String withCacheBuster(String url) {
-        if (url == null) url = "/uploadFilesFinal/default-avatar.png";
+        if (url == null || url.isBlank()) url = "/default-avatar.png";
         return url + (url.contains("?") ? "&" : "?") + "v=" + System.currentTimeMillis();
     }
+
 
     private String toAgeRange(LocalDate birth) {
         if (birth == null) return "미상";
@@ -301,8 +307,53 @@ public class MyController {
     @GetMapping("/myInquiry")
     public String myInquiry() { return "my/myInquiry"; }
 
+    // GET: 폼 진입
     @GetMapping("/myProductInquiry")
-    public String myProductInquiry() { return "my/myProductInquiry"; }
+    public String myProductInquiry(@RequestParam(name = "productNo", required = false) Integer productNo,
+                                   Model model, HttpSession session) {
+        Long userNo = getUserNo(session);
+        if (userNo == null) return "redirect:/";
+
+        if (productNo != null) {
+            Order owned = myService.selectproductbyOrder(productNo, userNo.intValue());
+            if (owned == null) {
+                return "redirect:/my/myProductInquiry";
+            }
+        }
+        model.addAttribute("productNo", productNo);
+        return "my/myProductInquiry";
+    }
+
+    // POST: 저장
+    @PostMapping("/product-question")
+    public String saveProductQuestion(@RequestParam("productNo") int productNo,
+                                      @RequestParam("questionTitle") String questionTitle,
+                                      @RequestParam("questionContent") String questionContent,
+                                      HttpSession session,
+                                      RedirectAttributes ra) {
+
+        Long userNo = getUserNo(session);
+        if (userNo == null) {
+            ra.addFlashAttribute("msg", "로그인이 필요합니다.");
+            return "redirect:/go/login";
+        }
+        if (questionTitle == null || questionTitle.isBlank()
+            || questionContent == null || questionContent.isBlank()) {
+            ra.addFlashAttribute("msg", "제목/내용을 입력해주세요.");
+            return "redirect:/my/myProductInquiry?productNo=" + productNo;
+        }
+
+        itView.springboot.vo.Question q = new itView.springboot.vo.Question();
+        q.setProductNo(productNo);
+        q.setUserNo(userNo.intValue());
+        q.setQuestionTitle(questionTitle.trim());
+        q.setQuestionContent(questionContent.trim());
+        q.setQuestionStatus("N");
+
+        int rows = myService.insertQuestion(q);
+        ra.addFlashAttribute("msg", rows > 0 ? "문의가 등록되었습니다." : "등록에 실패했습니다.");
+        return "redirect:/my/myProductInquiry?productNo=" + productNo;
+    }
 
     @GetMapping("/cart")
     public String cart() { return "Shopping/cart"; }
@@ -323,7 +374,7 @@ public class MyController {
     // 상품 검색(AJAX)
     @GetMapping("/searchProduct")
     @ResponseBody
-    public List<Product> searchProduct(@RequestParam("keyword") String keyword) {
+    public java.util.List<java.util.Map<String,Object>> searchProduct(@RequestParam("keyword") String keyword) {
         return myService.searchProducts(keyword);
     }
 
@@ -341,6 +392,16 @@ public class MyController {
         review.setUserNo(userNo.intValue());
         int rows = myService.insertReview(review);
         ra.addFlashAttribute("msg", rows > 0 ? "리뷰가 등록되었습니다." : "리뷰 등록 실패");
+
+        User u = myService.getUser(userNo);
+        int reviewPoint = uService.getPointByName("리뷰작성");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userNo", u.getUserNo());
+        map.put("point", reviewPoint);
+
+        int result = uService.addPoint(map);
+
         return "redirect:/my/myReview";
     }
 
@@ -384,20 +445,43 @@ public class MyController {
     // 체험단 신청 저장
     @PostMapping("/experience-apply")
     @ResponseBody
-    public java.util.Map<String,Object> applyExperience(@RequestParam("expNo") int expNo,
-                                                        @RequestParam(name="applyContent", required=false) String applyContent,
-                                                        HttpSession session) {
+    public java.util.Map<String,Object> applyExperience(
+            @RequestParam("expNo") int expNo,
+            @RequestParam(name="applyContent", required=false) String applyContent,
+            @RequestParam("receiver") String receiver,
+            @RequestParam("phone") String phone,
+            @RequestParam("address") String address,
+            @RequestParam(name="requestMemo", required=false) String requestMemo,
+            HttpSession session) {
+
         Long userNo = getUserNo(session);
-        if (userNo == null) {
-            return java.util.Map.of("ok", false, "message", "로그인이 필요합니다.");
+        if (userNo == null) return java.util.Map.of("ok", false, "message", "로그인이 필요합니다.");
+
+        // ⚠ 사용자가 '받는분'을 비워도 DB NOT NULL 방어
+        if (receiver == null || receiver.isBlank()) {
+            User u = myService.getUser(userNo);
+            receiver = (u != null && u.getUserName() != null) ? u.getUserName() : "신청자";
         }
 
-        int already = myService.countMyExperienceApply(userNo, expNo);
-        if (already > 0) {
-            return java.util.Map.of("ok", false, "message", "이미 신청한 모집글입니다.");
-        }
+        int dup = myService.countMyExperienceApply(userNo, expNo);
+        if (dup > 0) return java.util.Map.of("ok", false, "message", "이미 신청한 모집글입니다.");
 
-        int rows = myService.insertExperienceApply(userNo, expNo, applyContent);
+        int rows = myService.insertExperienceApply(userNo, expNo, applyContent, receiver, phone, address, requestMemo);
         return java.util.Map.of("ok", rows > 0);
     }
+    
+    
+    @GetMapping("/matching-rates")
+    @ResponseBody
+    public List<Map<String,Object>> matchingRates(HttpSession session) {
+        Long userNo = getUserNo(session);
+        if (userNo == null) return List.of();
+        return myService.getMatchingRates(userNo);
+    }
+
+
+    
+    
+    
+    
 }

@@ -49,7 +49,10 @@
 			<div class="avatar">
 				<!-- 실제 파일: C:\uploadFilesFinal\notice\default-avatar.png -->
 				<img th:src="${profileImageUrl}"
-					src="/uploadFilesFinal/default-avatar.png" alt="프로필" />
+     src="/default-avatar.png"
+     onerror="this.src='/default-avatar.png'">
+
+				
 			</div>
 
 			<div class="profile-meta">
@@ -66,16 +69,21 @@
 				변경›</a>
 		</section>
 
-
-
-		<!-- 매칭률 배너 -->
-		<section class="card hero-card">
-			<div class="hero-illustration" aria-hidden="true"></div>
-			<p class="hero-desc">
-				지금 사용하고 있는 제품을 선택하면<br /> <b>내 피부와의 매칭률을 알려드려요</b>
-			</p>
-			<button class="primary">매칭률 확인하기</button>
+		<section class="card matching-card">
+		  <h3 class="section-title">내가 주문한 상품과 나와의 매칭률</h3>
+		  <div class="matching-wrap">
+		    <div class="chart-box">
+		      <canvas id="matchingChart" height="360"></canvas>
+		    </div>
+		  </div>
+		  <p class="helper" id="matchingEmpty" style="display:none">표시할 주문 내역이 없어요.</p>
 		</section>
+		
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+				
+
+		
+
 
 		<!-- 리뷰 인입 카드 -->
 		<section class="card review-cta">
@@ -105,6 +113,115 @@
 			<a class="menu-item" th:href="@{/Shopping/order}">내 주문내역</a>
 		</section>
 
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+(async function () {
+  const res = await fetch('/my/matching-rates', { credentials:'same-origin' });
+  const raw = await res.json();
+
+  if (!Array.isArray(raw) || raw.length === 0) {
+    document.getElementById('matchingEmpty').style.display = 'block';
+    return;
+  }
+
+  // 상위 n개만 보기 원하면 여기를 조절하세요 (예: 8개)
+  const rows = [...raw]
+    .map(r => ({ ...r, MATCH_RATE: Number(r.MATCH_RATE ?? 0) }))
+    .sort((a,b) => b.MATCH_RATE - a.MATCH_RATE)
+    .slice(0, 8);
+
+  // 긴 이름을 y축에서 2줄로 쪼개기 위한 helper
+  const breakLabel = (name, maxLen = 16) => {
+    if (!name) return ['상품'];
+    // 공백 기준으로 적당히 두 줄로 나눔
+    if (name.length <= maxLen) return [name];
+    const words = name.split(' ');
+    let line1 = '', line2 = '';
+    for (const w of words) {
+      if ((line1 + ' ' + w).trim().length <= maxLen) line1 = (line1 + ' ' + w).trim();
+      else line2 = (line2 + ' ' + w).trim();
+    }
+    // 그래도 길면 살짝 자름
+    if (line2.length > maxLen) line2 = line2.slice(0, maxLen - 1) + '…';
+    return [line1, line2 || ''];
+  };
+
+  const labels = rows.map(d => breakLabel(d.PRODUCTNAME || d.LABEL || '상품'));
+  const rates  = rows.map(d => d.MATCH_RATE);
+
+  // 축 범위: 데이터에 맞춰 확대 (차이가 잘 보이게)
+  const min = Math.min(...rates);
+  const max = Math.max(...rates);
+
+  // 모든 값이 같을 때 대비: 살짝 범위를 만들어 줌
+  const pad = 5;
+  let minX = Math.max(0, Math.floor((min - pad)));
+  let maxX = Math.min(100, Math.ceil((max + pad)));
+  if (min === max) {
+    minX = Math.max(0, min - 5);
+    maxX = Math.min(100, max + 5);
+  }
+  if (maxX - minX < 10) maxX = Math.min(100, minX + 10); // 너무 붙으면 최소 폭 확보
+
+  const ctx = document.getElementById('matchingChart').getContext('2d');
+  if (window._matchingChart) window._matchingChart.destroy();
+
+  window._matchingChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: '매칭률(%)',
+        data: rates,
+        borderWidth: 0,
+        backgroundColor: '#93c5fd' /* light blue */
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { left: 6, right: 12, top: 8, bottom: 8 } },
+      elements: { bar: { borderRadius: 8, maxBarThickness: 28 } },
+      scales: {
+        x: {
+          min: minX,
+          max: maxX,
+          grid: { drawBorder: false },
+          ticks: {
+            callback: v => v + '%',
+            stepSize: Math.max(2, Math.round((maxX - minX) / 8)) // 눈금 개수 적당히
+          }
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            autoSkip: false,
+            font: { size: 13 }
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: (items) => {
+              // 툴팁에는 전체 상품명 보여주기
+              const idx = items[0].dataIndex;
+              return rows[idx].PRODUCTNAME || rows[idx].LABEL || '상품';
+            },
+            label: (item) => `매칭률: ${item.raw}%`
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+		
+		
+		
+		
 		
 
 		
