@@ -204,6 +204,7 @@ body {
 }
 
 </style>
+<link rel="stylesheet" th:href="@{/css/inhoCss/reportModal.css}">
 </head>
 <body>
 
@@ -230,7 +231,7 @@ body {
 					</select>
 				</p>
 				<p th:if="${cList.size() != 0}" id="downCoupon">🎫 쿠폰 발급받기</p>
-			    <button class="btn flex-fill">🚨신고</button>
+			    <button class="btn flex-fill" th:onclick="openReportModal('P', '[[${p.productNo}]]')">🚨신고</button>
 			    <button class="btn flex-fill" onClick="">❔문의하기</button>
 
 				<hr>
@@ -319,10 +320,33 @@ body {
 			</div>
 		</div>
 	</div>
+	
+	<div id="reportModal" style="display: none;">
+	    <div class="modal-content">
+	      <h3>신고하기</h3>
+	      <form action="/inhoAdmin/enrollProductReport" id="reportForm" method="post">
+	        <input type="hidden" name="reportType" id="reportType">
+	        <input type="hidden" name="reportTargetNo" id="reportTargetNo">
+	
+	        <label for="reportTitle">신고 제목</label>
+	        <input type="text" name="reportTitle" id="reportTitle">
+	
+	        <label for="reportContent">신고 사유</label>
+	        <textarea id="reportContent" name="reportContent" required></textarea>
+	
+	        <button type="submit">등록</button>
+	        <button type="button" onclick="closeReportModal()">취소</button>
+	      </form>
+	    </div>
+	  </div>
 
 	<div th:replace="~{common/footer :: footer}"></div>
-	
-	<script>
+	<script th:src="@{/js/inhoAdmin/alert.js}"></script>
+	<script th:inline="javascript">
+		const msg = /*[[${msg}]]*/ null;
+		if (msg) {
+		    alert(msg);
+		}
 		window.onload = () => {
 			const ratingStars = document.querySelectorAll('.ratingStar');
 			//console.log(ratingStar)
@@ -364,6 +388,19 @@ body {
 				
 			}
 		}
+		
+		window.openReportModal = function(type, id) {
+	    	  const modal = document.getElementById('reportModal');
+	    	  if (!modal) return console.error('reportModal element not found');
+	    	  document.getElementById('reportType').value = type;
+	    	  document.getElementById('reportTargetNo').value = id;
+	    	  document.getElementById('reportModal').style.display = 'flex';
+	    	};
+
+	    	window.closeReportModal = function() {
+	    	  const modal = document.getElementById('reportModal');
+	    	  if (modal) modal.style.display = 'none';
+	    	};
 	</script>
 
 </body>

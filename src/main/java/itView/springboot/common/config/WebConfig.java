@@ -5,6 +5,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import itView.springboot.common.config.interceptor.CheckAdminInterceptor;
 import itView.springboot.common.config.interceptor.FlashMessageInterceptor;
 
 @Configuration
@@ -28,8 +29,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new FlashMessageInterceptor())
                 .addPathPatterns("/**"); // 전체 경로 적용
 
-//        // 관리자 접근 체크
-//        registry.addInterceptor(new CheckAdminInterceptor())
-//                .addPathPatterns("/inhoAdmin/**"); // admin 페이지에만 적용
+        // 관리자 접근 체크
+        registry.addInterceptor(new CheckAdminInterceptor())
+                .addPathPatterns("/inhoAdmin/**")
+                .addPathPatterns("/admin/**");// admin 페이지에만 적용
     }
 }

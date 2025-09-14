@@ -583,7 +583,33 @@ public class InhoController {
         }
     }
     
-    
+    @PostMapping("/enrollProductReport")
+    public String enrollReport(@RequestParam("reportType") String reportType,
+                               @RequestParam("reportTitle") String reportTitle,
+                               @RequestParam("reportTargetNo") int reportTargetNo,
+                               @RequestParam("reportContent") String reportContent,
+                               HttpSession session, RedirectAttributes redirectAttributes) {
+
+        User loginUser = (User) session.getAttribute("loginUser");
+        int reporterUserId = loginUser.getUserNo();
+
+        Report r = new Report();
+        r.setReportType(reportType);
+        r.setReportTitle(reportTitle);
+        r.setReportContent(reportContent);
+        r.setReportTargetNo(reportTargetNo);
+        r.setReporterUserId(reporterUserId);
+
+        int result = uService.enrollReport(r);
+        
+        if(result > 0) {
+        	// 신고 처리 후, 원래 보던 페이지로 이동
+        	redirectAttributes.addFlashAttribute("msg", "신고가 정상적으로 등록되었습니다.");
+        	return "redirect:/product/detail/" + reportTargetNo;
+        } else {
+        	throw new AdminException("신고 등록을 실패하였습니다.");
+        }
+    }
     
     
 }
