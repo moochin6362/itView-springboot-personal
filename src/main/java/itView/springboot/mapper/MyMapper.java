@@ -77,5 +77,9 @@ public interface MyMapper {
     int insertQuestion(itView.springboot.vo.Question q);
     
     List<Map<String, Object>> selectOrderedProductsWithAttributes(Long userNo);
+    
+ // POINT 테이블에 한 건 기록
+    int insertPoint(itView.springboot.vo.Point p);
+
 
 }

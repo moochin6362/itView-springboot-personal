@@ -107,9 +107,10 @@
 			<a class="menu-item" th:href="@{/my/myPoint}">나의 포인트</a> 
 			<a class="menu-item" th:href="@{/my/myCoupon}">나의 쿠폰</a> 
 			<a class="menu-item" th:href="@{/my/experienceWins}">체험단 당첨내역</a>
-			<a class="menu-item" th:href="@{/my/myWriteReview}">내가 쓴 리뷰<span>상위 몇%인지 확인하기</span></a>
-			<a class="menu-item" th:href="@{/my/myInquiry}">내가 쓴 문의</a>
+			<a class="menu-item" th:href="@{/my/myWriteReview}">내가 쓴 리뷰</a>
+			
 			<a class="menu-item" th:href="@{/my/myProductInquiry}">판매자 상품문의</a>
+			<a class="menu-item" th:href="@{/my/myProductAnswer}">상품문의 답변</a>
 			<a class="menu-item" th:href="@{/Shopping/order}">내 주문내역</a>
 		</section>
 
@@ -219,14 +220,24 @@
 })();
 </script>
 		
-		
-		
-		
-		
-
-		
-
+	
+	
 	</main>
+
+	<!-- 플래시 메시지를 안전하게 전달 -->
+	<!-- myPage.html (기존 스니펫 교체) -->
+	<div id="flash-msg" th:if="${msg}" th:text="${msg}" hidden></div>
+	
+	<script>
+	  (function () {
+	    var el = document.getElementById('flash-msg');
+	    if (!el) return;
+	    var m = el.textContent;   // ← 실제 한글 텍스트로 들어옴
+	    if (m && m.trim()) alert(m);
+	  })();
+	</script>
+	
+	
 
 </body>
 </html>

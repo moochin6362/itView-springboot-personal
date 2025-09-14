@@ -456,7 +456,27 @@
 		  ORDER BY MAX(o.ORDER_DATE) DESC
 		</select>
 	
-  
+	<insert id="insertPoint" parameterType="itView.springboot.vo.Point">
+	  INSERT INTO "POINT"(
+	    "POINT_NO",
+	    "POINT_NAME",
+	    "POINT_DESCRIPTION",
+	    "POINT_VALUE",
+	    "POINT_CREATEDATE",
+	    "POINT_ENDDATE",
+	    "USER_NO"
+	  ) VALUES (
+	    SEQ_POINT.NEXTVAL,
+	    #{pointName},
+	    #{pointDescription},
+	    #{pointValue},
+	    SYSDATE,
+	    #{pointEnddate, jdbcType=DATE},
+	    #{userNo}
+	  )
+	</insert>
+	
+  	
   
 
 </mapper>

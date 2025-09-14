@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>상품 문의 답변</title>
+
+  <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/userCommon.css}"/>
+  <!-- 페이지 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/user/myPoint.css}"/>
+
+  <!-- 아이콘 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"/>
+</head>
+<body>
+  <!-- 공통 헤더/사이드바 -->
+  <div th:replace="~{common/myHeader}"></div>
+  <div th:replace="~{common/mySidebar}"></div>
+
+  <main class="page">
+    <!-- 상단 바 -->
+    <div class="page-topbar">
+      <a class="back-btn" href="javascript:history.back()" aria-label="뒤로가기">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <h1 class="page-title">상품 문의 답변</h1>
+      <span aria-hidden="true"></span>
+    </div>
+
+    <!-- 필터 탭 -->
+    <nav class="tabs" aria-label="문의 상태 필터">
+      <button class="tab active" type="button" data-filter="all">전체</button>
+      <button class="tab" type="button" data-filter="N">미답변</button>
+      <button class="tab" type="button" data-filter="Y">답변완료</button>
+    </nav>
+
+    <!-- 리스트 -->
+    <section class="qna-list" th:if="${qnaList != null and !#lists.isEmpty(qnaList)}">
+      <article class="qna-card card"
+               th:each="q : ${qnaList}"
+               th:attr="data-status=${q.questionStatus?:'N'}">
+        <!-- 헤더 -->
+        <header class="qna-head">
+          <div class="left">
+            <div class="badge" th:text="${q.questionStatus == 'Y' ? '답변완료' : '미답변'}">미답변</div>
+            <h2 class="title" th:text="${q.questionTitle}">문의 제목</h2>
+          </div>
+          <div class="right">
+            <div class="prod" th:text="${q.productName}">상품명</div>
+            <div class="meta">
+              <span class="who" th:text="${q.userName}">질문자</span>
+              <span class="dot">·</span>
+              <time th:text="${#dates.format(q.questionDate, 'yyyy.MM.dd HH:mm')}"
+                    title="문의일시">2025.09.05 12:30</time>
+            </div>
+          </div>
+        </header>
+
+        <!-- 문의 내용 -->
+        <div class="q-content" th:text="${q.questionContent}">문의 내용</div>
+
+        <!-- 답변영역: 상태별로 분기 -->
+        <div class="answer-area" th:if="${q.questionStatus != 'Y'}">
+          <!-- 미답변: 작성 폼 -->
+          <form class="answer-form" th:action="@{/my/product-answer}" method="post">
+            <!-- CSRF -->
+            <input type="hidden" th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" name="questionNo" th:value="${q.questionNo}"/>
+            <textarea name="answerContent" class="textarea" rows="4"
+                      placeholder="답변을 입력하세요(최대 1000자)" maxlength="1000" required></textarea>
+            <div class="actions">
+              <button type="submit" class="btn primary">
+                <i class="fa-solid fa-paper-plane"></i> 답변 등록
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="answer-area done" th:if="${q.questionStatus == 'Y'}">
+          <!-- 답변완료: 접기/펼치기 -->
+          <button class="ans-toggle" type="button" aria-expanded="false">
+            <i class="fa-solid fa-comment-dots"></i>
+            <b>등록된 답변 보기</b>
+            <i class="chev fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ans-body" hidden>
+            <div class="ans-text" th:text="${q.answerContent}">답변 내용</div>
+            <div class="ans-meta">
+              <time th:text="${#dates.format(q.answerDate, 'yyyy.MM.dd HH:mm')}">2025.09.05 13:10</time>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- 비어있음 -->
+    <section class="empty" th:if="${qnaList == null or #lists.isEmpty(qnaList)}">
+      <p class="empty-text">표시할 문의가 없습니다.</p>
+    </section>
+  </main>
+
+  <!-- 페이지 스크립트: 필터/토글 -->
+  <script>
+    (function(){
+      // 필터
+      const tabs = document.querySelectorAll('.tabs .tab');
+      const cards = () => document.querySelectorAll('.qna-card');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const f = tab.dataset.filter;
+          cards().forEach(c => {
+            const st = c.dataset.status || 'N';
+            c.style.display = (f === 'all' || f === st) ? '' : 'none';
+          });
+        });
+      });
+
+      // 답변 토글
+      document.addEventListener('click', (e)=>{
+        const btn = e.target.closest('.ans-toggle');
+        if(!btn) return;
+        const body = btn.nextElementSibling;
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        body.hidden = open;
+        btn.querySelector('.chev')?.classList.toggle('fa-chevron-up', !open);
+        btn.querySelector('.chev')?.classList.toggle('fa-chevron-down', open);
+      });
+    })();
+  </script>
+</body>
+</html>

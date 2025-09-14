@@ -309,20 +309,25 @@ public class MyController {
 
     // GET: 폼 진입
     @GetMapping("/myProductInquiry")
-    public String myProductInquiry(@RequestParam(name = "productNo", required = false) Integer productNo,
-                                   Model model, HttpSession session) {
+    public String myProductInquiry(
+            @RequestParam(name = "productNo", required = false) Integer productNo,
+            Model model, HttpSession session) {
+
         Long userNo = getUserNo(session);
         if (userNo == null) return "redirect:/";
 
-        if (productNo != null) {
-            Order owned = myService.selectproductbyOrder(productNo, userNo.intValue());
-            if (owned == null) {
-                return "redirect:/my/myProductInquiry";
-            }
-        }
+        // 구매자만 문의 허용 로직을 당분간 끄고 싶다면 전체 주석 OK
+        // if (productNo != null) {
+        //     Order owned = myService.selectproductbyOrder(productNo, userNo.intValue());
+        //     if (owned == null) {
+        //         return "redirect:/my/myProductInquiry";
+        //     }
+        // }
+
         model.addAttribute("productNo", productNo);
         return "my/myProductInquiry";
     }
+
 
     // POST: 저장
     @PostMapping("/product-question")
@@ -338,9 +343,9 @@ public class MyController {
             return "redirect:/go/login";
         }
         if (questionTitle == null || questionTitle.isBlank()
-            || questionContent == null || questionContent.isBlank()) {
+                || questionContent == null || questionContent.isBlank()) {
             ra.addFlashAttribute("msg", "제목/내용을 입력해주세요.");
-            return "redirect:/my/myProductInquiry?productNo=" + productNo;
+            return "redirect:/my/myProductInquiry";
         }
 
         itView.springboot.vo.Question q = new itView.springboot.vo.Question();
@@ -351,9 +356,16 @@ public class MyController {
         q.setQuestionStatus("N");
 
         int rows = myService.insertQuestion(q);
-        ra.addFlashAttribute("msg", rows > 0 ? "문의가 등록되었습니다." : "등록에 실패했습니다.");
-        return "redirect:/my/myProductInquiry?productNo=" + productNo;
+
+        if (rows > 0) {
+            ra.addFlashAttribute("msg", "문의가 등록되었습니다.");
+            return "redirect:/my/myPage"; // ✅ 성공 시 myPage로
+        } else {
+            ra.addFlashAttribute("msg", "등록에 실패했습니다.");
+            return "redirect:/my/myProductInquiry"; // 실패 시 폼으로
+        }
     }
+
 
     @GetMapping("/cart")
     public String cart() { return "Shopping/cart"; }
@@ -401,6 +413,8 @@ public class MyController {
         map.put("point", reviewPoint);
 
         int result = uService.addPoint(map);
+        
+        myService.addPointHistory(userNo, "리뷰작성", "리뷰 작성 보상", reviewPoint, null);
 
         return "redirect:/my/myReview";
     }
@@ -479,6 +493,8 @@ public class MyController {
         return myService.getMatchingRates(userNo);
     }
 
+    @GetMapping("/myProductAnswer")
+    public String myProductAnswer() { return "my/myProductAnswer"; }
 
     
     

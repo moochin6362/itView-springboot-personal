@@ -24,25 +24,27 @@
       <span class="spacer"></span>
     </div>
 
-    <!-- 선택된 상품 번호 안내(없으면 전송 비활성화) -->
-    <section class="card" th:if="${productNo != null}">
-      <div style="font-size:14px;color:#555">
-        대상 상품번호: <b th:text="${productNo}">-</b>
-      </div>
-    </section>
-    <section class="card" th:if="${productNo == null}">
-      <div style="font-size:14px;color:#b91c1c">
-        상품 상세 페이지에서 “문의하기”로 진입해주세요. (상품번호가 없습니다)
-      </div>
-    </section>
-
-    <!-- 문의 폼 -->
+    <!-- 단일 폼 -->
     <form class="form" th:action="@{/my/product-question}" method="post" autocomplete="off">
-      <!-- 필수 전달값 -->
-      <input type="hidden" name="productNo" th:value="${productNo}" />
       <!-- CSRF -->
       <input type="hidden" th:if="${_csrf != null}"
              th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+      <!-- 🔹 선택된 상품 번호(hidden). URL로 넘어오면 서버가 채워줌 -->
+      <input type="hidden" id="productNo" name="productNo" th:value="${productNo}" />
+
+      <!-- 상품 검색 -->
+      <section class="card">
+        <h2 class="sec-title" style="margin-bottom:8px">상품 검색</h2>
+        <div class="search-bar">
+          <input id="prodSearch" type="text" class="input" placeholder="상품명으로 검색" />
+        </div>
+        <!-- 현재 선택 상태 표시 -->
+        <div id="prodPicked" class="picked" aria-live="polite"
+             th:text="${productNo != null} ? '선택된 상품번호: ' + ${productNo} : ''"></div>
+        <!-- 검색 결과 리스트 -->
+        <div id="prodResults" class="results"></div>
+      </section>
 
       <!-- 제목 -->
       <h2 class="sec-title">문의 제목</h2>
@@ -60,12 +62,88 @@
 
       <!-- 전송 -->
       <div class="submit-bar">
-        <button type="submit" class="submit" th:disabled="${productNo == null}">
+        <button id="submitBtn" type="submit" class="submit"
+                th:disabled="${productNo == null}">
           판매자에게 전송하기
         </button>
       </div>
     </form>
   </main>
 
+  <script th:inline="none">
+  (function(){
+    const $q = document.getElementById('prodSearch');
+    const $list = document.getElementById('prodResults');
+    const $picked = document.getElementById('prodPicked');
+    const $productNo = document.getElementById('productNo');
+    const $submit = document.getElementById('submitBtn');
+
+    // URL로 productNo가 들어온 경우, 버튼 활성화
+    if ($productNo && $productNo.value) {
+      $submit && $submit.removeAttribute('disabled');
+    }
+
+    let timer = null;
+    function debounce(fn, delay){ if (timer) clearTimeout(timer); timer = setTimeout(fn, delay); }
+
+    async function search(keyword){
+      if (!keyword) { $list.innerHTML = ''; return; }
+      const res = await fetch('/my/searchProduct?keyword=' + encodeURIComponent(keyword));
+      if (!res.ok) throw new Error('검색 실패');
+      return res.json();
+    }
+
+    function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+
+    function render(items){
+      if (!Array.isArray(items) || items.length === 0){
+        $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>';
+        return;
+      }
+      $list.innerHTML = items.map(it=>{
+        const id = escapeHtml(String(it.productNo??''));
+        const name = escapeHtml(it.productName||'(상품명 없음)');
+        const detail = escapeHtml((it.productDetail||'').replace(/\s+/g,' ').trim());
+        const thumb = escapeHtml(it.thumbUrl||'/uploadFilesFinal/default-product.png');
+        return `
+          <button type="button" class="result" data-no="${id}" data-name="${name}">
+            <img src="${thumb}" alt="" onerror="this.onerror=null;this.src='/uploadFilesFinal/default-product.png'">
+            <div class="meta">
+              <div class="title">${name}</div>
+              <div class="desc">${detail}</div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    $q && $q.addEventListener('input', ()=>{
+      const kw = $q.value.trim();
+      debounce(async ()=>{
+        try{
+          const data = await search(kw);
+          render(data);
+        }catch(e){
+          console.error(e);
+          $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>';
+        }
+      }, 250);
+    });
+
+    $list && $list.addEventListener('click', (e)=>{
+      const item = e.target.closest('.result');
+      if (!item) return;
+      const no = item.getAttribute('data-no');
+      const name = item.getAttribute('data-name')||'';
+      $productNo.value = no;
+      $picked.textContent = `선택된 상품: [${no}] ${name}`;
+      $submit && $submit.removeAttribute('disabled');
+
+      // 시각 피드백
+      [...$list.querySelectorAll('.result')].forEach(el=>el.classList.remove('is-selected'));
+      item.classList.add('is-selected');
+    });
+  })();
+  </script>
 </body>
 </html>

@@ -177,8 +177,8 @@ public class MyService {
         if (q.getUserNo() <= 0 || q.getProductNo() <= 0) return 0;
 
         // 서버 검증: 해당 상품을 실제로 주문한 유저만 문의 가능
-        Order owned = myMapper.selectproductbyOrder(q.getProductNo(), q.getUserNo());
-        if (owned == null) return 0;
+//        Order owned = myMapper.selectproductbyOrder(q.getProductNo(), q.getUserNo());
+//        if (owned == null) return 0;
 
         if (q.getQuestionStatus() == null || q.getQuestionStatus().isBlank()) {
             q.setQuestionStatus("N");
@@ -348,6 +348,17 @@ public class MyService {
             if (v != null) return String.valueOf(v);
         }
         return "";
+    }
+
+    @Transactional
+    public void addPointHistory(long userNo, String name, String description, int value, LocalDate endDate) {
+        itView.springboot.vo.Point p = new itView.springboot.vo.Point();
+        p.setUserNo((int) userNo);
+        p.setPointName(name);                 // 예: "리뷰작성"
+        p.setPointDescription(description);   // 예: "리뷰 작성 보상"
+        p.setPointValue(value);               // +100, 사용이면 -500
+        p.setPointEnddate(endDate);           // 만료 없으면 null
+        myMapper.insertPoint(p);
     }
 
     
