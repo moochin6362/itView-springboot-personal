@@ -1,0 +1,255 @@
+/* ===== 기본 설정 ===== */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    background-color: #f4f6f9; /* 전체 배경 톤 다운 */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 오른쪽 콘텐츠 영역 */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== 메인 콘텐츠 박스 ===== */
+.main-content {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+
+    /* 두 개 섹션을 나란히 배치 */
+    display: flex;
+/*     flex-wrap: wrap; */
+	flex-direction: column; /* ← 가로 대신 세로 방향 */
+    gap: 20px;
+}
+
+/* 각 섹션 공통 박스 */
+.main-content .main-section {
+    flex: 1;
+    min-width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-left: 30px;
+    margin-right: 30px;
+    
+}
+
+
+/* ===== 제목 ===== */
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+    border-left: 6px solid #34e5eb;
+    padding-left: 12px;
+}
+
+/* ===== 상세 테이블 ===== */
+.detail-table {
+    width: 80%;
+    margin: 0 auto;   /* 가운데 정렬 */
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 25px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.detail-table th,
+.detail-table td {
+    padding: 14px 18px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 15px;
+}
+
+.detail-table th {
+    background-color: #f1f5f9;
+    color: #555;
+    font-weight: 600;
+    width: 50px;
+    text-align: center;  
+}
+
+.detail-table td {
+    background-color: #fff;
+    color: #333;
+    width: 150px;
+}
+
+.detail-table tr:last-child th,
+.detail-table tr:last-child td {
+    border-bottom: none;
+}
+
+.detail-table td img {
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ===== 신고 히스토리 테이블 ===== */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.history-table th,
+.history-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.history-table thead {
+    background-color: #dddddd; /* commonList.css 테이블 헤더 색상 */
+    font-weight: bold;
+    color: #333;
+}
+
+.history-table tbody tr {
+    cursor: default;
+    transition: background-color 0.25s;
+}
+
+.history-table tbody tr:hover {
+    background-color: #f0f8ff;
+}
+
+/* 상태 뱃지 */
+.history-table .status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+}
+
+
+/* ===== 버튼 ===== */
+.form-actions {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.user-btn-submit,
+.user-deleteBtn,
+.user-btn-reset {
+    padding: 12px 28px;
+    margin: 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* 수정 버튼 */
+.board-btn-submit {
+    background: linear-gradient(135deg, #34e5eb, #34e5eb);
+    color: white;
+}
+.board-btn-submit:hover {
+    background: linear-gradient(135deg, #83dbe0,#83dbe0);
+    transform: translateY(-2px);
+}
+
+/* 삭제/취소 버튼 */
+.board-btn-reset {
+    background: linear-gradient(135deg, #34e5eb, #34e5eb);
+    color: white;
+}
+.board-btn-reset:hover {
+    background: linear-gradient(135deg, #83dbe0,#83dbe0);
+    cursor : pointer;
+}
+
+/* ===== 라디오 버튼 스타일 ===== */
+.stop-period-section input[type="radio"] {
+    display: none; /* 기본 라디오 버튼 숨기기 */
+}
+
+/* 인접한 label만 스타일 적용 */
+.stop-period-section input[type="radio"] + label {
+    position: relative;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #444;
+    margin-right: 20px;
+    padding-left: 28px; /* 커스텀 원형 공간 확보 */
+    transition: color 0.3s ease;
+}
+
+/* 커스텀 원형 */
+.stop-period-section input[type="radio"] + label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid #4caf50;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* 선택 시 내부 점 */
+.stop-period-section input[type="radio"]:checked + label::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #4caf50;
+    transition: all 0.3s ease;
+}
+
+/* 선택 시 글자 색상 강조 */
+.stop-period-section input[type="radio"]:checked + label {
+    color: #4caf50;
+    font-weight: 600;
+}
+
+/* 비활성화 상태 */
+.stop-period-section input[type="radio"]:disabled + label {
+    color: #aaa;
+    cursor: not-allowed;
+}
+.stop-period-section input[type="radio"]:disabled + label::before {
+    border-color: #ccc;
+    background-color: #f0f0f0;
+}
+
+

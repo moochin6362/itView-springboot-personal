@@ -459,7 +459,9 @@ order by board_date desc, board_id DESC
 		"USER" u 
 		 on b.user_no = u.user_no
 	where board_type='7' and board_status ='Y'
+	order by board_id desc, board_date desc
 </select>
+
 <!-- 판매자 문의게시판 상세페이지 -->
  <select id="pBoardDetail" parameterType="int" resultType="itView.springboot.dto.GboardDetail">
  	select 
@@ -478,7 +480,7 @@ order by board_date desc, board_id DESC
 		"USER" u 
 		 on b.user_no = u.user_no
 	where board_id = #{boardId} and board_status='Y' and board_type='7'
-	order by board_date desc, board_id desc
+	order by board_id desc
  </select>
  <!-- 판매자 문의 댓글 조회 -->
  <select id="getPartnerReplyList" parameterType="int" resultType="AdminReply">
@@ -526,16 +528,16 @@ SELECT COUNT(*)
         <if test="value != null and value != ''">
             <choose>
                 <when test="condition == 'productName'">
-                    AND UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%'
+                    AND UPPER(p.product_name) LIKE '%' || UPPER(#{value}) || '%'
                 </when>
-                <when test="condition == 'productCompany'">
-                    AND UPPER(p.PRODUCT_COMPANY) LIKE '%' || UPPER(#{value}) || '%'
+                <when test="condition == 'boardId'">
+                    AND UPPER(b.board_id) LIKE '%' || UPPER(#{value}) || '%'
                 </when>
                 <when test="condition == 'boardDate'">
                     AND TO_CHAR(b.BOARD_DATE, 'YYYY-MM-DD') = #{value}
                 </when>
                 <otherwise>
-                    AND (UPPER(p.PRODUCT_NAME) LIKE '%' || UPPER(#{value}) || '%')
+                    AND (b.board_title) LIKE '%' || UPPER(#{value}) || '%')
                 </otherwise>
             </choose>
         </if>
@@ -602,6 +604,30 @@ SELECT *
 <update id="proBoardDelete">
 	update board set board_status ='N' where board_id=#{boardId} and board_type='8'
 </update>
+
+<!-- 회원삭제 -->
+<update id="deleteUserByNo">
+	update "USER" set user_status = 'N' where user_no = #{userNo}
+</update>
+
+<!-- 회원 정지 -->
+<update id="stopUser">
+	UPDATE "USER"
+    SET user_status = 'N', REPORT_MODIFY_DATE = #{endDate}
+    WHERE user_no = #{userNo}
+</update>
+
+<!-- 회원 복구 -->
+<update id="restoreUser">
+   <![CDATA[
+   UPDATE "USER"
+   SET user_status = 'Y', modify_date = NULL
+   WHERE user_status = 'N' AND report_modify_date IS NOT NULL AND modify_date <= #{now}
+   ]]>
+</update>
+
+
+
 
 
 

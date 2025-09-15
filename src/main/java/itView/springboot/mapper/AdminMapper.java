@@ -1,5 +1,6 @@
 package itView.springboot.mapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -151,6 +152,13 @@ public interface AdminMapper {
 	Reply selectReportReply(Integer replyNo);
 	int getReplyReportCount(Integer replyNo);
 	ArrayList<Report> getReplyReportList(RowBounds rowBounds, Integer replyNo);
+
+	//회원삭제
+	int deleteUserByNo(int userNo);
+	//회원정지
+	Object stopUser(int userNo, String status,LocalDateTime endDate);
+	//회원 복구(자동)
+	void restoreUser(LocalDateTime now);
 
 	
 	

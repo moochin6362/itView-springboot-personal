@@ -1,8 +1,11 @@
 package itView.springboot.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import itView.springboot.common.Pagination;
 import itView.springboot.dto.GboardDetail;
@@ -439,6 +443,58 @@ public class AdminController {
 			throw new AdminException("신고글 상세보기를 실패하였습니다.");
 		}
 	}
+	
+	//회원 삭제*영정 (update N)
+	@PostMapping("/deleteUser")
+    @ResponseBody
+    public ResponseEntity<String> deleteReportUser(
+    		@RequestParam("userNo") int userNo) {
+        try {
+            int result = adService.deleteUserByNo(userNo); // 서비스에서 삭제 처리
+            if (result > 0) {
+                return ResponseEntity.ok("회원 삭제 완료");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                     .body("회원 삭제 실패");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("회원 삭제를 실패하였습니다.");
+        }
+    }
+	
+	//회원 기간 정지
+	@PostMapping("/admin/stopUser")
+	@ResponseBody
+	public ResponseEntity<String> stopUser(@RequestParam("userNo") int userNo,
+	                                       @RequestParam("stopPeriod") String stopPeriod) {
+	    LocalDateTime endDate;
+	    LocalDateTime now = LocalDateTime.now();
+
+	    switch (stopPeriod) {
+	        case "1": endDate = now.plusDays(1); break;
+	        case "3": endDate = now.plusDays(3); break;
+	        case "7": endDate = now.plusDays(7); break;
+	        case "30": endDate = now.plusDays(30); break;
+	        case "permanent": endDate = null; break;
+	        default: return ResponseEntity.badRequest().body("기간을 다시 선택해주세요.");
+	    }
+
+	    adService.stopUser(userNo, endDate); // status=N, stop_end_date 설정
+	    return ResponseEntity.ok("회원 정지 완료");
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

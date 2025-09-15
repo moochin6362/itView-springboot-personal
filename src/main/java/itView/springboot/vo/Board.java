@@ -30,6 +30,9 @@ public class Board {
     private String userName;
     private String brandName;
     
+    //관리자 금지제품 검색
+    private String productName;
+    
     //신고용(DB에는 없음)
     private int reportNo;
 	private String reportType;

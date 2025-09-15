@@ -1,6 +1,7 @@
 package itView.springboot.service;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.apache.ibatis.session.RowBounds;
@@ -268,6 +269,16 @@ public class AdminService {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.getReplyReportList(rowBounds, replyNo);
+	}
+
+	//회원삭제
+	public int deleteUserByNo(int userNo) {
+		return mapper.deleteUserByNo(userNo);
+	}
+
+	public Object stopUser(int userNo, LocalDateTime endDate) {
+		return mapper.stopUser(userNo,"N", endDate);
+		
 	}
 
 

@@ -28,7 +28,7 @@
 		           <div class="admin-proBoard-searchBox">
 		               <form th:action="@{/admin/proBoard}" method="get">
 		                   <select name="condition" class="form-select">
-		                       <option value="boardTitle" th:selected="${condition == 'boardTitle'}">제품명</option>
+		                       <option value="productName" th:selected="${condition == 'productName'}">제품명</option>
 		                       <option value="boardId" th:selected="${condition == 'boardId'}">게시판 번호</option>
 		                       <option value="boardDate"th:selected="${condition == 'boardDate'}">공지 작성일</option>
 		                   </select>

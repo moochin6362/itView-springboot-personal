@@ -4,6 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>커뮤니티 신고글 상세</title>
+        
+        <script th:src="@{/js/admin/admin_rBoard_detail.js}" defer></script>
         <!-- CSS 파일 -->
 	    <link href="/css/inhoCss/reportProductDetail.css" rel="stylesheet" />
 	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
@@ -25,7 +27,7 @@
                 <div class="main-content">
 	                <div class="main-section">
 	                    <h2 class="page-title">커뮤니티 신고글 상세정보</h2>
-	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
+	                    <form id="board-detailForm" method="post">
 	                    	<input type="hidden" name="boardId" th:value="${b.boardId}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
@@ -54,32 +56,13 @@
 	                            <td>[[${b.reportCount}]]</td>
 	                        </tr>
 	                    </table>
-	                    <!-- 상품 정지기간 선택 영역 // 자동해지 -->
 						<div class="stop-period-section" style="margin-bottom: 10px;">
-						    <label class="page-title">글 정지기간 선택</label>
-						    <div style="margin-top: 10px;">
-						        <label>
-						            <input type="radio" name="stopPeriod" value="1" /> 1일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="3" /> 3일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="7" /> 7일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="30" /> 30일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="permanent" /> 영구정지
-						        </label>
-						    </div>
+						    <label class="page-title">게시글 관리</label>
 						</div>
 	                    
 	                    <div class="form-actions">
-	                        <button class="btn-submit">수정</button>
-	                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
-	                        <button type="button" class="btn-reset" onclick="history.back()">취소</button>
+	                        <button type="button" id="board-deleteBtn" class="board-btn-reset">삭제</button>
+	                        <button type="button" class="board-btn-reset" onclick="history.back()">취소</button>
 	                    </div>
 	                    </form>
 	                </div>
@@ -115,21 +98,5 @@
             </div>
         </div>
 		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
-		<script>
-			window.onload = () => {
-			    const delBtn = document.getElementById('deleteBtn');
-			    const form = document.getElementById('detailForm');
-	
-			    if (delBtn) {
-			        delBtn.addEventListener('click', () => {
-			            if (confirm("정말 상품을 삭제하시겠습니까?")) {
-			            	form.method = "post";
-			                form.action = '/inhoAdmin/deleteCoupon';
-			                form.submit();
-			            }
-			        });
-			    }
-			}
-		</script>
     </body>
 </html>
