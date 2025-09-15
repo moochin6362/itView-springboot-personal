@@ -555,4 +555,11 @@ public class ProductController {
 			throw new ProductException("쿠폰 다운로드가 실패하였습니다.");
 		}
 	}
+	
+	// 문의페이지 이동
+	@GetMapping("/productInquery/{productNo}")
+	public String productInquery(@PathVariable("productNo") int productNo, Model model) {
+		model.addAttribute("productNo", productNo);
+		return "my/myProductInquiry";
+	}
 }

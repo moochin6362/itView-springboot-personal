@@ -347,7 +347,7 @@ body {
 				        <div class="review-card">
 				            <!-- 리뷰 내용 -->
 				            <div class="review-header">
-				            	<input type="hidden" class="reviewId" th:value="${r.reviewNo}"/>
+				            	<input type="hidden" class="reviewNo" th:value="${r.reviewNo}"/>
 				                <span class="user-name">[[${r.userName}]]</span>
 				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
 				                <div class="buttonArea">
@@ -358,7 +358,7 @@ body {
 				            <div class="review-content">[[${r.reviewContent}]]</div>
 				            
 				            <!-- 리뷰에 대한 답변 영역 -->
-				            <div class="response">
+				            <div class="response" th:if="${r.reviewAnswerId != null}">
 				            	<input type="hidden" class="productNo" th:value="${r.productNo}"/>
 							    <div class="response-header">[[${p.brandName}]]</div>
 							    <div class="response-form" style="display: none;">
@@ -370,10 +370,16 @@ body {
 									<input type="hidden" class="reviewAnswerId" th:value="${r.reviewAnswerId}"/>
 							        <p class="reviewAnswerContent" th:text="${r.reviewAnswerContent}"></p>
 							    </div>
-							</div>
-							<div class="buttonArea2" th:if="${r.reviewAnswerContent != null}">
-							    <button class="answerEditButton">수정</button>
-							    <button class="answerDeleteButton">삭제</button>
+							    <!-- 수정할 때만 보이는 textarea 영역 -->
+								<div class="response-edit" style="display: none;">
+									<textarea class="response-textarea" rows="4" cols="60"></textarea>
+									<button class="answerEditCommitButton">완료</button>
+									<button class="answerEditCancelButton">취소</button>
+								</div>
+								<div class="buttonArea2" th:if="${r.reviewAnswerContent != null}">
+								    <button class="answerEditButton">수정</button>
+								    <button class="answerDeleteButton">삭제</button>
+								</div>
 							</div>
 				        </div>
 				    </div>
@@ -465,7 +471,7 @@ body {
 			}
 			
 			// 리뷰 답변 수정
-			const answerEditButtons = document.querySelectorAll('.answerEditButton');
+			/*const answerEditButtons = document.querySelectorAll('.answerEditButton');
 			for(answerEditButton of answerEditButtons){
 				answerEditButton.addEventListener('click', e => {
 					const responseDiv = e.target.parentElement.previousElementSibling;
@@ -482,8 +488,69 @@ body {
 							console.log(e.target.parentElement.previousElementSibling.querySelector('p>textarea'));
 						})
 					}
+					
+					const cancelButtons = document.querySelectorAll('.answerEditCancelButton');
+					for(cancelButton of cancelButtons){
+						cancelButton.addEventListener('click', () => {
+							if(confirm("답변 수정을 취소하시겠습니까?")){
+								location.reload();
+							}
+						})
+					}
 				});
 			}
+			*/
+			document.querySelectorAll('.answerEditButton').forEach(button => {
+				button.addEventListener('click', e => {
+					const responseContainer = e.target.closest('.response');
+					const contentDiv = responseContainer.querySelector('.response-content');
+					const editDiv = responseContainer.querySelector('.response-edit');
+					const reviewContent = contentDiv.querySelector('.reviewAnswerContent').innerText;
+					
+					// 기존 내용 숨기고 수정폼 보이기
+					contentDiv.style.display = 'none';
+					editDiv.style.display = 'block';
+
+					// textarea에 기존 내용 넣기
+					editDiv.querySelector('.response-textarea').value = reviewContent;
+
+					// 완료 버튼
+					editDiv.querySelector('.answerEditCommitButton').addEventListener('click', () => {
+						const newContent = editDiv.querySelector('.response-textarea').value;
+						const reviewAnswerId = responseContainer.querySelector('.reviewAnswerId').value;
+
+						//console.log('수정된 내용:', newContent);
+						//console.log('리뷰 답변 ID:', reviewAnswerId);
+						
+						fetch('/seller/reviewAnswer', {
+							method: 'put',
+							headers: {'content-type':'application/json; charset=UTF-8'},
+							body: JSON.stringify({
+								reviewAnswerContent : newContent,
+								reviewAnswerId : reviewAnswerId
+							})
+						})
+						.then(res => res.json())
+						.then(data => {
+							console.log(data)
+							// 예시: 서버에 전송 후 UI 업데이트
+							contentDiv.querySelector('.reviewAnswerContent').innerText = newContent;
+							contentDiv.style.display = 'block';
+							editDiv.style.display = 'none';
+						})
+						.catch(err => console.log(err))
+					});
+
+					// 취소 버튼
+					editDiv.querySelector('.answerEditCancelButton').addEventListener('click', () => {
+						if (confirm("답변 수정을 취소하시겠습니까?")) {
+							contentDiv.style.display = 'block';
+							editDiv.style.display = 'none';
+						}
+					});
+				});
+			});
+			
 			
 			// 리뷰 답변 삭제
 			const answerDeleteButtons = document.querySelectorAll('.answerDeleteButton');
@@ -501,6 +568,35 @@ body {
 						location.reload();
 					}
 				});
+			}
+			
+			// 리뷰 삭제
+			const reviewDeleteButtons = document.querySelectorAll('.reviewDeleteButton');
+			for(reviewDeleteButton of reviewDeleteButtons){
+				reviewDeleteButton.addEventListener('click', e => {
+					const reviewHeader = e.target.closest('.review-header');
+					const reviewContent = reviewHeader.nextElementSibling;
+					const reviewAnswer = reviewContent.nextElementSibling;
+					const reviewNo = reviewHeader.querySelector('.reviewNo').value;
+					
+					if(confirm('정말 리뷰를 삭제 하시겠습니까?')){
+						fetch('/seller/review', {
+							method: 'put',
+							headers: {'content-type':'application/json; charset=UTF-8'},
+							body : JSON.stringify({
+								reviewNo : reviewNo
+							})
+						})
+						.then(res => res.json())
+						.then(data => {
+							reviewHeader.style.display = 'none';
+							reviewContent.style.display = 'none';
+							reviewAnswer.style.display = 'none';
+						})
+						.catch(err => console.log(err))
+						
+					}
+				})
 			}
  		}
 	</script>

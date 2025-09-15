@@ -202,5 +202,13 @@ public class ProductService {
 		return mapper.downCoupon(map);
 	}
 
+	public int editReviewAnswer(ReviewAnswer reviewAnswer) {
+		return mapper.editReviewAnswer(reviewAnswer);
+	}
+
+	public int deleteReview(Review review) {
+		return mapper.deleteReview(review);
+	}
+
 
 }

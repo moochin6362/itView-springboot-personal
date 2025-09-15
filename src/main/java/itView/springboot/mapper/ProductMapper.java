@@ -116,6 +116,10 @@ public interface ProductMapper {
 
 	int downCoupon(HashMap<String, Integer> map);
 
+	int editReviewAnswer(ReviewAnswer reviewAnswer);
+
+	int deleteReview(Review review);
+
 
 }
 

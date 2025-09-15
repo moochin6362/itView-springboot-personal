@@ -84,7 +84,7 @@
 		from review
 			 join "USER" using(user_no)
 			 left join review_answer using(review_no)
-		where product_no = #{productNo}
+		where product_no = #{productNo} and review_status = 'Y'
 		order by review_no desc
 	</select>
 
@@ -193,7 +193,7 @@
 	<select id="selectReviewCount">
 		select count(*)
 		from review
-		where product_no = #{product_no}
+		where product_no = #{product_no} and review_status = 'Y'
 	</select>
 	
 	<insert id="writeExp">
@@ -271,6 +271,7 @@
 			 left join (
 			 			select product_no, count(*) AS review_count
 			 			from review
+			 			where review_status = 'Y'
 			 			group by product_no) r on p.product_no = r.product_no
 		where p.user_no = #{userNo}
 		order by p.product_no
@@ -338,4 +339,16 @@
 		insert into coupon_box
 		values(seq_coupon_box.nextval, default, #{userNo}, #{couponNo})
 	</insert>
+	
+	<update id="editReviewAnswer">
+		update review_answer
+		set review_answer_content = #{reviewAnswerContent}
+		where review_answer_id = #{reviewAnswerId} 
+	</update>
+	
+	<update id="deleteReview">
+		update review
+		set review_status = 'N'
+		where review_no = #{reviewNo}
+	</update>
 </mapper>
