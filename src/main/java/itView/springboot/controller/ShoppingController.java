@@ -20,6 +20,7 @@ import itView.springboot.vo.Cart;
 import itView.springboot.vo.CouponBox;
 import itView.springboot.vo.Order;
 import itView.springboot.vo.OrderCancel;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.User;
 import itView.springboot.vo.Wishlist;
 import jakarta.servlet.http.HttpSession;
@@ -65,12 +66,7 @@ public class ShoppingController {
 		model.addAttribute("olist",olist);
 		return "Shopping/cancelReason";
 	}
-	@GetMapping("detail")
-	public String detail() {
-		
-		
-		return "Shopping/detail";
-	}
+
 
 	
 
@@ -298,5 +294,79 @@ public class ShoppingController {
 	}
 	
 	
+	@GetMapping("payMent")
+	
+	public String selectCartList(@RequestParam("cartNo")List<Integer> cNo,HttpSession session,Model model,@RequestParam("totalPrice") int totalPrice) {
+		User loginUser = (User) session.getAttribute("loginUser");
+		int uNo = loginUser.getUserNo();
+		List<Cart> cList=sService.selectCartList(cNo);
+		
+		model.addAttribute("cList",cList);
+		model.addAttribute("totalPrice",totalPrice);
+		
+		return  "Shopping/payMent";
+	}
+	
+	@GetMapping("directPay")
+	public String directPay(@RequestParam("productNo")int pNo, @RequestParam("amount")int amount,HttpSession session, Model model) {
+		User loginUser = (User) session.getAttribute("loginUser");
+		
+		
+		Product p =sService.directPaySelectProduct(pNo);
+		int totalPrice=p.getProductPrice()*amount;
+		
+		model.addAttribute("product", p);
+		model.addAttribute("amount",amount);
+		model.addAttribute("totalPrice",totalPrice);
+		model.addAttribute("orderType",1);
+		model.addAttribute("user", loginUser);
+		
+		
+		return "Shopping/payMent";
+	}
+	
+	@PostMapping("productToCart")
+	@ResponseBody
+	public int productToCart(@RequestParam("productNo")int pNo, HttpSession session,@RequestParam("amount")int amount) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		int uNo = loginUser.getUserNo();
+		
+		int result=sService.productToCart(pNo,uNo,amount);
+		
+		return result;
+	}
 
+	@GetMapping("detail")
+	public String detail() {
+		
+		
+		
+		return"Shopping/detail";
+	}
+	
+	@PostMapping("addWish")
+	@ResponseBody
+	public int addWish(@RequestParam("productNo")int pNo,HttpSession session, Model model) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		int uNo = loginUser.getUserNo();
+		
+		int result=sService.addWish(uNo,pNo);
+		
+		return result;
+	}
+	
+	@PostMapping("removeWish")
+	@ResponseBody
+	public int removeWish(@RequestParam("productNo")int pNo,HttpSession session, Model model) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		int uNo = loginUser.getUserNo();
+		
+		int result=sService.removeWish(uNo,pNo);
+		
+		return result;
+	}
+	
 }

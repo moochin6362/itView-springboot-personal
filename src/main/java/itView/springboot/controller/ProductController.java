@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import itView.springboot.exception.ProductException;
 import itView.springboot.service.ProductService;
+import itView.springboot.service.ShoppingService;
 import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Coupon;
@@ -39,6 +40,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductController {
 	private final ProductService pService;
+	private final ShoppingService sService;
+
 	private final BCryptPasswordEncoder bcrypt;
 	
 	
@@ -260,7 +263,7 @@ public class ProductController {
 	
 	// 상품 상세페이지 이동
 	@GetMapping("/detail/{productNo}")
-	public String productdetail(@PathVariable("productNo") int productNo, Model model) {
+	public String productdetail(@PathVariable("productNo") int productNo,HttpSession session, Model model) {
 		
 		Product product = new Product();
 		product.setProductNo(productNo);
@@ -300,6 +303,16 @@ public class ProductController {
 			p.setEcoFriendly("일반 제품");
 		}
 		
+		//서연
+		Integer wishlistNo = null;   
+
+		User loginUser = (User) session.getAttribute("loginUser");
+			    
+		if (loginUser != null) {   
+			int uNo = loginUser.getUserNo();
+			wishlistNo = sService.checkWishNo(uNo, productNo); 
+		}
+		
 		model.addAttribute("p", p);
 		model.addAttribute("cList", cList);
 		model.addAttribute("attm", attm);
@@ -307,6 +320,7 @@ public class ProductController {
 		model.addAttribute("reviewCount", reviewCount);
 		model.addAttribute("qList", question);
 		model.addAttribute("aList", answer);
+		model.addAttribute("wishlistNo",wishlistNo);
 		
 		return "Shopping/detail";
 	}

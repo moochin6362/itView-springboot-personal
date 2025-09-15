@@ -18,6 +18,12 @@
 		where c.user_no=#{userNo}
 		order by p.product_company asc, c.cart_no asc
 	</select>
+	
+	<select id="selectProductDetail" resultType="Product">
+		select *
+		from product
+		where product_no=#{productNo}
+	</select>
 	<delete id="productDelete">
 		delete from cart
 		where cart_no=#{cartNo}
@@ -332,5 +338,68 @@
 		VALUES (seq_cancel.NEXTVAL,#{userNo},#{orderNo},#{cancelReason},#{cancelDetail},SYSDATE)
 	</insert>
 	
+	<update id="updateAutoConfirmOrder">
+		update "ORDER"
+		set order_status='confirmed'
+		where order_status='completed' and delivery_status='after'
+			<![CDATA[
+      			and delivery_date <= SYSDATE - (5/24/60)
+      		]]>
 	
+	</update>
+	
+	<update id="updateAutoUpdateDelivery">
+		update "ORDER"
+		set delivery_status= case delivery_status
+								when 'before' THEN 'shipping'
+								when 'shipping'THEN 'after'
+								else delivery_status
+								END,
+			delivery_date = case delivery_status
+								when 'shipping' then SYSDATE
+								else delivery_date
+								END
+		where order_status='completed' and delivery_status!='after'
+		
+	</update>
+	
+	<select id="selectCartList" resultType="Cart">
+		select *
+		from cart c
+		join product p on c.product_no=p.product_no
+		where c.cart_no in
+		<foreach collection="clist" item="cNo" open="(" separator="," close=")">
+			#{cNo}
+		</foreach>
+	</select>
+	
+	<select id="directPaySelectProduct" resultType="Product">
+		select *
+		from product
+		where product_no=#{productNo}
+	</select>
+	
+	<update id="updateCartQty">
+		update cart 
+		set amount =amount+#{amount}
+		where user_no=#{userNo} and product_no=#{productNo}
+	</update>
+	<insert id="insertCart">
+		INSERT INTO CART (CART_NO, AMOUNT, USER_NO, PRODUCT_NO)
+		VALUES (SEQ_CART.NEXTVAL,#{amount},#{userNo},#{productNo})
+	</insert>
+	
+	<select id="checkWishNo" resultType="java.lang.Integer">
+		select wishlist_no
+		from wishlist
+		where user_no=#{userNo} and product_no=#{productNo}
+	</select>
+	<insert id="addWish">
+		INSERT INTO WISHLIST (WISHLIST_NO, WISH_DATE, PRODUCT_NO,USER_NO)
+		VALUES (SEQ_WISHLIST.NEXTVAL,SYSDATE,#{productNo},#{userNo})
+	</insert>
+	<delete id="removeWish">
+		delete from wishlist
+		where user_no=#{userNo} and product_no=#{productNo}
+	</delete>
 </mapper>

@@ -27,6 +27,9 @@ public class Order {
 	private int userNo;
 	private int personalCouponNo;
 	
+	private LocalDate deliveryDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	
 	private int productNo;
 	private String productName;
 	private int productPrice;

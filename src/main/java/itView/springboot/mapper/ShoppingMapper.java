@@ -14,6 +14,7 @@ import itView.springboot.vo.Cart;
 import itView.springboot.vo.CouponBox;
 import itView.springboot.vo.Order;
 import itView.springboot.vo.OrderCancel;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.Wishlist;
 
 
@@ -61,6 +62,29 @@ public interface ShoppingMapper {
 
 
 	int insertCancel(OrderCancel cancel);
+
+	int updateAutoConfirmOrder();
+
+	int updateAutoUpdateDelivery();
+
+	List<Cart> selectCartList(List<Integer> cNo);
+
+	Product directPaySelectProduct(int pNo);
+
+	int updateCartQty(@Param("productNo") int pNo, @Param("userNo") int uNo, @Param("amount") int amount);
+
+	int insertCart(@Param("productNo") int pNo, @Param("userNo") int uNo, @Param("amount") int amount);
+
+	int addWish(@Param("userNo") int uNo, @Param("productNo") int pNo);
+
+	int removeWish(@Param("userNo") int uNo, @Param("productNo") int pNo);
+
+	Integer checkWishNo(@Param("userNo") int uNo, @Param("productNo") int productNo);
+
+
+	
+
+	
 
 
 

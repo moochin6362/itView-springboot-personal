@@ -12,6 +12,7 @@ import itView.springboot.vo.Cart;
 import itView.springboot.vo.CouponBox;
 import itView.springboot.vo.Order;
 import itView.springboot.vo.OrderCancel;
+import itView.springboot.vo.Product;
 import itView.springboot.vo.Wishlist;
 import lombok.RequiredArgsConstructor;
 
@@ -118,6 +119,73 @@ public class ShoppingService {
 		// TODO Auto-generated method stub
 		return mapper.insertCancel(cancel);
 	}
+
+	public int updateAutoConfirmOrder() {
+		// TODO Auto-generated method stub
+		return mapper.updateAutoConfirmOrder();
+	}
+
+	public int updateAutoUpdateDelivery() {
+		// TODO Auto-generated method stub
+		return mapper.updateAutoUpdateDelivery();
+	}
+
+	
+	public List<Cart> selectCartList(List<Integer> cNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectCartList(cNo);
+	}
+
+	public Product directPaySelectProduct(int pNo) {
+		// TODO Auto-generated method stub
+		return mapper.directPaySelectProduct(pNo);
+	}
+
+
+	public int productToCart(int pNo, int uNo, int amount) {
+		int exist = mapper.checkCart(uNo, pNo);
+		 if (exist > 0) {
+	            return mapper.updateCartQty(pNo, uNo, amount);
+	        }else {
+	        	return mapper.insertCart(pNo, uNo, amount);
+	        }
+		
+	}
+
+	public Integer checkWishNo(int uNo, int productNo) {
+		// TODO Auto-generated method stub
+		return mapper.checkWishNo(uNo, productNo);
+	}
+
+	public int addWish(int uNo, int pNo) {
+		Integer exist = mapper.checkWishNo(uNo, pNo);
+		if (exist != null && exist >0) {
+			return exist;
+		}
+		int result=mapper.addWish(uNo,pNo);
+		if(result>0) {
+			
+			return mapper.checkWishNo(uNo, pNo);
+		}
+		return 0;
+	}
+
+	public int removeWish(int uNo, int pNo) {
+		int result = mapper.removeWish(uNo, pNo);
+		if (result > 0) {
+			return 1;
+		}
+		return -1;
+	}
+
+	
+
+	
+
+	
+
+	
+	
 
 	
 	
