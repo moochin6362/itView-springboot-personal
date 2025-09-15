@@ -3,13 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>footer</title>
+    <style>
+        footer {
+            background-color: #2b2b2b; /* 회색에 가까운 검은색 */
+            color: #e0e0e0; /* 옅은 회색 글씨 */
+        }
+        footer a {
+            color: #bdbdbd;
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
-        <!-- 푸터 -->
-        <footer class="py-4">
-            <div class="container text-center">
-                <p>© 2025 쇼핑몰 예제. All rights reserved.</p>
-            </div>
-        </footer>
+<!-- 푸터 -->
+<footer class="py-5 border-top">
+    <div class="container text-center">
+        <h5 class="fw-bold mb-3">it:view</h5>
+        <p class="mb-1">세상의 모든 IT를 바라보다, it:view</p>
+
+        <div class="d-flex justify-content-center gap-3 my-3">
+            <a href="/terms">이용약관</a>
+            <a href="/privacy">개인정보처리방침</a>
+            <a href="/cs">고객센터</a>
+        </div>
+
+        <p class="small mb-0">
+            © 2025 it:view. All rights reserved.<br>
+            사업자등록번호: 123-45-67890 | 대표: 홍길동 | 서울특별시 강남구 테크로 123
+        </p>
+
+        <div class="mt-3">
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a> |
+            <a href="https://youtube.com" target="_blank">YouTube</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>쇼핑몰 예제</title>
+    <title>it:view</title>
 
     <style>
         /* 캐러셀 */
         #heroCarousel .carousel-item img {
-            /*border: 3px solid #34e5eb;*/
             border-radius: 10px;
             height: 500px;
             object-fit: cover;
@@ -22,51 +21,55 @@
             background-size: 100%, 100%;
         }
 
-
         /* 상품 카드 */
         .product-card {
-        border: 1px solid #e3e3e3;
-        border-radius: 10px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        background-color: #fff;
-        text-align: center;
-        padding: 10px;
-        position: relative;
-    }
+            border: 1px solid #e3e3e3;
+            border-radius: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
 
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
 
-    .product-image {
-        height: 180px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        overflow: hidden;
-    }
+        .product-image {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-    .product-image img {
-        max-height: 100%;
-        max-width: 100%;
-        object-fit: contain;
-    }
+        .product-image img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
 
-    .badge {
-        font-size: 0.7rem;
-        padding: 0.3em 0.5em;
-        border-radius: 5px;
-    }
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.3em 0.5em;
+            border-radius: 5px;
+        }
 
-    .price {
-        font-size: 0.9rem;
-    }
+        .price {
+            font-size: 0.9rem;
+        }
 
-
+        /* 판매중지일 때 카드 전체를 회색 톤으로 */
+        .disabled-card {
+            background-color: #f0f0f0 !important;
+            opacity: 0.7;
+            pointer-events: none; /* 클릭 막기 원하면 유지 */
+        }
     </style>
 </head>
 <body>
@@ -83,25 +86,19 @@
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="5000">
-            <img
-                    src="https://m.ones11.com/web/mobile/newDesign/208428674649cf3b4322fd.jpg"
-                    class="d-block w-100"
-                    alt="배너1"
-            />
+            <img src="https://m.ones11.com/web/mobile/newDesign/208428674649cf3b4322fd.jpg"
+                 class="d-block w-100"
+                 alt="배너1"/>
         </div>
         <div class="carousel-item" data-bs-interval="5000">
-            <img
-                    src="https://m.lalucell.com/_images/sub1_02.jpg"
-                    class="d-block w-100"
-                    alt="배너2"
-            />
+            <img src="https://m.lalucell.com/_images/sub1_02.jpg"
+                 class="d-block w-100"
+                 alt="배너2"/>
         </div>
         <div class="carousel-item" data-bs-interval="5000">
-            <img
-                    src="https://m.ones11.com/web/mobile/newDesign/1351581951649cf3b433199.jpg"
-                    class="d-block w-100"
-                    alt="배너3"
-            />
+            <img src="https://m.ones11.com/web/mobile/newDesign/1351581951649cf3b433199.jpg"
+                 class="d-block w-100"
+                 alt="배너3"/>
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
@@ -116,10 +113,13 @@
     <h2 class="mb-4">등록된 상품</h2>
     <h2 class="mb-4">최신 상품</h2>
     <div class="row g-4">
+
         <div class="col-md-3" th:each="product : ${products}">
             <!-- 제품 카드 전체를 링크로 -->
-            <a th:href="@{'/product/detail/' + ${product.productNo}}" class="text-decoration-none text-dark">
-                <div class="product-card position-relative p-2">
+            <a th:href="@{'/product/detail/' + ${product.productNo}}"
+               class="text-decoration-none text-dark">
+                <div class="product-card position-relative p-2"
+                     th:classappend="${product.productState == 'N' and product.productStock > 0} ? ' disabled-card' : ''">
 
                     <!-- 이미지 -->
                     <div class="product-image mb-2">
@@ -136,15 +136,26 @@
 
                     <!-- 가격 -->
                     <div class="price mb-2">
-                        <span class="fw-bold text-danger" th:text="${product.productPrice} + '원'"></span>
+                        <span th:if="${product.productStock != 0 and product.productState == 'Y'}"
+                                class="fw-bold text-danger" th:text="${product.productPrice} + '원'"></span>
+
+                        <!-- 상태 배지 -->
+                        <div>
+                        <span class="badge bg-danger"
+                              th:if="${product.productStock == 0 and product.productState == 'N'}">일시품절</span>
+
+                            <span class="badge bg-secondary"
+                                  th:if="${product.productStock > 0 and product.productState == 'N'}">판매중지</span>
+                        </div>
+
                     </div>
 
                 </div>
             </a>
         </div>
+
     </div>
 </section>
-
 
 <div th:replace="~{common/footer :: footer}"></div>
 

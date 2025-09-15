@@ -93,6 +93,8 @@
 		p.PRODUCT_NAME,
 		p.PRODUCT_DETAIL,
 		p.PRODUCT_PRICE,
+		p.PRODUCT_STOCK,
+		p.PRODUCT_STATE,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -110,6 +112,8 @@
 		p.PRODUCT_DETAIL,
 		p.PRODUCT_PRICE,
 		p.PRODUCT_COMPANY,
+		p.PRODUCT_STOCK,
+		p.PRODUCT_STATE,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -120,7 +124,15 @@
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
 			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_CATEGORY LIKE '%' || #{q} || '%'
+			OR p.SKIN_TYPE LIKE '%' || #{q} || '%'
+			OR p.PERSONAL_COLOR LIKE '%' || #{q} || '%'
+			OR p.SKIN_TROUBLE LIKE '%' || #{q} || '%'
+			OR p.HEAD_SKIN LIKE '%' || #{q} || '%'
+			OR p.USER_AGE LIKE '%' || #{q} || '%'
+			OR p.GENDER LIKE '%' || #{q} || '%'
+			OR p.INGREDIENT LIKE '%' || #{q} || '%' )
 		</if>
 		ORDER BY p.PRODUCT_NO DESC
 	</select>
@@ -133,6 +145,8 @@
 		p.PRODUCT_PRICE,
 		p.PRODUCT_CATEGORY,
 		p.PRODUCT_COMPANY,
+		p.PRODUCT_STOCK,
+		p.PRODUCT_STATE,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -143,7 +157,15 @@
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
 			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_CATEGORY LIKE '%' || #{q} || '%'
+			OR p.SKIN_TYPE LIKE '%' || #{q} || '%'
+			OR p.PERSONAL_COLOR LIKE '%' || #{q} || '%'
+			OR p.SKIN_TROUBLE LIKE '%' || #{q} || '%'
+			OR p.HEAD_SKIN LIKE '%' || #{q} || '%'
+			OR p.USER_AGE LIKE '%' || #{q} || '%'
+			OR p.GENDER LIKE '%' || #{q} || '%'
+			OR p.INGREDIENT LIKE '%' || #{q} || '%' )
 		</if>
 		<if test="categories != null and categories.size() > 0">
 			AND p.PRODUCT_CATEGORY IN
@@ -161,7 +183,15 @@
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
 			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_CATEGORY LIKE '%' || #{q} || '%'
+			OR p.SKIN_TYPE LIKE '%' || #{q} || '%'
+			OR p.PERSONAL_COLOR LIKE '%' || #{q} || '%'
+			OR p.SKIN_TROUBLE LIKE '%' || #{q} || '%'
+			OR p.HEAD_SKIN LIKE '%' || #{q} || '%'
+			OR p.USER_AGE LIKE '%' || #{q} || '%'
+			OR p.GENDER LIKE '%' || #{q} || '%'
+			OR p.INGREDIENT LIKE '%' || #{q} || '%' )
 		</if>
 		<if test="categories != null and categories.size() > 0">
 			AND p.PRODUCT_CATEGORY IN
@@ -179,7 +209,15 @@
 		<if test="q != null and q != ''">
 			AND (p.PRODUCT_NAME LIKE '%' || #{q} || '%'
 			OR p.PRODUCT_DETAIL LIKE '%' || #{q} || '%'
-			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%')
+			OR p.PRODUCT_COMPANY LIKE '%' || #{q} || '%'
+			OR p.PRODUCT_CATEGORY LIKE '%' || #{q} || '%'
+			OR p.SKIN_TYPE LIKE '%' || #{q} || '%'
+			OR p.PERSONAL_COLOR LIKE '%' || #{q} || '%'
+			OR p.SKIN_TROUBLE LIKE '%' || #{q} || '%'
+			OR p.HEAD_SKIN LIKE '%' || #{q} || '%'
+			OR p.USER_AGE LIKE '%' || #{q} || '%'
+			OR p.GENDER LIKE '%' || #{q} || '%'
+			OR p.INGREDIENT LIKE '%' || #{q} || '%' )
 		</if>
 	</select>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>쇼핑몰 예제</title>
+    <title>커뮤니티 상세</title>
 
     <style>
         /* 본문 */
@@ -159,7 +159,6 @@
                     삭제
                 </button>
 
-                게시글 신고 버튼
                 <div th:if="${session.loginUser != null and session.loginUser.userNo != community.userNo}">
 				    <button
 				        type="button"
