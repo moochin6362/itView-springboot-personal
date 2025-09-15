@@ -65,7 +65,8 @@
 		                       	</a>
 		                       </td>
 		                       <td>관리자</td>
-		                       <td th:text="${#dates.format(pro.boardDate,'yyyy-MM-dd')}"></td>
+		                      <td th:text="${#temporals.format(pro.boardDate, 'yyyy-MM-dd')}"></td>
+
 		                   </tr>
 		               </tbody>
 		           </table>
