@@ -608,7 +608,42 @@ SELECT *
  			
 </update>
 
-
+<!-- 신고게시글 삭제 -->
+<update id="deleteBoardByNo">
+UPDATE board
+SET board_status = 'N'
+WHERE board_id = (
+    SELECT report_target_no
+    FROM report
+    WHERE report_type = 'B'
+      AND report_target_no = #{boardId}
+    FETCH FIRST 1 ROWS ONLY
+)
+</update>
+ <!-- 신고리뷰 삭제 -->
+ <update id="deleteReviewByNo">
+ UPDATE review
+ SET review_status = 'N'
+ WHERE review_no = (
+    SELECT report_target_no
+    FROM report
+    WHERE report_type = 'R'
+      AND report_target_no = #{reviewNo}
+    FETCH FIRST 1 ROWS ONLY
+)
+ </update>
+ <!-- 신고댓글 삭제 -->
+ <update id="deleteReplyByNo">
+ UPDATE reply
+ SET reply_status = 'N'
+ WHERE reply_no = (
+    SELECT report_target_no
+    FROM report
+    WHERE report_type = 'V'
+      AND report_target_no = #{replyNo}
+    FETCH FIRST 1 ROWS ONLY
+)
+ </update>
 
 
 

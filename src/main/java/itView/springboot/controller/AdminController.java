@@ -467,6 +467,66 @@ public class AdminController {
         }
     }
 	
+	//게시글 삭제(update N)
+	@PostMapping("deleteBoard")
+	@ResponseBody
+	public ResponseEntity<String> deleteReportBoard(
+			@RequestParam("boardId") int boardId){
+		try {
+            int result = adService.deleteBoardByNo(boardId); 
+            if (result > 0) {
+                return ResponseEntity.ok("게시글을 삭제하였습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                     .body("게시글 삭제 실패");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("게시글 삭제를 실패하였습니다.");
+        }
+	}
+	//후기 삭제(update N)
+	@PostMapping("deleteReview")
+	@ResponseBody
+	public ResponseEntity<String> deleteReportReview(
+			@RequestParam("reviewNo") Integer reviewNo){
+		try {
+            int result = adService.deleteReviewByNo(reviewNo); 
+            if (result > 0) {
+                return ResponseEntity.ok("리뷰를 삭제하였습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                     .body("리뷰 삭제 실패");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("리뷰 삭제를 실패하였습니다.");
+        }
+	}
+	
+	//댓글 삭제
+	@PostMapping("deleteReply")
+	@ResponseBody
+	public ResponseEntity<String> deleteReportReply(
+			@RequestParam("replyNo") int replyNo){
+		try {
+            int result = adService.deleteReplyByNo(replyNo); 
+            if (result > 0) {
+                return ResponseEntity.ok("댓글을 삭제하였습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                     .body("댓글 삭제 실패");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("댓글 삭제를 실패하였습니다.");
+        }
+	}
+	
+	
 	//회원 기간 정지 + 복구
 	@PostMapping("/stopUser")
 	public String stopUser(

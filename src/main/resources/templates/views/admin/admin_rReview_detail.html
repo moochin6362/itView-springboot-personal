@@ -25,7 +25,7 @@
                 <div class="main-content">
 	                <div class="main-section">
 	                    <h2 class="page-title">신고리뷰 상세정보</h2>
-	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
+	                    <form id="rv-detailForm" method="post">
 	                    	<input type="hidden" name="reviewNo" th:value="${rv.reviewNo}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
@@ -52,14 +52,13 @@
 	                    </table>
 	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
 						<div class="stop-period-section" style="margin-bottom: 10px;">
-						    <label class="page-title">리뷰 정지</label>
+						    <label class="page-title">리뷰 관리</label>
 						    <div style="margin-top: 10px;"></div>
 						</div>
 	                    
 	                    <div class="form-actions">
-	                        <button class="btn-submit">리뷰 숨기기</button>
-	                        <button type="button" id="deleteBtn" class="btn-reset">삭제</button>
-	                        <button type="button" class="btn-reset" onclick="history.back()">취소</button>
+	                        <button type="button" id="rv-deleteBtn" class="rv-btn-reset">삭제</button>
+	                        <button type="button" class="rv-btn-reset" onclick="history.back()">취소</button>
 	                    </div>
 	                    </form>
 	                </div>

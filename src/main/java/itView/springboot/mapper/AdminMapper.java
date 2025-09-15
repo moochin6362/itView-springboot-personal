@@ -154,11 +154,20 @@ public interface AdminMapper {
 	int getReplyReportCount(Integer replyNo);
 	ArrayList<Report> getReplyReportList(RowBounds rowBounds, Integer replyNo);
 
+	
+	
 	//회원삭제(그냥 update N)
 	int deleteUserByNo(int userNo);
 	//회원정지(기간있는거)
 	int updateReportUserEndDate(Map<String, Object> map);
 	int stopUser(int userNo);
+
+	//게시글 삭제
+	int deleteBoardByNo(int boardId);
+
+	int deleteReviewByNo(Integer reviewNo);
+
+	int deleteReplyByNo(int replyNo);
 
 
 	

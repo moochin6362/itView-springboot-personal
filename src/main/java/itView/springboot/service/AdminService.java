@@ -286,6 +286,19 @@ public class AdminService {
 		return mapper.stopUser(userNo);
 	}
 
+	//신고글 삭제
+	public int deleteBoardByNo(int boardId) {
+		return mapper.deleteBoardByNo(boardId);
+	}
+
+	public int deleteReviewByNo(Integer reviewNo) {
+		return mapper.deleteReviewByNo(reviewNo);
+	}
+
+	public int deleteReplyByNo(int replyNo) {
+		return mapper.deleteReplyByNo(replyNo);
+	}
+
 
 
 

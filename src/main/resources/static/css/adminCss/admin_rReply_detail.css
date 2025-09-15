@@ -156,9 +156,8 @@ html {
     margin-top: 25px;
 }
 
-.board-btn-submit,
-.board-deleteBtn,
-.board-btn-reset {
+.rp-btn-submit,
+.rp-btn-reset {
     padding: 12px 28px;
     margin: 0 10px;
     font-size: 15px;
@@ -171,21 +170,21 @@ html {
 }
 
 /* 수정 버튼 */
-.board-btn-submit {
+.rp-btn-submit {
     background: linear-gradient(135deg, #34e5eb, #34e5eb);
     color: white;
 }
-.board-btn-submit:hover {
+.rp-btn-submit:hover {
     background: linear-gradient(135deg, #83dbe0,#83dbe0);
     transform: translateY(-2px);
 }
 
 /* 삭제/취소 버튼 */
-.board-btn-reset {
+.rp-btn-reset {
     background: linear-gradient(135deg, #34e5eb, #34e5eb);
     color: white;
 }
-.board-btn-reset:hover {
+.rp-btn-reset:hover {
     background: linear-gradient(135deg, #83dbe0,#83dbe0);
     cursor : pointer;
 }
