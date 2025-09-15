@@ -75,7 +75,7 @@ public class AdminService {
 	public Integer pBoardListCount(int boardType) {
 		return mapper.pBoardListCount(boardType);
 	}
-	public ArrayList<Board> selectpBoardList(PageInfo pi) {
+	public ArrayList<GboardDetail> selectpBoardList(PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectpBoardList(rowBounds);

@@ -1,5 +1,5 @@
 
-const title = document.querySelectorAll("#admin-partBoard-table-body td:nth-child(2)");
+const title = document.querySelectorAll("#admin-partBoard-table-body td:nth-child(2) a");
 title.forEach(cell => {
   const maxLength = 30; 
   if(cell.textContent.length > maxLength){
