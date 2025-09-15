@@ -171,64 +171,77 @@
     ORDER BY r."REVIEW_DATE" DESC
   </select>
 
-  <!-- 보유 포인트: USER.USER_POINT -->
-  <select id="selectPointBalance" parameterType="long" resultType="int">
-    SELECT NVL(u."USER_POINT", 0) AS balance
-      FROM "USER" u
-     WHERE u."USER_NO" = #{userNo}
+  <!-- =========================
+       포인트(POINT_BOX)로 전환
+       ========================= -->
+
+  <!-- 잔액: 사용(음수) 포함 합계 -->
+  <select id="selectPointBalanceBox" parameterType="long" resultType="int">
+    SELECT NVL(SUM(b."POINT_VALUE"), 0) AS balance
+      FROM "POINT_BOX" b
+     WHERE b."USER_NO" = #{userNo}
   </select>
 
-  <!-- 포인트 이력: POINT 테이블 -->
-  <select id="selectPointHistory" parameterType="long" resultType="itView.springboot.vo.Point">
+  <!-- 내역: POINT_BOX → PointBox VO로 매핑 -->
+  <select id="selectPointHistoryBox" parameterType="long" resultType="itView.springboot.vo.PointBox">
     SELECT
-      p."POINT_NO"        AS pointNo,
-      p."POINT_NAME"      AS pointName,
-      p."POINT_DESCRIPTION" AS pointDescription,
-      p."POINT_VALUE"     AS pointValue,
-      p."POINT_CREATEDATE"AS pointCreatedate,
-      p."POINT_ENDDATE"   AS pointEnddate,
-      p."USER_NO"         AS userNo
-    FROM "POINT" p
-    WHERE p."USER_NO" = #{userNo}
-    ORDER BY p."POINT_CREATEDATE" DESC, p."POINT_NO" DESC
+      b."POINT_NO"        AS pointNo,
+      b."USER_NO"         AS userNo,
+      b."POINT_NAME"      AS pointName,
+      b."POINT_DESCRIPTION" AS pointDescription,
+      b."POINT_VALUE"     AS pointValue,
+      b."POINT_CREATEDATE" AS pointCreatedate,
+      b."POINT_ENDDATE"   AS pointEnddate
+    FROM "POINT_BOX" b
+    WHERE b."USER_NO" = #{userNo}
+    ORDER BY b."POINT_CREATEDATE" DESC, b."POINT_NO" DESC
   </select>
 
-  <!-- 보유 쿠폰 -->
-  	<!-- 보유 쿠폰: COUPON_BOX(수령자) + COUPON(쿠폰 정보)
-     - 미사용/사용가능(기간 내, 상태 Y) 만 노출
--->
-<!-- 보유 쿠폰: COUPON_BOX(수령자) + COUPON(쿠폰 정보) -->
-<select id="selectMyCoupons" parameterType="long" resultType="itView.springboot.vo.Coupon"><![CDATA[
-  SELECT
-    -- 개인 보유 식별자(VO에 없어도 무시됨. 필요하면 VO에 추가)
-    cb."PERSONAL_COUPON_NO" AS personalCouponNo,
-    cb."COUPON_USED"        AS couponUsed,
+  <!-- 지급/차감 1건 기록 (+적립/-차감) -->
+  <insert id="insertPointBox" parameterType="itView.springboot.vo.PointBox">
+    INSERT INTO "POINT_BOX"(
+      "POINT_NO","USER_NO","POINT_NAME","POINT_DESCRIPTION",
+      "POINT_VALUE","POINT_CREATEDATE","POINT_ENDDATE"
+    ) VALUES (
+      SEQ_POINT_BOX.NEXTVAL,
+      #{userNo},
+      #{pointName},
+      #{pointDescription},
+      #{pointValue},
+      SYSDATE,
+      #{pointEnddate, jdbcType=DATE}
+    )
+  </insert>
 
-    -- 쿠폰 정보
-    c."COUPON_NO"           AS couponNo,
-    c."COUPON_NAME"         AS couponName,
-    c."COUPON_DESCRIPTION"  AS couponDescription,
-    c."COUPON_TARGET"       AS couponTarget,
-    c."COUPON_DISCOUNT"     AS couponDiscount,
-    c."COUPON_STARTDATE"    AS couponStartdate,
-    c."COUPON_ENDDATE"      AS couponEnddate,
-    c."COUPON_CREATEDATE"   AS couponCreatedate,
-    c."COUPON_MINPRICE"     AS couponMinprice,
-    c."COUPON_STATUS"       AS couponStatus
-  FROM "COUPON_BOX" cb
-  JOIN "COUPON" c
-    ON c."COUPON_NO" = cb."COUPON_NO"
-  WHERE cb."USER_NO" = #{userNo}
-    AND cb."COUPON_USED" = 'N'
-    AND c."COUPON_STATUS" = 'Y'
-    AND c."COUPON_STARTDATE" <= SYSDATE
-    AND (c."COUPON_ENDDATE" IS NULL OR c."COUPON_ENDDATE" >= TRUNC(SYSDATE))
-  ORDER BY
-    NVL(c."COUPON_ENDDATE", DATE '9999-12-31') ASC,
-    c."COUPON_CREATEDATE" DESC,
-    c."COUPON_NO" DESC
-]]></select>
+  <!-- 보유 쿠폰: COUPON_BOX(수령자) + COUPON(쿠폰 정보) -->
+  <select id="selectMyCoupons" parameterType="long" resultType="itView.springboot.vo.Coupon"><![CDATA[
+    SELECT
+      cb."PERSONAL_COUPON_NO" AS personalCouponNo,
+      cb."COUPON_USED"        AS couponUsed,
 
+      c."COUPON_NO"           AS couponNo,
+      c."COUPON_NAME"         AS couponName,
+      c."COUPON_DESCRIPTION"  AS couponDescription,
+      c."COUPON_TARGET"       AS couponTarget,
+      c."COUPON_DISCOUNT"     AS couponDiscount,
+      c."COUPON_STARTDATE"    AS couponStartdate,
+      c."COUPON_ENDDATE"      AS couponEnddate,
+      c."COUPON_CREATEDATE"   AS couponCreatedate,
+      c."COUPON_MINPRICE"     AS couponMinprice,
+      c."COUPON_STATUS"       AS couponStatus
+    FROM "COUPON_BOX" cb
+    JOIN "COUPON" c
+      ON c."COUPON_NO" = cb."COUPON_NO"
+    WHERE cb."USER_NO" = #{userNo}
+      AND cb."COUPON_USED" = 'N'
+      AND c."COUPON_STATUS" = 'Y'
+      AND c."COUPON_STARTDATE" <= SYSDATE
+      AND (c."COUPON_ENDDATE" IS NULL OR c."COUPON_ENDDATE" >= TRUNC(SYSDATE))
+    ORDER BY
+      NVL(c."COUPON_ENDDATE", DATE '9999-12-31') ASC,
+      c."COUPON_CREATEDATE" DESC,
+      c."COUPON_NO" DESC
+  ]]></select>
 
   <!-- 최근 찜 3개 -->
   <select id="selectTop3WishlistMap" parameterType="long" resultType="map">
@@ -372,111 +385,106 @@
     )
   </insert>
   
-  <!-- 내가 당첨된 체험단 + 모집글 정보 + 썸네일 -->
-	<!-- 내 신청(선정대기/당첨/미선정 모두) + 모집글 + 썸네일 -->
-<select id="selectExperienceWins" parameterType="long" resultType="map"><![CDATA[
+  <!-- MyMapper.xml (체험단 섹션 근처에 추가) -->
+	<select id="selectExperienceByNo"
+	        parameterType="int"
+	        resultType="itView.springboot.vo.ExperienceGroup">
 	  SELECT
-	    ea."APPLY_NO"        AS "applyNo",
-	    ea."EXP_GROUP_NO"    AS "expGroupNo",
-	    ea."USER_NO"         AS "userNo",
-	    TRIM(ea."IS_CHOICE") AS "winStatusCode",  -- Y / R / N or NULL
-	
-	    ea."APPLY_CONTENT"   AS "applyContent",
-	
-	    eg."EXP_TITLE"       AS "expTitle",
-	    eg."EXP_CONTENT"     AS "expContent",
-	    eg."EXP_START"       AS "expStart",
-	    eg."EXP_END"         AS "expEnd",
-	    eg."EXP_TITLE"       AS "productName",
-	
-	    CASE TRIM(ea."IS_CHOICE")
-	      WHEN 'Y' THEN '당첨'
-	      WHEN 'R' THEN '미선정'
-	      ELSE '선정대기'
-	    END                  AS "winStatusName",
-	
-	    CASE
-	      WHEN a."ATTM_RENAME" IS NOT NULL
-	        THEN '/uploadFilesFinal/product/' || a."ATTM_RENAME"
-	      ELSE '/uploadFilesFinal/default-product.png'
-	    END                  AS "productImageUrl"
-	
-	  FROM "EXPERIENCE_APPLICATION" ea
-	  JOIN "EXPERIENCE_GROUP" eg
-	    ON eg."EXP_NO" = ea."EXP_GROUP_NO"
-	  LEFT JOIN (
-	    SELECT x."POSITION_NO", x."ATTM_RENAME",
-	           ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
-	                              ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC) rn
-	      FROM "ATTACHMENT" x
-	     WHERE x."ATTM_POSITION" = 5
-	       AND x."ATTM_LEVEL"    = 0
-	       AND x."ATTM_STATUS"   = 'Y'
-	  ) a ON a."POSITION_NO" = eg."EXP_NO" AND a.rn = 1
-	  WHERE ea."USER_NO" = #{userNo}
-	  ORDER BY ea."APPLY_NO" DESC
-	]]></select>
-	
-	<!-- MyMapper.xml (추가) -->
-<insert id="insertQuestion" parameterType="itView.springboot.vo.Question">
-  INSERT INTO "QUESTION"(
-    "QUESTION_NO",
-    "QUESTION_TITLE",
-    "QUESTION_CONTENT",
-    "QUESTION_STATUS",
-    "USER_NO",
-    "PRODUCT_NO"
-  ) VALUES (
-    SEQ_QUESTION.NEXTVAL,
-    #{questionTitle},
-    #{questionContent},
-    NVL(#{questionStatus}, 'N'),
-    #{userNo},
-    #{productNo}
-  )
-</insert>
-	
-	<!-- MyMapper.xml -->
-		<select id="selectOrderedProductsWithAttributes" parameterType="long" resultType="map">
-		  SELECT
-		      p.PRODUCT_NO      AS productNo,
-		      p.PRODUCT_NAME    AS productName,
-		        NVL(p.SKIN_TYPE,'')       AS SKINTYPE,
-				NVL(p.PERSONAL_COLOR,'')  AS PERSONALCOLOR,
-				NVL(p.SKIN_TROUBLE,'')    AS SKINTROUBLE,
-				NVL(p.USER_AGE,'')        AS TARGETAGE,
-				NVL(p.GENDER,'')          AS TARGETGENDER,
-
-		      MAX(o.ORDER_DATE)         AS LastOrderDate
-		  FROM PRODUCT p
-		  JOIN "ORDER" o ON o.ORDER_TARGET_NO = p.PRODUCT_NO
-		  WHERE o.USER_NO = #{userNo}
-		  GROUP BY p.PRODUCT_NO, p.PRODUCT_NAME, p.SKIN_TYPE, p.PERSONAL_COLOR, 
-		           p.SKIN_TROUBLE, p.USER_AGE, p.GENDER
-		  ORDER BY MAX(o.ORDER_DATE) DESC
-		</select>
-	
-	<insert id="insertPoint" parameterType="itView.springboot.vo.Point">
-	  INSERT INTO "POINT"(
-	    "POINT_NO",
-	    "POINT_NAME",
-	    "POINT_DESCRIPTION",
-	    "POINT_VALUE",
-	    "POINT_CREATEDATE",
-	    "POINT_ENDDATE",
-	    "USER_NO"
-	  ) VALUES (
-	    SEQ_POINT.NEXTVAL,
-	    #{pointName},
-	    #{pointDescription},
-	    #{pointValue},
-	    SYSDATE,
-	    #{pointEnddate, jdbcType=DATE},
-	    #{userNo}
-	  )
-	</insert>
-	
-  	
+	    eg."EXP_NO"      AS expNo,
+	    eg."EXP_TITLE"   AS expTitle,
+	    eg."EXP_CONTENT" AS expContent,
+	    eg."EXP_START"   AS expStart,
+	    eg."EXP_END"     AS expEnd,
+	    eg."EXP_STATUS"  AS expStatus,
+	    eg."USER_NO"     AS userNo
+	  FROM "EXPERIENCE_GROUP" eg
+	  WHERE eg."EXP_NO" = #{expNo}
+	</select>
   
+
+  <!-- 내 신청(선정대기/당첨/미선정 모두) + 모집글 + 썸네일 -->
+  <select id="selectExperienceWins" parameterType="long" resultType="map"><![CDATA[
+    SELECT
+      ea."APPLY_NO"        AS "applyNo",
+      ea."EXP_GROUP_NO"    AS "expGroupNo",
+      ea."USER_NO"         AS "userNo",
+      TRIM(ea."IS_CHOICE") AS "winStatusCode",
+
+      ea."APPLY_CONTENT"   AS "applyContent",
+
+      eg."EXP_TITLE"       AS "expTitle",
+      eg."EXP_CONTENT"     AS "expContent",
+      eg."EXP_START"       AS "expStart",
+      eg."EXP_END"         AS "expEnd",
+      eg."EXP_TITLE"       AS "productName",
+
+      CASE TRIM(ea."IS_CHOICE")
+        WHEN 'Y' THEN '당첨'
+        WHEN 'R' THEN '미선정'
+        ELSE '선정대기'
+      END                  AS "winStatusName",
+
+      CASE
+        WHEN a."ATTM_RENAME" IS NOT NULL
+          THEN '/uploadFilesFinal/product/' || a."ATTM_RENAME"
+        ELSE '/uploadFilesFinal/default-product.png'
+      END                  AS "productImageUrl"
+
+    FROM "EXPERIENCE_APPLICATION" ea
+    JOIN "EXPERIENCE_GROUP" eg
+      ON eg."EXP_NO" = ea."EXP_GROUP_NO"
+    LEFT JOIN (
+      SELECT x."POSITION_NO", x."ATTM_RENAME",
+             ROW_NUMBER() OVER (PARTITION BY x."POSITION_NO"
+                                ORDER BY x."ATTM_DATE" DESC, x."ATTM_NO" DESC) rn
+        FROM "ATTACHMENT" x
+       WHERE x."ATTM_POSITION" = 5
+         AND x."ATTM_LEVEL"    = 0
+         AND x."ATTM_STATUS"   = 'Y'
+    ) a ON a."POSITION_NO" = eg."EXP_NO" AND a.rn = 1
+    WHERE ea."USER_NO" = #{userNo}
+    ORDER BY ea."APPLY_NO" DESC
+  ]]></select>
+
+  <!-- 상품 문의 저장 -->
+  <insert id="insertQuestion" parameterType="itView.springboot.vo.Question">
+    INSERT INTO "QUESTION"(
+      "QUESTION_NO",
+      "QUESTION_TITLE",
+      "QUESTION_CONTENT",
+      "QUESTION_STATUS",
+      "USER_NO",
+      "PRODUCT_NO"
+    ) VALUES (
+      SEQ_QUESTION.NEXTVAL,
+      #{questionTitle},
+      #{questionContent},
+      NVL(#{questionStatus}, 'N'),
+      #{userNo},
+      #{productNo}
+    )
+  </insert>
+
+  <!-- 주문한 상품 + 속성 (매칭률용) -->
+  <select id="selectOrderedProductsWithAttributes" parameterType="long" resultType="map">
+    SELECT
+      p.PRODUCT_NO      AS productNo,
+      p.PRODUCT_NAME    AS productName,
+      NVL(p.SKIN_TYPE,'')       AS SKINTYPE,
+      NVL(p.PERSONAL_COLOR,'')  AS PERSONALCOLOR,
+      NVL(p.SKIN_TROUBLE,'')    AS SKINTROUBLE,
+      NVL(p.USER_AGE,'')        AS TARGETAGE,
+      NVL(p.GENDER,'')          AS TARGETGENDER,
+      MAX(o.ORDER_DATE)         AS LastOrderDate
+    FROM PRODUCT p
+    JOIN "ORDER" o ON o.ORDER_TARGET_NO = p.PRODUCT_NO
+    WHERE o.USER_NO = #{userNo}
+    GROUP BY p.PRODUCT_NO, p.PRODUCT_NAME, p.SKIN_TYPE, p.PERSONAL_COLOR, 
+             p.SKIN_TROUBLE, p.USER_AGE, p.GENDER
+    ORDER BY MAX(o.ORDER_DATE) DESC
+  </select>
+  
+	 
+	  
 
 </mapper>

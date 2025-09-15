@@ -17,4 +17,6 @@ public class ExperienceApplication {
 	private String applyContent;
 	private String userName;
 	private String expTitle;
+	
+	
 }

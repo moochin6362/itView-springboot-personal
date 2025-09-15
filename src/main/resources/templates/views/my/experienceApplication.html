@@ -115,63 +115,138 @@
     </main>
   </div>
 
-	 <script th:inline="none">
-(function () {
-  const $q = document.getElementById('expSearch');
-  const $list = document.getElementById('expResults');
-  const $picked = document.getElementById('expPicked');
-  const $expNo = document.getElementById('expNo');
+	<script th:inline="none">
+	(function () {
+	  const $q = document.getElementById('expSearch');
+	  const $list = document.getElementById('expResults');
+	  const $picked = document.getElementById('expPicked');
+	  const $expNo = document.getElementById('expNo');
+	
+	  let timer = null;
+	  function debounce(fn, delay) {
+	    if (timer) clearTimeout(timer);
+	    timer = setTimeout(fn, delay);
+	  }
+	
+	  // 기존 검색 API 그대로 사용
+	  async function search(keyword) {
+	    const url = '/my/experience/search?q=' + encodeURIComponent(keyword || '');
+	    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+	    if (!res.ok) throw new Error('검색 실패');
+	    return res.json();
+	  }
+	
+	  // 단건 조회(제목 즉시 표기용) — 컨트롤러에 /my/experience/get?no= 추가했을 때 사용
+	  async function fetchByNo(no) {
+	    const res = await fetch('/my/experience/get?no=' + encodeURIComponent(no), {
+	      headers: { 'Accept': 'application/json' }
+	    });
+	    if (!res.ok) throw new Error('모집글 조회 실패');
+	    return res.json();
+	  }
+	
+	  function statusClass(s) {
+	    const v = (s||'').toLowerCase();
+	    if (v.includes('진행') || v === 'y' || v === 'ing') return 'badge badge--ing';
+	    if (v.includes('종료') || v === 'd' || v === 'done') return 'badge badge--done';
+	    return 'badge badge--ready';
+	  }
+	
+	  function render(items) {
+	    if (!Array.isArray(items) || items.length === 0) {
+	      $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>';
+	      return;
+	    }
+	    const selected = $expNo.value; // 이미 선택된 번호
+	    $list.innerHTML = items.map(it => {
+	      const id = escapeHtml(String(it.expNo ?? ''));
+	      const title = escapeHtml(it.expTitle || '(제목 없음)');
+	      const status = escapeHtml(it.expStatus || '미정');
+	      const excerpt = escapeHtml((it.expContent || '').replace(/\s+/g,' ').trim()).slice(0, 120);
+	      const start = fmtDate(it.expStart);
+	      const end = fmtDate(it.expEnd);
+	      const isSel = selected && String(selected) === String(id);
+	      return `
+	        <div class="result-item ${isSel ? 'is-selected' : ''}" data-no="${id}">
+	          <div class="result-check"><i class="fa-solid fa-check"></i></div>
+	          <div class="result-head">
+	            <span class="result-id">#${id}</span>
+	            <span class="${statusClass(status)}">${status}</span>
+	          </div>
+	          <div class="result-title">${title}</div>
+	          <div class="result-meta">
+	            <span><i class="fa-regular fa-calendar"></i> ${start} ~ ${end}</span>
+	          </div>
+	          <div class="result-excerpt">${excerpt}</div>
+	        </div>
+	      `;
+	    }).join('');
+	  }
+	
+	  function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+	  function fmtDate(d){try{ if(!d) return '-'; const x=new Date(d); if(isNaN(x)) return '-'; return x.toISOString().slice(0,10);}catch{ return '-';}}
+	
+	  // 입력 검색
+	  $q.addEventListener('input', () => {
+	    const kw = $q.value.trim();
+	    debounce(async () => {
+	      try {
+	        const data = await search(kw);
+	        render(data);
+	      } catch (e) {
+	        console.error(e);
+	        $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>';
+	      }
+	    }, 250);
+	  });
+	
+	  // 선택 처리
+	  $list.addEventListener('click', (e) => {
+	    const item = e.target.closest('.result-item');
+	    if (!item) return;
+	    // 단일 선택
+	    [...$list.querySelectorAll('.result-item')].forEach(el => el.classList.remove('is-selected'));
+	    item.classList.add('is-selected');
+	
+	    const no = item.getAttribute('data-no');
+	    const title = item.querySelector('.result-title')?.textContent || '';
+	    $expNo.value = no;
+	    $picked.textContent = `선택된 모집글: [${no}] ${title}`;
+	  });
+	
+	  // 초기: URL의 expNo가 있으면 바로 제목까지 세팅
+	  (async () => {
+	    const urlExpNo = new URLSearchParams(location.search).get('expNo');
+	    if (urlExpNo) {
+	      $expNo.value = urlExpNo; // 신청 시 사용
+	      try {
+	        // 컨트롤러에 /my/experience/get?no= 가 있다면 단건 조회로 정확한 제목 즉시 표시
+	        const eg = await fetchByNo(urlExpNo);
+	        if (eg && eg.expNo) {
+	          $picked.textContent = `선택된 모집글: [${eg.expNo}] ${eg.expTitle || ''}`;
+	        } else {
+	          $picked.textContent = `선택된 모집글: [${urlExpNo}]`;
+	        }
+	      } catch {
+	        // 단건 API가 없거나 실패한 경우 번호만 표기
+	        $picked.textContent = `선택된 모집글: [${urlExpNo}]`;
+	      }
+	
+	      // 선택 하이라이트를 위해 목록도 한 번 뿌려주고 싶다면(선택):
+	      try {
+	        const data = await search(''); // 초기 목록
+	        render(data);                  // $expNo.value 를 보고 해당 카드가 is-selected 처리됨
+	      } catch {
+	        render([]);
+	      }
+	    } else {
+	      // URL 파라미터 없으면 비어있는 상태로 시작
+	      render([]);
+	    }
+	  })();
+	})();
+	</script>
 
-  let timer = null;
-  function debounce(fn, delay) {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(fn, delay);
-  }
-
-  async function search(keyword) {
-    const url = '/my/experience/search?q=' + encodeURIComponent(keyword || '');
-    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-    if (!res.ok) throw new Error('검색 실패');
-    return res.json();
-  }
-
-  function statusClass(s) {
-    const v = (s||'').toLowerCase();
-    if (v.includes('진행') || v === 'y' || v === 'ing') return 'badge badge--ing';
-    if (v.includes('종료') || v === 'd' || v === 'done') return 'badge badge--done';
-    return 'badge badge--ready';
-  }
-
-  function render(items) {
-    if (!Array.isArray(items) || items.length === 0) {
-      $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>';
-      return;
-    }
-    const selected = $expNo.value; // 이미 선택된 번호
-    $list.innerHTML = items.map(it => {
-      const id = escapeHtml(String(it.expNo ?? ''));
-      const title = escapeHtml(it.expTitle || '(제목 없음)');
-      const status = escapeHtml(it.expStatus || '미정');
-      const excerpt = escapeHtml((it.expContent || '').replace(/\s+/g,' ').trim()).slice(0, 120);
-      const start = fmtDate(it.expStart);
-      const end = fmtDate(it.expEnd);
-      const isSel = selected && String(selected) === String(id);
-      return `
-        <div class="result-item ${isSel ? 'is-selected' : ''}" data-no="${id}">
-          <div class="result-check"><i class="fa-solid fa-check"></i></div>
-          <div class="result-head">
-            <span class="result-id">#${id}</span>
-            <span class="${statusClass(status)}">${status}</span>
-          </div>
-          <div class="result-title">${title}</div>
-          <div class="result-meta">
-            <span><i class="fa-regular fa-calendar"></i> ${start} ~ ${end}</span>
-          </div>
-          <div class="result-excerpt">${excerpt}</div>
-        </div>
-      `;
-    }).join('');
-  }
 
   function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
   function fmtDate(d){try{ if(!d) return '-'; const x=new Date(d); if(isNaN(x)) return '-'; return x.toISOString().slice(0,10);}catch{ return '-';}}

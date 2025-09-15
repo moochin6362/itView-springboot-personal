@@ -26,6 +26,7 @@ import itView.springboot.vo.Order;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import itView.springboot.vo.ExperienceGroup;
+import itView.springboot.vo.PointBox;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -131,7 +132,7 @@ public class MyController {
     public String saveInfo(@RequestParam(name = "email",         required = false) String email,
                            @RequestParam(name = "nickname",      required = false) String userName,
                            @RequestParam(name = "gender",        required = false) String userGender,
-                           @RequestParam(name = "ageRange",      required = false) Integer ageRange, // 표시용(저장X)
+                           @RequestParam(name = "ageRange",      required = false) Integer ageRange,
                            @RequestParam(name = "skinType",      required = false) String skinType,
                            @RequestParam(name = "personalColor", required = false) String personalColor,
                            @RequestParam(name = "concerns",      required = false) String[] concerns,
@@ -150,39 +151,28 @@ public class MyController {
             return "redirect:/go/login";
         }
 
-        // 1) 모든 필드 세팅
         User u = new User();
         u.setUserNo(Math.toIntExact(userNo));
         u.setEmail(emptyToNull(email));
         u.setUserName(emptyToNull(userName));
         u.setUserGender(emptyToNull(userGender));
-
-        // 생년(실제 DB USER_AGE: DATE)
-        if (birthDate != null) {
-            u.setUserAge(birthDate);
-        }
-
-        // 피부/선호
+        if (birthDate != null) u.setUserAge(birthDate);
         u.setSkinType(emptyToNull(skinType));
         u.setPersonalColor(emptyToNull(personalColor));
         u.setSkinTrouble((concerns != null && concerns.length > 0) ? String.join(",", concerns) : null);
         u.setHeadSkin(emptyToNull(headSkin));
-
-        // 신규 추가 필드
         u.setHopePrice(emptyToNull(hopePrice));
         u.setIngredient(emptyToNull(ingredient));
         u.setEcoFriendly(emptyToNull(ecoFriendly));
 
-        // 2) 딱 한 번 업데이트
         int rows = myService.updateUserBasicAndSkin(u);
 
         ra.addFlashAttribute("msg", rows > 0 ? "내 정보가 저장되었습니다." : "저장할 변경 사항이 없습니다.");
         return "redirect:/my/myPage";
     }
 
-    /** ✅ 현재 로그인 사용자의 userNo 결정 로직 (우선순서 개선본) */
+    /** ✅ 현재 로그인 사용자의 userNo 결정 로직 */
     private Long getUserNo(HttpSession session) {
-        // 1) loginUser가 있으면 그걸 신뢰
         try {
             Object loginUser = session.getAttribute("loginUser");
             if (loginUser instanceof User lu && lu.getUserNo() > 0) {
@@ -192,7 +182,6 @@ public class MyController {
             }
         } catch (Throwable ignore) {}
 
-        // 2) Spring Security
         try {
             Class<?> sch = Class.forName("org.springframework.security.core.context.SecurityContextHolder");
             Object ctx = sch.getMethod("getContext").invoke(null);
@@ -211,7 +200,6 @@ public class MyController {
             }
         } catch (Throwable ignore) {}
 
-        // 3) (구 코드 호환)
         for (String key : new String[] { "userId", "loginId" }) {
             Object idObj = session.getAttribute(key);
             if (idObj instanceof String s && !s.isBlank()) {
@@ -223,7 +211,6 @@ public class MyController {
             }
         }
 
-        // 4) 마지막에 캐시된 값
         Object cached = session.getAttribute("userNo");
         return (cached instanceof Number n) ? n.longValue() : null;
     }
@@ -250,7 +237,6 @@ public class MyController {
         if (url == null || url.isBlank()) url = "/default-avatar.png";
         return url + (url.contains("?") ? "&" : "?") + "v=" + System.currentTimeMillis();
     }
-
 
     private String toAgeRange(LocalDate birth) {
         if (birth == null) return "미상";
@@ -316,18 +302,9 @@ public class MyController {
         Long userNo = getUserNo(session);
         if (userNo == null) return "redirect:/";
 
-        // 구매자만 문의 허용 로직을 당분간 끄고 싶다면 전체 주석 OK
-        // if (productNo != null) {
-        //     Order owned = myService.selectproductbyOrder(productNo, userNo.intValue());
-        //     if (owned == null) {
-        //         return "redirect:/my/myProductInquiry";
-        //     }
-        // }
-
         model.addAttribute("productNo", productNo);
         return "my/myProductInquiry";
     }
-
 
     // POST: 저장
     @PostMapping("/product-question")
@@ -359,13 +336,12 @@ public class MyController {
 
         if (rows > 0) {
             ra.addFlashAttribute("msg", "문의가 등록되었습니다.");
-            return "redirect:/my/myPage"; // ✅ 성공 시 myPage로
+            return "redirect:/my/myPage";
         } else {
             ra.addFlashAttribute("msg", "등록에 실패했습니다.");
-            return "redirect:/my/myProductInquiry"; // 실패 시 폼으로
+            return "redirect:/my/myProductInquiry";
         }
     }
-
 
     @GetMapping("/cart")
     public String cart() { return "Shopping/cart"; }
@@ -405,16 +381,11 @@ public class MyController {
         int rows = myService.insertReview(review);
         ra.addFlashAttribute("msg", rows > 0 ? "리뷰가 등록되었습니다." : "리뷰 등록 실패");
 
-        User u = myService.getUser(userNo);
-        int reviewPoint = uService.getPointByName("리뷰작성");
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("userNo", u.getUserNo());
-        map.put("point", reviewPoint);
-
-        int result = uService.addPoint(map);
-        
-        myService.addPointHistory(userNo, "리뷰작성", "리뷰 작성 보상", reviewPoint, null);
+        if (rows > 0) {
+            // 리뷰 보상 지급 (POINT_BOX: +적립)
+            int reviewPoint = uService.getPointByName("리뷰작성"); // 정책 테이블에서 조회
+            myService.addPointBox(userNo, "리뷰작성", "리뷰 작성 보상", reviewPoint, java.time.LocalDate.now().plusYears(2));
+        }
 
         return "redirect:/my/myReview";
     }
@@ -439,8 +410,8 @@ public class MyController {
         Long userNo = getUserNo(session);
         if (userNo == null) return "redirect:/";
 
-        int balance = myService.getPointBalance(userNo); // ← USER.USER_POINT 사용
-        java.util.List<itView.springboot.vo.Point> list = myService.getPointHistory(userNo); // 내역은 POINT
+        int balance = myService.getPointBalance(userNo); // ← POINT_BOX 합계
+        java.util.List<PointBox> list = myService.getPointHistory(userNo); // ← BOX 내역
 
         model.addAttribute("pointBalance", balance);
         model.addAttribute("expireSoonText", "각 적립건의 만료일을 확인해주세요.");
@@ -471,7 +442,6 @@ public class MyController {
         Long userNo = getUserNo(session);
         if (userNo == null) return java.util.Map.of("ok", false, "message", "로그인이 필요합니다.");
 
-        // ⚠ 사용자가 '받는분'을 비워도 DB NOT NULL 방어
         if (receiver == null || receiver.isBlank()) {
             User u = myService.getUser(userNo);
             receiver = (u != null && u.getUserName() != null) ? u.getUserName() : "신청자";
@@ -483,8 +453,7 @@ public class MyController {
         int rows = myService.insertExperienceApply(userNo, expNo, applyContent, receiver, phone, address, requestMemo);
         return java.util.Map.of("ok", rows > 0);
     }
-    
-    
+
     @GetMapping("/matching-rates")
     @ResponseBody
     public List<Map<String,Object>> matchingRates(HttpSession session) {
@@ -495,9 +464,13 @@ public class MyController {
 
     @GetMapping("/myProductAnswer")
     public String myProductAnswer() { return "my/myProductAnswer"; }
+    
+ // MyController.java (일부분에 추가)
+    @GetMapping("/experience/get")
+    @ResponseBody
+    public itView.springboot.vo.ExperienceGroup getExperienceOne(
+            @RequestParam("no") int expNo) {
+        return myService.getExperienceByNo(expNo);
+    }
 
-    
-    
-    
-    
 }
