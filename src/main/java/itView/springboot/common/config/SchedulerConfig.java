@@ -18,14 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class SchedulerConfig {
-	 private final AdminMapper mapper;
-	 
-	// 1분마다 실행
-    @Scheduled(fixedRate = 60_000)
-    public void restoreUsers() {
-        LocalDateTime now = LocalDateTime.now();
-        mapper.restoreUser(now);
-        System.out.println("정지 만료 회원 복구 실행: " + now);
-    }
+
 	 
 }

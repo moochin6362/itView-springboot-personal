@@ -605,25 +605,38 @@ SELECT *
 	update board set board_status ='N' where board_id=#{boardId} and board_type='8'
 </update>
 
+
+
 <!-- 회원삭제 -->
 <update id="deleteUserByNo">
 	update "USER" set user_status = 'N' where user_no = #{userNo}
 </update>
 
 <!-- 회원 정지 -->
+<update id="updateReportUserEndDate">
+	update report
+	set report_modify_date = #{modifyDate}
+	where report_target_no = #{userNo}
+</update>
 <update id="stopUser">
 	UPDATE "USER"
-    SET user_status = 'N', REPORT_MODIFY_DATE = #{endDate}
+    SET user_status = 'N'
     WHERE user_no = #{userNo}
 </update>
 
 <!-- 회원 복구 -->
 <update id="restoreUser">
    <![CDATA[
-   UPDATE "USER"
-   SET user_status = 'Y', modify_date = NULL
-   WHERE user_status = 'N' AND report_modify_date IS NOT NULL AND modify_date <= #{now}
-   ]]>
+ 		update product
+ 		set user_state ='Y'
+ 		where user_state = 'N'
+ 			  and exists (
+	 			  select 1 from report
+	 			  where report_target_no = user_no
+	 			  and report_modify_date <= #{today}
+ 		)
+ 	]]>
+ 			
 </update>
 
 

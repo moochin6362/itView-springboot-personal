@@ -42,9 +42,8 @@ document.getElementById("part-replySubmit").addEventListener("click", async () =
     addReply(newReply);
 	
     // 입력창 초기화
-    document.getElementById("replyInput").value = "";
+    document.getElementById("part-replyInput").value = "";
   } catch (error) {
-    console.error("댓글 등록 실패:", error);
     alert("댓글 등록에 실패했습니다.");
   }
 });

@@ -1,8 +1,11 @@
 package itView.springboot.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -464,26 +467,39 @@ public class AdminController {
         }
     }
 	
-	//회원 기간 정지
-	@PostMapping("/admin/stopUser")
-	@ResponseBody
-	public ResponseEntity<String> stopUser(@RequestParam("userNo") int userNo,
-	                                       @RequestParam("stopPeriod") String stopPeriod) {
-	    LocalDateTime endDate;
-	    LocalDateTime now = LocalDateTime.now();
+	//회원 기간 정지 + 복구
+	@PostMapping("/stopUser")
+	public String stopUser(
+			@RequestParam("userNo") int userNo,
+	        @RequestParam("stopPeriod") String stopPeriod) {
+		LocalDate now = LocalDate.now(); 
+        LocalDate modifyDate;
 
-	    switch (stopPeriod) {
-	        case "1": endDate = now.plusDays(1); break;
-	        case "3": endDate = now.plusDays(3); break;
-	        case "7": endDate = now.plusDays(7); break;
-	        case "30": endDate = now.plusDays(30); break;
-	        case "permanent": endDate = null; break;
-	        default: return ResponseEntity.badRequest().body("기간을 다시 선택해주세요.");
-	    }
+        if("permanent".equals(stopPeriod)) {
+            modifyDate = LocalDate.of(9999,12,31);
+        } else {
+        	// 현재날짜 기준 + a
+            int days = Integer.parseInt(stopPeriod);
+            modifyDate = now.plusDays(days);
+        }
+        
+        Map<String, Object> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("modifyDate", modifyDate);
 
-	    adService.stopUser(userNo, endDate); // status=N, stop_end_date 설정
-	    return ResponseEntity.ok("회원 정지 완료");
-	}
+        // report 테이블 수정(정지끝나는날)
+        int result1 = adService.updateReportUserEndDate(map);
+
+        // user_status를 'N'으로 변경
+        int result2 = adService.stopUser(userNo);
+        
+        if(result1 + result2 > 1) {
+        	return "redirect:/admin/rUser";
+        } else {
+        	throw new AdminException("회원이 정지 처리되었습니다.");
+        }
+    }
+	
 
 	
 	

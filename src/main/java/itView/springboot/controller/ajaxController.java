@@ -115,47 +115,7 @@ public class ajaxController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("공지사항 삭제에 실패하였습니다.");
 		}
 	}
-	 //관리자 일반게시판 문의댓글 달기
-		@PostMapping("gReply/{boardId}")
-		@ResponseBody
-		public ResponseEntity<AdminReply> addReply(
-				@PathVariable("boardId") int boardId,
-				@RequestBody AdminReply adminReply,
-				HttpSession session){
-			
-			User loginUser = (User) session.getAttribute("loginUser");
-			if(adminReply.getReplyContent() == null || adminReply.getReplyContent().trim().isEmpty()) {
-				throw new AdminException("댓글 내용을 입력하세요.");
-			}
-			
-			//권한체크
-			if(loginUser != null && "A".equals(loginUser.getUserType())) {
-				adminReply.setUserNo(loginUser.getUserNo());
-				adminReply.setBoardType(3);
-				adminReply.setBoardId(boardId);
-				
-				int result = adService.saveGreply(adminReply);
-				if(result > 0) {
-					return ResponseEntity.ok(adminReply);
-				} else {
-					throw new AdminException("댓글 등록에 실패하였습니다.");
-				} 
-			} else {
-				 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-	                     .body(null);
-			}
-			
-		}
-		
-		//일반게시판 문의댓글 리스트 뽑아오기
-		@GetMapping("gReplyList")
-		@ResponseBody
-		public ArrayList<AdminReply> getReplyList(
-				@RequestParam("boardId") int boardId){
-			ArrayList<AdminReply> replyList = adService.getGeneralReplyList(boardId);
-			return replyList;
-		}
-		
+
 		//관리자 판매자 문의댓글 달기
 		@PostMapping("pReply/{boardId}")
 		@ResponseBody

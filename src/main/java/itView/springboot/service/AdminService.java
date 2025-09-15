@@ -3,6 +3,7 @@ package itView.springboot.service;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
@@ -271,14 +272,18 @@ public class AdminService {
 		return mapper.getReplyReportList(rowBounds, replyNo);
 	}
 
-	//회원삭제
+	//회원삭제(update N)
 	public int deleteUserByNo(int userNo) {
 		return mapper.deleteUserByNo(userNo);
 	}
 
-	public Object stopUser(int userNo, LocalDateTime endDate) {
-		return mapper.stopUser(userNo,"N", endDate);
-		
+	//회원 기간정지(update N)
+	public int updateReportUserEndDate(Map<String, Object> map) {
+		return mapper.updateReportUserEndDate(map);
+	}
+
+	public int stopUser(int userNo) {
+		return mapper.stopUser(userNo);
 	}
 
 
