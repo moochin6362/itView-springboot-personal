@@ -13,8 +13,9 @@
     <script th:src="@{/js/inhoAdmin/sidebar.js}" defer></script>
 
     <!-- 아이콘 & 폰트 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 </head>
 <body>
 
@@ -49,7 +50,12 @@
 		               		  th:each="pBoard : ${pBoardList}">
 		                   <tr>
 		                        <td th:text="${pBoard.boardId}"></td>
-		                        <td th:text="${pBoard.boardTitle}"></td>
+		                        <td>
+		                        	<a
+		                        	th:text="${pBoard.boardTitle}"
+		                        	th:href="@{/admin/pBoardDetail(boardId=${pBoard.boardId})}">
+		                        	</a>
+		                        </td>
 		                        <td th:text="${pBoard.brandName}"></td>
 		                        <td th:text="${pBoard.boardDate}"></td>
 		                        <td th:text="${pBoard.boardReplyStatus == 'Y' ? '답변완료' : '답변대기'}"></td>
