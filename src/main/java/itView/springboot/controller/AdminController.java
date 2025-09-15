@@ -1,10 +1,7 @@
 package itView.springboot.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import itView.springboot.service.InquiryService;
-import itView.springboot.vo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +17,12 @@ import itView.springboot.dto.UserReport;
 import itView.springboot.exception.AdminException;
 import itView.springboot.service.AdminService;
 import itView.springboot.service.ProductService;
+import itView.springboot.vo.Board;
+import itView.springboot.vo.PageInfo;
+import itView.springboot.vo.Reply;
+import itView.springboot.vo.Report;
+import itView.springboot.vo.Review;
+import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 	private final AdminService adService;
 	private final ProductService pService;
-	private final InquiryService inquiryService;
-
+	
 	//관리자 회원조회 list가져오기
 	@GetMapping("/searchUser")
 	public String userList(
@@ -80,23 +82,15 @@ public class AdminController {
 			HttpServletRequest request,
 			Model model
 			) {
-		int listCount = inquiryService.getAllListCount();
-		PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 5);
-		List<Inquiry> inquiryList = inquiryService.selectAllInquiryList(pi);
+	 	int gBoardListCount = adService.gBoardListCount(1);
+        PageInfo pi = Pagination.getPageInfo(currentPage, gBoardListCount, 10);
+        ArrayList<GboardDetail> gBoardList = adService.selectgBoardList(pi);
 
-        model.addAttribute("inquiryList", inquiryList);
+        model.addAttribute("gBoardList", gBoardList);
         model.addAttribute("pi", pi);
         model.addAttribute("loc", request.getRequestURL());
 
 		return"admin/admin_general_board";
-	}
-
-	//관리자 일반문의게시판 답변작성
-	@PostMapping("/inquiry/answer")
-	public String inquiryAnswer(@ModelAttribute Inquiry inquiry) {
-		int result = inquiryService.updateanswerContent(inquiry);
-
-		return "redirect:/admin/gBoard";
 	}
 	
 	//일반문의 상세
@@ -129,6 +123,25 @@ public class AdminController {
         
 		return"admin/admin_partner_board";
 	}
+	
+	
+	//판매자 문의 상세
+	@GetMapping("pBoardDetail")
+	public String pBoardDetailPage(
+			@RequestParam("boardId")int boardId,
+			@RequestParam(value="page", defaultValue="1") int page,
+			Model model) {
+		GboardDetail pBoard = adService.pBoardDetail(boardId);
+		model.addAttribute("pBoard",pBoard);
+		model.addAttribute("page",page);
+		
+		return "admin/admin_partner_board_detail";
+	}
+	
+	
+	
+	
+	
 		
 	//관리자 판매금지게시판 (검색조회)
 	@GetMapping("/proBoard")

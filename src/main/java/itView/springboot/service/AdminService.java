@@ -80,6 +80,18 @@ public class AdminService {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.selectpBoardList(rowBounds);
 	}
+	//판매자 문의게시판 상세페이지
+	public GboardDetail pBoardDetail(int boardId) {
+		return mapper.pBoardDetail(boardId);
+	}
+	public int savePreply(AdminReply adminReply) {
+		return mapper.savePreply(adminReply);
+	}
+
+	public ArrayList<AdminReply> getPartnerReplyList(int boardId) {
+		return mapper.getPartnerReplyList(boardId);
+	}
+
 
 	
 	//판매금지 게시판(검색,조회)
@@ -257,6 +269,8 @@ public class AdminService {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return mapper.getReplyReportList(rowBounds, replyNo);
 	}
+
+
 
 
 	

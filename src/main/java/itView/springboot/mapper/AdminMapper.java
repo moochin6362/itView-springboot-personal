@@ -96,9 +96,16 @@ public interface AdminMapper {
 	//판매자 문의게시판 조회
 	Integer pBoardListCount
 		(@Param("boardType") int boardType);
-
-	ArrayList<Board> selectpBoardList(
+	ArrayList<GboardDetail> selectpBoardList(
 		@Param("rowBounds") RowBounds rowBounds);
+	GboardDetail pBoardDetail(int boardId);
+	
+	//판매자 문의게시판 답변
+	ArrayList<AdminReply> getPartnerReplyList(int boardId);
+	int savePreply(AdminReply adminReply);
+
+	
+	
 
 	
 	//판매금지 게시판 조회
@@ -144,6 +151,9 @@ public interface AdminMapper {
 	Reply selectReportReply(Integer replyNo);
 	int getReplyReportCount(Integer replyNo);
 	ArrayList<Report> getReplyReportList(RowBounds rowBounds, Integer replyNo);
+
+	
+	
 
 	
 	

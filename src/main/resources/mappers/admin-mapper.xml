@@ -175,6 +175,7 @@ select count(*)
 <select id="selectReportReviewList" >
 	SELECT 
 	    ROW_NUMBER() OVER (ORDER BY COUNT(report_no) DESC) AS row_num,
+	    e.review_no,
 	    r.report_title,
 	    r.report_date,
 	    r.report_status,
@@ -187,13 +188,14 @@ select count(*)
 		  ON u.user_no = r.reporter_user_id 
 		WHERE report_type = 'R'
 		GROUP BY r.report_title, r.report_date,
-				r.report_status, u.user_name
+				r.report_status, u.user_name,e.review_no
 		ORDER BY report_count DESC
 </select>
 
 <select id="selectReportReplyList">
 	SELECT 
 	    ROW_NUMBER() OVER (ORDER BY COUNT(report_no) DESC) AS row_num,
+	    v.reply_no,
 	    r.report_title,
 	    r.report_date,
 	    r.report_status,
@@ -206,6 +208,7 @@ select count(*)
 		  ON u.user_no = r.reporter_user_id 
 		WHERE report_type = 'V'
 		GROUP BY 
+			 v.reply_no,
 			 r.report_title,
 			 r.report_date,
 			 r.report_status,
@@ -243,33 +246,31 @@ select count(*)
 
 <select id="selectReportBoard" parameterType="int" resultType="Board">
 	SELECT 
-	    r.report_status,
-	    r.report_title,
-	    r.report_no,
 	    b.board_id,
 	    b.board_title,
 	    b.board_content,
-	    u.user_id,
-	    COUNT(r.report_no) AS report_count
+	    u.user_name,
+	    COUNT(r.report_no) AS report_count,
 	    max(r.report_date) as report_date
 		FROM board b
 		JOIN report r 
 		  ON r.report_target_no = b.board_id
 		JOIN "USER" u
 		  ON b.user_no = u.user_no
-		WHERE report_type = 'B' and r.report_no = #{reportNo}
-		 group by b.board_id, b.board_title, b.board_content
+		WHERE report_type = 'B' and b.board_id = #{boardId}
+		 group by b.board_id, b.board_title, b.board_content, u.user_name
 </select>
 <select id="getBoardReportCount">
 	select count(*) from report 
 	where report_type = 'B' and report_target_no = #{boardId}
 </select>
 <select id="getBoardReportList">
-	select * 
-	from report
-	join board on (user_no = reporter_user_id)
-	where report_target_no = #{boardId}
-	order by report_date desc
+	select r.report_no, r.report_title, r.report_content,
+	       u.user_id as userName, r.report_date
+	from report r
+	join "USER" u on r.reporter_user_id = u.user_no
+	where r.report_target_no = #{boardId}
+	order by r.report_date desc
 </select>
 
 
@@ -278,7 +279,7 @@ SELECT
 	    r.report_no, 
 	    r.report_status,
 	    r.report_title,
-	    u.user_name,
+	    u.user_id,
 	    e.review_date,
 	    e.review_no,
 	    e.review_content,
@@ -289,12 +290,12 @@ SELECT
 		  ON r.report_target_no = e.review_no
 		JOIN "USER" u 
 		  ON e.user_no = u.user_no
-		WHERE report_type = 'R' and r.report_no = #{reportNo}
+		WHERE report_type = 'R' and e.review_no = #{reviewNo}
 		GROUP BY 
 			r.report_no,
 		    r.report_status,
 		    r.report_title,
-		    u.user_name,
+		    u.user_id,
 		    e.review_date,
 		    e.review_no,
 		    e.review_content
@@ -306,24 +307,27 @@ where report_type = 'R' and report_target_no = #{reviewNo}
 
 </select>
 <select id="getReviewReportList">
-select * 
-	from report
-	join review on (user_no = reporter_user_id)
-	where report_target_no = #{reviewNo}
-	order by report_date desc
+SELECT
+        r.report_no,
+        r.report_title,
+        r.report_content,
+        r.report_date,
+        u.user_id
+    FROM report r
+    JOIN "USER" u ON r.reporter_user_id = u.user_no
+    WHERE r.report_target_no = #{reviewNo}
+      AND r.report_type = 'R'
+    ORDER BY r.report_date DESC
 </select>
 
 
 <select id="selectReportReply" parameterType="Integer" resultType="Reply">
 SELECT 
-	    r.report_no, 
-	    r.report_title,
 	    v.reply_no,
 	    v.reply_date,
 	    v.reply_status,
 	    v.reply_content,
-	    u.user_Id,
-	    u.user_name,
+	    u.user_id,
 	    COUNT(r.report_no) AS report_count,
 	    max(r.report_date) as report_date
 		FROM reply v
@@ -331,27 +335,30 @@ SELECT
 		  ON r.report_target_no = v.reply_no
 		JOIN "USER" u
 		  ON v.user_no = u.user_no
-		WHERE report_type = 'R' and r.report_no = #{reportNo}
+		WHERE report_type = 'R' and report_target_no = #{replyNo}
 		GROUP BY
-		    r.report_no, 
-		    r.report_title,
 		    v.reply_no,
 		    v.reply_date,
 		    v.reply_status,
 		    v.reply_content,
-		    u.user_Id,
-		    u.user_name
+		    u.user_id
 </select>
 <select id="getReplyReportCount">
 select count(*) from report 
 where report_type = 'V' and report_target_no = #{replyNo}
 </select>
 <select id="getReplyReportList">
-select * 
-	from report r
-	join "USER" u on (u.user_no = r.reporter_user_id)
-	where report_target_no = #{replyNo}
-	order by report_date desc
+ SELECT
+        r.report_no,
+        r.report_title,
+        r.report_content,
+        r.report_date,
+        u.user_id
+    FROM report r
+    JOIN "USER" u ON r.reporter_user_id = u.user_no
+    WHERE r.report_target_no = #{replyNo}
+      AND r.report_type = 'V' 
+    ORDER BY r.report_date DESC
 </select>
 
 
@@ -409,7 +416,7 @@ order by board_date desc, board_id DESC
 <!-- 일반문의게시판 답변등록 -->
 <insert id="saveGreply">
 	insert into admin_reply
-	values (ㅡ
+	values (
 		seq_admin_reply.nextval,
 		#{replyContent},
 		sysdate,
@@ -453,6 +460,61 @@ order by board_date desc, board_id DESC
 		 on b.user_no = u.user_no
 	where board_type='7' and board_status ='Y'
 </select>
+<!-- 판매자 문의게시판 상세페이지 -->
+ <select id="pBoardDetail" parameterType="int" resultType="itView.springboot.dto.GboardDetail">
+ 	select 
+		b.board_id,
+		b.board_title,
+		b.board_content,
+		b.board_date,
+		b.board_modified_date,
+		b.board_type,
+		b.board_status,
+		b.user_no,
+		b.board_reply_status,
+		u.brand_name
+	from board b
+	join
+		"USER" u 
+		 on b.user_no = u.user_no
+	where board_id = #{boardId} and board_status='Y' and board_type='7'
+	order by board_date desc, board_id desc
+ </select>
+ <!-- 판매자 문의 댓글 조회 -->
+ <select id="getPartnerReplyList" parameterType="int" resultType="AdminReply">
+ 	select * from admin_reply
+ 	where board_type='7'
+ 		and reply_status='Y'
+ 		and board_id=#{boardId}
+ 	order by reply_date desc
+ </select>
+ <!-- 판매자 문의 게시판 답변등록 -->
+ <select id="savePReply">
+ 	insert into admin_reply
+ 	values(
+ 	seq_admin_reply.nextval,
+ 	#{replyContent},
+ 	sysdate,
+ 	sysdate,
+ 	'Y',
+ 	#{boardId},
+ 	'7',
+ 	#{userNo}
+ 	)
+ 	
+ </select>
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- 판매금지 제품 조회 -->
 <select id="getproListCount" parameterType="int" resultType="java.lang.Integer">

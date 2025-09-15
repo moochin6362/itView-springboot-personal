@@ -156,8 +156,47 @@ public class ajaxController {
 			return replyList;
 		}
 		
+		//관리자 판매자 문의댓글 달기
+		@PostMapping("pReply/{boardId}")
+		@ResponseBody
+		public ResponseEntity<AdminReply> addPartReply(
+				@PathVariable("boardId") int boardId,
+				@RequestBody AdminReply adminReply,
+				HttpSession session){
+			
+			User loginUser = (User) session.getAttribute("loginUser");
+			if(adminReply.getReplyContent() == null || adminReply.getReplyContent().trim().isEmpty()) {
+				throw new AdminException("댓글 내용을 입력하세요.");
+			}
+			
+			//권한체크
+			if(loginUser != null && "A".equals(loginUser.getUserType())) {
+				adminReply.setUserNo(loginUser.getUserNo());
+				adminReply.setBoardType(7);
+				adminReply.setBoardId(boardId);
+				
+				int result = adService.savePreply(adminReply);
+				if(result > 0) {
+					return ResponseEntity.ok(adminReply);
+				} else {
+					throw new AdminException("댓글 등록에 실패하였습니다.");
+				} 
+			} else {
+				 return ResponseEntity.status(HttpStatus.FORBIDDEN)
+	                     .body(null);
+			}
+			
+		}
 		
-    
+		//판매자문의 게시판 문의댓글 리스트 뽑아오기
+		@GetMapping("pReplyList")
+		@ResponseBody
+		public ArrayList<AdminReply> getPartReplyList(
+				@RequestParam("boardId") int boardId){
+			ArrayList<AdminReply> replyList = adService.getPartnerReplyList(boardId);
+			return replyList;
+		}
+				
     
     
     
