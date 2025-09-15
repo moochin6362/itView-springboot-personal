@@ -15,6 +15,7 @@ body {
     height: 100%;
 }
 
+
 /* 사이드바 */
 #sidebar {
     width: 300px;
@@ -132,4 +133,10 @@ body {
 
 .radio-group label {
     font-weight: 500;
+}
+
+a {
+  text-decoration: none;  /* 밑줄 제거 */
+  color: inherit;         /* 부모 색상 상속 */
+  cursor: pointer;        /* 필요 시 포인터로 변경 */
 }
