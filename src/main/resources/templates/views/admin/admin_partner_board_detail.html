@@ -33,6 +33,8 @@
 		    <div class="admin-partBoard-detail-wrapper">
 		        <div class="admin-partBoard-detail-container"> <!--게시판-->
 		            <table class="admin-partBoard-detail-table">  <!--게시판 헤더-->
+		             <input type="hidden" id="pBoardDetail" th:value="${pBoard.boardId}" />
+				
 		                <tr>
 		                    <th>작성자</th>
 		                    <td th:text="${pBoard.brandName}"></td>
@@ -57,12 +59,17 @@
 		            <!--관리자 답변 : 댓글형식 / 시간 "오름차순!!"-->
 		            <div class="admin-partBoard-detail-reply">
 		                <div class="partBoard-reply-list" id="part-replyList">
-		                    <!--js에서 동적 추가-->
-		                    <div class="partBoard-reply-admin">관리자</div>
-		                    <div class="partBoard-reply-date" th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd')}"></div>
-		                    <div class="partBoard-reply-text" th:text="${reply.replyContent}"></div>
-		                    
+		                	<div th:each="reply : ${replyList}">
+			                    <div class="partBoard-reply-admin">관리자</div>
+			                    <div class="partBoard-reply-date" th:text="${#dates.format(reply.replyDate, 'yyyy-MM-dd')}"></div>
+			                    <div class="partBoard-reply-text" th:text="${reply.replyContent}"></div>
+		                    </div>
 		                </div>
+		                
+		                <!-- 댓글이 없을 경우 안내 -->
+						<div th:if="${#lists.isEmpty(replyList)}">
+						    <p>등록된 답변이 없습니다.</p>
+						</div>
 		            
 		                <!--답변 입력-->
 		                <div class="partBoard-reply-content">

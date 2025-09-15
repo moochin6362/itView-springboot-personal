@@ -56,7 +56,7 @@ async function loadReplies(boardId) {
   const res = await fetch(`/admin/pReplyList?boardId=${boardId}`);
   if (!res.ok) return;
   const replyList = await res.json();
-  const list = document.getElementById('replyList');
+  const list = document.getElementById('part-replyList');
   list.innerHTML = "";
   replyList.forEach(reply => addReply(reply));
 }

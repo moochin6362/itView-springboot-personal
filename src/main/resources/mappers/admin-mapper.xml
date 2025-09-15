@@ -489,20 +489,20 @@ order by board_date desc, board_id DESC
  	order by reply_date desc
  </select>
  <!-- 판매자 문의 게시판 답변등록 -->
- <select id="savePReply">
+ <insert id="savePreply" parameterType="AdminReply">
  	insert into admin_reply
- 	values(
- 	seq_admin_reply.nextval,
- 	#{replyContent},
- 	sysdate,
- 	sysdate,
- 	'Y',
- 	#{boardId},
- 	'7',
- 	#{userNo}
- 	)
+	values (
+		seq_admin_reply.nextval,
+		#{replyContent},
+		sysdate,
+		sysdate,
+		'Y',
+		#{boardId},
+		'7',
+		#{userNo}
+		)
  	
- </select>
+ </insert>
 
 
 

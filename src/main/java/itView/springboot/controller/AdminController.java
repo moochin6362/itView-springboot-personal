@@ -131,6 +131,10 @@ public class AdminController {
 			@RequestParam(value="page", defaultValue="1") int page,
 			Model model) {
 		GboardDetail pBoard = adService.pBoardDetail(boardId);
+		if(pBoard == null) {
+			throw new AdminException("게시글 상세보기 실패");
+		} 
+		
 		model.addAttribute("pBoard",pBoard);
 		model.addAttribute("page",page);
 		
@@ -141,7 +145,7 @@ public class AdminController {
 	
 	
 	
-		
+	
 	//관리자 판매금지게시판 (검색조회)
 	@GetMapping("/proBoard")
 	public String proBoardPage(

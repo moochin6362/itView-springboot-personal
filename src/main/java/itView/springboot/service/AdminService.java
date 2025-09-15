@@ -62,8 +62,6 @@ public class AdminService {
 		public int saveGreply(AdminReply adminReply) {
 			return mapper.saveGreply(adminReply);
 		}
-		
-
 		//일반문의 - 댓글조회
 		public ArrayList<AdminReply> getGeneralReplyList(int boardId) {
 			return mapper.getGeneralReplyList(boardId);
@@ -84,10 +82,12 @@ public class AdminService {
 	public GboardDetail pBoardDetail(int boardId) {
 		return mapper.pBoardDetail(boardId);
 	}
+	//판매자 문의게시판 답변등록
 	public int savePreply(AdminReply adminReply) {
 		return mapper.savePreply(adminReply);
 	}
 
+	//판매자문의 - 댓글조회
 	public ArrayList<AdminReply> getPartnerReplyList(int boardId) {
 		return mapper.getPartnerReplyList(boardId);
 	}
