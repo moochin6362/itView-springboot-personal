@@ -133,7 +133,13 @@ body {
 .answer {
 	margin-top: 12px;
 	margin-left: 9%;
-	margin-right: 15%;
+	margin-right: 4%;
+}
+
+.stock-zero {
+	width: 120px;
+	margin-top: 12px;
+	margin-right: 3%;
 }
 
 #product-stockHead {

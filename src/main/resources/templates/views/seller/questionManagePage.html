@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>문의 내역 페이지</title>
+<link href="/css/seller/productQnAPage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+
+	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2>문의 내역 페이지</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>문의 번호</th>
+						<th>문의 제목</th>
+						<th>답변 상태</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="b : ${bList}">
+						<td>[[${b.boardId}]]</td>
+						<td class="boardTitle">[[${b.boardTitle}]]</td>
+						<td>[[${b.boardReplyStatus}]]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<script>
+		window.onload = () => {
+			const boardTitles = document.querySelectorAll('.boardTitle');
+			for(boardTitle of boardTitles){
+				boardTitle.addEventListener('click', e => {
+					const boardId = e.target.previousElementSibling.innerText;
+					location.href = '/seller/MyQuestionDetail/' + boardId
+				})
+			}
+		}
+	</script>
+
+</body>
+</html>

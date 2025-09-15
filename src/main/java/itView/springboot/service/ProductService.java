@@ -146,12 +146,12 @@ public class ProductService {
 		return mapper.insertAnswer(answer);
 	}
 
-	public int selectBeforeAnswerCount() {
-		return mapper.selectBeforeAnswerCount();
+	public int selectBeforeAnswerCount(int userNo) {
+		return mapper.selectBeforeAnswerCount(userNo);
 	}
 
-	public int selectAfterAnswerCount() {
-		return mapper.selectAfterAnswerCount();
+	public int selectAfterAnswerCount(int userNo) {
+		return mapper.selectAfterAnswerCount(userNo);
 	}
 
 	public int deleteAnswer(int answerNo) {
@@ -176,10 +176,6 @@ public class ProductService {
 
 	public ArrayList<Order> selectMyOrderList(int userNo) {
 		return mapper.selectMyOrderList(userNo);
-	}
-
-	public ArrayList<ReviewAnswer> countReviewAnswer(int userNo) {
-		return mapper.countReviewAnswer(userNo);
 	}
 
 	public ArrayList<ReviewAnswer> selectReviewAnswer(int productNo) {
@@ -208,6 +204,30 @@ public class ProductService {
 
 	public int deleteReview(Review review) {
 		return mapper.deleteReview(review);
+	}
+
+	public int insertQuestion(Board board) {
+		return mapper.insertQuestion(board);
+	}
+
+	public ArrayList<Board> selectMyBoard(int userNo) {
+		return mapper.selectMyBoard(userNo);
+	}
+
+	public Board selectMyBoardDetail(int boardId) {
+		return mapper.selectMyBoardDetail(boardId);
+	}
+
+	public Reply selectBoardReply(int boardId) {
+		return mapper.selectBoardReply(boardId);
+	}
+
+	public int updateQuestion(Board board) {
+		return mapper.updateQuestion(board);
+	}
+
+	public int deleteQuestion(Board board) {
+		return mapper.deleteQuestion(board);
 	}
 
 

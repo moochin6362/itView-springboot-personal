@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>문의 상세 페이지</title>
+<link href="/css/seller/productAnswerPage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+
+	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2 class="page-title">문의 상세 페이지</h2>
+			
+			<input type="hidden" id="boardId" th:value="${b.boardId}"/>
+				<div class="qna-wrapper">
+					<div class="qna-box">
+						<strong>문의 제목</strong>
+						<p>[[${b.boardTitle}]]</p>
+						<br/> 
+					</div>
+	
+					<div class="qna-box" id="contentDiv">
+						<strong>문의 내용</strong>
+						<br/> 
+						<p id="boardContent">[[${b.boardContent}]]</p>
+						<br/>
+						<button type="button" id="editButton">수정</button>
+						<button type="button" id="deleteButton">삭제</button>
+					</div>
+	
+					<div class="qna-box">
+						<strong>답변 내용</strong>
+						<br/><br/>
+						<p>[[${r.replyContent}]]</p>
+					</div>
+				</div>
+		</div>
+	</div>
+	
+	<script>
+		window.onload = () => {
+			document.querySelector('#editButton').addEventListener('click', () => {
+				const boardId = document.querySelector('#boardId').value;
+				const boardContentArea = document.querySelector('#contentDiv');
+				const boardOldContent = document.querySelector('#boardContent').innerText;
+				
+				boardContentArea.innerHTML = '<strong>문의 내용</strong><br/><textarea rows="4" cols="60" style="resize: none;" id="boardNewContent">' + boardOldContent + 
+											'</textarea>' +
+											'<br/> <button type="button" id="editCommitButton">완료</button> <button type="button" id="cancelButton">취소</button>';
+				
+				document.querySelector('#editCommitButton').addEventListener('click', () => {
+					const boardContent = document.querySelector("#boardNewContent").value;
+					fetch('/seller/question', {
+						method : 'put',
+						headers : {'content-type':'application/json; charset=UTF-8'},
+						body : JSON.stringify({
+							boardId : boardId,
+							boardContent : boardContent
+						})
+					})
+					.then(res => res.json())
+					.then(data => {
+						if(data > 0){
+							boardContentArea.innerHTML = '<strong>문의 내용</strong><br/><p id="boardContent">' + boardContent + '</p><br/><button type="button" id="editButton">수정</button><button type="button" id="deleteButton">삭제</button>'
+							location.reload();
+						} else {
+							alert('문의글 수정을 실패하였습니다. 페이지가 새로고침 됩니다.');
+							location.reload();
+						}
+					})
+					.catch(err => console.log(err))
+				});
+				document.querySelector('#cancelButton').addEventListener('click', () => {
+					if(confirm("문의글 수정을 취소하시겠습니까?")){
+						alert('페이지가 새로고침 됩니다.');
+						location.reload();
+					}
+				})
+			})
+			
+			document.querySelector('#deleteButton').addEventListener('click', () => {
+				const boardId = document.querySelector('#boardId').value;
+				if(confirm("문의글을 정말 삭제 하시겠습니까?")){
+					fetch('/seller/question', {
+						method: 'delete',
+						headers: {'content-type':'application/json; charset=UTF-8'},
+						body: JSON.stringify({boardId : boardId})
+					})
+					.then(res => res.json())
+					.then(data => {
+						if(data > 0){
+							alert('문의글 삭제가 완료되었습니다. 문의 내역 페이지로 이동합니다.');
+							location.href = "/seller/questionManagePage";
+						} else {
+							alert('문의글 삭제를 실채하였습니다. 페이지가 새로고침 됩니다.');
+							location.reload();
+						}
+					})
+					.catch(err => console.log(err))
+				}
+			})
+		}
+	</script>
+
+</body>
+</html>

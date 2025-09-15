@@ -244,13 +244,15 @@
 	<select id="selectBeforeAnswerCount">
 		select count(*)
 		from question
-		where question_status = 'N'
+			 join product using(product_no)
+		where question_status = 'N' and product.user_no = #{userNo}
 	</select>
 	
 	<select id="selectAfterAnswerCount">
 		select count(*)
 		from question
-		where question_status = 'Y'
+			 join product using(product_no)
+		where question_status = 'Y' and product.user_no = #{userNo}
 	</select>
 	
 	<delete id="deleteAnswer">
@@ -266,13 +268,20 @@
 	</update>
 	
 	<select id="countReview">
-		select p.product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count
+		select p.product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count, NVL(r.review_count-NVL(r1.review_answer_count, 0), 0) AS review_answer_count
 		from product p
 			 left join (
 			 			select product_no, count(*) AS review_count
 			 			from review
 			 			where review_status = 'Y'
 			 			group by product_no) r on p.product_no = r.product_no
+			 left join (
+				 		select product_no, count(*) AS review_answer_count
+				 		from review_answer
+				 			 join review using(review_no)
+				 			 join product using(product_no)
+				 		where product.user_no = #{userNo}
+				 		group by product_no) r1 on p.product_no = r1.product_no
 		where p.user_no = #{userNo}
 		order by p.product_no
 	</select>
@@ -294,14 +303,6 @@
 		select *
 		from "ORDER"
 			  join product on (order_target_no = product_no)
-		where product.user_no = #{userNo}
-	</select>
-	
-	<select id="countReviewAnswer">
-		select count(*)
-		from review_answer
-			 join review using(review_no)
-			 join product using(product_no)
 		where product.user_no = #{userNo}
 	</select>
 	
@@ -350,5 +351,40 @@
 		update review
 		set review_status = 'N'
 		where review_no = #{reviewNo}
+	</update>
+	
+	<insert id="insertQuestion">
+		insert into board
+		values(seq_board.nextval, #{boardTitle}, sysdate, sysdate, '7', default, #{userNo}, #{boardContent}, default)
+	</insert>
+	
+	<select id="selectMyBoard">
+		select *
+		from board
+		where user_no = #{userNo} and board_type = '7'
+	</select>
+	
+	<select id="selectMyBoardDetail">
+		select *
+		from board
+		where board_id = #{boardId}
+	</select>
+	
+	<select id="selectBoardReply">
+		select *
+		from admin_reply
+		where board_id = #{boardId}
+	</select>
+	
+	<update id="updateQuestion">
+		update board
+		set board_content = #{boardContent}
+		where board_id = #{boardId}
+	</update>
+	
+	<update id="deleteQuestion">
+		update board
+		set board_status = 'N'
+		where board_id = #{boardId}
 	</update>
 </mapper>

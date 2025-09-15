@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import itView.springboot.service.ProductService;
 import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
+import itView.springboot.vo.Board;
 import itView.springboot.vo.Coupon;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Review;
@@ -158,5 +159,16 @@ public class ProductRestContoller {
 		return pService.deleteReview(review);
 	}
 	
+	// 문의글 수정
+	@PutMapping("question")
+	public int updateQuestion(@RequestBody Board board) {
+		return pService.updateQuestion(board);
+	}
+	
+	// 문의글 삭제
+	@DeleteMapping("question")
+	public int deleteQuestion(@RequestBody Board board) {
+		return pService.deleteQuestion(board);
+	}
 	
 }

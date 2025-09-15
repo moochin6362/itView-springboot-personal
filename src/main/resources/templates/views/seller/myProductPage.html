@@ -25,9 +25,12 @@
 				<div class="product-card" th:each="r : ${rCount}">
 					<div class="product-item product-no">[[${r.productNo}]]</div>
 					<div class="product-item product-name">[[${r.productName}]]</div>
-					<div class="product-item product-stock">[[${r.productStock}]] 개</div>
+					<div class="product-item product-stock" th:if="${r.productStock != 0}" th:text="|${r.productStock} 개|"></div>
+					<div class="product-item product-stock" th:if="${r.productStock == 0}" th:text="|재고 없음|"></div>
 					<div class="product-item review-count">[[${r.reviewCount}]] 개</div>
-					<div class="product-item answer">3 개</div>
+					<div class="product-item answer">[[${r.reviewAnswerCount}]] 개</div>
+					<div class="product-item stock-zero" th:if="${r.productStock == 0}" th:text="|재고량 확인 요망|"></div>
+					<div class="product-item stock-zero" th:if="${r.productStock != 0}"></div>
 					<button class="editButton">수정</button>
 					<button class="editButton deleteButton">삭제</button>
 				</div>
@@ -61,6 +64,20 @@
 						} 
 					}
 				});
+			}
+			
+			const stockButtons = document.querySelectorAll('.stock-zero');
+			for(const stockButton of stockButtons){
+				stockButton.addEventListener('click', () => {
+					location.href = '/product/stockManagePage';
+				})
+			}
+			
+			const stocks = document.querySelectorAll('.product-stock');
+			for(const stock of stocks){
+				stock.addEventListener('click', () => {
+					location.href = '/product/stockManagePage'
+				})
 			}
 			
 			

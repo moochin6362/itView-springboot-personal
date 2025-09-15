@@ -465,6 +465,7 @@ body {
 						responseForm.innerHTML = '';
 						answerContent.innerHTML = '<div class="response-content"><p>' + reviewAnswerContent + '</p></div>'
 						responseDiv.append(answerContent);
+						location.reload();
 					})
 					.catch(err => console.log(err))
 				});
@@ -556,9 +557,9 @@ body {
 			const answerDeleteButtons = document.querySelectorAll('.answerDeleteButton');
 			for(answerDeleteButton of answerDeleteButtons){
 				answerDeleteButton.addEventListener('click', e => {
-					const responseDiv = e.target.parentElement.previousElementSibling;
- 					const reviewAnswerId = responseDiv.children[3].children[0].value;
-					const productNo = responseDiv.children[0].value;
+					const responseDiv = e.target.parentElement.previousElementSibling.previousElementSibling;
+ 					const reviewAnswerId = responseDiv.children[0].value;
+					const productNo = responseDiv.parentElement.children[0].value;
 					console.log(productNo)
 					if(confirm("리뷰 답변을 삭제 하시겠습니까?")){
 						alert("답변이 삭제됩니다.");
