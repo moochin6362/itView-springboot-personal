@@ -132,6 +132,8 @@ public interface ProductMapper {
 
 	int deleteQuestion(Board board);
 
+	ArrayList<ExperienceGroup> selectMyExp(int userNo);
+
 
 }
 

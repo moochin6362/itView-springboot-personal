@@ -230,5 +230,9 @@ public class ProductService {
 		return mapper.deleteQuestion(board);
 	}
 
+	public ArrayList<ExperienceGroup> selectMyExp(int userNo) {
+		return mapper.selectMyExp(userNo);
+	}
+
 
 }

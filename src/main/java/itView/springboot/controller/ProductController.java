@@ -152,7 +152,7 @@ public class ProductController {
 		
 		ArrayList<Product> rList = pService.countReview(userNo);
 		
-		System.out.println(rList);
+		//System.out.println(rList);
 		
 //		for(int i = 0; i < rList.size(); i++) {
 			// UserNo 이용해서 DB에 있는 쿼리문 갖고와서 review_answer count해오기
@@ -334,6 +334,19 @@ public class ProductController {
 		return "seller/expWritePage";
 	}
 	
+	// 체험단 신청글 관리 페이지 이동
+	@GetMapping("expEditPage")
+	public String expEditPage(Model model, HttpSession session) {
+		
+		User user = (User)session.getAttribute("loginUser");
+		int userNo = user.getUserNo();
+		ArrayList<ExperienceGroup> eList = pService.selectMyExp(userNo);
+		
+		model.addAttribute("eList", eList);
+		
+		return "seller/expEditPage";
+	}
+	
 	// 체험단 관리 페이지 이동
 	@GetMapping("experienceManagePage")
 	public String experienceManagePage(Model model, HttpSession session) {
@@ -349,8 +362,6 @@ public class ProductController {
 			int expNo = eList.get(i).getExpNo();
 			eaList.addAll(pService.selectExpApp(expNo));
 		}
-		
-		System.out.println(eaList);
 		
 		model.addAttribute("eaList", eaList);
 		

@@ -236,7 +236,12 @@
 	
 	<insert id="writeExp">
 		insert into experience_group
-		values(seq_exp_group, #{expTitle}, #{expContent}, sysdate, #{expEnd}, default, #{userNo})
+		<if test="expEnd != null">
+			values(seq_exp_group.nextval, #{expTitle}, #{expContent}, sysdate, #{expEnd}, default, #{userNo})
+		</if>
+		<if test="expEnd == null">
+			values(seq_exp_group.nextval, #{expTitle}, #{expContent}, sysdate, null, default, #{userNo})
+		</if>
 	</insert>
 	
 	<select id="selectProductDetail">
@@ -425,4 +430,15 @@
 		set board_status = 'N'
 		where board_id = #{boardId}
 	</update>
+	
+	<select id="selectMyExp">
+		select exp_no, exp_title, NVL(ea.ea_count, 0) as ea_count
+		from experience_group eg
+			 left join (
+			 			select exp_group_no, count(*) as ea_count
+			 			from experience_application
+			 			where is_choice = 'N'
+			 			group by exp_group_no) ea on eg.exp_no = ea.exp_group_no
+		where eg.user_no = #{userNo}
+	</select>
 </mapper>

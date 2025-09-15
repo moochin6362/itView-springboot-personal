@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>체험단 신청글 관리 페이지</title>
+<link href="/css/seller/productQnAPage.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+	<div th:replace="~{common/sellerHeader :: sellerHeader}"></div>
+
+	<div class="layout">
+		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
+
+		<div class="content">
+			<h2>체험단 신청글 관리 페이지</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>글 번호</th>
+						<th>체험단 신청글 제목</th>
+						<th>신청 미처리 개수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="e : ${eList}">
+						<td>[[${e.expNo}]]</td>
+						<td class="boardTitle">[[${e.expTitle}]]</td>
+						<td>[[${e.eaCount}]]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<script>
+		window.onload = () => {
+			
+		}
+	</script>
+
+</body>
+</html>
