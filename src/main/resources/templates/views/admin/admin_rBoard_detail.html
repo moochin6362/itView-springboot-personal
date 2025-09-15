@@ -81,12 +81,12 @@
 					          	</tr>
 				          	</thead>
 				          	<tbody>
-					        	<tr th:each="b : ${blist}">
-					            	<td>[[${b.reportNo}]]</td>
-					            	<td>[[${b.reportTitle}]]</td>
- 					            	<td>[[${b.reportContent}]]</td> 
-					            	<td>[[${b.userName}]]</td>
-					            	<td>[[${b.reportDate}]]</td>
+					        	<tr th:each="br : ${blist}">
+					            	<td th:text="${br.reportNo}"></td>
+					            	<td th:text="${br.reportTitle}"></td>
+ 					            	<td th:text="${br.reportContent}"></td> 
+					            	<td th:text="${br.userName}"></td>
+					            	<td th:text="${br.reportDate}"></td>
 					        	</tr>
 				        	</tbody>
 				    	</table>

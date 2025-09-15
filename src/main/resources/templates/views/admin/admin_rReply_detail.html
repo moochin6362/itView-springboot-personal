@@ -26,7 +26,7 @@
 	                <div class="main-section">
 	                    <h2 class="page-title">신고댓글 상세정보</h2>
 	                    <form id="detailForm" method="get" th:action="@{/inhoAdmin/updateReportProduct}">
-	                    	<input type="hidden" name="replyNo" th:value="${p.productNo}">
+	                    	<input type="hidden" name="replyNo" th:value="${v.replyNo}">
 	                    	<input type="hidden" name="page" th:value="${page}">
 	                    	<table class="detail-table">
 	                        <tr>
@@ -76,7 +76,7 @@
 					        	<tr>
 					        		<th>신고번호</th>
 						            <th>신고제목</th>
-<!-- 						            <th>신고내용</th> -->
+   						            <th>신고내용</th>
 						            <th>신고 작성자</th>
 						            <th>신고일</th>
 					          	</tr>
@@ -85,13 +85,10 @@
 					        	<tr th:each="r : ${vlist}">
 					            	<td>[[${r.reportNo}]]</td>
 					            	<td>[[${r.reportTitle}]]</td>
-<!-- 					            	<td>[[${r.reportContent}]]</td> -->
+ 					                <td>[[${r.reportContent}]]</td> 
 					            	<td>[[${r.userName}]]</td>
 					            	<td>[[${r.reportDate}]]</td>
 					        	</tr>
-<!-- 				          		<tr th:if="${#lists.isEmpty(reportHistoryList)}"> -->
-<!-- 				            		<td colspan="3" style="text-align:center;">신고 이력이 없습니다.</td> -->
-<!-- 				          		</tr> -->
 				        	</tbody>
 				    	</table>
 					</div>

@@ -140,7 +140,7 @@ public interface AdminMapper {
 	ArrayList<Report> getUserReportList(RowBounds rowBounds,int userNo );
 	
 	//신고 커뮤니티글 상세조회
-	Board selectReportBoardList(int boardId);
+	Board selectReportBoard(int boardId);
 	int getBoardReportCount(int boardId);
 	ArrayList<Report> getBoardReportList(RowBounds rowBounds, int boardId);
 	
@@ -159,6 +159,7 @@ public interface AdminMapper {
 	//회원정지(기간있는거)
 	int updateReportUserEndDate(Map<String, Object> map);
 	int stopUser(int userNo);
+
 
 	
 	

@@ -21,7 +21,8 @@ public class Review {
 	private int userNo;
 	private String userName;
 	
-    //신고용(DB에는 없음)
+    //신고용
+	private String userId;
 	private int reportNo;
 	private String reportType;
 	private Date reportDate;
@@ -31,8 +32,6 @@ public class Review {
 	private String reportStatus;
 	private Date reportModifyDate;
 	private int reportTargetNo;
-	private String reviewWriter;
-	private String reporterName;
 	
 	// 리뷰 답변
 	private int reviewAnswerId;

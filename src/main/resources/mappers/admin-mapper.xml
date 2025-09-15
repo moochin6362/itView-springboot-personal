@@ -250,29 +250,33 @@ select count(*)
 	    b.board_title,
 	    b.board_content,
 	    u.user_name,
-	    COUNT(r.report_no) AS report_count,
-	    max(r.report_date) as report_date
-		FROM board b
-		JOIN report r 
-		  ON r.report_target_no = b.board_id
-		JOIN "USER" u
-		  ON b.user_no = u.user_no
-		WHERE report_type = 'B' and b.board_id = #{boardId}
-		 group by b.board_id, b.board_title, b.board_content, u.user_name
+	    (SELECT COUNT(*) 
+         FROM report r 
+         WHERE r.report_target_no = b.board_id AND r.report_type = 'B') AS report_count,
+        (SELECT MAX(report_date) 
+         FROM report r 
+         WHERE r.report_target_no = b.board_id AND r.report_type = 'B') AS report_date
+    FROM board b
+    JOIN "USER" u ON b.user_no = u.user_no
+    WHERE b.board_id = #{boardId}
 </select>
 <select id="getBoardReportCount">
 	select count(*) from report 
 	where report_type = 'B' and report_target_no = #{boardId}
 </select>
 <select id="getBoardReportList">
-	select r.report_no, r.report_title, r.report_content,
-	       u.user_id as userName, r.report_date
+	select 
+		r.report_no, 
+		r.report_title, 
+		r.report_content,
+	    u.user_name,
+	    r.report_date
 	from report r
 	join "USER" u on r.reporter_user_id = u.user_no
 	where r.report_target_no = #{boardId}
+	 AND r.report_type = 'B'
 	order by r.report_date desc
 </select>
-
 
 <select id="selectReportReview" parameterType="int" resultType="Review">
 SELECT 
@@ -335,7 +339,7 @@ SELECT
 		  ON r.report_target_no = v.reply_no
 		JOIN "USER" u
 		  ON v.user_no = u.user_no
-		WHERE report_type = 'R' and report_target_no = #{replyNo}
+		WHERE report_type = 'V' and report_target_no = #{replyNo}
 		GROUP BY
 		    v.reply_no,
 		    v.reply_date,
@@ -413,29 +417,6 @@ where board_id = #{boardId} and board_status='Y' and board_type='3'
 order by board_date desc, board_id DESC
 </select>
 
-<!-- 일반문의게시판 답변등록 -->
-<insert id="saveGreply">
-	insert into admin_reply
-	values (
-		seq_admin_reply.nextval,
-		#{replyContent},
-		sysdate,
-		sysdate,
-		'Y',
-		#{boardId},
-		'3',
-		#{userNo}
-		)
-</insert>
-
-<!-- 일반문의 댓글조회-->
-<select id="getGeneralReplyList" parameterType="int" resultType="AdminReply">
-	select * from admin_reply 
-	where board_type='3' 
-		and reply_status ='Y' 
-		and board_id = #{boardId}
-	order by reply_date desc
-</select>
 
 
 <!-- 판매자 문의게시판 조회하기 -->
@@ -505,18 +486,6 @@ order by board_date desc, board_id DESC
 		)
  	
  </insert>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!-- 판매금지 제품 조회 -->
 <select id="getproListCount" parameterType="int" resultType="java.lang.Integer">

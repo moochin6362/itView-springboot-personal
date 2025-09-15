@@ -43,7 +43,7 @@
 	                        </tr>
 	                        <tr>
 	                            <th>리뷰 작성자</th>
-	                            <td>[[${rv.reviewWriter}]]</td>
+	                            <td>[[${rv.userId}]]</td>
 	                        </tr>
 	                        <tr>
 	                            <th>신고 누적횟수</th>
@@ -72,7 +72,7 @@
 					        	<tr>
 					        		<th>신고번호</th>
 						            <th>신고제목</th>
-<!-- 						            <th>신고내용</th> -->
+						            <th>신고내용</th>
 						            <th>신고 작성자</th>
 						            <th>신고일</th>
 					          	</tr>
@@ -81,13 +81,10 @@
 					        	<tr th:each="r : ${rlist}">
 					            	<td>[[${r.reportNo}]]</td>
 					            	<td>[[${r.reportTitle}]]</td>
-<!-- 					            	<td>[[${r.reportContent}]]</td> -->
-					            	<td>[[${r.reporterName}]]</td>
+									<td>[[${r.reportContent}]]</td> 
+					            	<td>[[${r.userName}]]</td>
 					            	<td>[[${r.reportDate}]]</td>
 					        	</tr>
-<!-- 				          		<tr th:if="${#lists.isEmpty(reportHistoryList)}"> -->
-<!-- 				            		<td colspan="3" style="text-align:center;">신고 이력이 없습니다.</td> -->
-<!-- 				          		</tr> -->
 				        	</tbody>
 				    	</table>
 					</div>

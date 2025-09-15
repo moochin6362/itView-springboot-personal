@@ -226,7 +226,7 @@ public class AdminService {
 
 	//신고 커뮤니티글 상세보기
 	public Board selectReportBoard(int boardId) {
-		Board b = mapper.selectReportBoardList(boardId);
+		Board b = mapper.selectReportBoard(boardId);
 		return b;
 	}
 
