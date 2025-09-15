@@ -231,8 +231,8 @@ body {
 					</select>
 				</p>
 				<p th:if="${cList.size() != 0}" id="downCoupon">🎫 쿠폰 발급받기</p>
-			    <button class="btn flex-fill" th:onclick="openReportModal('P', '[[${p.productNo}]]')">🚨신고</button>
-			    <button class="btn flex-fill" onClick="">❔문의하기</button>
+			    <button th:if="${session.loginUser != null}" class="btn flex-fill" th:onclick="openReportModal('P', '[[${p.productNo}]]')">🚨신고</button>
+			    <button th:if="${session.loginUser != null}" class="btn flex-fill" id="inquiryButton">❔문의하기</button>
 
 				<hr>
 
@@ -384,8 +384,14 @@ body {
 					location.href = '/product/downCoupon/' + userNo + '/' + couponNo + '/' + productNo;
 					
 				});
-				
-				
+			}
+			
+			if(document.querySelector('#inquiryButton') != null){
+				document.querySelector('#inquiryButton').addEventListener('click', () => {
+					const productNo = document.querySelector('#productNo').value;
+					alert('상품 문의 페이지로 이동합니다.')
+					location.href="/product/productInquery/" + productNo;
+				});
 			}
 		}
 		
