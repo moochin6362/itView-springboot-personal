@@ -1,6 +1,7 @@
 package itView.springboot.service;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -299,6 +300,9 @@ public class AdminService {
 		return mapper.deleteReplyByNo(replyNo);
 	}
 
+	public void restoreUser(LocalDate today) {
+		mapper.restoreUser(today);
+	}
 
 
 

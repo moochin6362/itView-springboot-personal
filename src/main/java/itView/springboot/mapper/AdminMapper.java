@@ -1,5 +1,6 @@
 package itView.springboot.mapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -168,6 +169,8 @@ public interface AdminMapper {
 	int deleteReviewByNo(Integer reviewNo);
 
 	int deleteReplyByNo(int replyNo);
+	//회원복구(자동)
+	void restoreUser(LocalDate today);
 
 
 	
