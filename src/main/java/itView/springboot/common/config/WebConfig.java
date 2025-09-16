@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import itView.springboot.common.config.interceptor.CheckAdminInterceptor;
 import itView.springboot.common.config.interceptor.FlashMessageInterceptor;
+import itView.springboot.common.config.interceptor.LogInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
