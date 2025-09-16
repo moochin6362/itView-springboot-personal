@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>쇼핑몰 예제</title>
+    <title>체험단 신청글</title>
 
     <style>
 
@@ -48,6 +48,20 @@
             margin: 10px 0;
         }
 
+#buttonDiv {
+	text-align: right;
+}
+
+#appButton{
+	background-color: #34e5eb;
+	color: white;
+	border: 1px solid #c2e4e4;
+	border-radius: 10px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
     </style>
 </head>
 <body>
@@ -57,6 +71,7 @@
 <!-- experience 상세 -->
 <main class="container my-5">
     <div class="notice-card">
+    	<input type="hidden" id="expNo" th:value="${experience.expNo}"/>
         <h2 class="notice-title">
             [[${experience.expTitle}]]
         </h2>
@@ -66,7 +81,10 @@
         <div class="notice-content">
             [[${experience.expContent}]]
         </div>
-
+		
+		<div id="buttonDiv">
+			<button id="appButton" th:if="${session.loginUser != null && session.loginUser.userType == 'U'}">신청하기</button>
+		</div>
 
 
     </div>
@@ -74,6 +92,17 @@
 
 
 <div th:replace="~{common/footer :: footer}"></div>
+
+<script>
+	window.onload = () => {
+		document.querySelector('#appButton').addEventListener('click', () => {
+			const expNo = document.querySelector('#expNo').value;
+			console.log(expNo)
+			location.href = '/seller/applicationExp/' + expNo;
+			alert('체험단 신청 페이지로 이동합니다.');
+		});
+	}
+</script>
 
 </body>
 </html>

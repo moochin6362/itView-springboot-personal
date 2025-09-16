@@ -1,5 +1,9 @@
 package itView.springboot.vo;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +33,8 @@ public class Product {
 	private String gender;
 	private String ingredient;
 	private String ecoFriendly;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate productCreateDate;
 	
 	private int reviewCount;
 	private int reviewAnswerCount;

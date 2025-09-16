@@ -7,7 +7,7 @@
 			select seq_product.nextval from dual 
 		</selectKey>
 		insert into product
-		values(#{productNo}, #{productName}, #{productDetail}, #{productStock}, #{productPrice}, #{productCategory}, #{productCompany}, default, #{userNo}, #{skinType}, #{personalColor}, #{skinTrouble}, #{headSkin}, #{userAge}, #{gender}, #{ingredient}, #{ecoFriendly})
+		values(#{productNo}, #{productName}, #{productDetail}, #{productStock}, #{productPrice}, #{productCategory}, #{productCompany}, default, #{userNo}, #{skinType}, #{personalColor}, #{skinTrouble}, #{headSkin}, #{userAge}, #{gender}, #{ingredient}, #{ecoFriendly} ,sysdate)
 	</insert>
 	
 	<insert id="insertAttm">

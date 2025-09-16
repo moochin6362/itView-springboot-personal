@@ -33,7 +33,8 @@
 						<td>[[${q.productName}]]</td>
 						<td class="questionTitle">[[${q.questionTitle}]]</td>
 						<td>[[${q.userName}]]</td>
-						<td>[[${q.questionStatus}]]</td>
+						<td class="statusY" th:if="${q.questionStatus == 'Y'}" th:text="|답변 완료|"></td>
+						<td class="statusN" th:if="${q.questionStatus == 'N'}" th:text="|답변 대기|"></td>
 					</tr>
 				</tbody>
 			</table>

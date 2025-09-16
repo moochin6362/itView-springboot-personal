@@ -14,7 +14,7 @@
 		<div th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
-			<h2>체험단 신청글 작성</h2>
+			<h2>관리자에게 1:1 문의 작성</h2>
 			<form action="/seller/writeQuestion" method="POST">
 				<input type="hidden" name="userNo" th:value="${session.loginUser.userNo}"/>
 				

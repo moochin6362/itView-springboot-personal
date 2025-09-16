@@ -3,60 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="/css/seller/sidebar.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
 	<div class="sidebar">
-		<div class="sidebar-item">내 상품 보기</div>
-		<div class="sidebar-item">내 쿠폰 보기</div>
-		<div class="sidebar-item">상품 등록</div>
-		<div class="sidebar-item">재고 관리</div>
-		<div class="sidebar-item">쿠폰 등록</div>
-		<div class="sidebar-item">판매 내역</div>
-		<div class="sidebar-item">상품 Q&A</div>
-		<div class="sidebar-item">체험단 신청글 작성</div>
-		<div class="sidebar-item">체험단 신청글 관리</div>
-		<div class="sidebar-item">체험단 신청 관리</div>
-		<div class="sidebar-item">문의하기</div>
-		<div class="sidebar-item">문의 내역</div>
-		<div class="sidebar-item">홈 페이지로 이동</div>
+		<!-- 왼쪽 아이콘 바 (필요시 활성화) -->
+		<div class="icon-bar">
+			<i class="fas fa-box active" title="상품"></i> 
+			<i class="fas fa-ticket-alt" title="쿠폰"></i> 
+			<i class="fas fa-clipboard-list" title="체험단"></i> 
+			<i class="fas fa-comments" title="Q&A"></i> 
+			<i class="fas fa-home" title="홈"></i>
+		</div>
+
+		<!-- 실제 메뉴 패널 -->
+		<div class="menu-panel">
+			<div class="menu-title">
+				<a th:href="@{/}">
+		    		it-view
+		    	</a><br/><br/>
+		    	판매자 메뉴
+		    </div>
+
+			<!-- 내 상품 -->
+			<div class="menu-item active">
+				<span>내 상품 보기</span>
+			</div>
+
+			<!-- 쿠폰 -->
+			<div class="menu-item">
+				<span>쿠폰 관리</span>
+			</div>
+			<div class="submenu">
+				<div class="submenu-item">
+					<span></span>내 쿠폰 보기
+				</div>
+				<div class="submenu-item">
+					<span></span>쿠폰 등록
+				</div>
+			</div>
+
+			<!-- 상품 -->
+			<div class="menu-item">
+				<span>상품 관리</span>
+			</div>
+			<div class="submenu">
+				<div class="submenu-item">
+					<span></span>상품 등록
+				</div>
+				<div class="submenu-item">
+					<span></span>재고 관리
+				</div>
+			</div>
+
+			<!-- 판매 내역 -->
+			<div class="menu-item">
+				<span>판매 내역</span>
+			</div>
+
+			<!-- Q&A -->
+			<div class="menu-item">
+				<span>Q&A</span>
+			</div>
+			<div class="submenu">
+				<div class="submenu-item">
+					<span></span>상품 Q&A
+				</div>
+				<div class="submenu-item">
+					<span></span>문의하기
+				</div>
+				<div class="submenu-item">
+					<span></span>문의 내역
+				</div>
+			</div>
+
+			<!-- 체험단 -->
+			<div class="menu-item">
+				<span>체험단</span>
+			</div>
+			<div class="submenu">
+				<div class="submenu-item">
+					<span></span>신청글 작성
+				</div>
+				<div class="submenu-item">
+					<span></span>신청글 관리
+				</div>
+				<div class="submenu-item">
+					<span></span>신청 관리
+				</div>
+			</div>
+
+			<!-- 홈페이지 이동 -->
+			<div class="menu-item">
+				<span class="submenu-item">홈 페이지로 이동</span>
+			</div>
+		</div>
 	</div>
-	
+
 	<script>
-		window.addEventListener('load', () => {
-			const buttons = document.querySelectorAll('.sidebar-item');
-			for(const button of buttons){
-				button.addEventListener('click', e => {
-					let value = e.target.innerText;
-					if(value == '상품 등록') {
-						location.href = '/seller/insertProductPage';
-					} else if(value == '재고 관리'){
-						location.href = '/seller/stockManagePage';
-					} else if(value == '쿠폰 등록'){
-						location.href = '/seller/couponManagePage';
-					} else if(value == '상품 Q&A'){
-						location.href = '/seller/productQnAPage';
-					} else if(value == '내 상품 보기'){
-						location.href = '/seller/myProductPage';
-					} else if(value == '내 쿠폰 보기'){
-						location.href = '/seller/myCouponPage';
-					} else if(value == '판매 내역'){
-						location.href = '/seller/mySellingPage';
-					} else if(value == '체험단 신청글 작성'){
-						location.href = '/seller/expWrite';
-					} else if(value == '체험단 신청글 관리'){
-						location.href = '/seller/expEditPage';
-					} else if(value == '체험단 신청 관리'){
-						location.href = '/seller/experienceManagePage';
-					} else if(value == '문의하기'){
-						location.href = '/seller/questionPage';
-					} else if(value == '문의 내역'){
-						location.href = '/seller/questionManagePage';
-					} else if(value == '홈 페이지로 이동'){
-						location.href = '/';
-					}
-				});
-			}
-		})  
+	document.addEventListener('DOMContentLoaded', () => {
+		  const menuItems = document.querySelectorAll(".menu-item");
+		  const submenuItems = document.querySelectorAll(".submenu-item");
+		  const icons = document.querySelectorAll(".icon-bar i");
+
+		  // 메뉴 상태 초기화
+		  function resetMenuState() {
+		    menuItems.forEach(item => {
+		      item.classList.remove('active');
+		      const submenu = item.nextElementSibling;
+		      if (submenu && submenu.classList.contains('submenu')) {
+		        submenu.style.display = 'none';
+		      }
+		    });
+		  }
+
+		  // 메뉴 활성화 함수
+		  function activateMenu(index) {
+		    const item = menuItems[index];
+		    if (!item) return;
+
+		    resetMenuState();
+		    item.classList.add('active');
+		    const submenu = item.nextElementSibling;
+		    if (submenu && submenu.classList.contains('submenu')) {
+		      submenu.style.display = 'block';
+		    }
+		    localStorage.setItem('activeMenuIndex', index);
+		  }
+
+		  // 초기 로딩 시 저장된 메뉴 상태 복원
+		  const savedIndex = localStorage.getItem('activeMenuIndex');
+		  if (savedIndex !== null) {
+		    activateMenu(Number(savedIndex));
+		  }
+
+		  // 메뉴 아이템 클릭 시
+		  menuItems.forEach((item, idx) => {
+		    item.addEventListener("click", () => {
+		      activateMenu(idx);
+		      console.log(item, idx);
+
+		      const text = item.innerText.trim();
+		      if (text === "내 상품 보기") location.href = '/seller/myProductPage';
+		      else if (text === "판매 내역") location.href = '/seller/mySellingPage';
+		      else if (text === "홈 페이지로 이동") location.href = '/';
+		    });
+		  });
+
+		  // 서브메뉴 클릭 시 페이지 이동
+		  submenuItems.forEach(subItem => {
+		    subItem.addEventListener("click", e => {
+		      const text = e.target.innerText.trim();
+		      if (text === "상품 등록") location.href = '/seller/insertProductPage';
+		      else if (text === "재고 관리") location.href = '/seller/stockManagePage';
+		      else if (text === "쿠폰 등록") location.href = '/seller/couponManagePage';
+		      else if (text === "상품 Q&A") location.href = '/seller/productQnAPage';
+		      else if (text === "내 쿠폰 보기") location.href = '/seller/myCouponPage';
+		      else if (text === "신청글 작성") location.href = '/seller/expWrite';
+		      else if (text === "신청글 관리") location.href = '/seller/expEditPage';
+		      else if (text === "신청 관리") location.href = '/seller/experienceManagePage';
+		      else if (text === "문의하기") location.href = '/seller/questionPage';
+		      else if (text === "문의 내역") location.href = '/seller/questionManagePage';
+		    });
+		  });
+
+		  // 아이콘 클릭 시 해당 메뉴 트리거
+		  const iconToMenuIndexMap = {
+		    0: 0,   // 상품 관리
+		    1: 1,   // 쿠폰 관리
+		    2: 5,   // 체험단
+		    3: 4,   // Q&A
+		    4: 6   // 홈 이동
+		  };
+
+		  icons.forEach((icon, iconIdx) => {
+		    icon.addEventListener('click', () => {
+		      // 아이콘 시각 효과
+		      icons.forEach(i => i.classList.remove('active'));
+		      icon.classList.add('active');
+
+		      const menuIdx = iconToMenuIndexMap[iconIdx];
+
+		      // 아이콘 클릭 시 그 페이지로 이동
+		      if (iconIdx === 0) {
+		        location.href = '/seller/myProductPage';
+		      } else if (iconIdx === 1) {
+		    	  location.href = '/seller/myCouponPage';
+		      } else if (iconIdx === 2) {
+		    	  location.href = '/seller/expEditPage';
+		      } else if (iconIdx === 3) {
+		    	  location.href = '/seller/productQnAPage';
+		      } else if (iconIdx === 4) {
+		    	  location.href = '/';
+		      }
+
+		      // 메뉴 클릭 트리거
+		      activateMenu(menuIdx);
+		    });
+		  });
+		});
 	</script>
 </body>
 </html>
