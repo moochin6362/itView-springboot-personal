@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 메인 페이지</title>
+
+	<!-- CSS 파일 -->
+    <link href="/css/inhoCss/commonList.css" rel="stylesheet" />
+    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
+    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
+
+    <!-- 아이콘 & 폰트 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{common/header2 :: header2}"></div>
+
+            <div class="main-content">
+				<h2>로그인 방문자 통계</h2>
+		        <div style="max-width: 1200px; margin: 20px auto; text-align: center;">
+		          <canvas id="loginChart"></canvas>
+		        </div>
+            </div>
+        </div>
+    </div>
+    <!-- Chart.js CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
+    <script th:src="@{/js/inhoAdmin/alert.js}"></script>
+    <script>
+	document.addEventListener("DOMContentLoaded", function() {
+	    const ctx = document.getElementById('loginChart').getContext('2d');
+	    let chart; // 차트 객체 저장
+	
+	    // 데이터를 가져와 그래프 생성
+	    const renderChart = (data, lastNDays = 7) => {
+	        const allDates = Object.keys(data).sort(); // 날짜 정렬
+	        const displayDates = lastNDays ? allDates.slice(-lastNDays) : allDates; // 최근 N일 또는 전체
+	        const displayCounts = displayDates.map(date => data[date]);
+	
+	        // 기존 차트가 있으면 제거
+	        if(chart) chart.destroy();
+	
+	        chart = new Chart(ctx, {
+	            type: 'line',
+	            data: {
+	                labels: displayDates,
+	                datasets: [{
+	                    label: '방문자 수',
+	                    data: displayCounts,
+	                    backgroundColor: 'rgba(54, 162, 235, 0.4)',
+	                    borderColor: 'rgba(54, 162, 235, 1)',
+	                    borderWidth: 4,
+	                    borderRadius: 8
+	                }]
+	            },
+	            options: {
+	                responsive: true,
+	                plugins: {
+	                    legend: { display: true },
+	                    title: {
+	                        display: true,
+	                        text: lastNDays ? `최근 ${lastNDays}일 로그인 방문자 수` : '전체 로그인 방문자 수',
+	                        font: { size: 18 }
+	                    }
+	                },
+	                scales: {
+	                    x: { ticks: { font: { size: 12 } } },
+	                    y: { min: 0,
+	                    	 max: 200,
+	                    	 ticks: {
+	                    		 stepsize: 10,
+	                    		 callback: function(value){
+	                    			 return value + '만';
+	                    		 }
+	                    	}
+	                    }
+	                   	
+	                }
+	            }
+	        });
+	    };
+	
+	    // 서버에서 데이터 가져오기
+	    fetch('/inhoAdmin/logs')
+	        .then(res => res.json())
+	        .then(data => renderChart(data, 7)) // 기본: 최근 7일
+	        .catch(err => console.error("로그 데이터 로드 실패:", err));
+	
+	    
+	});
+	</script>
+
+
+</body>
+</html>

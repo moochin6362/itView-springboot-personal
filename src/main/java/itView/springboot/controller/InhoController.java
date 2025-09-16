@@ -633,4 +633,9 @@ public class InhoController {
         	throw new AdminException("신고 등록을 실패하였습니다.");
         }
     }
+    
+    @GetMapping("/adminMain")
+    public String adminMainPage() {
+    	return "inhoAdmin/adminMain";
+    }
 }

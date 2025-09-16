@@ -95,6 +95,7 @@
 		p.PRODUCT_PRICE,
 		p.PRODUCT_STOCK,
 		p.PRODUCT_STATE,
+		p.product_create_date,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -114,6 +115,7 @@
 		p.PRODUCT_COMPANY,
 		p.PRODUCT_STOCK,
 		p.PRODUCT_STATE,
+		p.product_create_date,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a
@@ -147,6 +149,7 @@
 		p.PRODUCT_COMPANY,
 		p.PRODUCT_STOCK,
 		p.PRODUCT_STATE,
+		p.product_create_date,
 		a.ATTM_RENAME AS attmRename
 		FROM PRODUCT p
 		LEFT JOIN ATTACHMENT a

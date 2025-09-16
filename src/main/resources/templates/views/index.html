@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="/js/seller/product.js"></script>
     <title>it:view</title>
 
     <style>
@@ -70,6 +71,12 @@
             opacity: 0.7;
             pointer-events: none; /* 클릭 막기 원하면 유지 */
         }
+        
+        .productDate {
+        	color : #34e5eb;
+        	font-weight: bolder;
+        }
+        
     </style>
 </head>
 <body>
@@ -116,6 +123,7 @@
 
         <div class="col-md-3" th:each="product : ${products}">
             <!-- 제품 카드 전체를 링크로 -->
+			
             <a th:href="@{'/product/detail/' + ${product.productNo}}"
                class="text-decoration-none text-dark">
                 <div class="product-card position-relative p-2"
@@ -130,6 +138,10 @@
                              src="/images/default.png"
                              alt="기본 썸네일"/>
                     </div>
+                    
+                    <div class="productDate" th:text="${#dates.format(product.productCreateDate, 'HH:mm')}"
+						th:attr="data-fullDate=${#dates.format(product.productCreateDate, 'yyyy-MM-dd HH:mm:ss')}">
+					</div>
 
                     <!-- 상품 이름 -->
                     <h6 th:text="${product.productName}" class="mb-1">상품명</h6>

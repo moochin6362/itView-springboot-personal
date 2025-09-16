@@ -152,15 +152,6 @@ public class ProductController {
 		
 		ArrayList<Product> rList = pService.countReview(userNo);
 		
-		//System.out.println(rList);
-		
-//		for(int i = 0; i < rList.size(); i++) {
-			// UserNo 이용해서 DB에 있는 쿼리문 갖고와서 review_answer count해오기
-			// rList에 있는 review_count랑 review_answer_count랑 연산
-			// 그 결과를 화면에 고고
-			// product에 있는 user_n
-//		}
-		
 		model.addAttribute("rCount", rList);
 		return "seller/myProductPage";
 	}
@@ -220,9 +211,6 @@ public class ProductController {
 		int reviewCount = pService.selectReviewCount(productNo);
 		
 		ArrayList<Question> question = pService.selectQuestion(productNo);
-		
-		//System.out.println(rList);
-		
 		
 		ArrayList<Answer> answer = new ArrayList<Answer>();
 		

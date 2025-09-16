@@ -61,6 +61,13 @@
   color: #34e5eb;
   font-family: 'EBSHMJESaeronRA';
   letter-spacing: 1px;
+
+}
+
+.menu-title a{
+	color: #34e5eb;
+	font-size: 40px;
+	text-decoration: none;
 }
 
 .menu-item {

@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import itView.springboot.common.config.interceptor.CheckAdminInterceptor;
 import itView.springboot.common.config.interceptor.FlashMessageInterceptor;
+import itView.springboot.common.config.interceptor.LogInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -33,5 +34,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new CheckAdminInterceptor())
                 .addPathPatterns("/inhoAdmin/**", "/admin/**")
                 .excludePathPatterns("/inhoAdmin/ranking", "/inhoAdmin/enrollReport", "/inhoAdmin/enrollProductReport");// ranking page 제외
+        
+        // 로그 인터셉터
+        registry.addInterceptor(new LogInterceptor())
+		.addPathPatterns("/inhoAdmin/**");
     }
 }
