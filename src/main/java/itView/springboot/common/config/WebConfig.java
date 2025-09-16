@@ -17,10 +17,20 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/**")
                 .addResourceLocations(
                 		"file:///C:/uploadFilesFinal/product/"
-                		, "classpath:/static/"
-                		, "file:///C:/uploadFilesFinal/notice/"
-                		, "file:///C:/uploadFilesFinal/community/"
-                		, "file:///C:/uploadFilesFinal/temp/");
+                		, "classpath:/static/");
+
+        // temp 폴더 (수정 금지)
+        registry.addResourceHandler("/uploadFilesFinal/temp/**")
+                .addResourceLocations("file:///c:/uploadFilesFinal/temp/");
+
+        // notice 폴더 (수정 금지)
+        registry.addResourceHandler("/uploadFilesFinal/notice/**")
+                .addResourceLocations("file:///c:/uploadFilesFinal/notice/");
+
+        // community 폴더 (수정 금지)
+        registry.addResourceHandler("/uploadFilesFinal/community/**")
+                .addResourceLocations("file:///c:/uploadFilesFinal/community/");
+
     }
     
     @Override
