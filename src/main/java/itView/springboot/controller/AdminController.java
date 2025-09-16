@@ -415,7 +415,6 @@ public class AdminController {
 		int rlistCount = adService.getReviewReportCount(reviewNo);
 		PageInfo pi = Pagination.getPageInfo(page, rlistCount, 5);
 		ArrayList<Report> rlist = adService.getReviewReportList(pi, reviewNo);
-		System.out.println(rv);
 		if(rv != null) {
 			model.addAttribute("rv", rv);
 			model.addAttribute("rlist", rlist);
