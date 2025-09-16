@@ -381,11 +381,22 @@
 	<select id="getReportProductCount" resultType="int">
 	    SELECT COUNT(*)
 		FROM (
-		    SELECT report_target_no
+		    SELECT report_target_no, product_name, product_no
 		    FROM report
+		    	JOIN product ON report_target_no = product_no
 		    WHERE report_type = 'P'
-		    GROUP BY report_target_no
+		    GROUP BY report_target_no, product_name, product_no
 		) t
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					where product_name like '%${value}%'
+				</when>
+				<when test="condition == 'no'">
+					where product_no like '%${value}%'
+				</when>
+			</choose>
+		</if>
 	</select>
 
 	
@@ -395,11 +406,21 @@
 		    report_type,
 		    product_no,
 		    product_name,
-		    COUNT(report_no) AS report_count
+		    COUNT(CASE WHEN report_status = 'Y' THEN 1 END) AS report_count
 		FROM product
 		JOIN report
 		  ON report_target_no = product_no
 		WHERE report_type = 'P'
+		<if test="value != null">
+			<choose>
+				<when test="condition == 'name'">
+					and product_name like '%${value}%'
+				</when>
+				<when test="condition == 'no'">
+					and product_no like '%${value}%'
+				</when>
+			</choose>
+		</if>
 		GROUP BY product_no, product_name, report_type
 		ORDER BY report_count DESC
 	</select>
@@ -409,12 +430,6 @@
 		from product
 		where product_no = #{productNo}
 	</select>
-	
-<!-- 	<select id="selectReport"> -->
-<!-- 		select * -->
-<!-- 		from report -->
-<!-- 		where report_type = 'P' and report_target_no = #{productNo} -->
-<!-- 	</select> -->
 
 	<select id="getReportCount">
 		select count(*)

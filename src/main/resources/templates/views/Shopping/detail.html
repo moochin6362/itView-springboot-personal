@@ -227,44 +227,6 @@ btn-cart:hover {
 	cursor: pointer;
 }
 
-.soldout {
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	background: rgba(0, 0, 0, 0.5);   
-	color: #fff;
-	font-size: 18px;
-	font-weight: bold;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 8px;
-}
-.unavailable {
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	background: rgba(0, 0, 0, 0.5);   
-	color: #fff;
-	font-size: 18px;
-	font-weight: bold;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 8px;        
-}
-
-.item-image {
-	width: 550px;
-	height: 550px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 12px;
-	margin-right: 10px;
-	margin-bottom: 10px;
-	border-radius: 6px;
-	position: relative;
-}
-
 </style>
 <link rel="stylesheet" th:href="@{/css/inhoCss/reportModal.css}">
 </head>
@@ -278,17 +240,12 @@ btn-cart:hover {
 		<div class="row">
 			<!-- 좌측: 이미지 및 썸네일 -->
 			<div class="col-md-6">
-				<div class="item-image">
-					<img th:src="@{/} + ${attm.attmRename}" class="product-image mb-3" alt="상품 이미지">
-					<div th:if="${p.productStock == 0 && p.productState == 'N'}" class="soldout">일시 품절</div>
-					<div th:if="${p.productState == 'N' && p.productStock != 0}" class="unavailable">판매 중지</div>
-				</div>
+				<img th:src="@{/} + ${attm.attmRename}" class="product-image mb-3" alt="상품 이미지">
 			</div>
 			<!-- 우측: 상품 정보 -->
 			<div class="col-md-6">
 				<p class="brand-name">[[${p.brandName}]]</p>
-				<h1 class="product-title" th:if="${p.productStock != 0 && p.productState == 'Y'}">[[${p.productName}]]</h1>
-				<h1 class="product-title" th:if="${p.productStock == 0 || p.productState == 'N'}" style="text-decoration: line-through;">[[${p.productName}]]</h1>
+				<h1 class="product-title">[[${p.productName}]]</h1>
 				<p class="product-price" th:text="${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + '원'}"/>
 				<p>[[${p.ingredient}]]</p>
 				<p>[[${p.ecoFriendly}]]</p>
@@ -309,15 +266,14 @@ btn-cart:hover {
 
 				<div class="mb-3 quantity-box">
 					<label>수량</label> 
-					<input type="number" class="form-control w-25" th:if="${p.productStock != 0 && p.productState == 'Y'}" id="stock" value="1" min="1" th:max="${p.productStock}">
-					<input type="number" class="form-control w-25" id="zeroStock" th:if="${p.productStock == 0 || p.productState == 'N'}" value="0">
+					<input type="number" class="form-control w-25" id="stock" value="1" min="1" th:max="${p.productStock}">
 				</div>
 
 				<input type="hidden" id="productPrice" th:value="${p.productPrice}"/>
 				<div class="total-price mb-3" id="totalPrice" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
 				
 				<!-- 서연 -->
-				<div class="d-flex gap-2" th:if="${p.productStock == 0 || p.productState == 'Y'}">
+				<div class="d-flex gap-2">
 				     <button class="btn-wish" th:data-wish="${wishlistNo}">
 				    
 				    	<svg th:if="${wishlistNo == null or wishlistNo==0}" xmlns="http://www.w3.org/2000/svg" viewBox="-41.31 -41.31 300.03 300.03" width="28" height="29" fill="black" stroke="black" stroke-width="4">
@@ -341,12 +297,9 @@ btn-cart:hover {
 							           c31.644-41.05,70.556-73.335,116.737-96.853
 							           C903.309,4.363,1098.068,80.509,1176.629,250.347z"/>
 						</svg>
-				    	
-						
 				    </button>
 				    <button class="btn-cart">🛒 장바구니</button>
-				    <button class="btn-buy" th:attr="data-product=${p.productNo},data-stock=${p.productStock}" th:if="${p.productStock != 0 && p.productState == 'Y'}">💳 바로구매</button>
-
+				    <button class="btn-buy" th:attr="data-product=${p.productNo},data-stock=${p.productStock}">💳 바로구매</button>
 				    
 				</div>
 			</div>
@@ -381,6 +334,8 @@ btn-cart:hover {
 				            	<input type="hidden" class="reviewId" th:value="${r.reviewNo}"/>
 				                <span class="user-name">[[${r.userName}]]</span>
 				                <div class="ratingStar" th:text="${r.reviewRate}"></div>
+<!-- 				            리뷰 신고버튼 추가 -->
+								<button th:if="${session.loginUser != null}" class="btn flex-fill" th:onclick="openReportModal('R', '[[${r.reviewNo}]]')">🚨신고</button>
 				            </div>
 				            <div class="review-content">[[${r.reviewContent}]]</div>
 				            
@@ -423,6 +378,7 @@ btn-cart:hover {
 	      <form action="/inhoAdmin/enrollProductReport" id="reportForm" method="post">
 	        <input type="hidden" name="reportType" id="reportType">
 	        <input type="hidden" name="reportTargetNo" id="reportTargetNo">
+	        <input type="hidden" name="productNo" th:value="${p.productNo}" />
 	
 	        <label for="reportTitle">신고 제목</label>
 	        <input type="text" name="reportTitle" id="reportTitle">
@@ -435,9 +391,10 @@ btn-cart:hover {
 	      </form>
 	    </div>
 	  </div>
-
+	
 	<div th:replace="~{common/footer :: footer}"></div>
 	<script th:src="@{/js/inhoAdmin/alert.js}"></script>
+	<script th:src="@{/js/inhoAdmin/reportModal.js}"></script>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	
 	<script th:inline="javascript">
@@ -470,119 +427,106 @@ btn-cart:hover {
 			
 			//console.log(productStock)
 			//console.log(productPrice.value)
-			if(productStock != null){
-				productStock.addEventListener('change', () => {
-					const productTotalPrice = (productStock.value*productPrice.value).toLocaleString();
-					//console.log(productTotalPrice)
-					totalPrice.innerText = '총 상품 금액 : ' + productTotalPrice + ' 원';
-				})
-			}
 			
-			const zeroStock = document.querySelector('#zeroStock');
-			if(zeroStock != null){
-				zeroStock.addEventListener('change', () => {
-					alert('현재 구매 불가능한 상품입니다.');
-					alert('메인 화면으로 돌아갑니다.');
-					location.href = '/';
-				})
-			}
+			productStock.addEventListener('change', () => {
+				const productTotalPrice = (productStock.value*productPrice.value).toLocaleString();
+				//console.log(productTotalPrice)
+				totalPrice.innerText = '총 상품 금액 : ' + productTotalPrice + ' 원';
+			})
 			
 			<!--서연-->
-			if(btnbuy != null) {
-	         btnbuy.addEventListener('click',()=>{
-	            const productNo=btnbuy.dataset.product;
-	            const stockMax=btnbuy.dataset.stock;
-	            const amount=productStock.value;
-	            if(!userNo){
-	               alert("로그인 후 이용해주세요.");
-	               location.href="/login/login";
-	               return;
-	            }
-	            
-	            if(parseInt(amount)>parseInt(stockMax)){
-	               alert("재고 수량을 초과하였습니다.");
-	               return;
-	            }
-	            
-	            location.href="/Shopping/directPay?productNo="+productNo+"&amount="+amount;
-	         });
+			btnbuy.addEventListener('click',()=>{
+				const productNo=btnbuy.dataset.product;
+				const stockMax=btnbuy.dataset.stock;
+				const amount=productStock.value;
+				if(!userNo){
+					alert("로그인 후 이용해주세요.");
+					location.href="/login/login";
+					return;
+				}
 				
-			}
-	         if(btncart != null){
-		         btncart.addEventListener('click',()=>{
-		            
-		            if(!userNo){
-		               alert("로그인 후 이용해주세요.");
-		               location.href="/login/login";
-		               return;
-		            }
-		            
-		            
-		            const amount=productStock.value;
-		            if(productNo){
-		               if(confirm('상품을 장바구니에 담으시겠습니까?')){
-		                  $.ajax({
-		                     url:'/Shopping/productToCart',
-		                     type:'post',
-		                     data:{productNo:productNo,amount:amount},
-		                     success: data =>{
-		                        if(data > 0){
-		                           alert('상품이 장바구니에 담겼습니다.장바구니로 이동하시겠습니까?');
-		                           location.href="/Shopping/cart";
-		                        }else{
-		                           alert('상품을 장바구니에 담는 도중 오류가 발생했습니다.');
-		                        }
-		                     },
-		                     error:data => console.log(data)
-		                  });
-		               }
-		   
-		            }
-		         });
-	        	 
-	         }
-	         
-	         if(btnwish != null){
-		         btnwish.addEventListener('click',()=>{
-		            if(!userNo){
-		               alert("로그인 후 이용해주세요.");
-		               location.href="/login/login";
-		               return;
-		            }
-		            let wishlistNo = parseInt(btnwish.dataset.wish || 0);
-		            
-		            if(wishlistNo==0){
-		               $.ajax({
-		                  url:'/Shopping/addWish',
-		                  type:'post',
-		                  data:{productNo:productNo},
-		                  success: data =>{
-		                     if(data>0){
-		                        btnwish.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="27" height="29" viewBox="-132 -132 1464 1464" fill="#ef6b6b" stroke="#ef6b6b"><path d="M1176.629,250.347c54.502,168.401,8.89,339.761-87.232,468.872 c-63.446,87.553-139.273,163.012-216.796,228.983 c-71.322,66.39-230.933,197.753-273.241,201.402 c-37.394-7.148-79.353-49.433-109.039-71.196  C323.503,951.599,143.93,797.388,52.878,628.779  c-76.34-161.871-76.48-362.086,42.333-486.189C249.271,3.702,481.533,30.841,599.359,175.944c31.644-41.05,70.556-73.335,116.737-96.853 C903.309,4.363,1098.068,80.509,1176.629,250.347z"/></svg>';
-		                        btnwish.dataset.wish = data;
-		                     }
-		                  },
-		                  error:data => console.log(data)
-		               });
-		            }else{
-		               $.ajax({
-		                  url:'/Shopping/removeWish',
-		                  type:'post',
-		                  data:{productNo:productNo},
-		                  success: data =>{
-		                     if(data>0){
-		                        btnwish.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-41.31 -41.31 300.03 300.03" width="28" height="29" fill="black" stroke="black" stroke-width="4"><path d="M194.078,22.682c-10.747-8.193-22.606-12.348-35.248-12.348c-15.951,0-33.181,6.808-50.126,19.754C91.759,17.142,74.529,10.334,58.578,10.334c-12.642,0-24.501,4.155-35.248,12.348C7.606,34.671-0.24,49.8,0.006,67.648c0.846,61.117,100.093,133.233,104.317,136.273l4.381,3.153l4.381-3.153c4.225-3.04,103.472-75.156,104.317-136.273C217.648,49.8,209.802,34.671,194.078,22.682z M153.833,149.017c-18.374,18.48-36.915,33.188-45.129,39.453 c-8.214-6.265-26.755-20.972-45.129-39.453c-31.479-31.661-48.274-59.873-48.57-81.585 c-0.178-13.013,5.521-23.749,17.421-32.822c8.073-6.156,16.872-9.277,26.152-9.277 c17.563,0,34.338,10.936,45.317,20.11l4.809,4.018l4.809-4.018 c10.979-9.174,27.754-20.11,45.317-20.11c9.28,0,18.079,3.121,26.152,9.277 c11.9,9.073,17.599,19.809,17.421,32.822 C202.107,89.145,185.311,117.356,153.833,149.017z"/></svg>'
-		                           btnwish.dataset.wish = 0;
-		                     }
-		                  },
-		                  error:data => console.log(data)
-		               });
-		            }
-		            
-		            
-		         });
-	        	 
-	         }
+				if(parseInt(amount)>parseInt(stockMax)){
+					alert("재고 수량을 초과하였습니다.");
+					return;
+				}
+				
+				location.href="/Shopping/directPay?productNo="+productNo+"&amount="+amount;
+			});
+			
+			btncart.addEventListener('click',()=>{
+				
+				if(!userNo){
+					alert("로그인 후 이용해주세요.");
+					location.href="/login/login";
+					return;
+				}
+				
+				
+				const amount=productStock.value;
+				if(productNo){
+					if(confirm('상품을 장바구니에 담으시겠습니까?')){
+						$.ajax({
+							url:'/Shopping/productToCart',
+							type:'post',
+							data:{productNo:productNo,amount:amount},
+							success: data =>{
+								if(data > 0){
+									alert('상품이 장바구니에 담겼습니다.장바구니로 이동하시겠습니까?');
+									location.href="/Shopping/cart";
+								}else{
+									alert('상품을 장바구니에 담는 도중 오류가 발생했습니다.');
+								}
+							},
+							error:data => console.log(data)
+						});
+					}
+	
+				}
+			});
+			
+			btnwish.addEventListener('click',()=>{
+				if(!userNo){
+					alert("로그인 후 이용해주세요.");
+					location.href="/login/login";
+					return;
+				}
+				let wishlistNo = parseInt(btnwish.dataset.wish || 0);
+				
+				if(wishlistNo==0){
+					$.ajax({
+						url:'/Shopping/addWish',
+						type:'post',
+						data:{productNo:productNo},
+						success: data =>{
+							if(data>0){
+								btnwish.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="27" height="29" viewBox="-132 -132 1464 1464" fill="#ef6b6b" stroke="#ef6b6b"><path d="M1176.629,250.347c54.502,168.401,8.89,339.761-87.232,468.872 c-63.446,87.553-139.273,163.012-216.796,228.983 c-71.322,66.39-230.933,197.753-273.241,201.402 c-37.394-7.148-79.353-49.433-109.039-71.196  C323.503,951.599,143.93,797.388,52.878,628.779  c-76.34-161.871-76.48-362.086,42.333-486.189C249.271,3.702,481.533,30.841,599.359,175.944c31.644-41.05,70.556-73.335,116.737-96.853 C903.309,4.363,1098.068,80.509,1176.629,250.347z"/></svg>';
+								btnwish.dataset.wish = data;
+							}
+						},
+						error:data => console.log(data)
+					});
+				}else{
+					$.ajax({
+						url:'/Shopping/removeWish',
+						type:'post',
+						data:{productNo:productNo},
+						success: data =>{
+							if(data>0){
+								btnwish.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-41.31 -41.31 300.03 300.03" width="28" height="29" fill="black" stroke="black" stroke-width="4"><path d="M194.078,22.682c-10.747-8.193-22.606-12.348-35.248-12.348c-15.951,0-33.181,6.808-50.126,19.754C91.759,17.142,74.529,10.334,58.578,10.334c-12.642,0-24.501,4.155-35.248,12.348C7.606,34.671-0.24,49.8,0.006,67.648c0.846,61.117,100.093,133.233,104.317,136.273l4.381,3.153l4.381-3.153c4.225-3.04,103.472-75.156,104.317-136.273C217.648,49.8,209.802,34.671,194.078,22.682z M153.833,149.017c-18.374,18.48-36.915,33.188-45.129,39.453 c-8.214-6.265-26.755-20.972-45.129-39.453c-31.479-31.661-48.274-59.873-48.57-81.585 c-0.178-13.013,5.521-23.749,17.421-32.822c8.073-6.156,16.872-9.277,26.152-9.277 c17.563,0,34.338,10.936,45.317,20.11l4.809,4.018l4.809-4.018 c10.979-9.174,27.754-20.11,45.317-20.11c9.28,0,18.079,3.121,26.152,9.277 c11.9,9.073,17.599,19.809,17.421,32.822 C202.107,89.145,185.311,117.356,153.833,149.017z"/></svg>'
+									btnwish.dataset.wish = 0;
+							}
+						},
+						error:data => console.log(data)
+					});
+				}
+				
+				
+			});
+
+			
+			
+			
+			
 			
 			if(document.querySelector('#downCoupon') != null){
 				document.querySelector('#downCoupon').addEventListener('click', () => {
@@ -605,21 +549,8 @@ btn-cart:hover {
 					location.href="/product/productInquery/" + productNo;
 				});
 			}
-			
 		}
 		
-		window.openReportModal = function(type, id) {
-	    	  const modal = document.getElementById('reportModal');
-	    	  if (!modal) return console.error('reportModal element not found');
-	    	  document.getElementById('reportType').value = type;
-	    	  document.getElementById('reportTargetNo').value = id;
-	    	  document.getElementById('reportModal').style.display = 'flex';
-	    	};
-
-	    	window.closeReportModal = function() {
-	    	  const modal = document.getElementById('reportModal');
-	    	  if (modal) modal.style.display = 'none';
-	    	};
 	</script>
 
 </body>

@@ -28,8 +28,8 @@
                     <div class="right-control">
                         <div class="search-box">
                         	<select style="display: inline; width: auto;">
-                        		<option value="title" th:selected="${map['condition'] != null && map['condition'] == 'title'}">제목</option>
-                        		<option value="name" th:selected="${map['condition'] != null && map['condition'] == 'name'}">작성자</option>
+                        		<option value="name" th:selected="${map['condition'] != null && map['condition'] == 'name'}">상품명</option>
+                        		<option value="no" th:selected="${map['condition'] != null && map['condition'] == 'no'}">상품번호</option>
                         	</select>
                             <input type="text" placeholder="신고상품검색" th:value="${map['value'] != null ? map['value'] : ''}"/>
                             <button type="button" id="productSearch">검색</button>

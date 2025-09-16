@@ -325,8 +325,7 @@
     </div>
   </div>
 <div th:replace="~{common/footer :: footer}"></div>
-<!-- <div th:replace="~{common/reportModal :: reportModal}"></div> -->
-<!-- <script th:src="@{/js/inhoAdmin/reportModal.js}"></script> -->
+<script th:src="@{/js/inhoAdmin/reportModal.js}"></script>
 <script th:src="@{/js/inhoAdmin/alert.js}"></script>
 <script th:inline="javascript">
 	const msg = /*[[${msg}]]*/ null;
@@ -383,22 +382,6 @@
             form.submit();
         }
     }
-    
-    
-    
-    
-    window.openReportModal = function(type, id) {
-    	  const modal = document.getElementById('reportModal');
-    	  if (!modal) return console.error('reportModal element not found');
-    	  document.getElementById('reportType').value = type;
-    	  document.getElementById('reportTargetNo').value = id;
-    	  document.getElementById('reportModal').style.display = 'flex';
-    	};
-
-    	window.closeReportModal = function() {
-    	  const modal = document.getElementById('reportModal');
-    	  if (modal) modal.style.display = 'none';
-    	};
 </script>
 
 </body>

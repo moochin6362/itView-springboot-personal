@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         // 관리자 접근 체크
         registry.addInterceptor(new CheckAdminInterceptor())
-                .addPathPatterns("/inhoAdmin/**")
-                .addPathPatterns("/admin/**");// admin 페이지에만 적용
+                .addPathPatterns("/inhoAdmin/**", "/admin/**")
+                .excludePathPatterns("/inhoAdmin/ranking", "/inhoAdmin/enrollReport", "/inhoAdmin/enrollProductReport");// ranking page 제외
     }
 }

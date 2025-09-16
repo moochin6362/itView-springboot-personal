@@ -106,6 +106,28 @@ public class InhoController {
     	
     }
     
+    @PostMapping("/enrollCouponNotice")
+    public String enrollCouponNotice(HttpSession session, @ModelAttribute Board b,
+    								@RequestParam(value="uploadedFiles", required=false) String uploadedFiles) {
+    	User loginUser = (User)session.getAttribute("loginUser");
+    	b.setUserNo(loginUser.getUserNo());
+    	
+    	if(uploadedFiles != null && !uploadedFiles.isEmpty()){
+            String[] files = uploadedFiles.split(",");
+            String content = b.getBoardContent();
+            for(String fileName : files){
+                // HTML 내 temp 경로를 notice 경로로 변경
+                content = content.replace("/uploadFilesFinal/temp/" + fileName,
+                        "/uploadFilesFinal/notice/" + fileName);
+            }
+            b.setBoardContent(content);
+        }
+    	
+    	uService.enrollNotice(b, uploadedFiles, session);
+    	return "redirect:/inhoAdmin/couponBoardList";
+    	
+    }
+    
     // 업로드 (임시 폴더)
     @PostMapping("/uploadImage")
     @ResponseBody
@@ -555,7 +577,7 @@ public class InhoController {
     }
     
     @PostMapping("/enrollReport")
-    public String enrollReport(@RequestParam("reportType") String reportType,
+    public String enrollBoardReport(@RequestParam("reportType") String reportType,
                                @RequestParam("reportTitle") String reportTitle,
                                @RequestParam("reportTargetNo") int reportTargetNo,
                                @RequestParam("reportContent") String reportContent,
@@ -584,10 +606,11 @@ public class InhoController {
     }
     
     @PostMapping("/enrollProductReport")
-    public String enrollReport(@RequestParam("reportType") String reportType,
+    public String enrollShoppingReport(@RequestParam("reportType") String reportType,
                                @RequestParam("reportTitle") String reportTitle,
                                @RequestParam("reportTargetNo") int reportTargetNo,
                                @RequestParam("reportContent") String reportContent,
+                               @RequestParam("productNo") int productNo,
                                HttpSession session, RedirectAttributes redirectAttributes) {
 
         User loginUser = (User) session.getAttribute("loginUser");
@@ -605,11 +628,9 @@ public class InhoController {
         if(result > 0) {
         	// 신고 처리 후, 원래 보던 페이지로 이동
         	redirectAttributes.addFlashAttribute("msg", "신고가 정상적으로 등록되었습니다.");
-        	return "redirect:/product/detail/" + reportTargetNo;
+        	return "redirect:/product/detail/" + productNo;
         } else {
         	throw new AdminException("신고 등록을 실패하였습니다.");
         }
     }
-    
-    
 }
