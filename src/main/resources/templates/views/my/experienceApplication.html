@@ -47,8 +47,10 @@
         <div id="expResults" class="search-results"></div>
 
         <!-- 선택 결과 보관용 -->
-        <input type="hidden" id="expNo" name="expNo">
-        <p id="expPicked" class="helper"></p>
+        <input type="hidden" id="expNo" name="expNo" th:value="${expNo}" />
+
+		<p id="expPicked" class="helper"></p>
+        
       </section>
 
       <!-- ✅ 신청 내용 (고정 높이, 인풋처럼 보이게) -->
@@ -115,41 +117,35 @@
     </main>
   </div>
 
-	<script th:inline="none">
-	(function () {
-	  const $q = document.getElementById('expSearch');
-	  const $list = document.getElementById('expResults');
+		<script th:inline="none">
+	(function() {
+	  const $q      = document.getElementById('expSearch');
+	  const $list   = document.getElementById('expResults');
 	  const $picked = document.getElementById('expPicked');
-	  const $expNo = document.getElementById('expNo');
+	  const $expNo  = document.getElementById('expNo');
 	
-	  let timer = null;
-	  function debounce(fn, delay) {
-	    if (timer) clearTimeout(timer);
-	    timer = setTimeout(fn, delay);
-	  }
+	  // 필수 엘리먼트 없으면 스킵
+	  if (!$q || !$list || !$picked || !$expNo) return;
 	
-	  // 기존 검색 API 그대로 사용
+	  let timer;
+	  const debounce = (fn, d=300) => { clearTimeout(timer); timer = setTimeout(fn, d); };
+	  const escapeHtml = s => (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+	  const fmtDate = d => { try { if(!d) return '-'; const x = new Date(d); if (isNaN(x)) return '-'; return x.toISOString().slice(0,10);} catch { return '-'; } };
+	
 	  async function search(keyword) {
-	    const url = '/my/experience/search?q=' + encodeURIComponent(keyword || '');
-	    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+	    const res = await fetch('/my/experience/search?q=' + encodeURIComponent(keyword || ''), {
+	      headers: { 'Accept': 'application/json' }
+	    });
 	    if (!res.ok) throw new Error('검색 실패');
 	    return res.json();
 	  }
 	
-	  // 단건 조회(제목 즉시 표기용) — 컨트롤러에 /my/experience/get?no= 추가했을 때 사용
 	  async function fetchByNo(no) {
 	    const res = await fetch('/my/experience/get?no=' + encodeURIComponent(no), {
 	      headers: { 'Accept': 'application/json' }
 	    });
-	    if (!res.ok) throw new Error('모집글 조회 실패');
+	    if (!res.ok) throw new Error('조회 실패');
 	    return res.json();
-	  }
-	
-	  function statusClass(s) {
-	    const v = (s||'').toLowerCase();
-	    if (v.includes('진행') || v === 'y' || v === 'ing') return 'badge badge--ing';
-	    if (v.includes('종료') || v === 'd' || v === 'done') return 'badge badge--done';
-	    return 'badge badge--ready';
 	  }
 	
 	  function render(items) {
@@ -157,7 +153,7 @@
 	      $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>';
 	      return;
 	    }
-	    const selected = $expNo.value; // 이미 선택된 번호
+	    const selected = String($expNo.value || '');
 	    $list.innerHTML = items.map(it => {
 	      const id = escapeHtml(String(it.expNo ?? ''));
 	      const title = escapeHtml(it.expTitle || '(제목 없음)');
@@ -165,46 +161,40 @@
 	      const excerpt = escapeHtml((it.expContent || '').replace(/\s+/g,' ').trim()).slice(0, 120);
 	      const start = fmtDate(it.expStart);
 	      const end = fmtDate(it.expEnd);
-	      const isSel = selected && String(selected) === String(id);
+	      const isSel = selected && selected === id;
+	
 	      return `
 	        <div class="result-item ${isSel ? 'is-selected' : ''}" data-no="${id}">
-	          <div class="result-check"><i class="fa-solid fa-check"></i></div>
 	          <div class="result-head">
 	            <span class="result-id">#${id}</span>
-	            <span class="${statusClass(status)}">${status}</span>
+	            <span class="badge">${status}</span>
 	          </div>
 	          <div class="result-title">${title}</div>
-	          <div class="result-meta">
-	            <span><i class="fa-regular fa-calendar"></i> ${start} ~ ${end}</span>
-	          </div>
+	          <div class="result-meta"><i class="fa-regular fa-calendar"></i> ${start} ~ ${end}</div>
 	          <div class="result-excerpt">${excerpt}</div>
 	        </div>
 	      `;
 	    }).join('');
 	  }
 	
-	  function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-	  function fmtDate(d){try{ if(!d) return '-'; const x=new Date(d); if(isNaN(x)) return '-'; return x.toISOString().slice(0,10);}catch{ return '-';}}
-	
-	  // 입력 검색
+	  // 입력 검색 (디바운스)
 	  $q.addEventListener('input', () => {
 	    const kw = $q.value.trim();
 	    debounce(async () => {
-	      try {
-	        const data = await search(kw);
-	        render(data);
-	      } catch (e) {
+	      try { render(await search(kw)); }
+	      catch (e) {
 	        console.error(e);
 	        $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>';
 	      }
-	    }, 250);
+	    });
 	  });
 	
 	  // 선택 처리
 	  $list.addEventListener('click', (e) => {
 	    const item = e.target.closest('.result-item');
 	    if (!item) return;
-	    // 단일 선택
+	
+	    // 단일 선택 하이라이트
 	    [...$list.querySelectorAll('.result-item')].forEach(el => el.classList.remove('is-selected'));
 	    item.classList.add('is-selected');
 	
@@ -214,75 +204,28 @@
 	    $picked.textContent = `선택된 모집글: [${no}] ${title}`;
 	  });
 	
-	  // 초기: URL의 expNo가 있으면 바로 제목까지 세팅
+	  // 초기 진입: expNo가 이미 있으면(경로변수/hidden) 바로 표시 + 목록 로드
 	  (async () => {
-	    const urlExpNo = new URLSearchParams(location.search).get('expNo');
-	    if (urlExpNo) {
-	      $expNo.value = urlExpNo; // 신청 시 사용
+	    const initialNo = ($expNo.value || '').trim();
+	    if (initialNo) {
 	      try {
-	        // 컨트롤러에 /my/experience/get?no= 가 있다면 단건 조회로 정확한 제목 즉시 표시
-	        const eg = await fetchByNo(urlExpNo);
-	        if (eg && eg.expNo) {
-	          $picked.textContent = `선택된 모집글: [${eg.expNo}] ${eg.expTitle || ''}`;
-	        } else {
-	          $picked.textContent = `선택된 모집글: [${urlExpNo}]`;
-	        }
+	        const eg = await fetchByNo(initialNo);
+	        $picked.textContent = `선택된 모집글: [${eg.expNo}] ${eg.expTitle || ''}`;
 	      } catch {
-	        // 단건 API가 없거나 실패한 경우 번호만 표기
-	        $picked.textContent = `선택된 모집글: [${urlExpNo}]`;
-	      }
-	
-	      // 선택 하이라이트를 위해 목록도 한 번 뿌려주고 싶다면(선택):
-	      try {
-	        const data = await search(''); // 초기 목록
-	        render(data);                  // $expNo.value 를 보고 해당 카드가 is-selected 처리됨
-	      } catch {
-	        render([]);
+	        $picked.textContent = `선택된 모집글: [${initialNo}]`;
 	      }
 	    } else {
-	      // URL 파라미터 없으면 비어있는 상태로 시작
-	      render([]);
+	      $picked.textContent = '모집글을 먼저 선택하세요.';
 	    }
+	
+	    $list.innerHTML = '<p class="helper">검색어를 입력하면 결과가 표시됩니다.</p>';
 	  })();
 	})();
 	</script>
+	
 
-
-  function escapeHtml(s){return (s||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-  function fmtDate(d){try{ if(!d) return '-'; const x=new Date(d); if(isNaN(x)) return '-'; return x.toISOString().slice(0,10);}catch{ return '-';}}
-
-  $q.addEventListener('input', () => {
-    const kw = $q.value.trim();
-    debounce(async () => {
-      try {
-        const data = await search(kw);
-        render(data);
-      } catch (e) {
-        console.error(e);
-        $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>';
-      }
-    }, 250);
-  });
-
-  // 선택 처리
-  $list.addEventListener('click', (e) => {
-    const item = e.target.closest('.result-item');
-    if (!item) return;
-    // 선택 표시 토글(단일 선택)
-    [...$list.querySelectorAll('.result-item')].forEach(el => el.classList.remove('is-selected'));
-    item.classList.add('is-selected');
-
-    const no = item.getAttribute('data-no');
-    const title = item.querySelector('.result-title')?.textContent || '';
-    $expNo.value = no;
-    $picked.textContent = `선택된 모집글: [${no}] ${title}`;
-  });
-
-  // 초기 렌더(비우고 들어왔을 때도 예쁘게)
-  render([]);
-})();
-</script>
-	 
+	
+	
   
 
   <!-- ✅ 카카오 우편번호: 버튼 클릭 시 팝업 열기 & 주소 자동 채움 -->
@@ -324,67 +267,103 @@
       $btnSearch?.addEventListener('click', openPostcode);
     })();
   </script>
-
-	  <script th:inline="none">
-	(function () {
-	  const $applyBtn = document.querySelector('.btn-primary');
-	  const $expNo    = document.getElementById('expNo');
-	  const $content  = document.getElementById('applyContent');
+  
+		 <script th:inline="none">
+	(function() {
+	  const $q       = document.getElementById('expSearch');
+	  const $list    = document.getElementById('expResults');
+	  const $picked  = document.getElementById('expPicked');
+	  const $expNo   = document.getElementById('expNo');
+	  const $searchRow = document.querySelector('label[for="expSearch"]')?.closest('.form-row');
 	
-	  const $receiver = document.getElementById('receiver');
-	  const $tels     = document.querySelectorAll('.phone-wrap input[type="tel"]');
-	  const $addr1    = document.getElementById('addr1');
-	  const $addr2    = document.getElementById('addr2');
-	  const $addrReq  = document.getElementById('addrRequest');
-	  const $agreements = document.querySelectorAll('.agree input[type="checkbox"]');
+	  if (!$q || !$list || !$picked || !$expNo) return;
 	
-	  function getPhone() {
-	    const parts = Array.from($tels).map(i => (i.value||'').trim());
-	    return parts.join('-').replace(/-+/g,'-');
+	  let timer;
+	  const debounce = (fn, d=300)=>{ clearTimeout(timer); timer=setTimeout(fn,d); };
+	  const esc = s=>(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+	  const fmtDate = d=>{ try{ if(!d) return '-'; const x=new Date(d); if(isNaN(x))return '-'; return x.toISOString().slice(0,10);}catch{ return '-'; }};
+	
+	  async function search(keyword) {
+	    const res = await fetch('/my/experience/search?q=' + encodeURIComponent(keyword||''), {headers:{Accept:'application/json'}});
+	    if (!res.ok) throw new Error('검색 실패');
+	    return res.json();
 	  }
-	  function isAgreed() {
-	    return Array.from($agreements).slice(0,2).every(c => c.checked);
-	  }
-	  async function post(url, data) {
-	    const res = await fetch(url, {
-	      method: 'POST',
-	      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-	      body: new URLSearchParams(data).toString()
-	    });
-	    const json = await res.json().catch(()=> ({}));
-	    if (!res.ok || json.ok === false) throw new Error(json.message || '신청 처리에 실패했습니다.');
-	    return json;
+	  async function fetchByNo(no) {
+	    const res = await fetch('/my/experience/get?no=' + encodeURIComponent(no), {headers:{Accept:'application/json'}});
+	    if (!res.ok) throw new Error('조회 실패');
+	    return res.json();
 	  }
 	
-	  $applyBtn.addEventListener('click', async () => {
-	    const expNo = ($expNo.value||'').trim();
-	    if (!expNo) return alert('모집글을 먼저 선택해주세요.');
-	    if (!isAgreed()) return alert('필수 동의 항목에 체크해주세요.');
-	    if (!$receiver.value.trim()) return alert('받는분을 입력해주세요.');
-	    if (!$addr1.value.trim()) return alert('주소를 입력/검색해주세요.');
+	  function card(it, selected=true){
+	    const id = esc(String(it.expNo ?? ''));
+	    const title = esc(it.expTitle || '(제목 없음)');
+	    const status = esc(it.expStatus || '미정');
+	    const excerpt = esc((it.expContent||'').replace(/\s+/g,' ').trim()).slice(0,120);
+	    const start = fmtDate(it.expStart);
+	    const end   = fmtDate(it.expEnd);
+	    return `
+	      <div class="result-item ${selected?'is-selected':''}" data-no="${id}">
+	        <div class="result-head"><span class="result-id">#${id}</span><span class="badge">${status}</span></div>
+	        <div class="result-title">${title}</div>
+	        <div class="result-meta"><i class="fa-regular fa-calendar"></i> ${start} ~ ${end}</div>
+	        <div class="result-excerpt">${excerpt}</div>
+	      </div>`;
+	  }
 	
-	    const phone = getPhone();
-	    const address = $addr1.value.trim() + ($addr2.value.trim() ? ' ' + $addr2.value.trim() : '');
-	
-	    try {
-	      await post('/my/experience-apply', {
-	        expNo,
-	        applyContent: $content?.value || '',
-	        receiver: $receiver.value.trim(),
-	        phone,
-	        address,
-	        requestMemo: ($addrReq?.value || '').trim()
-	      });
-	      alert('신청이 완료되었습니다.');
-	      // location.href = '/my/experienceWins';
-	      window.location.replace('/my/myPage');
-	    } catch(e) {
-	      alert(e.message);
+	  function renderList(items){
+	    if (!Array.isArray(items) || items.length===0) {
+	      $list.innerHTML = '<p class="helper">검색 결과가 없습니다.</p>'; return;
 	    }
+	    const sel = String($expNo.value||'');
+	    $list.innerHTML = items.map(it => card(it, sel && sel===String(it.expNo))).join('');
+	  }
+	
+	  // 검색(최소 2자)
+	  $q.addEventListener('input', ()=>{
+	    const kw = $q.value.trim();
+	    debounce(async ()=>{
+	      if (kw.length < 2) { $list.innerHTML = '<p class="helper">검색어를 2자 이상 입력하세요.</p>'; return; }
+	      try { renderList(await search(kw)); }
+	      catch { $list.innerHTML = '<p class="helper">검색 중 오류가 발생했습니다.</p>'; }
+	    });
 	  });
+	
+	  // 선택 클릭
+	  $list.addEventListener('click', (e)=>{
+	    const item = e.target.closest('.result-item'); if(!item) return;
+	    [...$list.querySelectorAll('.result-item')].forEach(el=>el.classList.remove('is-selected'));
+	    item.classList.add('is-selected');
+	    const no = item.getAttribute('data-no');
+	    const title = item.querySelector('.result-title')?.textContent || '';
+	    $expNo.value = no;
+	    $picked.textContent = `선택된 모집글: [${no}] ${title}`;
+	  });
+	
+	  // 초기 분기
+	  (async ()=>{
+	    const initialNo = ($expNo.value||'').trim();
+	    if (initialNo) {
+	      // 상세→신청 버튼 경로: 검색 UI 감추고, 단일 카드만 표시
+	      if ($searchRow) $searchRow.style.display = 'none';
+	      try {
+	        const eg = await fetchByNo(initialNo);
+	        $picked.textContent = `선택된 모집글: [${eg.expNo}] ${eg.expTitle || ''}`;
+	        $list.innerHTML = card(eg, true);     // ★ 선택한 모집글만 표시
+	      } catch {
+	        $picked.textContent = `선택된 모집글: [${initialNo}]`;
+	        $list.innerHTML = '';
+	      }
+	    } else {
+	      // 사이드바 경로: 아무 것도 자동 표시 X
+	      $picked.textContent = '모집글을 검색해 선택하세요.';
+	      $list.innerHTML = '<p class="helper">검색어를 2자 이상 입력하면 결과가 표시됩니다.</p>';
+	    }
+	  })();
 	})();
 	</script>
-  
+	 
+
+			
   
   
   

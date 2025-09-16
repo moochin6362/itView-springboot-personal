@@ -3,7 +3,6 @@ package itView.springboot.controller;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,11 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import itView.springboot.service.InhoService;
 import itView.springboot.service.MyService;
 import itView.springboot.vo.Attachment;
+import itView.springboot.vo.ExperienceGroup;
 import itView.springboot.vo.Order;
+import itView.springboot.vo.PointBox;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
-import itView.springboot.vo.ExperienceGroup;
-import itView.springboot.vo.PointBox;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -390,10 +390,7 @@ public class MyController {
         return "redirect:/my/myReview";
     }
 
-    @GetMapping("/experienceApplication")
-    public String experienceApplication(HttpSession session) {
-        return "my/experienceApplication";
-    }
+   
 
     // 체험단 당첨 내역
     @GetMapping("/experienceWins")
@@ -427,6 +424,45 @@ public class MyController {
         return myService.searchExperienceGroups(keyword);
     }
 
+    
+ // 사이드바에서 바로 진입 (expNo 없음)
+    @GetMapping("/experienceApplication")
+    public String experienceApplication(HttpSession session, Model model) {
+        Long userNo = getUserNo(session);
+        if (userNo == null) return "redirect:/go/login"; // 또는 "/"
+        model.addAttribute("expNo", null);
+        model.addAttribute("experience", null);
+        return "my/experienceApplication";
+    }
+
+    // 버튼에서 진입 (/my/experienceApplication/{expNo})
+    @GetMapping("/experienceApplication/{expNo}")
+    public String experienceApplicationPath(@PathVariable("expNo") int expNo,
+                                            HttpSession session, Model model, RedirectAttributes ra) {
+        Long userNo = getUserNo(session);
+        if (userNo == null) return "redirect:/go/login";
+
+        var exp = myService.getExperienceByNo(expNo);
+        if (exp == null) {
+            ra.addFlashAttribute("msg", "존재하지 않는 모집글입니다.");
+            return "redirect:/my/myPage";
+        }
+
+        model.addAttribute("expNo", expNo);
+        model.addAttribute("experience", exp);
+        return "my/experienceApplication";
+    }
+
+
+       
+
+    @GetMapping("/experience/get")
+    @ResponseBody
+    public itView.springboot.vo.ExperienceGroup getExperienceOne(
+            @RequestParam("no") int expNo) {
+        return myService.getExperienceByNo(expNo);
+    }
+    
     // 체험단 신청 저장
     @PostMapping("/experience-apply")
     @ResponseBody
@@ -465,12 +501,7 @@ public class MyController {
     @GetMapping("/myProductAnswer")
     public String myProductAnswer() { return "my/myProductAnswer"; }
     
- // MyController.java (일부분에 추가)
-    @GetMapping("/experience/get")
-    @ResponseBody
-    public itView.springboot.vo.ExperienceGroup getExperienceOne(
-            @RequestParam("no") int expNo) {
-        return myService.getExperienceByNo(expNo);
-    }
+
+   
 
 }

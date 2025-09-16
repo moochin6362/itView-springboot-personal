@@ -159,25 +159,38 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <label class="form-label">피부 고민</label>
-        <div class="form-field">
-          <div class="chip-group multi">
-            <input id="c1" name="concerns" value="BRIGHTENING" type="checkbox"
-                   th:checked="${#lists.contains(concernList, 'BRIGHTENING')}"/><label for="c1" class="chip">미백/잡티</label>
-            <input id="c2" name="concerns" value="SEBUM" type="checkbox"
-                   th:checked="${#lists.contains(concernList, 'SEBUM')}"/><label for="c2" class="chip">피지/블랙헤드</label>
-            <input id="c3" name="concerns" value="DRYNESS" type="checkbox"
-                   th:checked="${#lists.contains(concernList, 'DRYNESS')}"/><label for="c3" class="chip">속건조</label>
-            <input id="c4" name="concerns" value="WRINKLE" type="checkbox"
-                   th:checked="${#lists.contains(concernList, 'WRINKLE')}"/><label for="c4" class="chip">주름/탄력</label>
-            <input id="c5" name="concerns" value="KERATIN" type="checkbox"
-                   th:checked="${#lists.contains(concernList, 'KERATIN')}"/><label for="c5" class="chip">각질</label>
-            <input id="c9" name="concerns" value="NONE" type="checkbox"
-                   th:checked="${#lists.contains(concernList, 'NONE')}"/><label for="c9" class="chip">해당없음</label>
-          </div>
-        </div>
-      </div>
+	      <div class="form-row">
+	  <label class="form-label">피부 고민</label>
+	  <div class="form-field">
+	    <div class="chip-group multi" id="concernsGroup">
+	      <input id="c1" name="concerns" value="BRIGHTENING" type="checkbox"
+	             th:checked="${#lists.contains(concernList, 'BRIGHTENING')}">
+	      <label for="c1" class="chip">미백/잡티</label>
+	
+	      <input id="c2" name="concerns" value="SEBUM" type="checkbox"
+	             th:checked="${#lists.contains(concernList, 'SEBUM')}">
+	      <label for="c2" class="chip">피지/블랙헤드</label>
+	
+	      <input id="c3" name="concerns" value="DRYNESS" type="checkbox"
+	             th:checked="${#lists.contains(concernList, 'DRYNESS')}">
+	      <label for="c3" class="chip">속건조</label>
+	
+	      <input id="c4" name="concerns" value="WRINKLE" type="checkbox"
+	             th:checked="${#lists.contains(concernList, 'WRINKLE')}">
+	      <label for="c4" class="chip">주름/탄력</label>
+	
+	      <input id="c5" name="concerns" value="KERATIN" type="checkbox"
+	             th:checked="${#lists.contains(concernList, 'KERATIN')}">
+	      <label for="c5" class="chip">각질</label>
+	
+	      <input id="c9" name="concerns" value="NONE" type="checkbox"
+	             th:checked="${#lists.contains(concernList, 'NONE')}">
+	      <label for="c9" class="chip">해당없음</label>
+	    </div>
+	  </div>
+	</div>
+      
+
       
 		      <!-- 희망 가격 -->
 		<div class="form-row">
@@ -291,5 +304,27 @@
       });
     })();
   </script>
+  
+	  <script>
+	(function () {
+	  const group = document.getElementById('concernsGroup');
+	  if (!group) return;
+	
+	  const inputs = group.querySelectorAll('input[type="checkbox"][name="concerns"]');
+	
+	  group.addEventListener('change', (e) => {
+	    const target = e.target;
+	    if (target.type !== 'checkbox') return;
+	
+	    // 라디오처럼 동작: 방금 체크된 것 외에는 전부 해제
+	    if (target.checked) {
+	      inputs.forEach(cb => { if (cb !== target) cb.checked = false; });
+	    }
+	  });
+	})();
+	</script>
+  
+  
+  
 </body>
 </html>
