@@ -112,3 +112,5 @@
   .pname{font-size:15px}
   .status-col{min-width:88px;padding:8px 10px}
 }
+.thumb--hidden{ visibility:hidden; } /* 칸은 유지, 화면에만 안 보임 */
+

@@ -39,10 +39,14 @@
 	  <section class="card win-list" th:if="${!#lists.isEmpty(winList)}">
   <article class="win-item" th:each="w : ${winList}">
     <!-- 썸네일 -->
-    <img class="thumb"
-         th:src="${w['productImageUrl']}"
-         alt="체험단 썸네일"
-         onerror="this.onerror=null; this.src='/uploadFilesFinal/default-product.png';"/>
+<!--     <img class="thumb" -->
+<!--          th:src="${w['productImageUrl']}" -->
+<!--          alt="체험단 썸네일" -->
+<!--          onerror="this.onerror=null; this.src='/uploadFilesFinal/default-product.png';"/> -->
+<img class="thumb thumb--hidden"
+     th:src="${w['productImageUrl']}"
+     alt="" onerror="this.onerror=null;this.src='/uploadFilesFinal/default-product.png';">
+
 
     <!-- 본문(제목/기간/내용/버튼) -->
     <div class="meta">
