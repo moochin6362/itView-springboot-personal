@@ -314,7 +314,7 @@ btn-cart:hover {
 				</div>
 
 				<input type="hidden" id="productPrice" th:value="${p.productPrice}"/>
-				<div class="total-price mb-3" id="totalPrice" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
+				<div class="total-price mb-3" th:data-value="${p.productPrice}" id="totalPrice" th:text="'총 상품 금액 : ' + ${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + ' 원'}"></div>
 				
 				<!-- 서연 -->
 				<div class="d-flex gap-2" th:if="${p.productStock == 0 || p.productState == 'Y'}">
@@ -496,7 +496,9 @@ btn-cart:hover {
 						return;
 					}
 					
-					location.href="/Shopping/directPay?productNo="+productNo+"&amount="+amount;
+					const totalPrice = document.getElementById("totalPrice").dataset.value;
+					
+					location.href="/Shopping/payMent?productNo="+productNo+"&amount="+amount +"&totalPrice="+totalPrice;
 				});
 				
 			}

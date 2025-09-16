@@ -352,7 +352,7 @@ select[name="coupon-option"] option{
 		<div class="sidenav-top">
 			<a class="nav-item active" href="/my/myPage"><i
 				class="fa-solid fa-user"></i><span>마이페이지</span></a> <a class="nav-item"
-				href="/experience/experienceApplication"><i
+				href="/my/experienceApplication"><i
 				class="fa-solid fa-gift"></i><span>체험단 신청</span></a> <a class="nav-item"
 				href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
 			<a class="nav-item" href="/Shopping/cart"><i
@@ -443,7 +443,7 @@ select[name="coupon-option"] option{
 				</select>
 			</div>
 			<div class="total">
-				<p class="total-coupon">총 주문금액</p>
+				<p class="total-coupon">예상 주문금액</p>
 				<p class="total-discount-price" style="color: black;">0원</p>
 			</div>
 			<div class="point">
@@ -608,6 +608,24 @@ select[name="coupon-option"] option{
 			const point=Math.floor(finalPrice*0.01);
 			pointreward.textContent=point.toLocaleString()+"원";
 		};
+		
+		const updateCartamount=(cartNo,qty)=>{
+				$.ajax({
+					url:'/Shopping/updateCartamount',
+					type:'post',
+					traditional:true,
+					data:{cartNo:cartNo, amount:qty},
+					success: data =>{
+						if(data<=0){
+							alert('수량변경실패');
+						}
+					},
+					error:data => console.log(data)
+				});
+				
+			
+		}
+		
 		
 		
 	    checkCompany.forEach(chkbrd => {
@@ -774,13 +792,17 @@ select[name="coupon-option"] option{
 		            const productBox = cartBodies[i];
 		            const productQty = productBox.querySelector('.qty');
 		            const productPriceBox = productBox.querySelector('.item-price');
-
+		            const cartNo = productBox.querySelector('.delete-btn').dataset.cartno;
+		            
+		            
 		            let qty = parseInt(productQty.textContent);
 		            const stock = parseInt(productQty.dataset.stock);
 
 		            if(qty > 1){
 		                qty--;
 		                productQty.textContent = qty;
+		                
+		                updateCartamount(cartNo, qty);
 		            }
 
 		            btn.disabled = (qty === 1);
@@ -794,6 +816,7 @@ select[name="coupon-option"] option{
 		            
 		    		couponActivation();
 		    		applyCoupon();
+		    		
 		        });
 		    });
 		
@@ -803,6 +826,10 @@ select[name="coupon-option"] option{
 		            const productQty = productBox.querySelector('.qty');
 		            const productPriceBox = productBox.querySelector('.item-price');
 
+		            const cartNo = productBox.querySelector('.delete-btn').dataset.cartno;
+		            
+		            
+		            
 		            let qty = parseInt(productQty.textContent);
 		            const stock = parseInt(productQty.dataset.stock);
 
@@ -816,9 +843,13 @@ select[name="coupon-option"] option{
 		                    minusBtn[i].disabled = false;
 		                }
 
+		                updateCartamount(cartNo, qty);
+		                
 		                const unit = parseInt(productPriceBox.dataset.price); 
 		                const total = unit * qty;
 		                productPriceBox.textContent = total.toLocaleString()+'원';
+		                
+		                
 		            } else {
 		                alert('상품이 더 이상 존재하지 않습니다. 😅');
 		            }
@@ -832,6 +863,7 @@ select[name="coupon-option"] option{
 		            
 		    		couponActivation();
 		    		applyCoupon();
+		    		
 		        });
 		    });
 		 
@@ -859,9 +891,18 @@ select[name="coupon-option"] option{
 				}
 				if(confirm('선택한 상품을 주문하시겠습니까?')){
 					
-					let totalDiscountPriceValue=totalDiscountPrice.textContent.replace(/[^0-9]/g,"");
+					let totalProductValue=totalProduct.textContent.replace(/[^0-9]/g,"");
+					
+					let selectedCoupon = couponDiscount.value;
+					
+					if(selectedCoupon == 'notice' || selectedCoupon=='none'){
+						selectedCoupon='';
+					}
+					
+					
 					location.href="/Shopping/payMent?cartNo="+checkedItems.join(",")
-									+"&totalPrice="+totalDiscountPriceValue;
+									+"&coupon="+selectedCoupon;
+									
 				}
 			}); 
 			

@@ -128,79 +128,38 @@
 	
 	<!-- ========================= 주문내역 =============================================-->
 	<select id="selectOrder" resultType="Order">
-		select *
-		from(
-			select 
-				o.order_no as orderNo,
-				o.order_target_no as orderTargetNo,
-				o.order_date as orderDate,
-				o.order_count as orderCount,
-				o.order_status as orderStatus,
-				o.payment_method as paymentMethod,
-				o.pay_price as payPrice,
-				o.delivery_company as deliveryCompany,
-				o.delivery_no as deliveryNo,
-				o.delivery_status as deliveryStatus,
-				o.order_type as orderType,
-				o.user_no as userNo,
-				o.personal_coupon_no as personalCouponNo,
-				o.user_name as userName,
-				o.user_phone as userPhone,
-				o.user_address as userAddress,
-				p.product_no as productNo,
-       			p.product_name as productName,
-        		p.product_price as productPrice,
-        		p.product_stock as productStock,
-        		p.product_state as productState,
-        		p.product_company as productCompany,
-        		a.attm_rename as attmRename
-			from "ORDER" o
-			left join product p 
-				on p.product_no=o.order_target_no
-			left join attachment a
-				on a.position_no=p.product_no
-			and a.attm_level=0
-			where o.user_no=#{userNo}
-			and o.order_type=1
-		
-			union all
-		
-			select 
-				o.order_no as orderNo,
-				o.order_target_no as orderTargetNo,
-				o.order_date as orderDate,
-				o.order_count as orderCount,
-				o.order_status as orderStatus,
-				o.payment_method as paymentMethod,
-				o.pay_price as payPrice,
-				o.delivery_company as deliveryCompany,
-				o.delivery_no as deliveryNo,
-				o.delivery_status as deliveryStatus,
-				o.order_type as orderType,
-				o.user_no as userNo,
-				o.personal_coupon_no as personalCouponNo,
-				o.user_name as userName,
-				o.user_phone as userPhone,
-				o.user_address as userAddress,
-				p.product_no as productNo,
-       			p.product_name as productName,
-        		p.product_price as productPrice,
-        		p.product_stock as productStock,
-        		p.product_state as productState,
-        		p.product_company as productCompany,
-        		a.attm_rename as attmRename
-			from "ORDER" o
-			join cart c 
-				on c.cart_no=o.order_target_no
-			left join product p 
-				on p.product_no=c.product_no
-			left join attachment a
-				on a.position_no=p.product_no
-			and a.attm_level=0
-			where o.user_no=#{userNo}
-			and o.order_type=2
-		)
-		order by orderNo desc
+	    select 
+	        o.order_no as orderNo,
+	        o.order_target_no as orderTargetNo,
+	        o.order_date as orderDate,
+	        o.order_count as orderCount,
+	        o.order_status as orderStatus,
+	        o.payment_method as paymentMethod,
+	        o.pay_price as payPrice,
+	        o.delivery_company as deliveryCompany,
+	        o.delivery_no as deliveryNo,
+	        o.delivery_status as deliveryStatus,
+	        o.order_type as orderType,
+	        o.user_no as userNo,
+	        o.personal_coupon_no as personalCouponNo,
+	        o.user_name as userName,
+	        o.user_phone as userPhone,
+	        o.user_address as userAddress,
+	        p.product_no as productNo,
+	        p.product_name as productName,
+	        p.product_price as productPrice,
+	        p.product_stock as productStock,
+	        p.product_state as productState,
+	        p.product_company as productCompany,
+	        a.attm_rename as attmRename
+	    from "ORDER" o
+	    left join product p 
+	        on p.product_no = o.order_target_no
+	    left join attachment a
+	        on a.position_no = p.product_no
+	       and a.attm_level = 0
+	    where o.user_no = #{userNo}
+	    order by o.order_no desc
 	</select>
 	
 	
@@ -267,10 +226,8 @@
         		p.product_company as productCompany,
         		a.attm_rename as attmRename
 			from "ORDER" o
-			join cart c 
-				on c.cart_no=o.order_target_no
 			left join product p 
-				on p.product_no=c.product_no
+				on p.product_no = o.order_target_no 
 			left join attachment a
 				on a.position_no=p.product_no
 			and a.attm_level=0
@@ -282,19 +239,11 @@
 	
 	
 	<select id="selectProductNoForOrder" resultType="int">
-		select o.order_target_no AS product_no
-  		from "ORDER" o
-  		where o.user_no = #{userNo}
-    	and o.order_type = 1
-
-  		UNION ALL
-
-  		select c.product_no
-  		from "ORDER" o
-  		join cart c on c.cart_no = o.order_target_no
-  		where o.user_no = #{userNo}
-    	and o.order_type = 2
+		  select o.order_target_no as product_no
+		  from "ORDER" o
+		  where o.user_no = #{userNo}
 	</select>
+
 	<select id="checkCart" resultType="int">
   		select count(*)
   		from cart
@@ -367,10 +316,14 @@
 		select *
 		from cart c
 		join product p on c.product_no=p.product_no
-		where c.cart_no in
-		<foreach collection="clist" item="cNo" open="(" separator="," close=")">
-			#{cNo}
-		</foreach>
+		<where>
+        <if test="list != null and list.size > 0">
+            c.cart_no IN
+            <foreach collection="list" item="cNo" open="(" separator="," close=")">
+                #{cNo}
+            </foreach>
+        </if>
+    </where>
 	</select>
 	
 	<select id="directPaySelectProduct" resultType="Product">
@@ -402,4 +355,70 @@
 		delete from wishlist
 		where user_no=#{userNo} and product_no=#{productNo}
 	</delete>
+	
+	<select id="selectOrderCancel" resultType="OrderCancel">
+		select *
+		from order_cancel
+		where order_no=#{orderNo}
+	</select>
+	
+	
+	<update id="updateCartamount">
+		update cart
+		set amount=#{amount}
+		where cart_no=#{cartNo}
+	</update>
+	
+	
+	<select id="checkCouponbyCart" resultType="CouponBox">
+		select *
+		from coupon_box cb
+		join coupon c on cb.coupon_no=c.coupon_no
+		where cb.personal_coupon_no=#{personalCouponNo}
+		
+	</select>
+	<select id="makeOrderNo" resultType="int">
+		select seq_order.NEXTVAL from dual
+	</select>
+	
+	
+	<insert id="insertOrder">
+    insert into "ORDER" (
+        order_no, order_target_no, order_date, order_count, order_status,
+        payment_method, pay_price, delivery_company, delivery_no, delivery_status,
+        order_type, user_no, personal_coupon_no, user_name, user_phone, user_address
+    )
+    VALUES (seq_order.NEXTVAL,#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress}
+    )
+</insert>
+
+	
+	<delete id="deleteCartlist">
+		delete from cart
+		where cart_no in
+		<foreach collection="list" item="cNo" open="(" separator="," close=")">
+            #{cNo}
+        </foreach>
+	</delete>
+	
+	
+	
+	<update id="minusPoint">
+		update "USER"
+		set user_point=user_point-#{usePoint}
+		where user_no=#{userNo}
+	</update>
+	
+	<update id="addPoint">
+		update "USER"
+		set user_point=user_point+#{savePoint}
+		where user_no=#{userNo}
+	</update>
+	
+	
+	<update id="updateCouponStatus">
+		update coupon_box
+		set coupon_used='Y'
+		where personal_coupon_no=#{couponNo}
+	</update>
 </mapper>

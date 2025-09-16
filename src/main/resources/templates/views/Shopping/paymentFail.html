@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>결제실패</title>
+<style>
+  body {
+    font-family: 'Pretendard', sans-serif;
+    background: #f7f8f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+  }
+  .card h1 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #d9534f; /* 빨간색 계열 */
+  }
+  .card p {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 24px;
+  }
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+  }
+  .btn-primary {
+    background: #d9534f;
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #c9302c;
+  }
+  .btn-secondary {
+    background: #f1f1f1;
+    color: #333;
+  }
+  .btn-secondary:hover {
+    background: #e1e1e1;
+  }
+</style>
+</head>
+<body>
+	<div class="card">
+    <h1>❌ 결제가 실패했습니다</h1>
+    <p>다시 시도해주시거나 다른 결제 수단을 이용해주세요.</p>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="history.back()">이전화면으로</button>
+      <button class="btn btn-secondary" onclick="window.location.href='/'">홈으로</button>
+    </div>
+  </div>
+</body>
+</html>

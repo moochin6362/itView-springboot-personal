@@ -81,6 +81,26 @@ public interface ShoppingMapper {
 
 	Integer checkWishNo(@Param("userNo") int uNo, @Param("productNo") int productNo);
 
+	OrderCancel selectOrderCancel(int oNo);
+
+	int updateCartamount(@Param("cartNo")int cNo, @Param("amount") int amount);
+
+	CouponBox checkCouponbyCart(String coupon);
+
+	int makeOrderNo();
+
+	int insertOrder(Map<String, Object> insert);
+
+	int deleteCartlist(List<Integer> cNo);
+
+	int minusPoint(@Param("userNo") int uNo, @Param("usePoint")int usePoint);
+
+	int addPoint(@Param("userNo") int uNo, @Param("savePoint")int savePoint);
+
+	int updateCouponStatus(int couponNo);
+
+	
+
 
 	
 

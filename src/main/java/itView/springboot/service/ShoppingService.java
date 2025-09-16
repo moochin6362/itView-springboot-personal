@@ -178,8 +178,60 @@ public class ShoppingService {
 		return -1;
 	}
 
+	public OrderCancel selectOrderCancel(int oNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectOrderCancel(oNo);
+	}
+
+	public int updateCartamount(int cNo, int amount) {
+		// TODO Auto-generated method stub
+		return mapper.updateCartamount(cNo,amount);
+	}
+
+	public CouponBox checkCouponbyCart(String coupon) {
+		// TODO Auto-generated method stub
+		return mapper.checkCouponbyCart(coupon);
+	}
+
+	
+	public int makeOrderNo() {
+		// TODO Auto-generated method stub
+		return mapper.makeOrderNo();
+	}
+
+	public int insertOrder(Map<String, Object> insert) {
+		// TODO Auto-generated method stub
+		return mapper.insertOrder(insert);
+	}
+
+	public int deleteCartlist(List<Integer> cNo) {
+		// TODO Auto-generated method stub
+		return mapper.deleteCartlist(cNo);
+	}
+
+	public int minusPoint(int uNo, int usePoint) {
+		// TODO Auto-generated method stub
+		return mapper.minusPoint(uNo,usePoint);
+	}
+
+	public int addPoint(int uNo, int savePoint) {
+		// TODO Auto-generated method stub
+		return mapper.addPoint(uNo,savePoint);
+	}
+
+	public int updateCouponStatus(int couponNo) {
+		// TODO Auto-generated method stub
+		return mapper.updateCouponStatus(couponNo);
+	}
+
 	
 
+	
+
+
+	
+
+	
 	
 
 	

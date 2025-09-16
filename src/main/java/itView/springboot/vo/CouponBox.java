@@ -20,7 +20,7 @@ public class CouponBox {
 	
 	private String couponName;
 	private String couponMinprice;
-	private String couponDiscount;
+	private int couponDiscount;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate couponStartdate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

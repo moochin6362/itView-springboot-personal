@@ -70,7 +70,6 @@ body {
 .order-image {
 	width: 130px;
 	height: 130px;
-	background-color: #ccc;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -78,7 +77,11 @@ body {
 	margin-top: 1%;
 	border-radius: 5px;
 }
-
+.order-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;     /* 비율 유지하면서 안에 맞춤 */
+}
 .order-info {
 	flex: 1;
 }
@@ -185,6 +188,10 @@ border: 1px solid #ccc;
 	padding-left: 3%;
 	padding-right: 3%;
 }
+.company {
+	font-size: 18px;
+	font-weight: bold;
+}
 </style>
 </head>
 <body>
@@ -213,17 +220,18 @@ border: 1px solid #ccc;
 			<div class="order-body">
 				<div class="order-image">
 					<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
-						th:src="@{/uploadFilesFinal/{file}(file=${a.attmRename})}"
-						width="100%" height="100%" style="border-radius: 8px;" />
+						th:src="@{/} + ${a.attmRename}"
+						width="100%" height="100%" style="border-radius: 8px; object-fit:contain;" /> 
 				</div>
 				<div class="order-info">
 					<p class="price" th:text="${#numbers.formatInteger(o.productPrice,3,'COMMA')}+'원'"></p>
+					<p class="company">[[${o.productCompany}]]</p>
 					<p class="name">[[${o.productName}]]</p>
 				</div>
 			</div>
-			<a href="#" class="cs-link">상품문의하기 ></a>
+			<a   th:href="@{/my/myProductInquiry(productNo=${o.productNo})}" class="cs-link" style="color: gray;">상품문의하기 ></a>
 		</div>
-		<div class="cancel-detail"><p>취소사유</p></div>
+		<div class="cancel-detail"><p>취소사유 : [[${ci.cancelReason}]]</p></div>
 		<div class="refund-inform" style="background: #ffffff;" th:each="o:${olist}">
 			<p class="refund-notice">환불 정보를 확인해주세요.</p>
 			<div class="total-refund">
@@ -237,7 +245,7 @@ border: 1px solid #ccc;
 			<!-- 이거는 좀 뺄수도... -->
 			<div class="refund-date">
 				<p>취소날짜</p>
-				<p style="color: black;">주문 취소 후 3일 이내</p>
+				<p style="color: black;">[[${ci.cancelDate}]]</p>
 			</div>
 
 		</div>

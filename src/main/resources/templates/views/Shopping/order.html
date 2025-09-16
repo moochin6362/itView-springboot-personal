@@ -95,6 +95,7 @@ a, a:link, a:visited, a:hover, a:active {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	margin-bottom:1%;
 }
 
 .order-image {
@@ -146,7 +147,7 @@ a, a:link, a:visited, a:hover, a:active {
 button {
 	background-color: #eefbfb;
 	color: black;
-	padding: 11px 0;
+	padding: 11px 100px;
 	width: 100%;
 	border: none;
 	border-radius: 5px;
@@ -161,6 +162,16 @@ button {
 button:hover {
 	color: white;
 	background: #8ad8f0;
+}
+
+.order-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;       
+}
+
+.order-actions button {
+  flex: 1;         
 }
 </style>
 </head>
@@ -202,17 +213,21 @@ button:hover {
 			</div>
 		</div>
 
-		<div th:if="${#lists.isEmpty(olist)}" class="order-empty">
+		<div th:if="${#lists.isEmpty(groupedOrder)}" class="order-empty">
    			<p>주문내역이 비어 있습니다.</p>
 		</div>
 
-		<div th:if="${!#lists.isEmpty(olist)}" class="order-box" th:each="o:${olist}">
+		<div th:if="${!#lists.isEmpty(groupedOrder)}" class="order-box" th:each="go : ${groupedOrder}">
 			<div class="order-header">
-				<span class="order-date">[[${o.orderDate}]]</span> 
-				<a  th:href="@{/Shopping/orderDetail(orderNo=${o.orderNo})}"
-					class="order-link">></a>
+				<span class="order-date">[[${go.value[0].orderDate}]]</span> 
+				<a th:if="${go.value[0].orderStatus != 'cancel'}"  th:href="@{/Shopping/orderDetail(orderNo=${go.key})}"
+					class="order-link">>
+				</a>
+				<a th:if="${go.value[0].orderStatus == 'cancel'}"  th:href="@{/Shopping/cancelDetail(orderNo=${go.key})}"
+					class="order-link">>
+				</a>
 			</div>
-			<div class="order-body">
+			<div class="order-body" th:each="o : ${go.value}">
 				<div class="order-image">
 					<a th:href="@{/Shopping/detail(productNo=${o.productNo})}">
 						<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
@@ -239,14 +254,17 @@ button:hover {
 							<span class="name" th:text="${o.productName}"></span>
 						</a>
 					</div>
+					
 				</div>
 				
 			</div>
-			<button class="cart-btn" th:if="${o.orderStatus=='confirmed'}" th:attr="data-order-no=${o.orderNo},data-product-no=${o.productNo},data-stock=${o.productStock},data-state=${o.productState}">장바구니 다시 담기</button>
-			<button class="purchase-confirmed-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus=='after'}" th:attr="data-order-no=${o.orderNo}">구매확정 하기</button>
-			<a th:href="@{/Shopping/cancelReason(orderNo=${o.orderNo})}">
-				<button class="order-cancel-btn" th:if="${o.orderStatus=='completed' and o.deliveryStatus == 'before'}" th:attr="data-order-no=${o.orderNo}">주문 취소하기</button>
-			</a>
+			<div class="order-actions">
+						<button class="cart-btn" th:if="${go.value[0].orderStatus=='confirmed'}" th:attr="data-order-no=${go.key},data-product-no=${go.value[0].productNo},data-stock=${go.value[0].productStock},data-state=${go.value[0].productState}">장바구니 다시 담기</button>
+						<button class="purchase-confirmed-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus=='after'}" th:attr="data-order-no=${go.key}">구매확정 하기</button>
+						<a th:href="@{/Shopping/cancelReason(orderNo=${go.key})}">
+							<button class="order-cancel-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus == 'before'}" th:attr="data-order-no=${go.key}">주문 취소하기</button>
+						</a>
+				</div>
 			
 		</div>
 	</div>

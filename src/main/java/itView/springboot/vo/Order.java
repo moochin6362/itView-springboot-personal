@@ -21,7 +21,7 @@ public class Order {
 	private String paymentMethod;
 	private int payPrice;
 	private String deliveryCompany;
-	private int deliveryNo;
+	private long deliveryNo;
 	private String deliveryStatus;
 	private int orderType;
 	private int userNo;

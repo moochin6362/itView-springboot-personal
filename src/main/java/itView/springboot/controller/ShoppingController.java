@@ -1,10 +1,18 @@
 package itView.springboot.controller;
 
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.client.RestTemplate;
 
 import itView.springboot.service.ShoppingService;
 import itView.springboot.vo.Attachment;
@@ -41,12 +50,14 @@ public class ShoppingController {
 		if (loginUser == null) {
 			return "redirect:/login";
 		}
-		ArrayList<Order>olist = sService.selectOrder(oNo);
-		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(oNo);
+		int uNo = loginUser.getUserNo();
 		
+		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
+		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(uNo);
+		OrderCancel cancelInfo =sService.selectOrderCancel(oNo);
 		model.addAttribute("olist", olist);
 		model.addAttribute("alist", alist);
-		
+		model.addAttribute("ci",cancelInfo);
 		
 		return "Shopping/cancelDetail";
 	}
@@ -64,6 +75,7 @@ public class ShoppingController {
 		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
 		
 		model.addAttribute("olist",olist);
+		
 		return "Shopping/cancelReason";
 	}
 
@@ -154,12 +166,14 @@ public class ShoppingController {
 		ArrayList<Order>olist = sService.selectOrder(uNo);
 		ArrayList<Attachment>alist=sService.selectThumbListByOrderNo(uNo);
 		
-		
-		
+		 Map<Integer, List<Order>> groupedOrder = olist.stream()
+		            .collect(Collectors.groupingBy(Order::getOrderNo, LinkedHashMap::new, Collectors.toList()));
+
 		Map<String, Object> count = sService.orderStatusCount(uNo);
-		model.addAttribute("olist", olist);
+		model.addAttribute("groupedOrder", groupedOrder.entrySet());
 		model.addAttribute("count",count);
 		model.addAttribute("alist",alist);
+		
 		return "Shopping/order";
 	}
 
@@ -285,45 +299,206 @@ public class ShoppingController {
 	
 	@PostMapping("insertCancel")
 	@ResponseBody
-	public int insertCancel(OrderCancel cancel, HttpSession session) {
+	public int insertCancel(OrderCancel cancel, HttpSession session,@RequestParam("orderNo") int oNo) {
 		
 		User loginUser = (User) session.getAttribute("loginUser");
 		
 		cancel.setUserNo(loginUser.getUserNo());
+		cancel.setOrderNo(oNo);
 		return sService.insertCancel(cancel);
 	}
 	
 	
 	@GetMapping("payMent")
-	
-	public String selectCartList(@RequestParam("cartNo")List<Integer> cNo,HttpSession session,Model model,@RequestParam("totalPrice") int totalPrice) {
+	public String selectProductList(@RequestParam(value = "cartNo", required = false)List<Integer> cNo,HttpSession session,Model model,
+								@RequestParam(value = "coupon", required = false) String coupon,
+								@RequestParam(value = "productNo", required = false)Integer pNo, @RequestParam(value = "amount", required = false)Integer amount) {
+		
 		User loginUser = (User) session.getAttribute("loginUser");
 		int uNo = loginUser.getUserNo();
-		List<Cart> cList=sService.selectCartList(cNo);
-		
-		model.addAttribute("cList",cList);
+	
+		List<Cart> clist=new ArrayList<>();
+		int totalPrice=0;
+		CouponBox selectedCoupon = null;
+	    int discountAmount = 0;
+	    
+	    if(cNo !=null) {
+	    	clist =sService.selectCartList(cNo);
+	    	for(Cart c:clist) {
+	    		totalPrice+=c.getProductPrice() * c.getAmount();
+	    	}
+	    	model.addAttribute("orderType",2);
+	    	
+	    	if(coupon != null && !coupon.isBlank()) {
+	    		selectedCoupon=sService.checkCouponbyCart(coupon);
+	    		if(selectedCoupon != null) {
+	    			int discountRate=selectedCoupon.getCouponDiscount();
+	    			discountAmount = (int) Math.floor(totalPrice * (discountRate / 100.0));
+	    		}
+	    	}
+	    	
+	    	
+	    }else if(pNo !=null && amount != null) {
+	    	Product p = sService.directPaySelectProduct(pNo);
+	    	Cart c = new Cart();
+	    	c.setProductNo(p.getProductNo());
+	    	c.setProductName(p.getProductName());
+	    	c.setProductCompany(p.getBrandName());
+	    	c.setProductPrice(p.getProductPrice());
+	    	c.setAmount(amount);
+	    	
+	    	clist.add(c);
+	    	totalPrice=p.getProductPrice()*amount;
+	    	model.addAttribute("orderType",1);
+	    }
+	    
+	    
+
+		model.addAttribute("clist",clist);
 		model.addAttribute("totalPrice",totalPrice);
+		model.addAttribute("coupon",selectedCoupon);
+		model.addAttribute("loginUser",loginUser);
+		model.addAttribute("discountAmount",discountAmount);
+		model.addAttribute("cartNoList", cNo);
+
+		
+		
+		
 		
 		return  "Shopping/payMent";
 	}
 	
-	@GetMapping("directPay")
-	public String directPay(@RequestParam("productNo")int pNo, @RequestParam("amount")int amount,HttpSession session, Model model) {
-		User loginUser = (User) session.getAttribute("loginUser");
-		
-		
-		Product p =sService.directPaySelectProduct(pNo);
-		int totalPrice=p.getProductPrice()*amount;
-		
-		model.addAttribute("product", p);
-		model.addAttribute("amount",amount);
-		model.addAttribute("totalPrice",totalPrice);
-		model.addAttribute("orderType",1);
-		model.addAttribute("user", loginUser);
-		
-		
-		return "Shopping/payMent";
+	private Map<String, Object> confirmPayment(String paymentKey, String orderId, int amount) {
+	    String tossSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
+	    String url = "https://api.tosspayments.com/v1/payments/confirm";
+
+	   
+	    Map<String, Object> body = new HashMap<>();
+	    body.put("paymentKey", paymentKey);
+	    body.put("orderId", orderId);
+	    body.put("amount", amount);
+
+	    
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    String encodedAuth = Base64.getEncoder().encodeToString((tossSecretKey + ":").getBytes());
+	    headers.set("Authorization", "Basic " + encodedAuth);
+
+	    HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+	    RestTemplate restTemplate = new RestTemplate();
+
+	    ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+
+	    return response.getBody(); 
 	}
+	
+	
+	
+	@GetMapping("paymentSuccess")
+	public String paymentSuccess(@RequestParam Map<String, String> map,
+	                             @RequestParam("orderType") int orderType,
+	                             @RequestParam(value = "cartNo", required = false) List<Integer> cNo,
+	                             @RequestParam(value = "productNo", required = false) Integer pNo,
+	                             @RequestParam(value = "amount", required = false) Integer amount,
+	                             @RequestParam("finalPrice") int finalPrice,
+	                             HttpSession session,
+	                             Model model) {
+
+	    User loginUser = (User) session.getAttribute("loginUser");
+	    int uNo = loginUser.getUserNo();
+
+	    int oNo = sService.makeOrderNo();
+	    long randomNo = System.currentTimeMillis() + new Random().nextInt(1000);
+	    
+	    
+	    String paymentKey = map.get("paymentKey");
+	    String orderId = map.get("orderId");
+	    int payAmount = Integer.parseInt(map.get("amount"));
+
+	    Map<String, Object> tossResult = confirmPayment(paymentKey, orderId, payAmount);
+	    String method = (String) tossResult.get("method");
+	    
+	    
+	    Map<String,Object> both = new HashMap<>();
+	    both.put("orderNo", oNo);
+	    both.put("userNo", uNo);
+	    both.put("orderType", orderType);
+
+	    
+	    both.put("paymentMethod", method);   
+	    both.put("paymentKey", map.get("paymentKey"));  
+	    both.put("orderId", map.get("orderId"));
+
+	    
+	    both.put("personalCouponNo", map.get("couponNo"));
+	    both.put("usePoint", map.get("usePoint"));
+	    both.put("savePoint", map.get("savePoint"));
+	    both.put("discountAmount", map.get("discountAmount"));
+	    both.put("deliveryFee", map.get("deliveryFee"));
+
+	    both.put("userName", map.get("shipName"));
+	    both.put("userPhone", map.get("shipPhone"));
+	    both.put("userAddress", map.get("shipAddr") + " " + map.get("shipAddrplus"));
+	    both.put("payPrice", finalPrice);
+	    both.put("deliveryNo", randomNo);
+	    both.put("deliveryCompany", "cj대한통운");
+
+	    
+	    if (orderType == 2 && cNo != null) {
+	        List<Cart> clist = sService.selectCartList(cNo);
+	        for (Cart c : clist) {
+	            Map<String,Object> insert = new HashMap<>(both);
+	            insert.put("orderTargetNo", c.getProductNo());
+	            insert.put("orderCount", c.getAmount());
+	            sService.insertOrder(insert);
+	        }
+	        sService.deleteCartlist(cNo);
+
+	    
+	    } else if (orderType == 1 && pNo != null) {
+	        Product p = sService.directPaySelectProduct(pNo);
+	        Map<String,Object> insert = new HashMap<>(both);
+	        insert.put("orderTargetNo", pNo);
+	        insert.put("orderCount", amount);
+	        sService.insertOrder(insert);
+	    }
+
+	    if (map.get("usePoint") != null) {  
+	
+	        int usePoint = Integer.parseInt(map.get("usePoint"));
+	        int result=sService.minusPoint(uNo, usePoint);
+	    }
+	    if (map.get("savePoint") != null) {  
+	        int savePoint = Integer.parseInt(map.get("savePoint"));
+	        int result=sService.addPoint(uNo, savePoint);
+	    }
+
+	    if (map.get("couponNo") != null) {  
+	        int couponNo = Integer.parseInt(map.get("couponNo"));
+	        int result=sService.updateCouponStatus(couponNo);
+	    }
+	    
+	    
+	    model.addAttribute("finalPrice", finalPrice);
+	    model.addAttribute("payInfo", map);
+
+	    return "shopping/paymentSuccess";
+	}
+
+	
+	
+	
+	
+	
+	
+	@GetMapping("paymentFail")
+	public String paymentFail(@RequestParam Map<String, String> map, Model model) {
+		model.addAttribute("payInfo", map);
+		return "Shopping/paymentFail";
+	}
+	
+	
+	
 	
 	@PostMapping("productToCart")
 	@ResponseBody
@@ -369,4 +544,11 @@ public class ShoppingController {
 		return result;
 	}
 	
+	
+	@PostMapping("updateCartamount")
+	@ResponseBody
+	public int updateCartamount(@RequestParam("cartNo") int cNo,@RequestParam("amount")int amount) {
+		int result=sService.updateCartamount(cNo,amount);
+		return result;
+	}
 }

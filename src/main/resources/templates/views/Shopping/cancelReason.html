@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>취소사유</title>
@@ -186,6 +186,7 @@ body {
   </nav>
 	<p class="title">주문취소</p>
 	<form class="form">
+	  <input type="hidden" name="orderNo" th:value="${olist[0].orderNo}" />
 		<div class="cancel-choose">
 			<p class="cancel-option">취소사유 (필수)</p>
 			<select id="sort" name="cancelSortType" required>

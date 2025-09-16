@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,7 +9,8 @@
   <!-- 아이콘 CDN (v6) -->
   <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://js.tosspayments.com/v1/payment-widget"></script>
  <style>
   /* 레이아웃 기본 */
   body { background:#f7f8f9; font-family:Pretendard, sans-serif; margin:0; }
@@ -62,7 +63,7 @@
   .divider{ height:1px; background:#e5e7eb; margin:16px 0; }
 
   /* 주문상품 리스트 */
-  .order-items .item{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .order-items .item{ display:flex; align-items:center; gap:12px; margin-bottom:10px;  margin-left:1%; margin-right:1%;}
   .order-items .thumb img{ width:80px; height:80px; border-radius:8px; border:1px solid #ddd; }
   .item-meta{ flex:1; font-size:14px; color:#444; }
   .item-meta .sub{ color:#666; font-size:13px; }
@@ -138,6 +139,21 @@
   line-height: 1;
 }
   
+.point-use{
+	display:flex;
+	align-items:center;
+	gap:6px;
+}
+
+.point-use input{
+	padding:6px;
+	border:1px solid #ccc;
+	border-radius:6px;
+}
+.point-box{
+	text-align:right;
+	margin-left:70%;
+}
 </style>
  
  
@@ -154,33 +170,32 @@
     <div class="page-topbar">
       <h1 class="page-title">주문/결제</h1>
     </div>
+	 <input type="hidden" id="userNo" th:value="${userNo}">
+	 <input type="hidden" id="orderType" th:value="${orderType}">
+	 <input type="hidden" id="productNo" th:value="${pNo}">
+	<input type="hidden" id="amount" th:value="${amount}">
+	<th:block th:each="cNo : ${cartNoList}">
+ 		 <input type="hidden" name="cartNoList" class="cartNo" th:value="${cNo}">
+	</th:block>
 
+
+	
     <!-- 주문자 정보 -->
     <section class="card">
       <h2 class="section-title">주문 정보</h2>
       <div class="form-grid">
         <label>주문자</label>
-        <input class="input" type="text" value="홍길동" required>
-
+        <input class="input" id="orderUserName" type="text" th:value="${loginUser.userName}" disabled>
         <label>이메일</label>
-        <input class="input" type="email" value="gildong@example.com" required>
-
-        <label>일반전화</label>
-        <div class="addr-row"><input class="input" type="text" placeholder="02-000-0000"></div>
+        <input class="input" type="email" th:value="${loginUser.email}" disabled>
 
         <label>휴대전화</label>
-        <div class="addr-row"><input class="input" type="text" value="010-1234-5678" required></div>
+        <div class="addr-row"><input class="input" type="text" th:value="${loginUser.userPhone}" disabled></div>
 
         <label>주소</label>
         <div class="full">
-          <div class="addr-row">
-            <input class="input" type="text" placeholder="우편번호" value="06236">
-            <button type="button" class="pill-btn">주소검색</button>
-          </div>
           <div style="height:8px"></div>
-          <input class="input" type="text" placeholder="기본주소" value="서울 강남구 테헤란로 123">
-          <div style="height:8px"></div>
-          <input class="input" type="text" placeholder="나머지 주소" value="XX빌딩 10층">
+          <input class="input" type="text"th:value="${loginUser.userAddress}" disabled>
         </div>
       </div>
     </section>
@@ -189,61 +204,70 @@
     <section class="card">
       <h2 class="section-title">배송지</h2>
       <div class="radio-row">
-        <label><input type="radio" name="shipSame" value="same" checked> 주문자 정보와 동일</label>
-        <label><input type="radio" name="shipSame" value="new"> 새로운 배송지</label>
+        <label><input type="radio" id="usersame" name="shipSame" value="same" checked> 주문자 정보와 동일</label>
+        <label><input type="radio" id="usernotsame" name="shipSame" value="new"> 새로운 배송지</label>
       </div>
       <div class="divider"></div>
       <div id="shipForm" class="form-grid">
         <label>받는사람</label>
-        <input class="input" type="text" value="홍길동" required>
-
+        <input class="input" id="shipName" type="text" placeholder="ex)홍길동" th:value="${loginUser.userName}" disabled required>
+		<label>휴대전화</label>
+        <input class="input" id="shipPhone" type="text" placeholder="ex)010-1234-5678" th:value="${loginUser.userPhone}" disabled required>
+        
+        
         <label>주소</label>
         <div class="full">
           <div class="addr-row">
-            <input class="input" type="text" placeholder="우편번호" value="06236">
-            <button type="button" class="pill-btn">주소검색</button>
+            <input class="input" id="shipAddr" type="text" placeholder="ex)경기도 가평군 가평읍 가화로 164" th:value="${loginUser.userAddress}" disabled required>
+            <button type="button" id="searchAddr" class="pill-btn" disabled>주소검색</button>
           </div>
           <div style="height:8px"></div>
-          <input class="input" type="text" placeholder="기본주소" value="서울 강남구 테헤란로 123">
-          <div style="height:8px"></div>
-          <input class="input" type="text" placeholder="나머지 주소" value="XX빌딩 10층">
+          <input class="input" id="shipAddrplus" type="text" placeholder="ex)201동 303호" disabled>
         </div>
-
         
-
-        <label>휴대전화</label>
-        <input class="input" type="text" placeholder="010-0000-0000" value="010-1234-5678" required>
-
-        <div class="full">
-          <select class="select">
-            <option>-- 메시지 선택 (선택사항) --</option>
-            <option>부재 시 문 앞에 놓아주세요</option>
-            <option>경비실에 맡겨주세요</option>
-            <option>배송 전 연락 부탁드립니다</option>
-          </select>
-        </div>
+        
       </div>
     </section>
 
     <!-- 주문상품 & 결제요약 -->
     <section class="card">
       <h2 class="section-title">주문상품</h2>
-      <div class="order-items">
+      <div class="order-items" th:each="c:${clist}">
         <div class="item">
-          <div class="thumb"><img src="https://via.placeholder.com/120" alt=""></div>
           <div class="item-meta">
-            <div>[999세일] 허브 스네일 기초세트</div>
-            <div class="sub">[옵션] 기본</div>
-            <div class="sub">수량: 1개</div>
+	    	<div class="company">[[${c.productCompany}]]</div>
+	    	<div class="name">[[${c.productName}]]</div>
+            <div class="sub">수량: [[${c.amount}]]개</div>
           </div>
-          <div class="price">21,999원</div>
+          <div class="price" th:text="${#numbers.formatInteger(c.productPrice,3,'COMMA')}+'원'"></div>
         </div>
       </div>
       <div class="divider"></div>
       <div class="summary">
-        <div class="row"><span>주문상품</span><span>21,999원</span></div>
-        <div class="row"><span>배송비</span><span>3,000원</span></div>
-        <div class="row"><strong>최종 결제 금액</strong><strong class="total" id="finalTotal">24,999원</strong></div>
+        <div class="row"><span>총 상품금액</span><span id="totalprice" th:data-value="${totalPrice}" th:text="${#numbers.formatInteger(totalPrice,3,'COMMA')}+'원'"></span></div>
+        <div class="row"><span>쿠폰적용</span>
+        	<span th:if="${coupon == null or coupon == ''}">적용된 쿠폰 없음</span>
+        	<span th:data-value="${discountAmount}" id="discountAmount" th:if="${coupon != null and coupon != ''}">[[${coupon.couponName}]] : -[[${#numbers.formatInteger(discountAmount,3,'COMMA')}]]원</span>
+        </div>
+        <div class="point-use">
+        				<span class="point-label">포인트사용</span>
+        				<div class="point-box">
+        					<input id="userpointwrite" type="text" placeholder="포인트사용금액입력" th:disabled="${loginUser.userPoint<4999}" autofocus>
+        					<div class="point-info" style="font-size:12px; color:#777; margin:0;">* 포인트는 보유 포인트 5000P이상일때 사용가능합니다.</div>
+     						<div class="point-info" style="font-size:13px; color:#333;margin:0;">* 보유포인트 : <strong id="userhavepoint" th:data-value="${loginUser.userPoint}" style="font-style: italic;">[[${#numbers.formatInteger(loginUser.userPoint,3,'COMMA')}]]</strong><strong> P</strong></div>
+        				</div>
+        </div>
+        <div class="row">
+        	<span>포인트적립</span>
+        	<span  id="savePoint">0P</span>
+       	</div>
+        <div class="row">
+        	<div>배송비<div class="delivery-info" style="font-size:12px; color:#777; margin:0;">* 5만원 이상 주문 시 무료배송입니다~ ^_^</div></div>
+        	<span id="deliverymoney" th:data-value="${totalPrice > 50000 ? 0 : 3000}">
+  				[[${totalPrice > 50000 ? 0 : 3000}]]원
+			</span>
+        </div>
+        <div class="row"><strong>최종 결제 금액</strong><strong class="total" id="finalTotal"></strong></div>
       </div>
     </section>
 
@@ -251,57 +275,205 @@
     <section class="card">
       <h2 class="section-title">결제수단</h2>
       <div class="pay-methods">
-        <label class="method"><span><input type="radio" name="payMethod" value="CARD" checked> 카드 결제</span><span class="sub">빠른 승인</span></label>
-        <label class="method"><span><input type="radio" name="payMethod" value="ESCROW"> 에스크로(실시간 계좌이체)</span></label>
-        <label class="method"><span><input type="radio" name="payMethod" value="MOBILE"> 휴대폰 결제</span></label>
-        <label class="method"><span><input type="radio" name="payMethod" value="VBANK"> 무통장 입금</span></label>
-        <label class="method"><span><input type="radio" name="payMethod" value="KAKAOPAY"> 카카오페이(간편결제)</span></label>
-        <label class="method"><span><input type="radio" name="payMethod" value="PAYCO"> 페이코(간편결제)</span></label>
+        <div id="payment-widget"></div>
       </div>
-      <div id="cardOptions" class="pay-options" style="margin-top:10px">
-        <select class="select"><option>카드선택</option><option>국민카드</option><option>신한카드</option><option>현대카드</option></select>
-        <select class="select"><option>할부기간: 일시불</option><option>2개월</option><option>3개월</option><option>6개월</option></select>
-      </div>
-      <div id="otherOptions" class="hide" style="margin-top:10px">
-        <div class="sub">선택하신 결제수단에 따라 추가 정보가 여기 노출됩니다.</div>
-      </div>
+     
     </section>
 
     <!-- 약관동의 -->
     <section class="card">
       <h2 class="section-title">약관 동의</h2>
-      <div class="terms">
-        <label class="term all"><input type="checkbox" id="agreeAll"> 모든 약관 동의</label>
-        <label class="term"><input type="checkbox" class="agree"> [필수] 결제대행서비스 약관 동의</label>
-        <label class="term"><input type="checkbox" class="agree"> [필수] 쇼핑몰 이용약관 동의</label>
-        <label class="term"><input type="checkbox" class="agree"> [필수] 개인정보 수집 및 이용 동의</label>
-      </div>
+         <div id="agreement"></div>
     </section>
 
     <!-- 하단 고정 결제바 -->
     <div class="paybar card">
-      <div class="pay-total">최종 결제 금액 <span id="paybarTotal">24,999원</span></div>
+      <div class="pay-total">최종 결제 금액 <span id="pay-bar"></span></div>
       <button class="primary" id="btnPay" type="button">결제하기</button>
     </div>
   </main>
 
-  <script>
-    const cardOptions=document.getElementById('cardOptions');
-    const otherOptions=document.getElementById('otherOptions');
-    document.querySelectorAll('input[name="payMethod"]').forEach(r=>{
-      r.addEventListener('change',()=>{
-        const v=document.querySelector('input[name="payMethod"]:checked').value;
-        cardOptions.classList.toggle('hide', v!=="CARD");
-        otherOptions.classList.toggle('hide', v==="CARD");
-      });
-    });
-    document.getElementById('agreeAll').addEventListener('change', e=>{
-      document.querySelectorAll('.agree').forEach(c=> c.checked=e.target.checked);
-    });
-    const finalTotal=document.getElementById('finalTotal');
-    const paybarTotal=document.getElementById('paybarTotal');
-    if(finalTotal&&paybarTotal) paybarTotal.textContent=finalTotal.textContent;
-    document.getElementById('btnPay').addEventListener('click',()=>{alert('양서연 테스트입니당');});
+  <script th:inline="javascript">
+  window.onload= async ()=>{
+	  const usersame = document.getElementById('usersame');
+	  const usernotsame = document.getElementById('usernotsame');
+	  const shipForm=document.getElementById('shipForm');
+	  
+	  
+	  const shipName=document.getElementById('shipName');
+	  const shipPhone=document.getElementById('shipPhone');
+	  const shipAddr=document.getElementById('shipAddr');
+	  const searchAddr=document.getElementById('searchAddr');
+	  const shipAddrplus=document.getElementById('shipAddrplus');
+	  
+	  const defaultName=shipName.value;
+	  const defaultPhone=shipPhone.value;
+	  const defaultAddr=shipAddr.value;
+	  const defaultAddrplus=shipAddrplus.value;
+	  
+	  const userpointwrite=document.getElementById('userpointwrite');
+	  const userhavepoint =document.getElementById('userhavepoint');
+	  const finalTotal = document.getElementById('finalTotal');
+	  const payBar=document.getElementById('pay-bar');
+	  const btnPay=document.getElementById('btnPay');
+	  
+	  
+	  const originalPoint=parseInt(userhavepoint.textContent.replace(/[^0-9]/g, ""));
+	  
+	  
+	  
+	  const totalPriceEl=document.getElementById('totalprice');
+	  const discountEl=document.getElementById('discountAmount');
+	  const deliveryEl=document.getElementById('deliverymoney');
+	  
+	  const calcfinalPrice=()=>{
+		  let usePoint=parseInt(userpointwrite.value.replace(/[^0-9]/g, "")) || 0;
+		  
+		  if(usePoint<0)usePoint=0;
+		  if(usePoint>originalPoint) usePoint=originalPoint;
+		  
+		  const totalPrice = parseInt(totalPriceEl.dataset.value) || 0;
+		  const discountAmount = discountEl ? parseInt(discountEl.dataset.value) : 0;
+		  const deliveryMoney = parseInt(deliveryEl.dataset.value) || 0;
+
+		  let result = totalPrice - discountAmount - usePoint + deliveryMoney;
+		  if (result < 0) result = 0;
+
+		  finalTotal.textContent = result.toLocaleString() + "원";
+		  payBar.textContent = result.toLocaleString() + "원";
+		  
+		  let savePoint=Math.floor((result-deliveryMoney)*0.01);
+		  if(savePoint<0)savePoint=0;
+		  
+		  let remain=originalPoint-usePoint;
+		  userhavepoint.textContent=remain.toLocaleString();
+		  
+		  document.getElementById("savePoint").textContent = savePoint.toLocaleString() + "P";
+		  
+		  
+		  return result;
+	  };
+	  calcfinalPrice();
+	  
+	  
+	  usersame.addEventListener('click',()=>{
+		  shipName.value=defaultName;
+		  shipPhone.value=defaultPhone;
+		  shipAddr.value=defaultAddr;
+		  shipAddrplus.value=defaultAddrplus;
+		  
+		  shipName.disabled=true;
+		  shipPhone.disabled=true;
+		  shipAddr.disabled=true;
+		  searchAddr.disabled=true;
+		  shipAddrplus.disabled=true;
+	  });
+	  
+	  usernotsame.addEventListener('click',()=>{
+		  shipName.value='';
+		  shipPhone.value='';
+		  shipAddr.value='';
+		  shipAddrplus.value='';
+		  
+		  shipName.disabled=false;
+		  shipPhone.disabled=false;
+		  shipAddr.disabled=false;
+		  searchAddr.disabled=false;
+		  shipAddrplus.disabled=false;
+	  });
+	  searchAddr.addEventListener('click',()=>{
+		  new daum.Postcode({
+			  oncomplete:function(data){
+				  document.getElementById("shipAddr").value=data.address;
+			  }
+		  }).open();
+	  });
+	  
+	  userpointwrite.addEventListener('input',()=>{
+		  let usePoint=parseInt(userpointwrite.value.replace(/[^0-9]/g, "")) || 0;
+		  
+		  if (usePoint < 0) usePoint = 0;
+		  if (usePoint > originalPoint) usePoint = originalPoint;
+		  
+		  
+		  let remain=originalPoint-usePoint;
+		  userhavepoint.textContent=remain.toLocaleString();
+		  
+		  calcfinalPrice();
+	  });
+	  
+	  const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+	  const customerKey = "user-" + document.getElementById("userNo").value;
+	  const paymentWidget = PaymentWidget(clientKey, customerKey);	
+	  const finalPrice=document.getElementById("finalTotal").textContent.replace(/[^0-9]/g,"") || 0;
+	  
+	  await paymentWidget.renderPaymentMethods(
+			    "#payment-widget",       
+			    { value: finalPrice },         
+			    { variantKey: "DEFAULT"} 
+			  );
+
+			  
+			  await paymentWidget.renderAgreement(
+			    "#agreement",
+			    { variantKey: "AGREEMENT" }
+			  );
+	  btnPay.addEventListener('click',async()=>{
+		  const paymentprice=calcfinalPrice();
+		  
+		  
+		  const usePoint = parseInt(userpointwrite.value.replace(/[^0-9]/g, "")) || 0;
+		  const discountAmount = discountEl ? parseInt(discountEl.dataset.value) : 0;
+		  const deliveryMoney = parseInt(deliveryEl.dataset.value) || 0;
+		  const savePoint = Math.floor((paymentprice - deliveryMoney) * 0.01);
+		  
+		  const orderType = parseInt(document.getElementById("orderType").value) || 0;
+		  const pNo = document.getElementById("productNo") ? document.getElementById("productNo").value : null;
+		  const amount = document.getElementById("amount") ? document.getElementById("amount").value : null;
+
+		  
+		  const clist = Array.from(document.querySelectorAll(".cartNo")).map(el => el.value);
+
+		  
+		  
+		  
+		  
+		  try{
+			  await paymentWidget.requestPayment({
+				  orderId:"order-" + new Date().getTime(),
+				  orderName:"상품 결제",
+				  customerName:document.getElementById("orderUserName").value,
+				  successUrl:window.location.origin+"/Shopping/paymentSuccess"
+													  + "?finalPrice=" + paymentprice
+													  + "&usePoint=" + usePoint
+													  + "&discountAmount=" + discountAmount
+													  + "&deliveryFee=" + deliveryMoney
+													  + "&savePoint=" + savePoint
+													  + "&shipName=" + encodeURIComponent(shipName.value)
+													  + "&shipPhone=" + encodeURIComponent(shipPhone.value)
+													  + "&shipAddr=" + encodeURIComponent(shipAddr.value)
+													  + "&shipAddrplus=" + encodeURIComponent(shipAddrplus.value)
+													  + "&orderType=" + orderType
+													  + (orderType == 1
+															    ? ("&productNo=" + pNo + "&amount=" + amount)
+															    : clist.map(no => "&cartNo=" + no).join("")
+															),
+
+
+				  failUrl:window.location.origin+"/Shopping/paymentFail",
+				  amount:paymentprice,
+			  });
+			  
+		  }catch(err){
+			  console.error("결제 요청 중 오류 발생:", err);
+			  alert("결제에 실패했습니다. 다시 시도해주세요.");
+		  }
+	  });
+			  
+	
+			
+  }
+  
   </script>
 </body>
 </html>
