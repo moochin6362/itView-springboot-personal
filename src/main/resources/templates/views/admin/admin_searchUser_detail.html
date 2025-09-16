@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href="/css/adminCss/admin_searchUser_detail.css">
    	<link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
     <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
-	<script src="/js/admin/admin_searchUser_detail.js"defer></script>
 	<script src="/js/inhoAdmin/sidebar.js" defer></script>
+	<script src="/js/admin/admin_searchUser_detail.js" defer></script>
 	
      <!-- 아이콘 & 폰트 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -26,40 +26,50 @@
 
 		    <div class="admin-searchUser-detail-wrapper">
 		        <div class="admin-searchUser-detail-container"> <!--게시판-->
-		            <table class="admin-searchUser-detail-table">  <!--게시판 헤더-->
-		                <tr>
-		                    <th>회원 아이디</th>
-		                    <td th:text="${user.userId}"></td>
-		                </tr>
-		                <tr>
-		                    <th>이메일</th>
-		                    <td th:text="${user.email}"></td>
-		                </tr>
-		                <tr>
-		                    <th>회원 유형</th>
-		                    <td th:text="${user.userType == 'P' ? '판매자' : '일반회원'}"></td>
-		                </tr>
-		                <tr>
-		                    <th>활동 여부</th>
-		                    <td th:text="${user.userStatus == 'Y'? '활동 중' : '활동 정지}"></td>
-		                </tr>
-		                <tr>
-		                    <th>누적 신고횟수</th>
-		                    <td th:text="${user.reportCount + ' 회'}"></td>
-		                </tr>
-		            </table>
+		        	<form id="searchUserForm" method="get">
+			            <table class="admin-searchUser-detail-table">  <!--게시판 헤더-->
+				            <input type="hidden" name="userNo" th:value="${user.userNo}">
+			                <input type="hidden" name="page" th:value="${page}">
+			                <tr>
+			                    <th>회원 아이디</th>
+			                    <td th:text="${user.userId}"></td>
+			                </tr>
+			                <tr>
+			                    <th>이메일</th>
+			                    <td th:text="${user.email}"></td>
+			                </tr>
+			                <tr>
+			                    <th>회원 유형</th>
+			                    <td th:text="${user.userType == 'P' ? '판매자' : '일반회원'}"></td>
+			                </tr>
+			                <tr>
+			                    <th>활동 여부</th>
+			                    <td th:text="${user.userStatus == 'Y'? '활동 중' : '활동 정지'}"></td>
+			                </tr>
+			                <tr>
+			                    <th>누적 신고횟수</th>
+			                    <td th:text="${user.reportCount + ' 회'}"></td>
+			                </tr>
+			            </table>
+			            
+			            <div class="admin-button-wrapper">
+					        <button class="admin-reportList-btn" 
+					                type="button"
+					                th:attr="data-user-no=${user.userNo}"
+					                onclick="existReportUser(this)">
+					                신고글 보기
+					        </button>
+					
+					        <button  class="admin-back-btn"  
+					        		 type="button" onclick="history.back()">
+					            뒤로가기
+					        </button>
+				    	</div>
+			     	</form>
 		         </div>
-		         <!-- 
-		         <button class="admin-reportList-btn" type="button" 
-		                onclick="'location.href=\'/report/list?userId=' + ${user.userId} + '\'"'>
-		            신고글 보기
-		        </button>
-		         -->
-		
-		       
-		
-		    </div>
-    	</div>
-    </div>
-</body>
+		         
+	    	</div>
+	    </div>
+	  </div>
+	</body>
 </html>

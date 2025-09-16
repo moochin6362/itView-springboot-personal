@@ -20,6 +20,7 @@ public class Review {
 	private int productNo;
 	private int userNo;
 	private String userName;
+	private String reviewStatus;
 	
     //신고용
 	private String userId;

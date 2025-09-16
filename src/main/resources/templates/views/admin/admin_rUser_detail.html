@@ -6,6 +6,7 @@
         <title>회원신고 상세</title>
         
         <script th:src="@{/js/admin/admin_rUser_detail.js}" defer></script>
+        <script th:src="@{/js/inhoAdmin/sidebar.js}" defer></script>
         <!-- CSS 파일 -->
 	    <link href="/css/adminCss/admin_rUser_detail.css" rel="stylesheet" />
 	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
@@ -56,25 +57,21 @@
 	                            <td th:text="${u.userStatus == 'Y'?'활동중' : '정지'}"></td>
 	                        </tr>
 	                    </table>
-	                    <!-- 상품 정지기간 선택 영역 // 자자동해지 -->
 						<div class="stop-period-section" style="margin-bottom: 10px;">
 						    <label class="page-title">회원 활동정지 기간선택</label>
 						    <div style="margin-top: 10px;">
-						        <label>
-						            <input type="radio" name="stopPeriod" value="1" /> 1일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="3" /> 3일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="7" /> 7일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="30" /> 30일
-						        </label>
-						        <label>
-						            <input type="radio" name="stopPeriod" value="permanent" /> 영구정지
-						        </label>
+						        <input type="radio" id="stop1" name="stopPeriod" value="1" /> 
+						        <label for="stop1"> 1일</label>
+						        
+						         <input type="radio" id="stop3" name="stopPeriod" value="3" /> 
+						        <label for="stop3"> 3일</label>
+						        
+						         <input type="radio" id="stop7" name="stopPeriod" value="7" /> 
+						        <label for="stop7"> 7일</label>
+						        
+						         <input type="radio" id="stop30" name="stopPeriod" value="30" /> 
+						        <label for="stop30">30일</label>
+						        
 						    </div>
 						</div>
 	                    

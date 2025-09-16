@@ -165,3 +165,10 @@
     font-weight: normal;
     font-style: normal;
 }
+a {
+    text-decoration: none;  /* 밑줄 제거 */
+    color: inherit;         /* 글자색 부모 상속 */
+    cursor: pointer;        /* 마우스 포인터 커서 */
+}
+
+

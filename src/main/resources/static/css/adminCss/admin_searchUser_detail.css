@@ -91,17 +91,30 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.admin-reportList-btn{
+.admin-button-wrapper {
+    display: flex;              /* 플렉스 박스로 정렬 */
+    justify-content: center;    /* 가로 중앙 */
+    align-items: center;        /* 세로 중앙 */
+    gap: 20px;                  /* 버튼 사이 간격 */
+    margin-top: 30px;           /* 위쪽 여백 */
+}
+
+.admin-reportList-btn,
+.admin-back-btn{
     padding: 10px 15px;
     border-radius: 8px;
     border: none;
-    background-color: #97f1f7e3;
+    background-color: #34e5eb;
     color: white;
     font-weight: 600;
     cursor: pointer;
     font-size: 14px;
     margin-top: 50px;
 }
-.admin-reportList-btn:hover {
-    background-color: #83dbe0;
+.admin-reportList-btn:hover{
+	 cursor: pointer;
+    background-color:#8ad8f0;
+}.admin-back-btn:hover {
+     cursor: pointer;
+    background-color:#8ad8f0;
 }

@@ -10,27 +10,29 @@ select count(*)
         select u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status,
                count(r.report_no) as reportCount
         from "USER" u
-        left join REPORT r on u.user_no = r.reporter_user_id
+        left join REPORT r on u.user_no = r.report_target_no
         group by u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status)t
-	<if test="value != null and value != ''">
-		<choose>
-			<when test="condition == 'userId'">
-				where user_id like '%' || #{value} || '%'
-			</when>
-			<when test="condition == 'userType'">
-				where user_type like '%'|| #{value} ||'%'
-			</when>
-			<when test="condition == 'userStatus'">
-				where user_status like '%' || #{value} || '%'
-			</when>
-			<when test="condition == 'reportCount'">
-				where reportCount = #{value}
-			</when>
-			<otherwise>
-            	where (user_id like '%' || #{value} || '%')
-            </otherwise>
-		</choose>
-	</if>
+	<where>
+		<if test="value != null and value != ''">
+			<choose>
+				<when test="condition == 'userId'">
+					t.user_id like '%' || #{value} || '%'
+				</when>
+				<when test="condition == 'userType'">
+					t.user_type like '%'|| #{value} ||'%'
+				</when>
+				<when test="condition == 'userStatus'">
+					t.user_status like '%' || #{value} || '%'
+				</when>
+				<when test="condition == 'reportCount'">
+					t.reportCount = #{value}
+				</when>
+				<otherwise>
+	            	t.user_id like '%' || #{value} || '%')
+	            </otherwise>
+			</choose>
+		</if>
+	</where>
 </select>
 
 <select id="selectUserList" resultType="itView.springboot.dto.UserReport">
@@ -38,14 +40,14 @@ select count(*)
     from (
         select 
         	u.user_no, u.user_id, u.email, u.user_type, 
-        	u.brand_name, u.user_status,
+        	u.user_name, u.user_status,
                count(r.report_no) as reportCount
         from "USER" u
         left join REPORT r 
-        	on u.user_no = r.reporter_user_id
+        	on u.user_no = r.report_target_no
         	and r.report_type = 'U'
         group by 
-        	u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status)t
+        	u.user_no, u.user_id, u.email, u.user_type, u.user_name, u.user_status)t
 	<if test="value != null and value != ''">
 		<choose>
 			<when test="condition == 'userId'">
@@ -73,16 +75,16 @@ SELECT
     u.user_id,
     u.email,
     u.user_type,
-    u.brand_name,
+    u.user_name,
     u.user_status,
     COUNT(r.report_no) AS reportCount
 FROM "USER" u
 LEFT JOIN REPORT r 
-    ON u.user_no = r.reporter_user_id
+    ON u.user_no = r.report_target_no
     AND r.report_type = 'U'
 WHERE u.user_no = #{userNo}
 GROUP BY 
-    u.user_no, u.user_id, u.email, u.user_type, u.brand_name, u.user_status
+    u.user_no, u.user_id, u.email, u.user_type, u.user_name, u.user_status
 </select>
 
 
@@ -139,7 +141,7 @@ select count(*)
         u.user_status,
         u.user_no,
         u.user_name,
-        COUNT(r.report_no) AS report_count
+        COUNT(case when report_status = 'Y' then 1 end) AS report_count
     FROM "USER" u
     JOIN report r
       ON r.report_target_no = u.user_no
@@ -157,7 +159,7 @@ select count(*)
 	    b.board_id,
 	    b.board_title,
 	    u.user_name,
-	    COUNT(r.report_no) AS report_count
+	    COUNT(case when report_status = 'Y' then 1 end) AS report_count
 		FROM board b
 		JOIN report r 
 		  ON r.report_target_no = b.board_id
@@ -180,7 +182,7 @@ select count(*)
 	    r.report_date,
 	    r.report_status,
 	    u.user_name,
-	    COUNT(r.report_no) AS report_count
+	    COUNT(case when report_status = 'Y' then 1 end) AS report_count
 		FROM review e
 		JOIN report r
 		  ON r.report_target_no = e.review_no
@@ -200,7 +202,7 @@ select count(*)
 	    r.report_date,
 	    r.report_status,
 	    u.user_id,
-	    COUNT(report_no) AS report_count
+	    COUNT(case when report_status = 'Y' then 1 end) AS report_count
 		FROM reply v
 		JOIN report r
 		  ON r.report_target_no = v.reply_no
@@ -287,6 +289,7 @@ SELECT
 	    e.review_date,
 	    e.review_no,
 	    e.review_content,
+	    e.review_status,
 	    COUNT(r.report_no) AS report_count,
 	    max(r.report_date) as report_date
 		FROM review e
@@ -299,7 +302,8 @@ SELECT
 		    u.user_id,
 		    e.review_date,
 		    e.review_no,
-		    e.review_content
+		    e.review_content,
+		    e.review_status
 </select>
 
 <select id="getReviewReportCount">
@@ -344,6 +348,8 @@ SELECT
 		    v.reply_content,
 		    u.user_id
 </select>
+
+
 <select id="getReplyReportCount">
 select count(*) from report 
 where report_type = 'V' and report_target_no = #{replyNo}
@@ -634,7 +640,13 @@ WHERE board_id = (
 )
  </update>
 
-
+<!-- 회원상세조회 : 회원신고 상세보기 이동 -->
+<select id="existsReportForUser" parameterType="int" resultType="boolean">
+	select case when count(*) > 0 then 1 else 0 end
+	from report
+	where report_type='U'
+		and report_target_no = #{userNo}
+</select>
 
 
 </mapper>

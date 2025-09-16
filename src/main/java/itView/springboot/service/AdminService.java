@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
@@ -303,6 +304,15 @@ public class AdminService {
 	public void restoreUser(LocalDate today) {
 		mapper.restoreUser(today);
 	}
+
+	
+	
+	//회원조회 버튼 : 회원신고글 상세보기 페이지 이동
+	public boolean existsReportForUser(int userNo) {
+		return mapper.existsReportForUser(userNo);
+	}
+
+
 
 
 

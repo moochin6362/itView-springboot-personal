@@ -4,8 +4,10 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>신고 댓글 상세</title>
+        
+        <script th:src="@{/js/admin/admin_rReply_detail.js}" defer></script>
         <!-- CSS 파일 -->
-	    <link href="/css/inhoCss/reportProductDetail.css" rel="stylesheet" />
+	    <link href="/css/adminCss/admin_rReply_detail.css" rel="stylesheet" />
 	    <link href="/css/inhoCss/sidebar.css" rel="stylesheet" type="text/css" />
 	    <link href="/css/inhoCss/header.css" rel="stylesheet" type="text/css"/>
 	
@@ -82,11 +84,11 @@
 				          	</thead>
 				          	<tbody>
 					        	<tr th:each="r : ${vlist}">
-					            	<td>[[${r.reportNo}]]</td>
-					            	<td>[[${r.reportTitle}]]</td>
- 					                <td>[[${r.reportContent}]]</td> 
-					            	<td>[[${r.userName}]]</td>
-					            	<td>[[${r.reportDate}]]</td>
+					            	<td th:text="${r.reportNo}"></td>
+					            	<td th:text="${r.reportTitle}"></td>
+ 					            	<td th:text="${r.reportContent}"></td> 
+					            	<td th:text="${r.userName}"></td>
+					            	<td th:text="${r.reportDate}"></td>
 					        	</tr>
 				        	</tbody>
 				    	</table>
@@ -95,21 +97,6 @@
             </div>
         </div>
 		<script th:src="@{/js/inhoAdmin/sidebar.js}"></script>
-		<script>
-			window.onload = () => {
-			    const delBtn = document.getElementById('deleteBtn');
-			    const form = document.getElementById('detailForm');
-	
-			    if (delBtn) {
-			        delBtn.addEventListener('click', () => {
-			            if (confirm("정말 상품을 삭제하시겠습니까?")) {
-			            	form.method = "post";
-			                form.action = '/inhoAdmin/deleteCoupon';
-			                form.submit();
-			            }
-			        });
-			    }
-			}
-		</script>
+		
     </body>
 </html>

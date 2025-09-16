@@ -44,6 +44,8 @@ public class AdminController {
 	private final ProductService pService;
 	private final InquiryService inquiryService;
 	
+	
+	
 	//관리자 회원조회 list가져오기
 	@GetMapping("/searchUser")
 	public String userList(
@@ -560,7 +562,20 @@ public class AdminController {
     }
 	
 
-	
+	//회원조회 버튼 => 신고글 상세페이지로 이동
+	@GetMapping("/searchReportedUserDetail")
+	@ResponseBody
+	public Map<String, Boolean> searchReportedUserDetail(
+			@RequestParam("userNo")int userNo,
+			Model model, HttpSession session
+			) {
+		
+		boolean existReport = adService.existsReportForUser(userNo);
+		Map<String, Boolean> result = new HashMap<>();
+		result.put("existReport", existReport);
+		return result;
+	}
+
 	
 	
 	

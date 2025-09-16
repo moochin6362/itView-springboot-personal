@@ -213,10 +213,10 @@ html {
     position: absolute;
     left: 0;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-53%);
     width: 18px;
     height: 18px;
-    border: 2px solid #4caf50;
+    border: 2px solid #34e5eb;
     border-radius: 50%;
     background-color: #fff;
     transition: all 0.3s ease;
@@ -228,17 +228,16 @@ html {
     position: absolute;
     left: 5px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-53%);
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #4caf50;
+    background-color:  #34e5eb;
     transition: all 0.3s ease;
 }
 
 /* 선택 시 글자 색상 강조 */
 .stop-period-section input[type="radio"]:checked + label {
-    color: #4caf50;
     font-weight: 600;
 }
 

@@ -3,6 +3,7 @@ package itView.springboot.mapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -171,6 +172,9 @@ public interface AdminMapper {
 	int deleteReplyByNo(int replyNo);
 	//회원복구(자동)
 	void restoreUser(LocalDate today);
+
+	//회원조회상세 => 신고글 보기
+	boolean existsReportForUser(int userNo);
 
 
 	
