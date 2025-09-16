@@ -1,5 +1,5 @@
 :root {
-  --main-color: #27c7c7;
+  --main-color: #34e5eb;
   --bg-color: #eefbfb;
   --text-color: #333;
   --border-radius: 8px;
@@ -70,12 +70,12 @@ body {
 }
 
 .approve-btn {
-  background-color: #2ecc71;
+  background-color: #34e5eb;
   color: white;
 }
 
 .approve-btn:hover {
-  background-color: #27ae60;
+  background-color: #8ad8f0;
 }
 
 .reject-btn {

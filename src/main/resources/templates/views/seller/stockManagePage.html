@@ -21,7 +21,7 @@
 				<div class="stock-item" th:each="p : ${list}">
 					<input type="hidden" name="productNo" th:value="${p.productNo}"/>
 					<input type="hidden" name="userNo" th:value="${p.userNo}"/>
-					<div class="stock-name">상품 번호 [[${p.productNo}]] [[${p.productName}]]</div>
+					<div class="stock-name">[[${p.productName}]]</div>
 					<div class="stock-controls">
 						<p>현재 재고량 : </p>
 						<input type="number" min="0" name="productStock" th:value="${p.productStock}"/>

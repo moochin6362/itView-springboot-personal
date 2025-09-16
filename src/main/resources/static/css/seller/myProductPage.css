@@ -124,3 +124,14 @@ body {
 	cursor: pointer;
 	transition: background-color 0.2s ease;
 }
+
+.editButton:hover {
+	width: 70px;
+	background-color: #8ad8f0;
+	color: white;
+	border: 1px solid #c2e4e4;
+	border-radius: var(--border-radius);
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
