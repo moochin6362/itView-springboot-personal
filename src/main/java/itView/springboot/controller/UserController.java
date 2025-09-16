@@ -57,7 +57,7 @@ public class UserController {
                 case "P":
                     return "redirect:/seller/home";
                 case "A":
-                    return "redirect:/inhoAdmin/enrollCouponNotice";
+                    return "redirect:/inhoAdmin/adminMain";
                 default:
                     throw new UserException("알 수 없는 사용자 유형입니다.");
             }

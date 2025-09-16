@@ -33,5 +33,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new CheckAdminInterceptor())
                 .addPathPatterns("/inhoAdmin/**", "/admin/**")
                 .excludePathPatterns("/inhoAdmin/ranking", "/inhoAdmin/enrollReport", "/inhoAdmin/enrollProductReport");// ranking page 제외
+        
+        // 로그 인터셉터
+        registry.addInterceptor(new LogInterceptor())
+		.addPathPatterns("/inhoAdmin/**");
     }
 }

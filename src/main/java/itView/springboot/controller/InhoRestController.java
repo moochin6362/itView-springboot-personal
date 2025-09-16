@@ -1,19 +1,21 @@
 package itView.springboot.controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.TreeMap;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import itView.springboot.service.InhoService;
-import itView.springboot.vo.Report;
-import itView.springboot.vo.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -95,5 +97,45 @@ public class InhoRestController {
 		return random;
  	}
  	
+ 	@GetMapping("logs")
+	public TreeMap<String, Integer> getLogs() {
+		File f = new File("C:/logs/member/");
+		File[] files = f.listFiles();
+		
+		TreeMap<String, Integer> dateCount = new TreeMap<String, Integer>();
+		dateCount.put("2025-09-15", 50);
+		dateCount.put("2025-09-14", 100);
+		dateCount.put("2025-09-13", 150);
+		dateCount.put("2025-09-12", 30);
+		dateCount.put("2025-09-11", 70);
+		dateCount.put("2025-09-10", 90);
+		dateCount.put("2025-09-09", 200);
+		dateCount.put("2025-09-08", 110);
+		BufferedReader br = null;
+		try {
+			for(File file : files) {
+				br = new BufferedReader(new FileReader(file));
+				String data;
+				while((data = br.readLine()) != null) {
+					String date = data.split(" ")[0];
+					if(!dateCount.containsKey(date)) {
+						dateCount.put(date, 1);
+					} else {
+						dateCount.put(date, dateCount.get(date)+1);
+					}
+				}
+			} 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return dateCount;
+		
+	}
 
 }
