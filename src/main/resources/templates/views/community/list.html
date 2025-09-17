@@ -98,9 +98,19 @@
                  th:onclick="|location.href='/community/detail?boardId=${community.boardId}&page=${pi.currentPage}'|"
                  style="cursor:pointer;">
 
-                <!-- 썸네일 이미지 -->
-                <img th:src="${community.thumbnailPath != null} ? @{${community.thumbnailPath}} : @{/images/no-image.png}"
-                     class="card-img-top" style="height: 180px; object-fit: cover;" alt="썸네일 이미지"/>
+                <!-- 썸네일 이미지 or 텍스트 -->
+                <div th:if="${community.thumbnailPath != null}">
+                    <img th:src="@{${community.thumbnailPath}}"
+                         class="card-img-top"
+                         style="height: 180px; object-fit: cover;"
+                         alt="썸네일 이미지"/>
+                </div>
+                <div th:if="${community.thumbnailPath == null}"
+                     class="d-flex align-items-center justify-content-center bg-light text-muted"
+                     style="height: 180px; font-size: 0.9rem;">
+                    이미지가 없는 게시글입니다
+                </div>
+
 
                 <div class="card-body">
                     <h5 class="card-title" th:text="${community.boardTitle}">제목</h5>
