@@ -229,7 +229,10 @@ select count(*)
 		count(r.report_no) as report_count,
 		max(r.report_date) as report_date
 	from "USER" u 
-	join report r on (reporter_user_id = user_no)
+	left join report r 
+	on (report_target_no = user_no)
+	AND r.report_type = 'U'
+    AND r.report_status = 'Y'
 	where user_no = #{userNo}
 	group by u.user_name, u.user_type, u.user_no,u.user_status
 </select>
