@@ -373,7 +373,7 @@ public class AdminController {
 		//신고 당한 회원 정보 상세
 		User u = adService.selectReportUser(userNo);
 		int listCount = adService.getReportCount(userNo);
-		PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+		PageInfo pi = Pagination.getPageInfo(page, listCount, 10);
 		ArrayList<Report> rllist = adService.getUserReportList(pi, userNo);
 		
 		if(u != null) {
