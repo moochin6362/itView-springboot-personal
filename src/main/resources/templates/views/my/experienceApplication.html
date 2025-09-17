@@ -111,9 +111,12 @@
       </section>
 
       <!-- 하단 버튼 -->
-      <div class="submit-bar">
-        <button type="button" class="btn-primary">이벤트 신청하기</button>
-      </div>
+      
+        <div class="submit-bar">
+	  <button type="button" id="btnSubmit" class="btn-primary">이벤트 신청하기</button>
+	</div>
+
+   
     </main>
   </div>
 
@@ -361,6 +364,69 @@
 	  })();
 	})();
 	</script>
+	 
+	 <script th:inline="javascript">
+	  const SUBMIT_URL = /*[[@{/my/experience-apply}]]*/ '/my/experience-apply';
+	 </script>
+	 
+	 
+	<script th:inline="none">
+	(function () {
+	  const $btn     = document.getElementById('btnSubmit');
+	  if(!$btn) return;
+	
+	  const $expNo   = document.getElementById('expNo');
+	  const $content = document.getElementById('applyContent');
+	  const $recv    = document.getElementById('receiver');
+	  const [$p1,$p2,$p3] = document.querySelectorAll('.phone-wrap input');
+	  const $addr1   = document.getElementById('addr1');
+	  const $addr2   = document.getElementById('addr2');
+	
+	  async function submit() {
+	    // 유효성은 생략…(있으면 그대로 사용)
+	    const payload = new URLSearchParams({
+	      expNo: String($expNo.value||'').trim(),
+	      applyContent: ($content.value||'').trim(),
+	      receiver: ($recv.value||'').trim(),
+	      phone: `${$p1.value}-${$p2.value}-${$p3.value}`,
+	      address: `${($addr1.value||'').trim()} ${($addr2.value||'').trim()}`
+	      // requestMemo 필요하면 여기에 추가
+	    });
+	
+	    // (선택) CSRF
+	    const csrfToken  = document.querySelector('meta[name="_csrf"]')?.content;
+	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
+	
+	    try {
+	      const res = await fetch(SUBMIT_URL, {
+	        method: 'POST',
+	        headers: {
+	          'Accept': 'application/json',
+	          'Content-Type': 'application/x-www-form-urlencoded',
+	          ...(csrfToken && csrfHeader ? { [csrfHeader]: csrfToken } : {})
+	        },
+	        body: payload
+	      });
+	      if(!res.ok) throw new Error('전송 실패');
+	      const data = await res.json();  // 컨트롤러가 Map<String,Object> 반환 → JSON
+	
+	      if (data.ok) {
+	        alert('신청이 완료되었습니다.');
+	        // 필요 시 이동
+	         location.href = '/my/experienceWins';
+	      } else {
+	        alert(data.message || '신청 처리에 실패했습니다.');
+	      }
+	    } catch(e){
+	      console.error(e);
+	      alert('전송 중 오류가 발생했습니다.');
+	    }
+	  }
+	
+	  $btn.addEventListener('click', submit);
+	})();
+	</script>
+	
 	 
 
 			
