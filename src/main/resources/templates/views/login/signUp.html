@@ -62,7 +62,7 @@
 	  <!-- 생년월일 -->
       <div class="form-group">
         <label>생년월일</label>
-        <input type="text" id="userAge" name="userAge" placeholder="생년월일 입력">
+        <input type="date" id="userAge" name="userAge" placeholder="생년월일 입력">
       </div>
       
       <!-- 휴대전화 -->
@@ -372,7 +372,7 @@
 	    
 	  	// 생년월일
 	    flatpickr("#userAge", {
-	        dateFormat: "Ymd",   // 출력 형식 
+	        dateFormat: "Y-m-d",   // 출력 형식 
 	        maxDate: "today",      // 미래 날짜 선택 불가
 	        minDate: "1900-01-01", // 최소 선택 가능 날짜
 	        locale: "ko"           // 한국어 적용
