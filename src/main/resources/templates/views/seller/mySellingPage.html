@@ -32,7 +32,7 @@
 							<td>[[${o.productName}]]</td>
 							<td>[[${o.orderCount}]]</td>
 							<td>[[${o.orderDate}]]</td>
-							<td>[[${o.payPrice}]]</td>
+							<td th:text="${#numbers.formatInteger(o.payPrice, 3, 'COMMA') + ' 원'}"></td>
 							<td>[[${o.deliveryStatus}]]</td>
 						</tr>
 						

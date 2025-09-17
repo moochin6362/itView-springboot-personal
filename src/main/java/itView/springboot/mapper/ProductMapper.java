@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import itView.springboot.vo.AdminReply;
 import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
@@ -126,7 +127,7 @@ public interface ProductMapper {
 
 	Board selectMyBoardDetail(int boardId);
 
-	Reply selectBoardReply(int boardId);
+	ArrayList<AdminReply> selectBoardReply(int boardId);
 
 	int updateQuestion(Board board);
 

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import itView.springboot.exception.ProductException;
 import itView.springboot.service.ProductService;
 import itView.springboot.service.ShoppingService;
+import itView.springboot.vo.AdminReply;
 import itView.springboot.vo.Answer;
 import itView.springboot.vo.Attachment;
 import itView.springboot.vo.Board;
@@ -30,7 +31,6 @@ import itView.springboot.vo.ExperienceGroup;
 import itView.springboot.vo.Order;
 import itView.springboot.vo.Product;
 import itView.springboot.vo.Question;
-import itView.springboot.vo.Reply;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
 import jakarta.servlet.http.HttpSession;
@@ -380,10 +380,12 @@ public class ProductController {
 	public String myQuestionDetail(@PathVariable("boardId") int boardId, Model model) {
 		Board b = pService.selectMyBoardDetail(boardId);
 		
-		Reply r = pService.selectBoardReply(boardId);
+		ArrayList<AdminReply> r = pService.selectBoardReply(boardId);
 		
 		model.addAttribute("b", b);
-		model.addAttribute("r", r);
+		if(r != null) {
+			model.addAttribute("r", r);
+		}
 		
 		return "/seller/myQuestionDetail";
 	}

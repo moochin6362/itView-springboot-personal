@@ -218,7 +218,7 @@ public class ProductService {
 		return mapper.selectMyBoardDetail(boardId);
 	}
 
-	public Reply selectBoardReply(int boardId) {
+	public ArrayList<AdminReply> selectBoardReply(int boardId) {
 		return mapper.selectBoardReply(boardId);
 	}
 

@@ -33,7 +33,7 @@
 						<button type="button" id="deleteButton">삭제</button>
 					</div>
 	
-					<div class="qna-box">
+					<div class="qna-box" th:if="${r != null}" th:each="r : ${r}">
 						<strong>답변 내용</strong>
 						<br/><br/>
 						<p>[[${r.replyContent}]]</p>
