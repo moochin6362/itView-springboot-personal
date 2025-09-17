@@ -208,8 +208,8 @@
         <div class="scroll-items" th:each="product : ${plist}">
             <a th:href="@{'/product/detail/' + ${product.productNo}}" class="scroll-item text-decoration-none text-dark">
                 <div class="scroll-item-image">
-                    <img th:if="${product.attmRename != null}" th:src="@{'/' + ${product.attmRename}}" alt="상품 이미지"/>
-                    <img th:if="${product.attmRename == null}" src="/images/default.png" alt="기본 이미지"/>
+                    <img th:if="${product.firstImage != null}" th:src="@{'/' + ${product.firstImage}}" alt="상품 이미지"/>
+                    <img th:if="${product.firstImage == null}" src="/images/default.png" alt="기본 이미지"/>
                 </div>
                 <div class="scroll-item-title" th:text="${product.productName}">상품명</div>
             </a>
