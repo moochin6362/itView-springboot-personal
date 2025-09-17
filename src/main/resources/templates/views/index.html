@@ -71,12 +71,97 @@
             opacity: 0.7;
             pointer-events: none; /* 클릭 막기 원하면 유지 */
         }
-        
-        .productDate {
-        	color : #34e5eb;
-        	font-weight: bolder;
+
+        /* 스크롤 영역 */
+        .infinite-scroll-container {
+            overflow: hidden;
+            padding: 40px 0;
+            position: relative;
         }
-        
+
+        .scroll-section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #222;
+        }
+
+        /* 스크롤 애니메이션 */
+        .infinite-scroll-wrapper {
+            display: flex;
+            width: max-content;
+            animation: scroll-left 60s linear infinite; /* 더 느리게 */
+        }
+
+        /* 상품 묶음 */
+        .scroll-items {
+            display: flex;
+        }
+
+        /* 개별 상품 카드 */
+        .scroll-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+            margin: 0 25px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 15px;
+        }
+
+        .scroll-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        /* 상품 이미지 */
+        .scroll-item-image {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scroll-item-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .scroll-item:hover .scroll-item-image img {
+            transform: scale(1.05);
+        }
+
+        /* 상품 제목 */
+        .scroll-item-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #222;
+            text-align: center;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 애니메이션 */
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -116,14 +201,39 @@
     </button>
 </div>
 
+<!-- 무한 가로 스크롤 상품 리스트 -->
+<section class="infinite-scroll-container py-5">
+    <h3 class="scroll-section-title mb-4">추천 상품</h3>
+    <div class="infinite-scroll-wrapper">
+        <div class="scroll-items" th:each="product : ${plist}">
+            <a th:href="@{'/product/detail/' + ${product.productNo}}" class="scroll-item text-decoration-none text-dark">
+                <div class="scroll-item-image">
+                    <img th:if="${product.attmRename != null}" th:src="@{'/' + ${product.attmRename}}" alt="상품 이미지"/>
+                    <img th:if="${product.attmRename == null}" src="/images/default.png" alt="기본 이미지"/>
+                </div>
+                <div class="scroll-item-title" th:text="${product.productName}">상품명</div>
+            </a>
+        </div>
+        <!-- 무한 스크롤을 위해 같은 상품들 다시 출력 -->
+        <div class="scroll-items" th:each="product : ${products}">
+            <a th:href="@{'/product/detail/' + ${product.productNo}}" class="scroll-item text-decoration-none text-dark">
+                <div class="scroll-item-image">
+                    <img th:if="${product.attmRename != null}" th:src="@{'/' + ${product.attmRename}}" alt="상품 이미지"/>
+                    <img th:if="${product.attmRename == null}" src="/images/default.png" alt="기본 이미지"/>
+                </div>
+                <div class="scroll-item-title" th:text="${product.productName}">상품명</div>
+            </a>
+        </div>
+    </div>
+</section>
+
 <section class="container py-5">
-    <h2 class="mb-4">등록된 상품</h2>
     <h2 class="mb-4">최신 상품</h2>
     <div class="row g-4">
 
         <div class="col-md-3" th:each="product : ${products}">
             <!-- 제품 카드 전체를 링크로 -->
-			
+
             <a th:href="@{'/product/detail/' + ${product.productNo}}"
                class="text-decoration-none text-dark">
                 <div class="product-card position-relative p-2"
@@ -138,7 +248,7 @@
                              src="/images/default.png"
                              alt="기본 썸네일"/>
                     </div>
-                    
+
                     <div class="productDate" th:text="${#dates.format(product.productCreateDate, 'HH:mm')}"
 						th:attr="data-fullDate=${#dates.format(product.productCreateDate, 'yyyy-MM-dd HH:mm:ss')}">
 					</div>
