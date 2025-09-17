@@ -42,7 +42,7 @@ public class HomeController {
         // 검색 포함 게시글 수 가져오기
         int listCount = productService.getListCountWithSearch(q);
 
-        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
 
         List<Product> products = productService.getSearchProducts(pi, q);
         model.addAttribute("pi", pi);
@@ -66,7 +66,7 @@ public class HomeController {
         // 검색 포함 게시글 수 가져오기
         int listCount = productService.getListCountWithFilter(q, categories);
 
-        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 10);
+        PageInfo pi = Pagination.getPageInfo(currentPage, listCount, 12);
 
         List<Product> products = productService.getFilterProducts(pi, q, categories);
 
