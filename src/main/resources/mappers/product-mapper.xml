@@ -39,7 +39,7 @@
 	<select id="selectMyCoupon" resultType="Coupon">
 		select *
 		from coupon
-		where user_no = #{userNo}
+		where user_no = #{userNo} and coupon_status = 'Y'
 		order by coupon_no desc
 	</select>
 	
@@ -314,22 +314,22 @@
 	</update>
 	
 	<select id="countReview">
-		select p.product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count, NVL(r.review_count-NVL(r1.review_answer_count, 0), 0) AS review_answer_count
+		select product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count, NVL(r.review_count-NVL(r1.review_answer_count, 0), 0) AS review_answer_count
 		from product p
 			 left join (
 			 			select product_no, count(*) AS review_count
 			 			from review
 			 			where review_status = 'Y'
-			 			group by product_no) r on p.product_no = r.product_no
+			 			group by product_no) r using(product_no)
 			 left join (
 				 		select product_no, count(*) AS review_answer_count
 				 		from review_answer
 				 			 join review using(review_no)
 				 			 join product using(product_no)
 				 		where product.user_no = #{userNo}
-				 		group by product_no) r1 on p.product_no = r1.product_no
+				 		group by product_no) r1 using(product_no)
 		where p.user_no = #{userNo}
-		order by p.product_no
+		order by product_no
 	</select>
 	
 	<select id="selectExpGroup">
