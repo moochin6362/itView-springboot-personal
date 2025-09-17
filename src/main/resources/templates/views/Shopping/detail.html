@@ -521,8 +521,10 @@ btn-cart:hover {
 								data:{productNo:productNo,amount:amount},
 								success: data =>{
 									if(data > 0){
-										alert('상품이 장바구니에 담겼습니다.장바구니로 이동하시겠습니까?');
-										location.href="/Shopping/cart";
+										if (confirm('상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?')){
+											location.href="/Shopping/cart";
+										}
+										
 									}else{
 										alert('상품을 장바구니에 담는 도중 오류가 발생했습니다.');
 									}
