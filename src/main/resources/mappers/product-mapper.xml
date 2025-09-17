@@ -103,7 +103,7 @@
 		AND a.ATTM_LEVEL = 0
 		AND a.ATTM_POSITION = 0
 		ORDER BY p.PRODUCT_NO DESC
-		FETCH FIRST 10 ROWS ONLY
+		FETCH FIRST 8 ROWS ONLY
 	</select>
 
 	<select id="getSearchProducts" resultType="Product" parameterType="String">
