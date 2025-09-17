@@ -16,14 +16,13 @@ public class StatusScheduler {
 	public void autoConfirmOrder() {
 		int update=sService.updateAutoConfirmOrder();
 		
-		System.out.println("구매확정 처리됨: " + update + " 건");
+		
 	}
 	
 	
-	@Scheduled(fixedRate=300000)
+	@Scheduled(fixedRate=90000)
 	public void autoUpdateDelivery() {
 		int update=sService.updateAutoUpdateDelivery();
 		
-		System.out.println("구매확정 처리됨: " + update + " 건");
 	}
 }

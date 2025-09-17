@@ -299,16 +299,17 @@
 	
 	<update id="updateAutoUpdateDelivery">
 		update "ORDER"
-		set delivery_status= case delivery_status
-								when 'before' THEN 'shipping'
-								when 'shipping'THEN 'after'
-								else delivery_status
-								END,
-			delivery_date = case delivery_status
-								when 'shipping' then SYSDATE
-								else delivery_date
-								END
-		where order_status='completed' and delivery_status!='after'
+    set delivery_status = case 
+                             when delivery_status = 'before' then 'shipping'
+                             when delivery_status = 'shipping' then 'after'
+                             else delivery_status
+                          end,
+        delivery_date = case 
+                          when delivery_status = 'shipping' then SYSDATE
+                          else delivery_date
+                        end
+    where order_status = 'completed'
+      and (delivery_status = 'before' or delivery_status = 'shipping')'
 		
 	</update>
 	

@@ -180,7 +180,7 @@ button:hover {
 
   <!-- 전역 사이드바 (공통) -->
   <div th:replace="~{common/mySidebar}"></div>
-	</nav>
+	
 	<div class="all">
 		<p class="title">주문내역</p>
 		<div class="order-status">
@@ -226,6 +226,7 @@ button:hover {
 						<span th:switch="${o.orderStatus}">
 							<span th:case="'completed'">
 								<span th:if="${o.deliveryStatus=='before'}">주문완료</span>
+								<span th:if="${o.deliveryStatus=='shipping'}">배송중</span>
 								<span th:if="${o.deliveryStatus=='after'}">배송완료</span>
 							</span>
 							<span th:case="'confirmed'">구매확정</span>
