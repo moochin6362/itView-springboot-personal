@@ -275,52 +275,38 @@
 
   <!-- (서연) 주문/썸네일 -->
   <select id="selectproductbyOrder" resultType="Order">
-    SELECT *
-    FROM(
-      SELECT 
-        o.order_no         AS orderNo,
-        o.order_target_no  AS orderTargetNo,
-        o.order_date       AS orderDate,
-        o.order_count      AS orderCount,
-        o.order_status     AS orderStatus,
-        o.payment_method   AS paymentMethod,
-        o.pay_price        AS payPrice,
-        o.delivery_company AS deliveryCompany,
-        o.delivery_no      AS deliveryNo,
-        o.delivery_status  AS deliveryStatus,
-        o.order_type       AS orderType,
-        o.user_no          AS userNo,
-        o.personal_coupon_no AS personalCouponNo,
-        o.user_name        AS userName,
-        o.user_phone       AS userPhone,
-        o.user_address     AS userAddress,
-        p.product_no       AS productNo,
-        p.product_name     AS productName,
-        p.product_price    AS productPrice,
-        p.product_stock    AS productStock,
-        p.product_state    AS productState,
-        p.product_company  AS productCompany,
-        a.attm_rename      AS attmRename
-      FROM "ORDER" o
-      LEFT JOIN product p ON p.product_no = o.order_target_no
-      LEFT JOIN attachment a ON a.position_no = p.product_no AND a.attm_level=0
-      WHERE o.user_no = #{userNo} AND p.product_no = #{productNo} AND o.order_type = 1
-
-      UNION ALL
-
-      SELECT 
-        o.order_no, o.order_target_no, o.order_date, o.order_count, o.order_status,
-        o.payment_method, o.pay_price, o.delivery_company, o.delivery_no, o.delivery_status,
-        o.order_type, o.user_no, o.personal_coupon_no, o.user_name, o.user_phone, o.user_address,
-        p.product_no, p.product_name, p.product_price, p.product_stock, p.product_state, p.product_company,
-        a.attm_rename
-      FROM "ORDER" o
-      JOIN cart c ON c.cart_no = o.order_target_no
-      LEFT JOIN product p ON p.product_no = c.product_no
-      LEFT JOIN attachment a ON a.position_no = p.product_no AND a.attm_level=0
-      WHERE o.user_no = #{userNo} AND p.product_no = #{productNo} AND o.order_type = 2
-    )
-    ORDER BY orderNo DESC
+    select 
+	        o.order_no as orderNo,
+	        o.order_target_no as orderTargetNo,
+	        o.order_date as orderDate,
+	        o.order_count as orderCount,
+	        o.order_status as orderStatus,
+	        o.payment_method as paymentMethod,
+	        o.pay_price as payPrice,
+	        o.delivery_company as deliveryCompany,
+	        o.delivery_no as deliveryNo,
+	        o.delivery_status as deliveryStatus,
+	        o.order_type as orderType,
+	        o.user_no as userNo,
+	        o.personal_coupon_no as personalCouponNo,
+	        o.user_name as userName,
+	        o.user_phone as userPhone,
+	        o.user_address as userAddress,
+	        p.product_no as productNo,
+	        p.product_name as productName,
+	        p.product_price as productPrice,
+	        p.product_stock as productStock,
+	        p.product_state as productState,
+	        p.product_company as productCompany,
+	        a.attm_rename as attmRename
+	    from "ORDER" o
+	    left join product p 
+	        on p.product_no = o.order_target_no
+	    left join attachment a
+	        on a.position_no = p.product_no
+	       and a.attm_level = 0
+	    where o.order_no = #{orderNo}
+	    order by o.order_no desc
   </select>
 
   <select id="selectThumbByOrder" resultType="Attachment">

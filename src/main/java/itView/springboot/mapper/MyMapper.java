@@ -6,13 +6,11 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import itView.springboot.vo.Attachment;
+import itView.springboot.vo.ExperienceGroup;
 import itView.springboot.vo.Order;
-import itView.springboot.vo.Product;
+import itView.springboot.vo.PointBox;
 import itView.springboot.vo.Review;
 import itView.springboot.vo.User;
-import itView.springboot.vo.ExperienceGroup;
-import itView.springboot.vo.PointBox;
 
 @Mapper
 public interface MyMapper {
@@ -62,7 +60,7 @@ public interface MyMapper {
     List<Map<String,Object>> selectExperienceWins(@Param("userNo") long userNo);
 
     // 서연
-    Order selectproductbyOrder(@Param("productNo") Integer pNo, @Param("userNo") int uNo);
+    Order selectproductbyOrder(@Param("productNo") Integer pNo, @Param("userNo") int uNo,@Param("orderNo")int oNo);
     itView.springboot.vo.Attachment selectThumbByOrder(Integer pNo);
 
     // 문의추가

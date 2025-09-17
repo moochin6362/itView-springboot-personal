@@ -282,11 +282,16 @@ public class MyController {
 
         int uNo = loginUser.getUserNo();
         if (pNo != null) {
-            Order order = myService.selectproductbyOrder(pNo, uNo);
+            Order order = myService.selectproductbyOrder(pNo, uNo,oNo);
             Attachment attachment = myService.selectThumbByOrder(pNo);
             model.addAttribute("order", order);
             model.addAttribute("attachment", attachment);
+            System.out.println("order = " + order);
+            System.out.println("attachment = " + attachment);
         }
+        
+        
+
         return "my/myReview";
     }
 
