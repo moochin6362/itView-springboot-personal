@@ -531,7 +531,7 @@ public class InhoController {
     	
     	Product p = uService.selectReportProduct(pNo);
     	int listCount = uService.getReportCount(pNo);
-    	PageInfo pi = Pagination.getPageInfo(page, listCount, 5);
+    	PageInfo pi = Pagination.getPageInfo(page, listCount, 20);
     	ArrayList<Report> rlist = uService.selectReportList(pi, pNo);
 
     	if(p != null) {
