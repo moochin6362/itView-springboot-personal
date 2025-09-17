@@ -344,24 +344,10 @@ select[name="coupon-option"] option{
 </style>
 </head>
 <body>
-	<!-- 전역 헤더 (공통) -->
-	<header class="site-header">It:View</header>
+	<div th:replace="~{common/myHeader}"></div>
 
-	<!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
-	<nav class="sidenav" aria-label="Primary">
-		<div class="sidenav-top">
-			<a class="nav-item active" href="/my/myPage"><i
-				class="fa-solid fa-user"></i><span>마이페이지</span></a> <a class="nav-item"
-				href="/my/experienceApplication"><i
-				class="fa-solid fa-gift"></i><span>체험단 신청</span></a> <a class="nav-item"
-				href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
-			<a class="nav-item" href="/Shopping/cart"><i
-				class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a> <a
-				class="nav-item" href="/Shopping/WishList"><i
-				class="fa-solid fa-heart"></i><span>찜</span></a> <a class="nav-item"><i
-				class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
-		</div>
-	</nav>
+  <!-- 전역 사이드바 (공통) -->
+  <div th:replace="~{common/mySidebar}"></div>
 	<div class="all">
 		<div class="check">
 			<label><input type="checkbox" id="checkAll">전체선택</label>

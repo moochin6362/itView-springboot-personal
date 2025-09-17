@@ -256,15 +256,15 @@ button:hover {
 					</div>
 					
 				</div>
-				
-			</div>
-			<div class="order-actions">
+				<div class="order-actions">
 						<button class="cart-btn" th:if="${go.value[0].orderStatus=='confirmed'}" th:attr="data-order-no=${go.key},data-product-no=${go.value[0].productNo},data-stock=${go.value[0].productStock},data-state=${go.value[0].productState}">장바구니 다시 담기</button>
 						<button class="purchase-confirmed-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus=='after'}" th:attr="data-order-no=${go.key}">구매확정 하기</button>
 						<a th:href="@{/Shopping/cancelReason(orderNo=${go.key})}">
 							<button class="order-cancel-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus == 'before'}" th:attr="data-order-no=${go.key}">주문 취소하기</button>
 						</a>
 				</div>
+			</div>
+			
 			
 		</div>
 	</div>
