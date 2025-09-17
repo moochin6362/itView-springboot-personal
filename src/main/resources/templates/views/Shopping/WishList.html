@@ -90,6 +90,7 @@ hr {
 	width: 240px; /* 고정 크기 */
 	height: 230px;
 	border-radius: 6px;
+	overflow: hidden;
 }
 
 .delete-btn {
@@ -209,10 +210,10 @@ hr {
 		<div class="product-item" th:if="${!#lists.isEmpty(wlist)}" th:each="w:${wlist}">
 			<input type="checkbox" class="check" th:value="${w.wishlistNo}" th:data-productno="${w.productNo}" th:disabled="${w.productStock == 0 or w.productState == 'N'}"/>
 			<div class="product-image">
-				<a th:href="@{/Shopping/detail(productNo=${w.productNo})}">
+				<a th:href="@{/product/detail/} + ${w.productNo}">
 						<img th:each="a:${alist}" th:if="${a.positionNo==w.productNo}"
 						th:src="@{/} + ${a.attmRename}"
-						width="102%" height="102%" style="border-radius: 8px;" />
+						width="100%" height="100%" style="border-radius: 8px;" />
 				</a>
 						
 				<div th:if="${w.productStock == 0 && w.productState =='Y'}" class="soldout">

@@ -99,21 +99,23 @@ a, a:link, a:visited, a:hover, a:active {
 }
 
 .order-image {
-	width: 130px;
-	height: 130px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-right: 15px;
-	margin-top: 1%;
-	border-radius: 6px;
+	 width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  margin-top: 1%;
+  border-radius: 6px;
+  overflow: hidden; /* 영역 벗어나면 잘림 */
+ 
 }
 
 
 .order-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cotain;  
+   max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;   /* ✅ 전체가 다 보이게 */
   border-radius: 6px;
 }
 
@@ -217,7 +219,7 @@ button:hover {
 					<a th:href="@{/Shopping/detail(productNo=${o.productNo})}">
 						<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
 						th:src="@{/} + ${a.attmRename}"
-						width="100%" height="100%" style="border-radius: 8px; object-fit:contain;" />
+						 width="100%;"height="100%;"style="border-radius: 8px;"/>
 					</a>
 				</div>
 				<div class="order-info">
@@ -225,7 +227,7 @@ button:hover {
 					<p class="status">
 						<span th:switch="${o.orderStatus}">
 							<span th:case="'completed'">
-								<span th:if="${o.deliveryStatus=='before'}">주문완료</span>
+								<span th:if="${o.deliveryStatus=='before'}">배송준비중</span>
 								<span th:if="${o.deliveryStatus=='shipping'}">배송중</span>
 								<span th:if="${o.deliveryStatus=='after'}">배송완료</span>
 							</span>

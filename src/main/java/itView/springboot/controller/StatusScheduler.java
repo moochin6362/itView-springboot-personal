@@ -20,7 +20,7 @@ public class StatusScheduler {
 	}
 	
 	
-	@Scheduled(fixedRate=90000)
+	@Scheduled(fixedRate=30000)
 	public void autoUpdateDelivery() {
 		int update=sService.updateAutoUpdateDelivery();
 		
