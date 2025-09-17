@@ -271,6 +271,11 @@ btn-cart:hover {
 	font-weight: bolder;
 }
 
+.product-specificity {
+	font-weight: bolder;
+	font-size: small;
+}
+
 </style>
 <link rel="stylesheet" th:href="@{/css/inhoCss/reportModal.css}">
 </head>
@@ -296,8 +301,8 @@ btn-cart:hover {
 				<h1 class="product-title" th:if="${p.productStock != 0 && p.productState == 'Y'}">[[${p.productName}]]</h1>
 				<h1 class="product-title" th:if="${p.productStock == 0 || p.productState == 'N'}" style="text-decoration: line-through;">[[${p.productName}]]</h1>
 				<p class="product-price" th:text="${#numbers.formatInteger(p.productPrice, 3, 'COMMA') + '원'}"/>
-				<p>[[${p.ingredient}]]</p>
-				<p>[[${p.ecoFriendly}]]</p>
+				<p class="product-specificity">[[${p.ingredient}]]</p>
+				<p class="product-specificity">[[${p.ecoFriendly}]]</p>
 				<p class="text-danger">
 					<select th:if="${cList.size() != 0}" id="couponSelect">
 						<option th:each="c : ${cList}" th:value="${c.couponNo}">[[${c.couponName}]]  ([[${c.couponDiscount}]]% 할인)</option>
