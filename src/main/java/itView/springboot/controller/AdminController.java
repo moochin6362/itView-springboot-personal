@@ -393,7 +393,7 @@ public class AdminController {
 			//신고 당한 회원 정보 상세
 			Board b = adService.selectReportBoard(boardId);
 			int blistCount = adService.getBoardReportCount(boardId);
-			PageInfo pi = Pagination.getPageInfo(page, blistCount, 5);
+			PageInfo pi = Pagination.getPageInfo(page, blistCount, 10);
 			ArrayList<Report> blist = adService.getBoardReportList(pi, boardId);
 			
 			if(b != null) {
@@ -415,7 +415,7 @@ public class AdminController {
 			) {
 		Review rv = adService.selectReportReview(reviewNo);
 		int rlistCount = adService.getReviewReportCount(reviewNo);
-		PageInfo pi = Pagination.getPageInfo(page, rlistCount, 5);
+		PageInfo pi = Pagination.getPageInfo(page, rlistCount, 10);
 		ArrayList<Report> rlist = adService.getReviewReportList(pi, reviewNo);
 		if(rv != null) {
 			model.addAttribute("rv", rv);
@@ -435,7 +435,7 @@ public class AdminController {
 			) {
 		Reply v = adService.selectReportReply(replyNo);
 		int vlistCount = adService.getReplyReportCount(replyNo);
-		PageInfo pi = Pagination.getPageInfo(page, vlistCount, 5);
+		PageInfo pi = Pagination.getPageInfo(page, vlistCount, 10);
 		ArrayList<Report> vlist = adService.getReplyReportList(pi, replyNo);
 		
 		if(v != null) {
