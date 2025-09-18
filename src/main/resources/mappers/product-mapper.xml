@@ -339,8 +339,8 @@
 	</select>
 	
 	<select id="selectExpApp">
-		select user_name, apply_content, exp_title, apply_no
-		from experience_application
+		select user_name, apply_content, exp_title, apply_no, experience_application.user_no
+		from experience_application 
 		     join experience_group on (exp_no = exp_group_no)
 		where experience_application.exp_group_no = #{expNo} and is_choice = 'N'
 	</select>
@@ -444,4 +444,15 @@
 			 			group by exp_group_no) ea on eg.exp_no = ea.exp_group_no
 		where eg.user_no = #{userNo}
 	</select>
+	
+	<select id="selectMyExpCoupon">
+		select *
+		from coupon
+		where user_no = #{userNo} and coupon_discount = 100
+	</select>
+	
+	<insert id="insertExpCoupon">
+		insert into coupon_box
+		values(seq_coupon_box.nextval, default, #{userNo}, #{couponNo})
+	</insert>
 </mapper>

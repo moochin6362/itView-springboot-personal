@@ -567,10 +567,20 @@ public class ProductController {
 	}
 	
 	// 체험단 신청 수락
-	@GetMapping("/expApply/{applyNo}")
-	public String updateExpApply(@PathVariable("applyNo") int applyNo) {
-		int result = pService.updateExpApply(applyNo);
-		if(result > 0) {
+	@GetMapping("/expApply/{applyNo}/{userNo}/{expUserNo}")
+	public String updateExpApply(@PathVariable("applyNo") int applyNo, @PathVariable("userNo") int userNo, @PathVariable("expUserNo") int expUserNo) {
+		int result1 = pService.updateExpApply(applyNo);
+		
+		Coupon myCoupon = pService.selectMyExpCoupon(userNo);
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		
+		map.put("couponNo", myCoupon.getCouponNo());
+		map.put("userNo", expUserNo);
+		
+		int result2 = pService.insertExpCoupon(map);
+		
+		if(result1 + result2 > 1) {
 			return "redirect:/seller/experienceManagePage";
 		} else {
 			throw new ProductException("체험단 신청 수락을 실패하였습니다.");

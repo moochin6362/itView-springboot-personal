@@ -305,7 +305,7 @@ btn-cart:hover {
 				<p class="product-specificity">[[${p.ecoFriendly}]]</p>
 				<p class="text-danger">
 					<select th:if="${cList.size() != 0}" id="couponSelect">
-						<option th:each="c : ${cList}" th:value="${c.couponNo}">[[${c.couponName}]]  ([[${c.couponDiscount}]]% 할인)</option>
+						<option th:each="c : ${cList}" th:if="${c.couponDiscount != 100}" th:value="${c.couponNo}">[[${c.couponName}]]  ([[${c.couponDiscount}]]% 할인)</option>
 					</select>
 				</p>
 				<p th:if="${cList.size() != 0}" id="downCoupon">🎫 쿠폰 발급받기</p>
