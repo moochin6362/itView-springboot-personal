@@ -887,8 +887,42 @@ select[name="coupon-option"] option{
 					}
 					
 					
-					location.href="/Shopping/payMent?cartNo="+checkedItems.join(",")
-									+"&coupon="+selectedCoupon;
+					const form = document.createElement("form");
+			        form.method = "post";
+			        form.action = "/Shopping/payMent";
+
+			        
+			        checkedItems.forEach(no => {
+			            const input = document.createElement("input");
+			            input.type = "hidden";
+			            input.name = "cartNo";
+			            input.value = no;
+			            form.appendChild(input);
+			        });
+
+			        
+			        const couponInput = document.createElement("input");
+			        couponInput.type = "hidden";
+			        couponInput.name = "coupon";
+			        couponInput.value = selectedCoupon;
+			        form.appendChild(couponInput);
+
+			        
+			        const priceInput = document.createElement("input");
+			        priceInput.type = "hidden";
+			        priceInput.name = "finalPrice";
+			        priceInput.value = totalProductValue;
+			        form.appendChild(priceInput);
+
+			        
+			        const pointInput = document.createElement("input");
+			        pointInput.type = "hidden";
+			        pointInput.name = "savePoint";
+			        pointInput.value = pointreward.textContent.replace(/[^0-9]/g, "");
+			        form.appendChild(pointInput);
+
+			        document.body.appendChild(form);
+			        form.submit();
 									
 				}
 			}); 

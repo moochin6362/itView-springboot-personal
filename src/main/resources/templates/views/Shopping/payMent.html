@@ -246,6 +246,7 @@
       <div class="summary">
         <div class="row"><span>총 상품금액</span><span id="totalprice" th:data-value="${totalPrice}" th:text="${#numbers.formatInteger(totalPrice,3,'COMMA')}+'원'"></span></div>
         <div class="row"><span>쿠폰적용</span>
+        <input type="hidden" id="couponNo" th:value="${coupon != null ? coupon.couponNo : ''}">
         	<span th:if="${coupon == null or coupon == ''}">적용된 쿠폰 없음</span>
         	<span th:data-value="${discountAmount}" id="discountAmount" th:if="${coupon != null and coupon != ''}">[[${coupon.couponName}]] : -[[${#numbers.formatInteger(discountAmount,3,'COMMA')}]]원</span>
         </div>
@@ -263,7 +264,7 @@
        	</div>
         <div class="row">
         	<div>배송비<div class="delivery-info" style="font-size:12px; color:#777; margin:0;">* 5만원 이상 주문 시 무료배송입니다~ ^_^</div></div>
-        	<span id="deliverymoney" th:data-value="${totalPrice > 50000 ? 0 : 3000}">
+        	<span id="deliverymoney" th:data-value="${(totalPrice > 50000 or (coupon != null and coupon.couponDiscount == 100)) ? 0 : 3000}">
   				[[${totalPrice > 50000 ? 0 : 3000}]]원
 			</span>
         </div>
@@ -437,34 +438,38 @@
 		  
 		  
 		  
+		  await fetch("/Shopping/preparePayment",{
+			  method:'post',
+			  headers:{'Content-Type': 'application/json; charset=UTF-8'},
+			  body:JSON.stringify({
+				  finalPrice:paymentprice,
+				  usePoint,
+				  discountAmount,
+				  deliveryFee:deliveryMoney,
+				  savePoint,
+				  shipName:shipName.value,
+				  shipPhone:shipPhone.value,
+				  shipAddr:shipAddr.value,
+				  shipAddrplus:shipAddrplus.value,
+				  orderType,
+				  productNo:pNo,
+				  amount,
+				  cartList:clist,
+				  couponNo: document.getElementById("couponNo") 
+	              ? document.getElementById("couponNo").value || null
+	              : null
+			  })
+		  });
 		  
 		  try{
 			  await paymentWidget.requestPayment({
-				  orderId:"order-" + new Date().getTime(),
-				  orderName:"상품 결제",
-				  customerName:document.getElementById("orderUserName").value,
-				  successUrl:window.location.origin+"/Shopping/paymentSuccess"
-													  + "?finalPrice=" + paymentprice
-													  + "&usePoint=" + usePoint
-													  + "&discountAmount=" + discountAmount
-													  + "&deliveryFee=" + deliveryMoney
-													  + "&savePoint=" + savePoint
-													  + "&shipName=" + encodeURIComponent(shipName.value)
-													  + "&shipPhone=" + encodeURIComponent(shipPhone.value)
-													  + "&shipAddr=" + encodeURIComponent(shipAddr.value)
-													  + "&shipAddrplus=" + encodeURIComponent(shipAddrplus.value)
-													  + "&orderType=" + orderType
-													  + (orderType == 1
-															    ? ("&productNo=" + pNo + "&amount=" + amount)
-															    : clist.map(no => "&cartNo=" + no).join("")
-															),
-															
-	
-
-				  failUrl:window.location.origin+"/Shopping/paymentFail",
-				  amount:paymentprice,
+				  orderId:"order-"+ new Date().getTime(),
+				  orderName:"결제",
+				  customerName:document.getElementById('orderUserName').value,
+				  successUrl:window.location.origin + "/Shopping/paymentSuccess",
+				  failUrl: window.location.origin + "/Shopping/paymentFail",
+			      amount: paymentprice,
 			  });
-			  
 		  }catch(err){
 			  console.error("결제 요청 중 오류 발생:", err);
 			  alert("결제에 실패했습니다. 다시 시도해주세요.");

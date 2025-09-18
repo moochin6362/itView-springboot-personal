@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -309,7 +310,7 @@ public class ShoppingController {
 	}
 	
 	
-	@GetMapping("payMent")
+	@PostMapping("payMent")
 	public String selectProductList(@RequestParam(value = "cartNo", required = false)List<Integer> cNo,HttpSession session,Model model,
 								@RequestParam(value = "coupon", required = false) String coupon,
 								@RequestParam(value = "productNo", required = false)Integer pNo, @RequestParam(value = "amount", required = false)Integer amount) {
@@ -391,18 +392,22 @@ public class ShoppingController {
 
 	    return response.getBody(); 
 	}
-	
+	@PostMapping("preparePayment")
+	@ResponseBody
+	public String preparePayment(@RequestBody Map<String, Object> paymentData,
+								HttpSession session) {
+		session.setAttribute("paymentData", paymentData);
+		
+		return "success";
+	}
 	
 	
 	@GetMapping("paymentSuccess")
-	public String paymentSuccess(@RequestParam Map<String, String> map,
-	                             @RequestParam("orderType") int orderType,
-	                             @RequestParam(value = "cartNo", required = false) List<Integer> cNo,
-	                             @RequestParam(value = "productNo", required = false) Integer pNo,
-	                             @RequestParam(value = "amount", required = false) Integer amount,
-	                             @RequestParam("finalPrice") int finalPrice,
-	                             HttpSession session,
-	                             Model model) {
+	public String paymentSuccess(@RequestParam("paymentKey") String paymentKey,
+					            @RequestParam("orderId") String orderId,
+					            @RequestParam("amount") int payAmount,
+					            HttpSession session,
+					            Model model) {
 
 	    User loginUser = (User) session.getAttribute("loginUser");
 	    int uNo = loginUser.getUserNo();
@@ -410,77 +415,91 @@ public class ShoppingController {
 	    int oNo = sService.makeOrderNo();
 	    long randomNo = System.currentTimeMillis() + new Random().nextInt(1000);
 	    
+	    Map<String, Object> paymentData = (Map<String, Object>) session.getAttribute("paymentData");
 	    
-	    String paymentKey = map.get("paymentKey");
-	    String orderId = map.get("orderId");
-	    int payAmount = Integer.parseInt(map.get("amount"));
-
 	    Map<String, Object> tossResult = confirmPayment(paymentKey, orderId, payAmount);
 	    String method = (String) tossResult.get("method");
 	    
+	    java.util.function.Function<Object, Integer> safeParseInt = obj -> {
+	        if (obj == null) return null;
+	        String str = obj.toString().trim();
+	        if (str.isEmpty()) return null;
+	        return Integer.parseInt(str);
+	    };
 	    
-	    Map<String,Object> both = new HashMap<>();
-	    both.put("orderNo", oNo);
-	    both.put("userNo", uNo);
-	    both.put("orderType", orderType);
+	    Map<String,Object> map = new HashMap<>();
+	    map.put("orderNo", oNo);
+	    map.put("userNo", uNo);
+	    map.put("orderType",paymentData.get("orderType"));
 
 	    
-	    both.put("paymentMethod", method);   
-	    both.put("paymentKey", map.get("paymentKey"));  
-	    both.put("orderId", map.get("orderId"));
+	    map.put("paymentMethod", method);   
+	    map.put("paymentKey", paymentKey);  
+	    map.put("orderId", orderId);
 
 	    
-	    both.put("personalCouponNo", map.get("couponNo"));
-	    both.put("usePoint", map.get("usePoint"));
-	    both.put("savePoint", map.get("savePoint"));
-	    both.put("discountAmount", map.get("discountAmount"));
-	    both.put("deliveryFee", map.get("deliveryFee"));
+	    map.put("personalCouponNo", paymentData.get("couponNo"));
+	    map.put("usePoint", paymentData.get("usePoint"));
+	    map.put("savePoint", paymentData.get("savePoint"));
+	    map.put("discountAmount", paymentData.get("discountAmount"));
+	    map.put("deliveryFee", paymentData.get("deliveryFee"));
 
-	    both.put("userName", map.get("shipName"));
-	    both.put("userPhone", map.get("shipPhone"));
-	    both.put("userAddress", map.get("shipAddr") + " " + map.get("shipAddrplus"));
-	    both.put("payPrice", finalPrice);
-	    both.put("deliveryNo", randomNo);
-	    both.put("deliveryCompany", "cj대한통운");
+	    map.put("userName", paymentData.get("shipName"));
+	    map.put("userPhone", paymentData.get("shipPhone"));
+	    map.put("userAddress", paymentData.get("shipAddr") + " " + paymentData.get("shipAddrplus"));
+	    map.put("payPrice", paymentData.get("finalPrice"));
+	    map.put("deliveryNo", randomNo);
+	    map.put("deliveryCompany", "cj대한통운");
 
-	    
-	    if (orderType == 2 && cNo != null) {
-	        List<Cart> clist = sService.selectCartList(cNo);
+	    Integer orderType=safeParseInt.apply(paymentData.get("orderType"));
+	    if (orderType == 2 && paymentData.get("cartList") != null) {
+	    	 List<Integer> cNo = (List<Integer>) paymentData.get("cartList");
+	         List<Cart> clist = sService.selectCartList(cNo);
+	         
+	         
+	         
 	        for (Cart c : clist) {
-	            Map<String,Object> insert = new HashMap<>(both);
+	            Map<String,Object> insert = new HashMap<>(map);
 	            insert.put("orderTargetNo", c.getProductNo());
 	            insert.put("orderCount", c.getAmount());
-	            sService.insertOrder(insert);
+	            int result=sService.insertOrder(insert);
 	        }
-	        sService.deleteCartlist(cNo);
+	        int result=sService.deleteCartlist(cNo);
 
 	    
-	    } else if (orderType == 1 && pNo != null) {
-	        Product p = sService.directPaySelectProduct(pNo);
-	        Map<String,Object> insert = new HashMap<>(both);
+	    } else if (orderType == 1 && paymentData.get("productNo") != null) {
+	        
+	    	int pNo = safeParseInt.apply(paymentData.get("productNo"));
+	        int amount = safeParseInt.apply(paymentData.get("amount"));
+	    	
+	    	Product p = sService.directPaySelectProduct(pNo);
+	        Map<String,Object> insert = new HashMap<>(map);
 	        insert.put("orderTargetNo", pNo);
 	        insert.put("orderCount", amount);
-	        sService.insertOrder(insert);
+	        int result=sService.insertOrder(insert);
 	    }
 
-	    if (map.get("usePoint") != null) {  
-	
-	        int usePoint = Integer.parseInt(map.get("usePoint"));
+	    
+	    Integer usePoint = safeParseInt.apply(paymentData.get("usePoint"));
+	    if (usePoint != null) {  
 	        int result=sService.minusPoint(uNo, usePoint);
 	    }
-	    if (map.get("savePoint") != null) {  
-	        int savePoint = Integer.parseInt(map.get("savePoint"));
+	    
+	    Integer savePoint = safeParseInt.apply(paymentData.get("savePoint"));
+	    if (savePoint != null) { 
 	        int result=sService.addPoint(uNo, savePoint);
 	    }
 
-	    if (map.get("couponNo") != null) {  
-	        int couponNo = Integer.parseInt(map.get("couponNo"));
+	    Integer couponNo = safeParseInt.apply(paymentData.get("couponNo"));
+	    if (couponNo != null) {  
 	        int result=sService.updateCouponStatus(couponNo);
 	    }
 	    
 	    
-	    model.addAttribute("finalPrice", finalPrice);
-	    model.addAttribute("payInfo", map);
+	    model.addAttribute("finalPrice", paymentData.get("finalPrice"));
+	    model.addAttribute("payInfo", tossResult);
+	    
+	    session.removeAttribute("paymentData");
 
 	    return "shopping/paymentSuccess";
 	}
