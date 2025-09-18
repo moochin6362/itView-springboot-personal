@@ -183,7 +183,7 @@ body {
 <p class="title">주문상세</p>
 <form class="form">
 <div class="order-notice">
-  <p class="date" th:each="o:${olist}">결제날짜 / [[${o.orderDate}]]</p>
+  <p class="date">결제날짜 / [[${olist[0].orderDate}]]</p>
   <details>
 	  <summary>배송/교환/반품 안내 </summary>
 	  <p style="padding-left:2%;padding-right:2%;">
@@ -194,10 +194,10 @@ body {
 	  </p>
 </details>
 </div>
-<div class="order-box" th:each="o:${olist}">
-    <span class="order-count">주문갯수 / [[${o.orderCount}]]개</span>
-    <a th:href="@{/Shopping/delivery(orderNo=${o.orderNo})}" class="delivery-link" style="color:blue;">배송조회</a>
-	  <div class="order-body">
+<div class="order-box" >
+    <span class="order-count">주문갯수 / [[${olist[0].orderCount}]]개</span>
+    <a th:href="@{/Shopping/delivery(orderNo=${olist[0].orderNo})}" class="delivery-link" style="color:blue;">배송조회</a>
+	  <div class="order-body" th:each="o:${olist}">
 	    <div class="order-image">
 	   		<a th:href="@{/Shopping/detail(productNo=${o.productNo})}">
 						<img th:each="a:${alist}" th:if="${a.positionNo==o.productNo}"
@@ -224,11 +224,11 @@ body {
 			</a>
 		</div>
 	    </div>
-	    <a class="review-btn" th:if="${o.orderStatus=='confirmed'}" th:href="@{/my/myReview(orderNo=${o.orderNo},productNo=${o.productNo})}">리뷰쓰러가기</a>
+	    <a class="review-btn" th:if="${o.orderStatus=='confirmed'}" th:href="@{/my/myReview(orderNo=${o.orderNo},productNo=${o.productNo},orderTargetNo=${o.orderTargetNo})}">리뷰쓰러가기</a>
 	    <a   th:href="@{/my/myProductInquiry(productNo=${o.productNo})}" class="cs-link" style="color: gray;">상품문의하기 ></a>
 	  </div>
 </div>
-<div class= "order-detail" th:each="o:${olist}">
+<div class= "order-detail">
 <details style="border-bottom: none;">
 	  <summary>주문자 정보 </summary>
 	  <p>주문자 / [[${loginUser.userName}]]</p>
@@ -237,15 +237,15 @@ body {
 
 <details style="border-bottom: none;">
 	  <summary >결제 정보 </summary>
-	  <p>결제 방법 / [[${o.paymentMethod}]]</p>
-	  <p>총 상품금액 / [[${#numbers.formatInteger(o.payPrice != null ? o.payPrice : 0, 3, 'COMMA')}]]원 </p>
+	  <p>결제 방법 / [[${olist[0].paymentMethod}]]</p>
+	  <p>총 상품금액 / [[${#numbers.formatInteger(olist[0].payPrice != null ? olist[0].payPrice : 0, 3, 'COMMA')}]]원 </p>
 </details>
 
 <details style="border-bottom: none;">
 	  <summary>배송 정보 </summary>
-	  <p>주소 / [[${o.userAddress}]]</p>
-	  <p>수령인 / [[${o.userName}]]</p>
-	  <p>전화번호 / [[${o.userPhone}]]</p>
+	  <p>주소 / [[${olist[0].userAddress}]]</p>
+	  <p>수령인 / [[${olist[0].userName}]]</p>
+	  <p>전화번호 / [[${olist[0].userPhone}]]</p>
 </details>
 </div>
 

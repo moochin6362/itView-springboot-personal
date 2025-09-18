@@ -240,9 +240,18 @@ public class MyController {
     }
 
     private String withCacheBuster(String url) {
-        if (url == null || url.isBlank()) url = PROFILE_BASE + "1758174973595_1100c539.jpg"; // ★ 루트(X)
+        if (url == null || url.isBlank()) {
+            url = PROFILE_BASE + "기본프로필.jpg"; 
+        }
+
+        // ★ 절대경로 보장
+        if (!url.startsWith("/")) {
+            url = "/" + url;
+        }
+
         return url + (url.contains("?") ? "&" : "?") + "v=" + System.currentTimeMillis();
     }
+
 
     private String toAgeRange(LocalDate birth) {
         if (birth == null) return "미상";
@@ -282,13 +291,14 @@ public class MyController {
     @GetMapping("/myReview")
     public String myReview(@RequestParam(value = "orderNo", required = false) Integer oNo,
                            @RequestParam(value = "productNo", required = false) Integer pNo,
+                           @RequestParam(value = "orderTargetNo", required = false) Integer tNo,
                            Model model, HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/login";
 
         int uNo = loginUser.getUserNo();
         if (pNo != null) {
-            Order order = myService.selectproductbyOrder(pNo, uNo,oNo);
+            Order order = myService.selectproductbyOrder(pNo, uNo,oNo,tNo);
             Attachment attachment = myService.selectThumbByOrder(pNo);
             model.addAttribute("order", order);
             model.addAttribute("attachment", attachment);

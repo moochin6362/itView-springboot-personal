@@ -60,7 +60,7 @@ public interface MyMapper {
     List<Map<String,Object>> selectExperienceWins(@Param("userNo") long userNo);
 
     // 서연
-    Order selectproductbyOrder(@Param("productNo") Integer pNo, @Param("userNo") int uNo,@Param("orderNo")int oNo);
+    Order selectproductbyOrder(@Param("productNo") Integer pNo, @Param("userNo") int uNo,@Param("orderNo")int oNo, @Param("orderTargetNo")int tNo);
     itView.springboot.vo.Attachment selectThumbByOrder(Integer pNo);
 
     // 문의추가

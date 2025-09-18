@@ -246,13 +246,14 @@ button:hover {
 				</div>
 				<div class="order-actions">
 						<button class="cart-btn" th:if="${go.value[0].orderStatus=='confirmed'}" th:attr="data-order-no=${go.key},data-product-no=${go.value[0].productNo},data-stock=${go.value[0].productStock},data-state=${go.value[0].productState}">장바구니 다시 담기</button>
-						<button class="purchase-confirmed-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus=='after'}" th:attr="data-order-no=${go.key}">구매확정 하기</button>
-						<a th:href="@{/Shopping/cancelReason(orderNo=${go.key})}">
+						<button class="purchase-confirmed-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus=='after'}" th:attr="data-order-no=${o.orderNo},data-order-target-no=${o.orderTargetNo}">구매확정 하기</button>
+						
+				</div>
+				
+			</div>
+			<a th:href="@{/Shopping/cancelReason(orderNo=${go.key})}">
 							<button class="order-cancel-btn" th:if="${go.value[0].orderStatus=='completed' and go.value[0].deliveryStatus == 'before'}" th:attr="data-order-no=${go.key}">주문 취소하기</button>
 						</a>
-				</div>
-			</div>
-			
 			
 		</div>
 	</div>
@@ -304,11 +305,12 @@ button:hover {
 			purchaseBtn.forEach(btn => {
 			  btn.addEventListener('click', () => {
 			    const orderNo = btn.dataset.orderNo;
+			    const orderTargetNo = btn.dataset.orderTargetNo;
 			    if (confirm('상품을 구매확정 하시겠습니까? 구매확정 후 반품 및 환불 불가합니다.')) {
 			      $.ajax({
 			        url: '/Shopping/purchaseConfirm',
 			        type: 'post',
-			        data: { orderNo: orderNo },
+			        data: { orderNo: orderNo, orderTargetNo: orderTargetNo },
 			        success: data => {
 			          if (data > 0) {
 			            alert('구매확정이 되었습니다.');
@@ -326,6 +328,7 @@ button:hover {
 			cancelBtn.forEach(btn => {
 			  btn.addEventListener('click', () => {
 			    const orderNo = btn.dataset.orderNo;
+			    
 			    if (confirm('상품을 정말 취소하시겠습니까?')) {
 			      $.ajax({
 			        url: '/Shopping/orderCancel',

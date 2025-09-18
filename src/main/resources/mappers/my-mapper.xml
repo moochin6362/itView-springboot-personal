@@ -306,6 +306,7 @@
 	        on a.position_no = p.product_no
 	       and a.attm_level = 0
 	    where o.order_no = #{orderNo}
+	     and o.order_target_no = #{orderTargetNo}
 	    order by o.order_no desc
   </select>
 

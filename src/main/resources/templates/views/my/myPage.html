@@ -35,13 +35,13 @@
 	  <div class="avatar">
 	    <!-- 기본 이미지 -->
 	    <img th:if="${#strings.isEmpty(profileImageUrl)}"
-	         src="/uploadFilesFinal/notice/1758174973595_1100c539.jpg"
+	         th:src="@{/uploadFilesFinal/notice/1758174973595_1100c539.jpg}"
 	         onerror="this.onerror=null; this.src='/uploadFilesFinal/1758174973595_1100c539.jpg';"
 	         alt="프로필">
 	
 	    <!-- 실제 프로필: 파일명만 오면 경로 자동 보정 -->
 	    <img th:unless="${#strings.isEmpty(profileImageUrl)}"
-	         th:src="${profileImageUrl.startsWith('/') ? profileImageUrl : '/uploadFilesFinal/notice/' + profileImageUrl}"
+	         th:src="${profileImageUrl}"
 	         onerror="this.onerror=null; this.src='/uploadFilesFinal/notice/1758174973595_1100c539.jpg';"
 	         alt="프로필">
 	  </div>

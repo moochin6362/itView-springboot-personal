@@ -182,8 +182,8 @@ public class MyService {
     }
 
     //서연
-    public Order selectproductbyOrder(Integer pNo, int uNo,int oNo) {
-        return myMapper.selectproductbyOrder(pNo, uNo,oNo);
+    public Order selectproductbyOrder(Integer pNo, int uNo,int oNo, int tNo) {
+        return myMapper.selectproductbyOrder(pNo, uNo,oNo,tNo);
     }
 
     //서연
