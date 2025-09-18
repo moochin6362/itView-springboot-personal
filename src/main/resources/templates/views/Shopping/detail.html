@@ -290,7 +290,8 @@ btn-cart:hover {
 			<!-- 좌측: 이미지 및 썸네일 -->
 			<div class="col-md-6">
 				<div class="item-image">
-					<img th:src="@{/} + ${attm.attmRename}" class="product-image mb-3" alt="상품 이미지">
+					<img th:if="${attm != null}" th:src="@{/} + ${attm.attmRename}" class="product-image mb-3" alt="상품 이미지">
+					<img th:if="${attm == null}" th:src="@{/img/no-image.png}" class="product-image mb-3" alt="기본 이미지">
 					<div th:if="${p.productStock == 0 && p.productState == 'N'}" class="soldout">일시 품절</div>
 					<div th:if="${p.productState == 'N' && p.productStock != 0}" class="unavailable">판매 중지</div>
 				</div>
@@ -509,7 +510,52 @@ btn-cart:hover {
 					
 					const totalPrice = document.getElementById("totalPrice").dataset.value;
 					
-					location.href="/Shopping/payMent?productNo="+productNo+"&amount="+amount +"&totalPrice="+totalPrice;
+					const paymentData = {
+					        orderType: 1,
+					        productNo: productNo,
+					        amount: amount,
+					        finalPrice: totalPrice
+					    };
+					
+					
+					fetch("/Shopping/preparePayment",{
+						method:"post",
+						headers: { "Content-Type": "application/json" },
+				        body: JSON.stringify(paymentData)
+					})
+					.then(res=>res.text())
+					.then(data=>{
+						if(data=='success'){
+							const form=document.createElement('form');
+							form.method="post";
+							form.action="/Shopping/payMent";
+							
+							const totalInput=document.createElement('input');
+							totalInput.type='hidden';
+							totalInput.name='totalPrice';
+							totalInput.value=totalPrice;
+							form.appendChild(totalInput);
+							
+							const pInput=document.createElement('input');
+							pInput.type='hidden';
+							pInput.name='productNo';
+							pInput.value=productNo;
+							form.appendChild(pInput);
+							
+							const amountInput=document.createElement('input');
+							amountInput.type='hidden';
+							amountInput.name='amount';
+							amountInput.value=amount;
+							form.appendChild(amountInput);
+							
+
+							document.body.appendChild(form);
+							form.submit();
+						}else{
+							alert("결제 준비 중 오류 발생");
+						}
+					});
+			       
 				});
 				
 			}

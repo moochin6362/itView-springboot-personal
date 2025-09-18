@@ -261,6 +261,10 @@ public class ProductController {
 		
 		ArrayList<Coupon> cList = pService.selectMyCoupon(userNo);
 		Attachment attm = pService.selectMyAttm(productNo);
+		if (attm == null) {
+		    attm = new Attachment();
+		    attm.setAttmRename("img/no-image.png"); 
+		}
 		ArrayList<Review> rList = pService.selectReview(productNo);
 		int reviewCount = pService.selectReviewCount(productNo);
 		ArrayList<Question> question = pService.selectQuestion(productNo);
