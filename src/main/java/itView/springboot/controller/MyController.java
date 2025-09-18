@@ -240,7 +240,7 @@ public class MyController {
     }
 
     private String withCacheBuster(String url) {
-        if (url == null || url.isBlank()) url = PROFILE_BASE + "default-avatar.png"; // ★ 루트(X)
+        if (url == null || url.isBlank()) url = PROFILE_BASE + "1758174973595_1100c539.jpg"; // ★ 루트(X)
         return url + (url.contains("?") ? "&" : "?") + "v=" + System.currentTimeMillis();
     }
 

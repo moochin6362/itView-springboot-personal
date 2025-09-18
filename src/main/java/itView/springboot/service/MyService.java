@@ -40,7 +40,7 @@ public class MyService {
         Attachment a = myMapper.selectProfileImageByUser(userNo);
         if (a == null || a.getAttmRename() == null || a.getAttmRename().isBlank()) {
             // 기본 이미지
-            return "/uploadFilesFinal/notice/default-avatar.png";
+            return "/uploadFilesFinal/notice/1758174973595_1100c539.jpg";
         }
 
         String path = (a.getAttmPath() == null) ? "" : a.getAttmPath().trim();
