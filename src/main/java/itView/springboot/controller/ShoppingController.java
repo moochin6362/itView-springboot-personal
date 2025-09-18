@@ -396,6 +396,18 @@ public class ShoppingController {
 	@ResponseBody
 	public String preparePayment(@RequestBody Map<String, Object> paymentData,
 								HttpSession session) {
+		
+		Integer orderType = paymentData.get("orderType") != null 
+		        ? Integer.parseInt(paymentData.get("orderType").toString())
+		        : null;
+
+		    if (orderType != null && orderType == 1) {
+		        if (!paymentData.containsKey("productNo") || !paymentData.containsKey("amount")) {
+		            return"FAIL";
+		        }
+		    }
+		
+		
 		session.setAttribute("paymentData", paymentData);
 		
 		return "success";
@@ -450,6 +462,8 @@ public class ShoppingController {
 	    map.put("payPrice", paymentData.get("finalPrice"));
 	    map.put("deliveryNo", randomNo);
 	    map.put("deliveryCompany", "cj대한통운");
+	    
+	    
 
 	    Integer orderType=safeParseInt.apply(paymentData.get("orderType"));
 	    if (orderType == 2 && paymentData.get("cartList") != null) {
@@ -469,8 +483,9 @@ public class ShoppingController {
 	    
 	    } else if (orderType == 1 && paymentData.get("productNo") != null) {
 	        
-	    	int pNo = safeParseInt.apply(paymentData.get("productNo"));
-	        int amount = safeParseInt.apply(paymentData.get("amount"));
+	    	Integer pNo = safeParseInt.apply(paymentData.get("productNo"));
+	    	Integer amount = safeParseInt.apply(paymentData.get("amount"));
+	    	
 	    	
 	    	Product p = sService.directPaySelectProduct(pNo);
 	        Map<String,Object> insert = new HashMap<>(map);

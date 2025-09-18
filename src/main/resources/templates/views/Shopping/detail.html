@@ -522,6 +522,8 @@ btn-cart:hover {
 						method:"post",
 						headers: { "Content-Type": "application/json" },
 				        body: JSON.stringify(paymentData)
+				        
+				        
 					})
 					.then(res=>res.text())
 					.then(data=>{

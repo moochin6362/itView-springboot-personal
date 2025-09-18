@@ -438,12 +438,12 @@
 		  
 		  
 		  
-		  await fetch("/Shopping/preparePayment",{
+		  const res = await fetch("/Shopping/preparePayment",{
 			  method:'post',
 			  headers:{'Content-Type': 'application/json; charset=UTF-8'},
 			  body:JSON.stringify({
 				  finalPrice:paymentprice,
-				  usePoint,
+				  usePoint:usePoint,
 				  discountAmount,
 				  deliveryFee:deliveryMoney,
 				  savePoint,
@@ -453,13 +453,21 @@
 				  shipAddrplus:shipAddrplus.value,
 				  orderType,
 				  productNo:pNo,
-				  amount,
+				  amount: amount, 
 				  cartList:clist,
 				  couponNo: document.getElementById("couponNo") 
 	              ? document.getElementById("couponNo").value || null
 	              : null
 			  })
 		  });
+		  
+		  
+		  const result = await res.text();   
+		  if (result !== 'success') {
+		    alert("결제 준비 실패");
+		    return;
+		  }
+		  
 		  
 		  try{
 			  await paymentWidget.requestPayment({
