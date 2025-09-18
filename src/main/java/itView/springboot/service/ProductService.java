@@ -234,5 +234,13 @@ public class ProductService {
 		return mapper.selectMyExp(userNo);
 	}
 
+	public Coupon selectMyExpCoupon(int userNo) {
+		return mapper.selectMyExpCoupon(userNo);
+	}
+
+	public int insertExpCoupon(HashMap<String, Integer> map) {
+		return mapper.insertExpCoupon(map);
+	}
+
 
 }

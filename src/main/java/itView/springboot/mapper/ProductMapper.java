@@ -135,6 +135,10 @@ public interface ProductMapper {
 
 	ArrayList<ExperienceGroup> selectMyExp(int userNo);
 
+	Coupon selectMyExpCoupon(int userNo);
+
+	int insertExpCoupon(HashMap<String, Integer> map);
+
 
 }
 
