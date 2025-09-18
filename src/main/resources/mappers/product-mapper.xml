@@ -314,7 +314,7 @@
 	</update>
 	
 	<select id="countReview">
-		select product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count, NVL(r.review_count-NVL(r1.review_answer_count, 0), 0) AS review_answer_count
+		select product_no, p.product_name, p.product_stock, NVL(r.review_count, 0) AS review_count, NVL(r.review_count-NVL(r1.review_answer_count, 0), 0) AS before_review_answer , NVL(r1.review_answer_count, 0) AS review_answer_count
 		from product p
 			 left join (
 			 			select product_no, count(*) AS review_count
@@ -329,7 +329,7 @@
 				 		where product.user_no = #{userNo}
 				 		group by product_no) r1 using(product_no)
 		where p.user_no = #{userNo}
-		order by product_no
+		order by product_no desc
 	</select>
 	
 	<select id="selectExpGroup">
@@ -455,4 +455,11 @@
 		insert into coupon_box
 		values(seq_coupon_box.nextval, default, #{userNo}, #{couponNo})
 	</insert>
+	
+	<select id="selectMyExpDetail">
+		select *
+		from experience_group
+		where exp_no = #{expNo}
+	</select>
+	
 </mapper>

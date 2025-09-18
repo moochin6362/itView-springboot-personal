@@ -242,5 +242,9 @@ public class ProductService {
 		return mapper.insertExpCoupon(map);
 	}
 
+	public ExperienceGroup selectMyExpDetail(int expNo) {
+		return mapper.selectMyExpDetail(expNo);
+	}
+
 
 }

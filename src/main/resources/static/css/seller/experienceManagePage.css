@@ -44,7 +44,7 @@ body {
   border: 1px solid var(--main-color);
   border-radius: var(--border-radius);
   padding: 20px;
-  background-color: var(--bg-color);
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;

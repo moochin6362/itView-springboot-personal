@@ -35,6 +35,7 @@ public class Product {
 	
 	private int reviewCount;
 	private int reviewAnswerCount;
+	private int beforeReviewAnswer;
 	
 	// join시 가져올 이름
 	private String brandName;

@@ -12,12 +12,14 @@
 		<div class="sidebar" th:replace="~{common/sellerSidebar :: sellerSidebar}"></div>
 
 		<div class="content">
+			<input type="hidden" id="pUserNo" th:value="${session.loginUser.userNo}"/>
 			<h2>체험단 신청 관리</h2>
 			
 			<div class="application-list">
 			    <div class="application-card" th:each="ea : ${eaList}">
 			    	<input type="hidden" class="applyNo" th:value="${ea.applyNo}"/>
 			        <div class="application-info">
+			        	<input type="hidden" class="userNo" th:value="${ea.userNo}"/>
 			            <p><strong>회원 이름 : </strong>[[${ea.userName}]]</p>
 			            <p><strong>모집글 제목 : </strong>[[${ea.expTitle}]]</p>
 			            <p><strong>신청 내용 : </strong>[[${ea.applyContent}]]</p>
@@ -37,8 +39,10 @@
 			for(approveBtn of approveBtns){
 				approveBtn.addEventListener('click', e => {
 					const applyNo = e.target.parentElement.parentElement.children[0].value;
+					const userNo = e.target.parentElement.parentElement.parentElement.parentElement.children[0].value;
+					const expUserNo = e.target.parentElement.previousElementSibling.children[0].value;
 					if(confirm("이 회원의 체험단 신청을 수락하시겠습니까?")){
-						location.href = '/seller/expApply/' + applyNo;
+						location.href = '/seller/expApply/' + applyNo + '/' + userNo + '/' + expUserNo;
 					}
 				});
 			}

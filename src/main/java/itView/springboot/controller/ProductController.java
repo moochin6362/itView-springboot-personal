@@ -360,6 +360,17 @@ public class ProductController {
 		return "seller/experienceManagePage";
 	}
 	
+	// 체험단 신청글 상세 페이지 이동
+	@GetMapping("expDetail/{expNo}")
+	public String expDetail(Model model, @PathVariable("expNo") int expNo) {
+		
+		ExperienceGroup expDetail = pService.selectMyExpDetail(expNo);
+		
+		model.addAttribute("expDetail", expDetail);
+		return "seller/myExpDetail";
+	}
+	
+	
 	// 문의하기 페이지 이동
 	@GetMapping("questionPage")
 	public String questionPage() {

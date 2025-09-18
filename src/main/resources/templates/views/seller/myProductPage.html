@@ -18,6 +18,7 @@
 				<div class="product-head" id="product-stockHead">재고량</div>
 				<div class="product-head" id="review-countHead">리뷰 개수</div>
 				<div class="product-head" id="answer-head">답변 대기</div>
+				<div class="product-head" id="after-answer">답변 완료</div>
 			</div>
 
 			<!-- 상품 리스트 -->
@@ -28,9 +29,8 @@
 					<div class="product-item product-stock" th:if="${r.productStock != 0}" th:text="|${r.productStock} 개|"></div>
 					<div class="product-item product-stock" th:if="${r.productStock == 0}" th:text="|재고 없음|"></div>
 					<div class="product-item review-count">[[${r.reviewCount}]] 개</div>
-					<div class="product-item answer">[[${r.reviewAnswerCount}]] 개</div>
-					<div class="product-item stock-zero" th:if="${r.productStock == 0}" th:text="|재고량 확인 요망|"></div>
-					<div class="product-item stock-zero" th:if="${r.productStock != 0}"></div>
+					<div class="product-item answer">[[${r.beforeReviewAnswer}]] 개</div>
+					<div class="product-item stock-zero">[[${r.reviewAnswerCount}]] 개</div>
 					<button class="editButton">수정</button>
 					<button class="editButton deleteButton">삭제</button>
 				</div>
@@ -64,13 +64,6 @@
 						} 
 					}
 				});
-			}
-			
-			const stockButtons = document.querySelectorAll('.stock-zero');
-			for(const stockButton of stockButtons){
-				stockButton.addEventListener('click', () => {
-					location.href = '/product/stockManagePage';
-				})
 			}
 			
 			const stocks = document.querySelectorAll('.product-stock');

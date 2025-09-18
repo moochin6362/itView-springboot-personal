@@ -36,7 +36,13 @@
 	
 	<script>
 		window.onload = () => {
-			
+			const titles = document.querySelectorAll('.boardTitle');
+			for(title of titles){
+				title.addEventListener('click', e => {
+					const expNo = e.target.previousElementSibling.innerText;
+					location.href = '/seller/expDetail/' + expNo;
+				});
+			}
 		}
 	</script>
 

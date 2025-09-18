@@ -76,6 +76,7 @@ body {
 	width: 500px;
 	margin-top: 10px;
 	margin-left: 10%;
+	
 }
 
 .product-stock {
@@ -85,20 +86,22 @@ body {
 }
 
 .review-count {
-	width: 50px;
+	width: 70px;
 	margin-top: 12px;
 	margin-left: 4%;
 }
 
 .answer {
+	width: 70px;
 	margin-top: 12px;
-	margin-left: 5%;
-	margin-right: 4%;
+	margin-left: 4%;
+	margin-right: 2%;
 }
 
 .stock-zero {
-	width: 120px;
+	width: 70px;
 	margin-top: 12px;
+	margin-left: 2%;
 	margin-right: 1%;
 }
 
@@ -111,6 +114,10 @@ body {
 }
 
 #answer-head {
+	margin-left: 4%;
+}
+
+#after-answer {
 	margin-left: 4%;
 }
 

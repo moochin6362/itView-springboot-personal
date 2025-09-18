@@ -139,6 +139,8 @@ public interface ProductMapper {
 
 	int insertExpCoupon(HashMap<String, Integer> map);
 
+	ExperienceGroup selectMyExpDetail(int expNo);
+
 
 }
 
