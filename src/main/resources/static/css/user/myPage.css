@@ -198,5 +198,17 @@ a:hover, .link:hover{text-decoration:underline}
   /* Chart.js는 자동 줄바꿈이 없어 라벨을 콜백에서 개행 처리해줄거야(아래 JS 참고) */
 }
 
+/* --- fix: chevron 링크 클릭 안 되는 현상 대응 --- */
+.profile-card { position: relative; }
+.profile-card .chevron{
+  position: relative;         /* 스택 컨텍스트 */
+  z-index: 5;                 /* 위로 올리기 */
+  pointer-events: auto;       /* 클릭 허용 */
+  display: inline-flex;       /* 클릭 영역 확보 */
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
 
 

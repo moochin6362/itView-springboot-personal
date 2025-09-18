@@ -38,11 +38,26 @@ public class MyService {
 
     public String getProfileImageUrl(Long userNo) {
         Attachment a = myMapper.selectProfileImageByUser(userNo);
-        if (a == null) return "/default-avatar.png";
-        String base = (a.getAttmPath() != null && !a.getAttmPath().isBlank()) ? a.getAttmPath() : "/";
-        if (!base.endsWith("/")) base += "/";
-        return base + a.getAttmRename();
+        if (a == null || a.getAttmRename() == null || a.getAttmRename().isBlank()) {
+            // 기본 이미지
+            return "/uploadFilesFinal/notice/default-avatar.png";
+        }
+
+        String path = (a.getAttmPath() == null) ? "" : a.getAttmPath().trim();
+
+        // ★ 여기 핵심: null, 빈 문자열, 그리고 "/" 모두 비정상으로 간주 -> 기본 notice 경로로 보정
+        if (path.isEmpty() || "/".equals(path)) {
+            path = "/uploadFilesFinal/notice";
+        }
+
+        // 슬래시 보정
+        if (!path.startsWith("/")) path = "/" + path;
+        if (!path.endsWith("/")) path = path + "/";
+
+        return path + a.getAttmRename();
     }
+
+
 
     @Transactional
     public void updateProfileImage(Long userNo, MultipartFile file) throws IOException {
@@ -66,7 +81,7 @@ public class MyService {
         Attachment attm = new Attachment();
         attm.setAttmName(origin);
         attm.setAttmRename(rename);
-        attm.setAttmPath("/");
+        attm.setAttmPath("/uploadFilesFinal/notice");
         attm.setAttmStatus("Y");
         attm.setAttmLevel(0);
         attm.setAttmPosition(7);

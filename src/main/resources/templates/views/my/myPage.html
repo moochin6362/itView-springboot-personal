@@ -4,118 +4,104 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>마이페이지</title>
-<!-- 공통 레이아웃 CSS -->
 <link rel="stylesheet" th:href="@{/css/user/userCommon.css}" />
-
-<!-- 페이지 전용 CSS -->
 <link rel="stylesheet" th:href="@{/css/user/myPage.css}" />
-<!-- 아이콘 CDN (v6) -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
 </head>
 <body>
 
+  <!-- 로그인확인용 -->
+  <div class="card" style="margin: 10px 4px; padding: 8px; font-size: 13px; color: #666">
+    userNo: <b th:text="${session.userNo}">null</b>, userId: <b th:text="${session.userId}">null</b>, name:
+    <b th:text="${session.loginUser != null ? session.loginUser.userName : 'null'}">null</b>
+  </div>
+  <!-- 로그인확인용 -->
 
-	<!-- 로그인확인용 -->
-	<div class="card"
-		style="margin: 10px 4px; padding: 8px; font-size: 13px; color: #666">
-		userNo: <b th:text="${session.userNo}">null</b>, userId: <b
-			th:text="${session.userId}">null</b>, name: <b
-			th:text="${session.loginUser != null ? session.loginUser.userName : 'null'}">null</b>
-	</div>
-	<!-- 로그인확인용	 -->
+  <!-- 전역 헤더 (공통) -->
+  <div th:replace="~{common/myHeader}"></div>
 
+  <!-- 전역 사이드바 (공통) -->
+  <div th:replace="~{common/mySidebar}"></div>
 
+  <main class="page">
+    <!-- 상단 타이틀바 -->
+    <div class="page-topbar">
+      <h1 class="page-title">마이페이지</h1>
+      <div class="page-actions"></div>
+    </div>
 
+   <!-- 프로필 카드 -->
+	<section class="card profile-card">
+	  <div class="avatar">
+	    <!-- 기본 이미지 -->
+	    <img th:if="${#strings.isEmpty(profileImageUrl)}"
+	         src="/uploadFilesFinal/notice/default-avatar.png"
+	         onerror="this.onerror=null; this.src='/uploadFilesFinal/notice/default-avatar.png';"
+	         alt="프로필">
+	
+	    <!-- 실제 프로필: 파일명만 오면 경로 자동 보정 -->
+	    <img th:unless="${#strings.isEmpty(profileImageUrl)}"
+	         th:src="${profileImageUrl.startsWith('/') ? profileImageUrl : '/uploadFilesFinal/notice/' + profileImageUrl}"
+	         onerror="this.onerror=null; this.src='/uploadFilesFinal/notice/default-avatar.png';"
+	         alt="프로필">
+	  </div>
+	
+	  <div class="profile-meta">
+	    <div class="nickname" th:text="${profileName}">사용자명</div>
+	    <div class="chips">
+	      <span class="chip" th:text="${profileAge}">30대</span>
+	      <span class="chip" th:text="${profileGrade}">일반</span>
+	    </div>
+	  </div>
+	
+	  <a class="chevron" th:href="@{/my/myInfo}" aria-label="프로필 설정 이동">내정보 변경›</a>
+	</section>
+	   
+   
+   
+   
 
-	<!-- 전역 헤더 (공통) -->
-	<div th:replace="~{common/myHeader}"></div>
+    <section class="card matching-card">
+      <h3 class="section-title">내가 주문한 상품과 나와의 매칭률</h3>
+      <div class="matching-wrap">
+        <div class="chart-box">
+          <canvas id="matchingChart" height="360"></canvas>
+        </div>
+      </div>
+      <p class="helper" id="matchingEmpty" style="display:none">표시할 주문 내역이 없어요.</p>
+    </section>
 
-	<!-- 전역 사이드바 (공통) -->
-	<div th:replace="~{common/mySidebar}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- 리뷰 인입 카드 -->
+    <section class="card review-cta">
+      <div class="review-cta-left">
+        <h2 class="section-title">내가 사용해 본 제품 리뷰 쓰기</h2>
+        <p class="muted">쇼핑 구매 여부와 상관 없이</p>
+      </div>
+      <div class="review-cta-full">
+        <a class="pill-btn" th:href="@{/my/myReview}">리뷰 쓰고 포인트 받기</a>
+      </div>
+    </section>
 
+    <!-- 구매한 제품 리뷰 쓰기 -->
+    <section class="list-row">
+      <h3>나의 이벤트</h3>
+    </section>
 
-	<main class="page">
-		<!-- 상단 타이틀바 -->
-		<div class="page-topbar">
-			<h1 class="page-title">마이페이지</h1>
-			<div class="page-actions"></div>
+    <!-- 마이 메뉴 -->
+    <section class="menu-list card">
+      <a class="menu-item" th:href="@{/my/myPoint}">나의 포인트</a>
+      <a class="menu-item" th:href="@{/my/myCoupon}">나의 쿠폰</a>
+      <a class="menu-item" th:href="@{/my/experienceWins}">체험단 당첨내역</a>
+      <a class="menu-item" th:href="@{/my/myWriteReview}">내가 쓴 리뷰</a>
+      <a class="menu-item" th:href="@{/my/myProductInquiry}">판매자 상품문의</a>
+      <a class="menu-item" th:href="@{/my/myProductAnswer}">상품문의 답변</a>
+      <a class="menu-item" th:href="@{/Shopping/order}">내 주문내역</a>
+    </section>
 
-		</div>
-
-		<!-- 프로필 카드 -->
-		<section class="card profile-card">
-			<div class="avatar">
-				<!-- 실제 파일: C:\uploadFilesFinal\notice\default-avatar.png -->
-				<img th:src="${profileImageUrl}"
-     src="/default-avatar.png"
-     onerror="this.src='/default-avatar.png'">
-
-				
-			</div>
-
-			<div class="profile-meta">
-				<div class="nickname" th:text="${profileName}">사용자명</div>
-				<div class="chips">
-					<!-- 요구사항: 연령대 + 등급 -->
-					<span class="chip" th:text="${profileAge}">30대</span> <span
-						class="chip" th:text="${profileGrade}">일반</span>
-				</div>
-			</div>
-
-			<!-- 화살표 누르면 내정보로 -->
-			<a class="chevron" th:href="@{/my/myInfo}" aria-label="프로필 설정 이동">내정보
-				변경›</a>
-		</section>
-
-		<section class="card matching-card">
-		  <h3 class="section-title">내가 주문한 상품과 나와의 매칭률</h3>
-		  <div class="matching-wrap">
-		    <div class="chart-box">
-		      <canvas id="matchingChart" height="360"></canvas>
-		    </div>
-		  </div>
-		  <p class="helper" id="matchingEmpty" style="display:none">표시할 주문 내역이 없어요.</p>
-		</section>
-		
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-				
-
-		
-
-
-		<!-- 리뷰 인입 카드 -->
-		<section class="card review-cta">
-			<div class="review-cta-left">
-				<h2 class="section-title">내가 사용해 본 제품 리뷰 쓰기</h2>
-				<p class="muted">쇼핑 구매 여부와 상관 없이</p>
-			</div>
-
-			<div class="review-cta-full">
-				<a class="pill-btn" th:href="@{/my/myReview}">리뷰 쓰고 포인트 받기</a>
-			</div>
-		</section>
-
-		<!-- 구매한 제품 리뷰 쓰기 -->
-		<section class="list-row">
-			<h3>나의 이벤트</h3>
-		</section>
-
-		<!-- 마이 메뉴 -->
-		<section class="menu-list card">
-			<a class="menu-item" th:href="@{/my/myPoint}">나의 포인트</a> 
-			<a class="menu-item" th:href="@{/my/myCoupon}">나의 쿠폰</a> 
-			<a class="menu-item" th:href="@{/my/experienceWins}">체험단 당첨내역</a>
-			<a class="menu-item" th:href="@{/my/myWriteReview}">내가 쓴 리뷰</a>
-			
-			<a class="menu-item" th:href="@{/my/myProductInquiry}">판매자 상품문의</a>
-			<a class="menu-item" th:href="@{/my/myProductAnswer}">상품문의 답변</a>
-			<a class="menu-item" th:href="@{/Shopping/order}">내 주문내역</a>
-		</section>
-
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
 (async function () {
   const res = await fetch('/my/matching-rates', { credentials:'same-origin' });
   const raw = await res.json();
@@ -125,16 +111,13 @@
     return;
   }
 
-  // 상위 n개만 보기 원하면 여기를 조절하세요 (예: 8개)
   const rows = [...raw]
     .map(r => ({ ...r, MATCH_RATE: Number(r.MATCH_RATE ?? 0) }))
     .sort((a,b) => b.MATCH_RATE - a.MATCH_RATE)
     .slice(0, 8);
 
-  // 긴 이름을 y축에서 2줄로 쪼개기 위한 helper
   const breakLabel = (name, maxLen = 16) => {
     if (!name) return ['상품'];
-    // 공백 기준으로 적당히 두 줄로 나눔
     if (name.length <= maxLen) return [name];
     const words = name.split(' ');
     let line1 = '', line2 = '';
@@ -142,7 +125,6 @@
       if ((line1 + ' ' + w).trim().length <= maxLen) line1 = (line1 + ' ' + w).trim();
       else line2 = (line2 + ' ' + w).trim();
     }
-    // 그래도 길면 살짝 자름
     if (line2.length > maxLen) line2 = line2.slice(0, maxLen - 1) + '…';
     return [line1, line2 || ''];
   };
@@ -150,11 +132,9 @@
   const labels = rows.map(d => breakLabel(d.PRODUCTNAME || d.LABEL || '상품'));
   const rates  = rows.map(d => d.MATCH_RATE);
 
-  // 축 범위: 데이터에 맞춰 확대 (차이가 잘 보이게)
   const min = Math.min(...rates);
   const max = Math.max(...rates);
 
-  // 모든 값이 같을 때 대비: 살짝 범위를 만들어 줌
   const pad = 5;
   let minX = Math.max(0, Math.floor((min - pad)));
   let maxX = Math.min(100, Math.ceil((max + pad)));
@@ -162,7 +142,7 @@
     minX = Math.max(0, min - 5);
     maxX = Math.min(100, max + 5);
   }
-  if (maxX - minX < 10) maxX = Math.min(100, minX + 10); // 너무 붙으면 최소 폭 확보
+  if (maxX - minX < 10) maxX = Math.min(100, minX + 10);
 
   const ctx = document.getElementById('matchingChart').getContext('2d');
   if (window._matchingChart) window._matchingChart.destroy();
@@ -175,7 +155,7 @@
         label: '매칭률(%)',
         data: rates,
         borderWidth: 0,
-        backgroundColor: '#93c5fd' /* light blue */
+        backgroundColor: '#93c5fd'
       }]
     },
     options: {
@@ -191,15 +171,12 @@
           grid: { drawBorder: false },
           ticks: {
             callback: v => v + '%',
-            stepSize: Math.max(2, Math.round((maxX - minX) / 8)) // 눈금 개수 적당히
+            stepSize: Math.max(2, Math.round((maxX - minX) / 8))
           }
         },
         y: {
           grid: { display: false },
-          ticks: {
-            autoSkip: false,
-            font: { size: 13 }
-          }
+          ticks: { autoSkip: false, font: { size: 13 } }
         }
       },
       plugins: {
@@ -207,7 +184,6 @@
         tooltip: {
           callbacks: {
             title: (items) => {
-              // 툴팁에는 전체 상품명 보여주기
               const idx = items[0].dataIndex;
               return rows[idx].PRODUCTNAME || rows[idx].LABEL || '상품';
             },
@@ -218,26 +194,20 @@
     }
   });
 })();
-</script>
-		
-	
-	
-	</main>
+    </script>
 
-	<!-- 플래시 메시지를 안전하게 전달 -->
-	<!-- myPage.html (기존 스니펫 교체) -->
-	<div id="flash-msg" th:if="${msg}" th:text="${msg}" hidden></div>
-	
-	<script>
-	  (function () {
-	    var el = document.getElementById('flash-msg');
-	    if (!el) return;
-	    var m = el.textContent;   // ← 실제 한글 텍스트로 들어옴
-	    if (m && m.trim()) alert(m);
-	  })();
-	</script>
-	
-	
+  </main>
+
+  <!-- 플래시 메시지 -->
+  <div id="flash-msg" th:if="${msg}" th:text="${msg}" hidden></div>
+  <script>
+    (function () {
+      var el = document.getElementById('flash-msg');
+      if (!el) return;
+      var m = el.textContent;
+      if (m && m.trim()) alert(m);
+    })();
+  </script>
 
 </body>
 </html>

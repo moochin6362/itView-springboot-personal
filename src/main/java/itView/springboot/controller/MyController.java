@@ -41,7 +41,22 @@ public class MyController {
     private final MyService myService;
     private static final String LOGIN_URL = "/";
 
+    private static final String PROFILE_BASE = "/uploadFilesFinal/notice/";
+
+    /** 파일명/상대경로가 와도 절대경로로 바꿔준다 */
+    private String normalizeProfileUrl(String s) {
+        if (s == null || s.isBlank()) return null;
+        String v = s.trim();
+        // 이미 절대경로 또는 외부 URL이면 그대로
+        if (v.startsWith("/") || v.startsWith("http://") || v.startsWith("https://")) return v;
+        // 파일명만 온 경우 접두 경로 부착
+        return PROFILE_BASE + v;
+    }
+    
+    
+    
     /** 마이페이지(프로필/연령대/등급 표시) */
+   
     @GetMapping("/myPage")
     public String myPage(HttpSession session, Model model) {
         Long userNo = getUserNo(session);
@@ -50,13 +65,7 @@ public class MyController {
         User u = myService.getUser(userNo);
         if (u != null) {
             model.addAttribute("profileName", u.getUserName());
-
-            String ageRange = "연령대 미상";
-            LocalDate birth = u.getUserAge(); // LocalDate
-            if (birth != null) {
-                ageRange = toAgeRange(birth);
-            }
-            model.addAttribute("profileAge", ageRange);
+            model.addAttribute("profileAge", toAgeRange(u.getUserAge()));
             model.addAttribute("profileGrade", toGradeName(u.getUserGrade()));
         } else {
             model.addAttribute("profileName", "로그인 사용자");
@@ -64,8 +73,10 @@ public class MyController {
             model.addAttribute("profileGrade", "일반");
         }
 
-        String url = myService.getProfileImageUrl(userNo);
-        model.addAttribute("profileImageUrl", withCacheBuster(url));
+        // ★ 여기!
+        String raw = myService.getProfileImageUrl(userNo); // 파일명 또는 경로
+        String norm = normalizeProfileUrl(raw);            // 절대경로 보정
+        model.addAttribute("profileImageUrl", withCacheBuster(norm));
 
         var wish3 = myService.getRecentWishlistMap(userNo);
         model.addAttribute("wish3", wish3);
@@ -73,6 +84,26 @@ public class MyController {
         return "my/myPage";
     }
 
+    @GetMapping("/myInfo")
+    public String myInfo(HttpSession session, Model model) {
+        Long userNo = getUserNo(session);
+        if (userNo == null) return "redirect:/";
+
+        // ★ 여기도 동일
+        String raw = myService.getProfileImageUrl(userNo);
+        String norm = normalizeProfileUrl(raw);
+        model.addAttribute("profileImageUrl", withCacheBuster(norm));
+
+        User u = myService.getUser(userNo);
+        model.addAttribute("user", u);
+        Integer ageBand = (u != null) ? toAgeBand(u.getUserAge()) : null;
+        model.addAttribute("ageBand", ageBand);
+        model.addAttribute("concernList", splitCsv(u != null ? u.getSkinTrouble() : null));
+
+        return "my/myInfo";
+    }
+
+    
     /** 프로필 이미지 업로드(교체) */
     @PostMapping("/profile-image")
     public String uploadProfile(@RequestParam("file") MultipartFile file,
@@ -93,32 +124,7 @@ public class MyController {
         return "redirect:/my/myInfo";
     }
 
-    /** 내 정보 보기 */
-    @GetMapping("/myInfo")
-    public String myInfo(HttpSession session, Model model) {
-        Long userNo = getUserNo(session);
-        if (userNo == null) return "redirect:/";
-
-        // 1) 프로필 이미지
-        String url = myService.getProfileImageUrl(userNo);
-        model.addAttribute("profileImageUrl", withCacheBuster(url));
-
-        // 2) 사용자 정보
-        User u = myService.getUser(userNo);
-        model.addAttribute("user", u);
-
-        // 3) 화면 라디오 체크용 "연령대 밴드"(10/20/30…)
-        Integer ageBand = null;
-        if (u != null && u.getUserAge() != null) {
-            ageBand = toAgeBand(u.getUserAge());
-        }
-        model.addAttribute("ageBand", ageBand);
-
-        // 4) 체크박스(피부고민) 리스트
-        model.addAttribute("concernList", splitCsv(u != null ? u.getSkinTrouble() : null));
-
-        return "my/myInfo";
-    }
+    
 
     private java.util.List<String> splitCsv(String s) {
         if (s == null || s.isBlank()) return java.util.Collections.emptyList();
@@ -234,7 +240,7 @@ public class MyController {
     }
 
     private String withCacheBuster(String url) {
-        if (url == null || url.isBlank()) url = "/default-avatar.png";
+        if (url == null || url.isBlank()) url = PROFILE_BASE + "default-avatar.png"; // ★ 루트(X)
         return url + (url.contains("?") ? "&" : "?") + "v=" + System.currentTimeMillis();
     }
 
