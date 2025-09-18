@@ -390,38 +390,51 @@
 		  }).open();
 	  });
 	  
-	  userpointwrite.addEventListener('input',()=>{
-		  let usePoint=parseInt(userpointwrite.value.replace(/[^0-9]/g, "")) || 0;
-		  
-		  if (usePoint < 0) usePoint = 0;
-		  if (usePoint > originalPoint) usePoint = originalPoint;
-		  
-		  
-		  let remain=originalPoint-usePoint;
-		  userhavepoint.textContent=remain.toLocaleString();
-		  
-		  calcfinalPrice();
-	  });
+	 
 	  
+	// 루강수정 지점
 	  const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 	  const customerKey = "user-" + document.getElementById("userNo").value;
-	  const paymentWidget = PaymentWidget(clientKey, customerKey);	
-	  const finalPrice=document.getElementById("finalTotal").textContent.replace(/[^0-9]/g,"") || 0;
-	  
-	  await paymentWidget.renderPaymentMethods(
-			    "#payment-widget",       
-			    { value: finalPrice },         
-			    { variantKey: "DEFAULT"} 
-			  );
+	  const paymentWidget = PaymentWidget(clientKey, customerKey);
 
-			  
-			  await paymentWidget.renderAgreement(
-			    "#agreement",
-			    { variantKey: "AGREEMENT" }
-			  );
+	  // calcfinalPrice()가 이미 화면 숫자 업데이트하니까 그 값을 그대로 위젯에도 적용
+	  let paymentMethods = await paymentWidget.renderPaymentMethods(
+	    "#payment-widget",
+	    { value: calcfinalPrice() },
+	    { variantKey: "DEFAULT" }
+	  );
+
+	  // 약관
+	  await paymentWidget.renderAgreement("#agreement", { variantKey: "AGREEMENT" });
+
+	  
+	  function syncPaymentAmount(reason = "금액 재계산") {
+	    const newValue = calcfinalPrice();                 // 화면의 최종금액을 다시 계산
+	    paymentMethods.updateAmount(newValue, reason);     // Toss 위젯 금액 갱신
+	  }
+
+	  // ✅ 3) 포인트 입력 이벤트에 동기화 추가
+	  userpointwrite.addEventListener('input', () => {
+	    let usePoint = parseInt(userpointwrite.value.replace(/[^0-9]/g, "")) || 0;
+	    if (usePoint < 0) usePoint = 0;
+	    if (usePoint > originalPoint) usePoint = originalPoint;
+
+	    let remain = originalPoint - usePoint;
+	    userhavepoint.textContent = remain.toLocaleString();
+
+	    calcfinalPrice();
+	    syncPaymentAmount("포인트 변경");
+	  });
+
+	  
+
+	  
+	  
+	  
 	  btnPay.addEventListener('click',async()=>{
 		  const paymentprice=calcfinalPrice();
-		  
+		 //  루강 추가부분 결제 직전 동기화
+		  syncPaymentAmount("결제 직전 동기화");
 		  
 		  const usePoint = parseInt(userpointwrite.value.replace(/[^0-9]/g, "")) || 0;
 		  const discountAmount = discountEl ? parseInt(discountEl.dataset.value) : 0;
@@ -476,7 +489,7 @@
 				  customerName:document.getElementById('orderUserName').value,
 				  successUrl:window.location.origin + "/Shopping/paymentSuccess",
 				  failUrl: window.location.origin + "/Shopping/paymentFail",
-			      amount: paymentprice,
+			      
 			  });
 		  }catch(err){
 			  console.error("결제 요청 중 오류 발생:", err);
