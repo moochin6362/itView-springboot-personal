@@ -52,7 +52,7 @@ public interface ShoppingMapper {
 	
 	int orderToCart(@Param("userNo") int uNo,@Param("productNo") int pNo);
 
-	int purchaseConfirm(@Param("orderNo") int oNo,@Param("userNo") int uNo);
+	int purchaseConfirm(@Param("orderNo") int oNo,@Param("userNo") int uNo, @Param("orderTargetNo")int tNo);
 	
 	int orderCancel(int oNo);
 

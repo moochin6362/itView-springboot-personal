@@ -92,10 +92,10 @@ public class ShoppingService {
 		return mapper.orderToCart(uNo,pNo);
 	}
 
-	public int purchaseConfirm(int oNo,int uNo) {
+	public int purchaseConfirm(int oNo,int uNo, int tNo) {
 		// TODO Auto-generated method stub
 		
-		return mapper.purchaseConfirm(oNo,uNo);
+		return mapper.purchaseConfirm(oNo,uNo,tNo);
 	}
 
 	public int orderCancel(int oNo) {

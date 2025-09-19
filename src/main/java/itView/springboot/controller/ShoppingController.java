@@ -279,11 +279,11 @@ public class ShoppingController {
 	
 	@PostMapping("purchaseConfirm")
 	@ResponseBody
-	public int purchaseConfirm(@RequestParam("orderNo") int oNo,HttpSession session) {
+	public int purchaseConfirm(@RequestParam("orderNo") int oNo, @RequestParam("orderTargetNo") int tNo,HttpSession session) {
 		
 		User loginUser = (User) session.getAttribute("loginUser");
 		int uNo = loginUser.getUserNo();
-		int result = sService.purchaseConfirm(oNo,uNo);
+		int result = sService.purchaseConfirm(oNo,uNo,tNo);
 		return result;
 	}
 	
@@ -402,12 +402,13 @@ public class ShoppingController {
 		        : null;
 
 		    if (orderType != null && orderType == 1) {
-		        if (!paymentData.containsKey("productNo") || !paymentData.containsKey("amount")) {
-		            return"FAIL";
+		        if (!paymentData.containsKey("productNo") || !paymentData.containsKey("amount") || paymentData.get("productNo") == null || paymentData.get("amount") == null) {
+		            return"fail";
 		        }
 		    }
 		
-		
+		   
+
 		session.setAttribute("paymentData", paymentData);
 		
 		return "success";
@@ -428,6 +429,7 @@ public class ShoppingController {
 	    long randomNo = System.currentTimeMillis() + new Random().nextInt(1000);
 	    
 	    Map<String, Object> paymentData = (Map<String, Object>) session.getAttribute("paymentData");
+	    
 	    
 	    Map<String, Object> tossResult = confirmPayment(paymentKey, orderId, payAmount);
 	    String method = (String) tossResult.get("method");
@@ -481,10 +483,14 @@ public class ShoppingController {
 	        int result=sService.deleteCartlist(cNo);
 
 	    
-	    } else if (orderType == 1 && paymentData.get("productNo") != null) {
+	    } else if (orderType == 1) {
 	        
 	    	Integer pNo = safeParseInt.apply(paymentData.get("productNo"));
 	    	Integer amount = safeParseInt.apply(paymentData.get("amount"));
+	    	
+	    	if (pNo == null || amount == null) {
+	            throw new IllegalArgumentException("바로결제에 필요한 상품번호나 수량이 없습니다.");
+	        }
 	    	
 	    	
 	    	Product p = sService.directPaySelectProduct(pNo);
@@ -509,14 +515,15 @@ public class ShoppingController {
 	    if (couponNo != null) {  
 	        int result=sService.updateCouponStatus(couponNo);
 	    }
-	    
+	 
+
 	    
 	    model.addAttribute("finalPrice", paymentData.get("finalPrice"));
 	    model.addAttribute("payInfo", tossResult);
 	    
 	    session.removeAttribute("paymentData");
 
-	    return "shopping/paymentSuccess";
+	    return "Shopping/paymentSuccess";
 	}
 
 	

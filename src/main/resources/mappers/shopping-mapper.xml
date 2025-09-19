@@ -261,6 +261,7 @@
 		set order_status='confirmed'
 		where delivery_status='after'
 			and order_no=#{orderNo}
+			and order_target_no = #{orderTargetNo}
 			and user_no=#{userNo}
 	</update>
 	<select id="orderStatusCount" parameterType="int" resultType="map">
@@ -389,7 +390,7 @@
         payment_method, pay_price, delivery_company, delivery_no, delivery_status,
         order_type, user_no, personal_coupon_no, user_name, user_phone, user_address
     )
-    VALUES (seq_order.NEXTVAL,#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress}
+    VALUES (#{orderNo},#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress}
     )
 </insert>
 

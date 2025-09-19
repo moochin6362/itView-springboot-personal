@@ -496,25 +496,25 @@ btn-cart:hover {
 				btnbuy.addEventListener('click',()=>{
 					const productNo=btnbuy.dataset.product;
 					const stockMax=btnbuy.dataset.stock;
-					const amount=productStock.value;
+					const amount=parseInt(productStock.value);
 					if(!userNo){
 						alert("로그인 후 이용해주세요.");
 						location.href="/login/login";
 						return;
 					}
 					
-					if(parseInt(amount)>parseInt(stockMax)){
+					if(amount>parseInt(stockMax)){
 						alert("재고 수량을 초과하였습니다.");
 						return;
 					}
 					
-					const totalPrice = document.getElementById("totalPrice").dataset.value;
+					const totalPrice = parseInt(document.getElementById("totalPrice").dataset.value);
 					
 					const paymentData = {
 					        orderType: 1,
-					        productNo: productNo,
-					        amount: amount,
-					        finalPrice: totalPrice
+					        productNo: parseInt(productNo),
+					        amount: parseInt(amount),
+					        finalPrice: parseInt(totalPrice)
 					    };
 					
 					

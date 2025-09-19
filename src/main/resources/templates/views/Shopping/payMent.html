@@ -246,7 +246,7 @@
       <div class="summary">
         <div class="row"><span>총 상품금액</span><span id="totalprice" th:data-value="${totalPrice}" th:text="${#numbers.formatInteger(totalPrice,3,'COMMA')}+'원'"></span></div>
         <div class="row"><span>쿠폰적용</span>
-        <input type="hidden" id="couponNo" th:value="${coupon != null ? coupon.couponNo : ''}">
+        <input type="hidden" id="couponNo" th:value="${coupon != null ? coupon.personalCouponNo : ''}">
         	<span th:if="${coupon == null or coupon == ''}">적용된 쿠폰 없음</span>
         	<span th:data-value="${discountAmount}" id="discountAmount" th:if="${coupon != null and coupon != ''}">[[${coupon.couponName}]] : -[[${#numbers.formatInteger(discountAmount,3,'COMMA')}]]원</span>
         </div>
@@ -451,45 +451,49 @@
 		  
 		  
 		  
-		  const res = await fetch("/Shopping/preparePayment",{
-			  method:'post',
-			  headers:{'Content-Type': 'application/json; charset=UTF-8'},
-			  body:JSON.stringify({
-				  finalPrice:paymentprice,
-				  usePoint:usePoint,
+		  const body={
+				  finalPrice: paymentprice,
+				  usePoint,
 				  discountAmount,
-				  deliveryFee:deliveryMoney,
+				  deliveryFee: deliveryMoney,
 				  savePoint,
-				  shipName:shipName.value,
-				  shipPhone:shipPhone.value,
-				  shipAddr:shipAddr.value,
-				  shipAddrplus:shipAddrplus.value,
+				  shipName: shipName.value,
+				  shipPhone: shipPhone.value,
+				  shipAddr: shipAddr.value,
+				  shipAddrplus: shipAddrplus.value,
 				  orderType,
-				  productNo:pNo,
-				  amount: amount, 
-				  cartList:clist,
-				  couponNo: document.getElementById("couponNo") 
-	              ? document.getElementById("couponNo").value || null
-	              : null
-			  })
+				  cartList: clist,
+				  couponNo: document.getElementById("couponNo")
+				    ? document.getElementById("couponNo").value || null
+				    : null
+		  };
+		  
+		  
+		  if (orderType === 1) {  
+			  body.productNo=pNo;
+			  body.amount=amount;
+		  }
+		  const res = await fetch("/Shopping/preparePayment", {
+			  method:'post',
+			  headers: { "Content-Type": "application/json; charset=UTF-8" },
+			  body: JSON.stringify(body)
 		  });
 		  
 		  
-		  const result = await res.text();   
-		  if (result !== 'success') {
-		    alert("결제 준비 실패");
-		    return;
+		  const result=await res.text();
+		  if(result!='success'){
+			  alert("결제 준비 실패");
+			  return;
 		  }
 		  
 		  
 		  try{
 			  await paymentWidget.requestPayment({
-				  orderId:"order-"+ new Date().getTime(),
+				  orderId:"order-" + new Date().getTime(),
 				  orderName:"결제",
-				  customerName:document.getElementById('orderUserName').value,
+				  customerName:document.getElementById("orderUserName").value,
 				  successUrl:window.location.origin + "/Shopping/paymentSuccess",
-				  failUrl: window.location.origin + "/Shopping/paymentFail",
-			      
+				  failUrl:window.location.origin + "/Shopping/paymentFail"
 			  });
 		  }catch(err){
 			  console.error("결제 요청 중 오류 발생:", err);
