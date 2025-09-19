@@ -370,6 +370,16 @@ public class ProductController {
 		return "seller/myExpDetail";
 	}
 	
+	// 체험단 신청글 수정 페이지 이동
+	@GetMapping("editExp/{expNo}")
+	public String editExp(Model model, @PathVariable("expNo") int expNo) {
+		
+		ExperienceGroup exp = pService.selectMyExpDetail(expNo);
+		
+		model.addAttribute("exp", exp);
+		
+		return "seller/expEditWritePage";
+	}
 	
 	// 문의하기 페이지 이동
 	@GetMapping("questionPage")
@@ -539,10 +549,11 @@ public class ProductController {
 
 	// 체험단 신청글 작성
 	@PostMapping("/writeExp")
-	public String writeExp(@ModelAttribute ExperienceGroup expGroup) {
+	public String writeExp(@ModelAttribute ExperienceGroup expGroup, @RequestParam("editordata") String expContent) {
+		expGroup.setExpContent(expContent);
 		int result = pService.writeExp(expGroup);
 		if(result > 0) {
-			return "redirect:/seller/experienceManagePage";
+			return "redirect:/seller/expEditPage";
 		} else {
 			throw new ProductException("체험단 신청글 작성을 실패하였습니다.");
 		}
@@ -642,6 +653,32 @@ public class ProductController {
 			return "redirect:/seller/questionManagePage";
 		} else {
 			throw new ProductException("문의글 등록을 실패하였습니다.");
+		}
+	}
+	
+	// 체험단 신청글 수정
+	@PostMapping("/editExp")
+	public String editExp(@ModelAttribute ExperienceGroup exp) {
+		
+		int result = pService.editExperienceGroup(exp);
+		
+		if(result > 0) {
+			return "redirect:/seller/expEditPage";
+		} else {
+			throw new ProductException("체험단 신청글 수정을 실패하였습니다.");
+		}
+	}
+	
+	// 체험단 신청글 삭제
+	@GetMapping("/deleteExp/{expNo}")
+	public String deleteExp(@ModelAttribute ExperienceGroup exp) {
+		
+		int result = pService.deleteExperienceGroup(exp);
+		
+		if(result > 0) {
+			return "redirect:/seller/expEditPage";
+		} else {
+			throw new ProductException("체험단 신청글 삭제를 실패하였습니다.");
 		}
 	}
 }

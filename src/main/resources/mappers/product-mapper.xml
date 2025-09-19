@@ -33,7 +33,7 @@
 	
 	<insert id="insertCoupon">
 		insert into coupon
-		values(seq_coupon.nextval, #{couponName}, #{couponDescription}, 'all', #{couponDiscount}, sysdate, sysdate, sysdate, #{couponMinprice}, #{userNo}, default)
+		values(seq_coupon.nextval, #{couponName}, #{couponDescription}, 'all', #{couponDiscount}, sysdate, null, sysdate, #{couponMinprice}, #{userNo}, default)
 	</insert>
 	
 	<select id="selectMyCoupon" resultType="Coupon">
@@ -442,7 +442,7 @@
 			 			from experience_application
 			 			where is_choice = 'N'
 			 			group by exp_group_no) ea on eg.exp_no = ea.exp_group_no
-		where eg.user_no = #{userNo}
+		where eg.user_no = #{userNo} and exp_status = 'Y'
 	</select>
 	
 	<select id="selectMyExpCoupon">
@@ -461,5 +461,17 @@
 		from experience_group
 		where exp_no = #{expNo}
 	</select>
+	
+	<update id="editExperienceGroup">
+		update experience_group
+		set exp_title = #{expTitle}, exp_content = #{expContent}, exp_end = #{expEnd}
+		where exp_no = #{expNo}
+	</update>
+	
+	<update id="deleteExperienceGroup">
+		update experience_group
+		set exp_status = 'N'
+		where exp_no = #{expNo}
+	</update>
 	
 </mapper>
