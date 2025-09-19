@@ -98,9 +98,9 @@ public class ShoppingService {
 		return mapper.purchaseConfirm(oNo,uNo,tNo);
 	}
 
-	public int orderCancel(int oNo) {
+	public int orderCancel(int oNo, int tNo) {
 		// TODO Auto-generated method stub
-		return mapper.orderCancel(oNo);
+		return mapper.orderCancel(oNo,tNo);
 	}
 
 	public Map<String, Object> orderStatusCount(int uNo) {
@@ -110,10 +110,7 @@ public class ShoppingService {
 		
 	}
 
-	public ArrayList<Order> selectOrderDetail(int oNo,int uNo) {
-		// TODO Auto-generated method stub
-		return mapper.selectOrderDetail(oNo,uNo);
-	}
+	
 
 	public int insertCancel(OrderCancel cancel) {
 		// TODO Auto-generated method stub
@@ -222,6 +219,19 @@ public class ShoppingService {
 	public int updateCouponStatus(int couponNo) {
 		// TODO Auto-generated method stub
 		return mapper.updateCouponStatus(couponNo);
+	}
+
+
+
+	public ArrayList<Order> selectOrderDetail(int oNo, int uNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectOrderDetail(oNo,uNo);
+
+	}
+
+	public int updateOrderCancel(int oNo, int tNo) {
+		// TODO Auto-generated method stub
+		return mapper.updateOrderCancel(oNo,tNo);
 	}
 
 	

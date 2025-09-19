@@ -54,11 +54,11 @@ public interface ShoppingMapper {
 
 	int purchaseConfirm(@Param("orderNo") int oNo,@Param("userNo") int uNo, @Param("orderTargetNo")int tNo);
 	
-	int orderCancel(int oNo);
+	int orderCancel(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
 
 	Map<String, Object> orderStatusCount(@Param("userNo") int uNo);
 
-	ArrayList<Order> selectOrderDetail(@Param("orderNo") int oNo,@Param("userNo") int uNo);
+	
 
 
 	int insertCancel(OrderCancel cancel);
@@ -98,6 +98,10 @@ public interface ShoppingMapper {
 	int addPoint(@Param("userNo") int uNo, @Param("savePoint")int savePoint);
 
 	int updateCouponStatus(int couponNo);
+
+	ArrayList<Order> selectOrderDetail(@Param("orderNo") int oNo,@Param("userNo") int uNo);
+
+	int updateOrderCancel(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
 
 	
 

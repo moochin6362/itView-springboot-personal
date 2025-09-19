@@ -73,14 +73,40 @@ public class ShoppingController {
 		}
 		int uNo = loginUser.getUserNo();
 		
+		
 		ArrayList<Order>olist = sService.selectOrderDetail(oNo,uNo);
+
 		
 		model.addAttribute("olist",olist);
 		
 		return "Shopping/cancelReason";
 	}
 
-
+	@PostMapping("orderCancel")
+	@ResponseBody
+	public int orderCancel(@RequestParam("orderNo") int oNo,@RequestParam("orderTargetNo") int tNo) {
+		int result = sService.orderCancel(oNo,tNo);
+		return result;
+	}
+	
+	
+	@PostMapping("insertCancel")
+	@ResponseBody
+	public int insertCancel(OrderCancel cancel, HttpSession session,@RequestParam("orderNo") int oNo,@RequestParam("orderTargetNo") int tNo) {
+		
+		User loginUser = (User) session.getAttribute("loginUser");
+		
+		cancel.setUserNo(loginUser.getUserNo());
+		cancel.setOrderNo(oNo);
+		int result=sService.insertCancel(cancel);
+		
+		if(result>0) {
+			int result2=sService.updateOrderCancel(oNo,tNo);
+			return result2;
+		}
+		return result;
+	}
+	
 	
 
 	@GetMapping("cart")
@@ -290,24 +316,6 @@ public class ShoppingController {
 	
 	
 	
-	@PostMapping("orderCancel")
-	@ResponseBody
-	public int orderCancel(@RequestParam("orderNo") int oNo) {
-		int result = sService.orderCancel(oNo);
-		return result;
-	}
-	
-	
-	@PostMapping("insertCancel")
-	@ResponseBody
-	public int insertCancel(OrderCancel cancel, HttpSession session,@RequestParam("orderNo") int oNo) {
-		
-		User loginUser = (User) session.getAttribute("loginUser");
-		
-		cancel.setUserNo(loginUser.getUserNo());
-		cancel.setOrderNo(oNo);
-		return sService.insertCancel(cancel);
-	}
 	
 	
 	@PostMapping("payMent")
@@ -361,7 +369,8 @@ public class ShoppingController {
 		model.addAttribute("loginUser",loginUser);
 		model.addAttribute("discountAmount",discountAmount);
 		model.addAttribute("cartNoList", cNo);
-
+		model.addAttribute("pNo", pNo);      
+	    model.addAttribute("amount", amount); 
 		
 		
 		
