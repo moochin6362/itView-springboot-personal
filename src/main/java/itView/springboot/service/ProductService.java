@@ -246,5 +246,13 @@ public class ProductService {
 		return mapper.selectMyExpDetail(expNo);
 	}
 
+	public int editExperienceGroup(ExperienceGroup exp) {
+		return mapper.editExperienceGroup(exp);
+	}
+
+	public int deleteExperienceGroup(ExperienceGroup exp) {
+		return mapper.deleteExperienceGroup(exp);
+	}
+
 
 }

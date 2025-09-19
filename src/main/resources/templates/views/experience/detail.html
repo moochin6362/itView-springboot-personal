@@ -78,8 +78,8 @@
         <div class="notice-meta">
             작성자: [[${experience.userName}]] | 작성일: [[${experience.expStart}]]
         </div>
-        <div class="notice-content">
-            [[${experience.expContent}]]
+        <div class="notice-content" th:utext="${experience.expContent}">
+            
         </div>
 		
 		<div id="buttonDiv">

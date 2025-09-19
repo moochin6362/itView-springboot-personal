@@ -141,6 +141,10 @@ public interface ProductMapper {
 
 	ExperienceGroup selectMyExpDetail(int expNo);
 
+	int editExperienceGroup(ExperienceGroup exp);
+
+	int deleteExperienceGroup(ExperienceGroup exp);
+
 
 }
 
