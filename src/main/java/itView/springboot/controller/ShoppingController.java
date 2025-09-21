@@ -97,6 +97,7 @@ public class ShoppingController {
 		                    @RequestParam(value = "savedPoint", required = false, defaultValue = "0") int savedPoint,
 		                    @RequestParam(value = "couponNo", required = false) Integer personalCouponNo) {
 		
+		
 		User loginUser = (User) session.getAttribute("loginUser");
 		
 		cancel.setUserNo(loginUser.getUserNo());
@@ -442,8 +443,10 @@ public class ShoppingController {
 	    HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 	    RestTemplate restTemplate = new RestTemplate();
 
+	    
 	    ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
 
+	    
 	    return response.getBody(); 
 	}
 	@PostMapping("preparePayment")
@@ -512,6 +515,7 @@ public class ShoppingController {
 	    map.put("discountAmount", paymentData.get("discountAmount"));
 	    map.put("deliveryFee", paymentData.get("deliveryFee"));
 
+	    
 	    map.put("userName", paymentData.get("shipName"));
 	    map.put("userPhone", paymentData.get("shipPhone"));
 	    map.put("userAddress", paymentData.get("shipAddr") + " " + paymentData.get("shipAddrplus"));
@@ -634,7 +638,9 @@ public class ShoppingController {
 		User loginUser = (User) session.getAttribute("loginUser");
 		int uNo = loginUser.getUserNo();
 		
+		
 		int result=sService.removeWish(uNo,pNo);
+		
 		
 		return result;
 	}

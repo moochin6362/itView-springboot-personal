@@ -12,7 +12,7 @@ public class StatusScheduler {
 	private final ShoppingService sService;
 	
 	
-	@Scheduled(initialDelay = 60000, fixedRate = 60000)
+	@Scheduled(initialDelay = 30000, fixedRate = 30000)
 	public void autoConfirmOrder() {
 		int update=sService.updateAutoConfirmOrder();
 		
@@ -20,7 +20,7 @@ public class StatusScheduler {
 	}
 	
 	
-	@Scheduled(initialDelay = 60000, fixedRate = 60000)
+	@Scheduled(initialDelay = 30000, fixedRate = 30000)
 	public void autoUpdateDelivery() {
 		
 		int update=sService.updateAutoUpdateDelivery();

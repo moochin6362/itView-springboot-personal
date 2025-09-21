@@ -127,7 +127,8 @@ input[type="checkbox"]:indeterminate {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;               
+  border-radius: 8px; 
+   pointer-events: none;              
 }
 .unavailable {
   position: absolute;
@@ -139,7 +140,8 @@ input[type="checkbox"]:indeterminate {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;               
+  border-radius: 8px; 
+   pointer-events: none;              
 }
 
 .quantity {
@@ -475,7 +477,7 @@ select[name="coupon-option"] option{
 	        let sum = 0;
 	        items.forEach(check => {
 	            if (check.checked && !check.disabled) {
-	                const productBox = check.closest('.cart-body');   // 체크박스가 속한 상품
+	                const productBox = check.closest('.cart-body');   
 	                const productPriceBox = productBox.querySelector('.item-price');
 	                const productQty = productBox.querySelector('.qty');
 
