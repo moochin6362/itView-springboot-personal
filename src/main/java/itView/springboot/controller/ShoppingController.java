@@ -89,24 +89,69 @@ public class ShoppingController {
 		return result;
 	}
 	
-	
 	@PostMapping("insertCancel")
 	@ResponseBody
-	public int insertCancel(OrderCancel cancel, HttpSession session,@RequestParam("orderNo") int oNo,@RequestParam("orderTargetNo") int tNo) {
+	public int insertCancel(OrderCancel cancel, HttpSession session,
+							@RequestParam("orderNo") int oNo,@RequestParam("orderTargetNo") int tNo,
+							@RequestParam(value = "usedPoint", required = false, defaultValue = "0") int usedPoint,
+		                    @RequestParam(value = "savedPoint", required = false, defaultValue = "0") int savedPoint,
+		                    @RequestParam(value = "couponNo", required = false) Integer personalCouponNo) {
 		
 		User loginUser = (User) session.getAttribute("loginUser");
 		
 		cancel.setUserNo(loginUser.getUserNo());
 		cancel.setOrderNo(oNo);
-		int result=sService.insertCancel(cancel);
 		
-		if(result>0) {
-			int result2=sService.updateOrderCancel(oNo,tNo);
-			return result2;
-		}
+		
+		String paymentKey = sService.selectPaymentKey(oNo, tNo);
+		int refundAmount = sService.selectPayPrice(oNo, tNo);
+ 
+		boolean refundSuccess = refundPayment(paymentKey, refundAmount);
+		if (!refundSuccess) {
+	        return 0; 
+	    }
+		
+		Map<String, Object> refundData = new HashMap<>();
+	    refundData.put("cancel", cancel);
+	    refundData.put("orderNo", oNo);
+	    refundData.put("orderTargetNo", tNo);
+	    refundData.put("usedPoint", usedPoint);
+	    refundData.put("savedPoint", savedPoint);
+	    refundData.put("couponNo", personalCouponNo);
+
+	   
+	    int result = sService.processRefund(refundData);
+		
 		return result;
 	}
 	
+	private boolean refundPayment(String paymentKey,int amount){
+		 String tossSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
+		 String url = "https://api.tosspayments.com/v1/payments/"+ paymentKey + "/cancel";
+		 
+		 Map<String, Object> body = new HashMap<>();
+		 body.put("cancelReason", "환불");
+		 
+
+		 
+		 HttpHeaders headers = new HttpHeaders();
+		 headers.setContentType(MediaType.APPLICATION_JSON);
+		 String encodedAuth = Base64.getEncoder().encodeToString((tossSecretKey + ":").getBytes());
+		 headers.set("Authorization", "Basic " + encodedAuth);
+
+		 HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+		 RestTemplate restTemplate = new RestTemplate();
+		 
+		 try {
+		    ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+		    System.out.println("Refund Response: " + response.getBody());
+		    return response.getStatusCode().is2xxSuccessful();
+		 } catch (Exception e) {
+		    e.printStackTrace();
+		    return false;
+		 }
+		 
+	}
 	
 
 	@GetMapping("cart")

@@ -234,6 +234,47 @@ public class ShoppingService {
 		return mapper.updateOrderCancel(oNo,tNo);
 	}
 
+	public int processRefund(Map<String, Object> refundData) {
+		OrderCancel cancel = (OrderCancel) refundData.get("cancel");
+		int oNo = (int) refundData.get("orderNo");
+	    int tNo = (int) refundData.get("orderTargetNo");
+	    int usedPoint = (int) refundData.get("usedPoint");
+	    int savedPoint = (int) refundData.get("savedPoint");
+	    Integer couponNo = (Integer) refundData.get("couponNo");
+	    
+	    
+	    int uNo = cancel.getUserNo();
+	    int insert = mapper.insertCancel(cancel);
+	    int update = mapper.updateOrderCancel(oNo, tNo);
+	    
+	    
+	    
+	    if (couponNo != null) {
+	        mapper.restoreCoupon(couponNo);
+	    }
+	    if (usedPoint > 0) {
+	        mapper.addPoint(uNo, usedPoint);
+	    }
+	    if (savedPoint > 0) {
+	        mapper.minusPoint(uNo, savedPoint);
+	    }
+	    
+	    if (insert > 0 && update > 0) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+
+	}
+
+	public int selectPayPrice(int oNo, int tNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectPayPrice(oNo,tNo);
+	}
+	public String selectPaymentKey(int oNo, int tNo) {
+		// TODO Auto-generated method stub
+		return mapper.selectPaymentKey(oNo,tNo);
+	}
 	
 
 	

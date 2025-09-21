@@ -305,16 +305,16 @@
 		<![CDATA[
     set delivery_status = case 
                              when delivery_status = 'before'
-                             	and order_date <= SYSDATE - (5/24/60) then 'shipping'
+                             	and order_date <= SYSDATE - (1/24/60) then 'shipping'
                              when delivery_status = 'shipping'
-                              	and delivery_date <= SYSDATE - (5/24/60) then 'after'
+                              	and delivery_date <= SYSDATE - (1/24/60) then 'after'
                              else delivery_status
                           end,
         delivery_date = case 
                           when delivery_status = 'before' 
-                               and order_date <= SYSDATE - (5/24/60) then SYSDATE
+                               and order_date <= SYSDATE - (1/24/60) then SYSDATE
                           when delivery_status = 'shipping' 
-                               and delivery_date <= SYSDATE - (5/24/60) then SYSDATE
+                               and delivery_date <= SYSDATE - (1/24/60) then SYSDATE
                           else delivery_date
                         end
     where order_status = 'completed'
@@ -398,9 +398,9 @@
     insert into "ORDER" (
         order_no, order_target_no, order_date, order_count, order_status,
         payment_method, pay_price, delivery_company, delivery_no, delivery_status,
-        order_type, user_no, personal_coupon_no, user_name, user_phone, user_address
+        order_type, user_no, personal_coupon_no, user_name, user_phone, user_address,payment_key
     )
-    VALUES (#{orderNo},#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress}
+    VALUES (#{orderNo},#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress},#{paymentKey}
     )
 </insert>
 
@@ -441,4 +441,29 @@
 		where order_no=#{orderNo}
 		
 	</update>
+	
+	<update id="restoreCoupon">
+	    update coupon_box
+	    set coupon_used = 'Y'
+	    where personal_coupon_no = #{couponNo}
+	</update>
+	
+	
+	<select id="selectPayPrice" resultType="int">
+	    select pay_price
+	    from "ORDER"
+	    where order_no = #{orderNo}
+	    and rownum = 1
+	</select>
+
+
+	<select id="selectPaymentKey" resultType="string">
+    	select payment_key
+    	from "ORDER"
+    	where order_no = #{orderNo}
+        and rownum = 1
+	</select>
+	
+	
+	
 </mapper>

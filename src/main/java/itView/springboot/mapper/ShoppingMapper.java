@@ -103,6 +103,18 @@ public interface ShoppingMapper {
 
 	int updateOrderCancel(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
 
+	Integer selectUseCoupon(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
+
+	void restoreCoupon(Integer coupon);
+
+	Integer selectUsePoint(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
+
+	Integer selectSavedPoint(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
+
+	int selectPayPrice(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
+
+	String selectPaymentKey(@Param("orderNo") int oNo, @Param("orderTargetNo")int tNo);
+
 	
 
 
