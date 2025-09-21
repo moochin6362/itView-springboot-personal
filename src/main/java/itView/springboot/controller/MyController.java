@@ -408,7 +408,7 @@ public class MyController {
             myService.addPointBox(userNo, "리뷰작성", "리뷰 작성 보상", reviewPoint, java.time.LocalDate.now().plusYears(2));
         }
 
-        return "redirect:/my/myReview";
+        return "redirect:/my/myWriteReview";
     }
 
    
@@ -522,7 +522,6 @@ public class MyController {
     @GetMapping("/myProductAnswer")
     public String myProductAnswer() { return "my/myProductAnswer"; }
     
-
    
-
+   
 }
