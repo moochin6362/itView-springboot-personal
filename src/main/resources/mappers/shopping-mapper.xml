@@ -284,8 +284,8 @@
 	
 	
 	<insert id="insertCancel">
-		INSERT INTO order_cancel (cancel_no, user_no,order_no,cancel_reason,cancel_detail,cancel_date)
-		VALUES (seq_cancel.NEXTVAL,#{userNo},#{orderNo},#{cancelReason},#{cancelDetail},SYSDATE)
+		INSERT INTO order_cancel (cancel_no, user_no,order_no,cancel_reason,cancel_detail,cancel_date,order_target_no)
+		VALUES (seq_cancel.NEXTVAL,#{userNo},#{orderNo},#{cancelReason},#{cancelDetail},SYSDATE,#{orderTargetNo})
 	</insert>
 	
 	<update id="updateAutoConfirmOrder">
@@ -298,21 +298,31 @@
 	
 	</update>
 	
+	
+	
 	<update id="updateAutoUpdateDelivery">
 		update "ORDER"
+		<![CDATA[
     set delivery_status = case 
-                             when delivery_status = 'before' then 'shipping'
-                             when delivery_status = 'shipping' then 'after'
+                             when delivery_status = 'before'
+                             	and order_date <= SYSDATE - (1/24/60) then 'shipping'
+                             when delivery_status = 'shipping'
+                              	and delivery_date <= SYSDATE - (1/24/60) then 'after'
                              else delivery_status
                           end,
         delivery_date = case 
-                          when delivery_status = 'shipping' then SYSDATE
+                          when delivery_status = 'before' 
+                               and order_date <= SYSDATE - (1/24/60) then SYSDATE
+                          when delivery_status = 'shipping' 
+                               and delivery_date <= SYSDATE - (1/24/60) then SYSDATE
                           else delivery_date
                         end
     where order_status = 'completed'
-      and (delivery_status = 'before' or delivery_status = 'shipping')
-		
+      and  delivery_status in ('before', 'shipping')
+		]]>
 	</update>
+	
+	
 	
 	<select id="selectCartList" resultType="Cart">
 		select *
@@ -388,9 +398,9 @@
     insert into "ORDER" (
         order_no, order_target_no, order_date, order_count, order_status,
         payment_method, pay_price, delivery_company, delivery_no, delivery_status,
-        order_type, user_no, personal_coupon_no, user_name, user_phone, user_address
+        order_type, user_no, personal_coupon_no, user_name, user_phone, user_address,payment_key
     )
-    VALUES (#{orderNo},#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress}
+    VALUES (#{orderNo},#{orderTargetNo},SYSDATE,#{orderCount},DEFAULT,#{paymentMethod},#{payPrice},#{deliveryCompany},#{deliveryNo},DEFAULT,#{orderType},#{userNo},#{personalCouponNo},#{userName},#{userPhone},#{userAddress},#{paymentKey}
     )
 </insert>
 
@@ -423,4 +433,37 @@
 		set coupon_used='Y'
 		where personal_coupon_no=#{couponNo}
 	</update>
+	
+	
+	<update id="updateOrderCancel">
+		update "ORDER"
+		set order_status='cancel', delivery_status='before'
+		where order_no=#{orderNo}
+		
+	</update>
+	
+	<update id="restoreCoupon">
+	    update coupon_box
+	    set coupon_used = 'Y'
+	    where personal_coupon_no = #{couponNo}
+	</update>
+	
+	
+	<select id="selectPayPrice" resultType="int">
+	    select pay_price
+	    from "ORDER"
+	    where order_no = #{orderNo}
+	    and rownum = 1
+	</select>
+
+
+	<select id="selectPaymentKey" resultType="string">
+    	select payment_key
+    	from "ORDER"
+    	where order_no = #{orderNo}
+        and rownum = 1
+	</select>
+	
+	
+	
 </mapper>

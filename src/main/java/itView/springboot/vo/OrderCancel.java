@@ -7,12 +7,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
 
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 public class OrderCancel {
 	private int cancelNo;
 	private int userNo;
@@ -22,4 +24,5 @@ public class OrderCancel {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate cancelDate;
+	private int orderTargetNo;
 }

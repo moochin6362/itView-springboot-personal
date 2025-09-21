@@ -224,7 +224,7 @@ body {
 			</a>
 		</div>
 	    </div>
-	    <a class="review-btn" th:if="${o.orderStatus=='confirmed'}" th:href="@{/my/myReview(orderNo=${o.orderNo},productNo=${o.productNo},orderTargetNo=${o.orderTargetNo})}">리뷰쓰러가기</a>
+	    <a class="review-btn" th:if="${o.orderStatus=='confirmed'}" th:href="@{/my/myReview(orderNo=${o.orderNo},productNo=${o.productNo},orderTargetNo=${o.orderTargetNo})}" style="border: 1px solid #c2e4e4;">리뷰쓰러가기</a>
 	    <a   th:href="@{/my/myProductInquiry(productNo=${o.productNo})}" class="cs-link" style="color: gray;">상품문의하기 ></a>
 	  </div>
 </div>

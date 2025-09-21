@@ -170,23 +170,14 @@ body {
 </style>
 </head>
 <body>
-<!-- 전역 헤더 (공통) -->
-  <header class="site-header"><a href="index">It:View</a></header>
+<div th:replace="~{common/myHeader}"></div>
 
-  <!-- 전역 사이드바 (공통) : 아이콘 구조로 교체 -->
-  <nav class="sidenav" aria-label="Primary">
-    <div class="sidenav-top">
-      <a class="nav-item active" href="/my/myInfo"><i class="fa-solid fa-user"></i><span>마이페이지</span></a>
-      <a class="nav-item" href="/experience/experienceApplication"><i class="fa-solid fa-gift"></i><span>체험단 신청</span></a>
-      <a class="nav-item" href="/my/myReview"><i class="fa-solid fa-star"></i><span>리뷰</span></a>
-      <a class="nav-item" href="/Shopping/cart"><i class="fa-solid fa-cart-shopping"></i><span>장바구니</span></a>
-      <a class="nav-item" href="/Shopping/WishList"><i class="fa-solid fa-heart"></i><span>찜</span></a>
-      <a class="nav-item"><i class="fa-solid fa-right-from-bracket"></i><span>로그아웃</span></a>
-    </div>
-  </nav>
+  <!-- 전역 사이드바 (공통) -->
+  <div th:replace="~{common/mySidebar}"></div>
 	<p class="title">주문취소</p>
 	<form class="form">
-	  <input type="hidden" name="orderNo" th:value="${olist[0].orderNo}" />
+	  <input type="hidden" name="orderNo" th:value="${olist[0].orderNo}"/>
+	  <input type="hidden" name="orderTargetNo" th:value="${olist[0].orderTargetNo}"/>
 		<div class="cancel-choose">
 			<p class="cancel-option">취소사유 (필수)</p>
 			<select id="sort" name="cancelSortType" required>
@@ -247,7 +238,7 @@ body {
 				</p>
 			</details>
 		</div>
-		<button type="button" class="cancel-request" th:attr="data-order-no=${olist[0].orderNo}">취소 접수</button>
+		<button type="button" class="cancel-request" th:attr="data-order-no=${olist[0].orderNo},data-order-target-no=${olist[0].orderTargetNo}">취소 접수</button>
 	</form>
 </body>
 
@@ -259,6 +250,7 @@ body {
 		
 			  cancel.addEventListener('click', (e) => {
 				    const orderNo = e.currentTarget.dataset.orderNo;
+				    const orderTargetNo = e.currentTarget.dataset.orderTargetNo;
 				    const reason=document.querySelector('#sort').value;
 				    const detail = document.querySelector('#content').value;
 				    
@@ -271,6 +263,7 @@ body {
 				        url: '/Shopping/insertCancel',
 				        type: 'post',
 				        data: { orderNo: orderNo,
+				        		orderTargetNo:orderTargetNo,
 				        		cancelReason:reason,
 				        		cancelDetail: detail || null
 				        		},

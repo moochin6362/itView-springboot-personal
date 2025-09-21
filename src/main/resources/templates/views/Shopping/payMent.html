@@ -170,10 +170,10 @@
     <div class="page-topbar">
       <h1 class="page-title">주문/결제</h1>
     </div>
-	 <input type="hidden" id="userNo" th:value="${userNo}">
-	 <input type="hidden" id="orderType" th:value="${orderType}">
-	 <input type="hidden" id="productNo" th:value="${pNo}">
-	<input type="hidden" id="amount" th:value="${amount}">
+	 <input type="hidden" name="userNo" id="userNo" th:value="${userNo}">
+	 <input type="hidden" name="orderType" id="orderType" th:value="${orderType}">
+	 <input type="hidden" name="productNo" id="productNo" th:value="${pNo}">
+	<input type="hidden" name="amount" id="amount" th:value="${amount}">
 	<th:block th:each="cNo : ${cartNoList}">
  		 <input type="hidden" name="cartNoList" class="cartNo" th:value="${cNo}">
 	</th:block>
