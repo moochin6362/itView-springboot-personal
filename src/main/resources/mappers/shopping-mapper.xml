@@ -305,16 +305,16 @@
 		<![CDATA[
     set delivery_status = case 
                              when delivery_status = 'before'
-                             	and order_date <= SYSDATE - (1/24/60) then 'shipping'
+                             	and order_date <= SYSDATE - (20/24/60/60) then 'shipping'
                              when delivery_status = 'shipping'
-                              	and delivery_date <= SYSDATE - (1/24/60) then 'after'
+                              	and delivery_date <= SYSDATE - (20/24/60/60) then 'after'
                              else delivery_status
                           end,
         delivery_date = case 
                           when delivery_status = 'before' 
-                               and order_date <= SYSDATE - (1/24/60) then SYSDATE
+                               and order_date <= SYSDATE - (20/24/60/60) then SYSDATE
                           when delivery_status = 'shipping' 
-                               and delivery_date <= SYSDATE - (1/24/60) then SYSDATE
+                               and delivery_date <= SYSDATE - (20/24/60/60) then SYSDATE
                           else delivery_date
                         end
     where order_status = 'completed'
