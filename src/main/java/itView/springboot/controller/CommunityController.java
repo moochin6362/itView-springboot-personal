@@ -119,14 +119,14 @@ public class CommunityController {
 
     // 삭제
     @GetMapping("/{boardId}/delete")
-    public String deleteNotice(@PathVariable int boardId) {
+    public String deleteNotice(@PathVariable("boardId") int boardId) {
         int notice = communityService.deleteBoard(boardId);
         return "redirect:/community/list";
     }
 
     // 업데이트 페이지
     @GetMapping("/{boardId}/updateForm")
-    public String updateForm(@PathVariable int boardId, Model model) {
+    public String updateForm(@PathVariable("boardId") int boardId, Model model) {
         Board community = communityService.selectBoard(boardId);
         model.addAttribute("community", community);
         return "community/update";
